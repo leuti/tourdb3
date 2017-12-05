@@ -12,7 +12,7 @@
       $dirHandle = opendir($verz);   // Open handle
       
       echo "<h2>Directory $verz</h2>";
-            
+      echo "TrackTime;FileName;TrackName;NoTrackPoints<br>";      
       // Loop through each file in directory
       while ($fileName = readdir($dirHandle))
       {
@@ -22,9 +22,12 @@
         if (is_file ($fullFileName)) 
         {
           $gpx = simplexml_load_file($fullFileName);  // Load XML structure
-          echo " Track Name: " . $gpx->trk->name;
-          echo " --> Anzahl trk: " . count($gpx->trk) . "<br>";   // ACTION: Through error message when number of trk > 1 
-          /*foreach ($gpx->trk->trkseg->trkpt as $trkpt)
+          echo "D" . strftime("%Y%m%d", strtotime($gpx->metadata->time)) . ";";
+          echo $fileName . ";";
+          echo $gpx->trk->name . ";";
+          echo count($gpx->trk->trkseg->trkpt);
+          echo "<br>";    
+          /*foreach ($gpx->trk->trkseg->trkpt as $trkpt) // ACTION: Through error message when number of trk / trkseg > 1
           {
             echo "lat: " . $trkpt["lat"] . "<br>";
             echo "lon: " . $trkpt["lon"] . "<br>";
