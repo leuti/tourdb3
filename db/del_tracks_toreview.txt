@@ -1,0 +1,1 @@
+DELETE FROM `tourdb2`.`tbl_tracks` WHERE `tbl_tracks`.`trkToReview` = 1
