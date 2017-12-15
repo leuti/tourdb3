@@ -12,7 +12,7 @@
 <head><meta charset="utf8"><title>Tour DB 3.0 - Login</title></head></head>
 <body>
 	<h3>Login-Page</h3>
-	<form action="/tourdb3/services/introPage.php" method="post">
+	<form action="/tourdb3/introPage.php" method="post">
 		<p><input name="login"> Login</p>
 		<p><input name="passwd"> Password</p>	 
 		<p><input type="submit" value="login"></p>
