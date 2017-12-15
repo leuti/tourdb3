@@ -4,7 +4,7 @@
 
     // Check if within session
     if(!isset($_SESSION["login"]))
-        exit("<p>No access<br><a href='index.php'>"
+        exit("<p>No access<br><a href='/tourdb3/index.php'>"
             . "Back to login</a></p>");
 ?>
 <!DOCTYPE HTML>
@@ -16,6 +16,6 @@
         echo "<p>Hello " . $_SESSION["login"] . "</p>";
         echo "<br><p>This is the beliebige page</p>";
     ?>
-    <p><a href="check_login.php">Intro page</a></p>
-    <p><a href="index.php">Log-off</a></p>
+    <p><a href="/tourdb3/services/introPage.php">Intro page</a></p>
+    <p><a href="/tourdb3/index.php">Log-off</a></p>
 </body></html>

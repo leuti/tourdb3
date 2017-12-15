@@ -13,8 +13,8 @@
 
     // check if within sessioin
     if(!isset($_SESSION["login"]))
-        exit("<p>No access<br><a href='index.php'>"
-            . "Back to Login</a></p>)");
+        exit("<p>No access<br><a href='/tourdb3/index.php'>"
+            . "Back to Login</a></p>");
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -24,6 +24,6 @@
     <?php
         echo "<p>Hello " . $_SESSION["login"] . "</p><br>";
     ?>
-    <p><a href="beliebige.php">Go to beliebige Page</a></p>
-    <p><a href="index.php">Log-off</a></p>
+    <p><a href="/tourdb3/services/beliebige.php">Go to beliebige Page</a></p>
+    <p><a href="/tourdb3/index.php">Log-off</a></p>
 </body></html>
