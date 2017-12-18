@@ -20,7 +20,6 @@ h2 {
 p {
     margin: 0px;}
 .logo { /* formatting for logo in general */
-    float: left;
     width: 40%;}
 em { /* formatting for DB in logo*/
     font-size: 38pt;
@@ -40,5 +39,22 @@ footer {
     left: 20px;}
 
 /*****************************/
-
+#segPanel_List, #waypPanel_List, #mapPanel_List {
+    display: none;}
+#segPanel_List.visible, #waypPanel_List.visible, #mapPanel_List.visible {
+    display: block;
+    clear: both;}   
+.segValidateTips, .waypValidateTips {
+    color: #ff0000;}
+.labelFirst, .labelNext, .waypFilterLabelFirst {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 3px; 
+    padding: 0.4em; 
+    height: 14px;
+    color: #001a33;}
+.labelFirst {
+    width: 90px;
+    float: left;}
 

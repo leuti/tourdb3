@@ -1,24 +1,15 @@
 <?php
+$file = './out/ownTracksKml.out';
 
-$logbook = @fopen("./import/logbook/logbook.csv","r"); // Opens logbuchberge.csv file
-
-$zaehler = 1;
-$run = 1;
-
-while (!feof($logbook))
-{
-    $zeile = fgets($logbook,1000);                                   // 2. Parameter: Anzahl Zeichen?
-    echo "25: Zeile >" . $zeile . "< <br>";
-    //while(ord(substr($zeile, strlen($zeile)-1)) == 13           // solange am Zeilenende ein Carrage Return steht ODER
-    //        || ord(substr($zeile, strlen($zeile)-1)) == 10 )    // ein Line Feed
-    //{
-        echo "===========<br>";
-        echo "30: Run: $run <br>";
-        $run++;
-        $zeile = substr($zeile, 0, strlen($zeile)-1);           // Ausgabe der Zeile ohne Carrage Return oder Line Feed
-        echo "33: Zeile >>>" . $zeile . "<<< <br>";
-
-    //}
+if (file_exists($file)) {
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="'.basename($file).'"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    readfile($file);
+    exit;
 }
-fclose($logbook);
 ?>

@@ -21,8 +21,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Tour DB 3.0</title>
-    <link type="text/css" rel="stylesheet" href="/tourdb3/css/tourdb_main.css">   
-    <!-- <link type="text/css" rel="stylesheet" href="/tourdb3/css/jquery-ui.css"> -->
+    <link type="text/css" rel="stylesheet" href="/tourdb3/css/tourdb_main.css?v=1">   
+    <link type="text/css" rel="stylesheet" href="/tourdb3/css/jquery-ui.css">
 </head>
 <body style="height: 100%;">
     <script type="text/javascript" src="/tourdb3/js/jquery-3.1.0.js"></script> <!-- JQuery from local server -->
@@ -37,22 +37,17 @@
 		<!-- ========================================================================== -->
 		
 		<div id="panelAdmin" class="tourdbPanel, active">
-			<p></p>
-			<br><br>
-			<input type="submit" class="button" id="segGenKml" value="Create Single KML Files" />
-
-			<br><br>
-			<input type="submit" class="button" id="waypCalcWgs84" value="..." />
-
-			<br><br>
-			<input type="submit" class="button" id="segBtnOpenDialog" value="..." />
-
-			<br><br>
-			<input type="submit" class="button" id="waypBtnOpenDialog" value="..." />
-
+			<div id="containerAdmin">
+				<div id="divGenKml">
+					<button href="#" id="btnGenKml">Generate KML</button>
+				</div>
+				
+				<form id="frmGenKml">
+					<input type="text" id="whereGenKml" placeholder="Enter WHERE clause..." />
+					<input type="submit" id="submGenKml" value="GO" />
+				</form>
+			</div>
 		</div> <!-- End div panelAdmin -->
-
-	</section> <!-- End main -->
 
 	<footer id="footer">
         <p>&copy; 2016 leuti - Version 1.09.2016</p>
