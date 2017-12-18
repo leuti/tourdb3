@@ -7,20 +7,24 @@
 // Created: 7.12.2017 - Daniel Leutwyler
 //---------------------------------------------------------------------------------------------
 
+// Test Cases
+// Total number of tracks = number of lines in logbook
+// All attributes are correctly inserted
+
+// -----------------------------------
+// Set variables and parameters    
 include("./config.inc.php");                                        //include config file
+
+$zaehler = 0;                                                       // used to count overall number of records
+$corr_insert = 0;                                                   // counts number of correctly imported records
+$err_insert = 0;                                                    // counts number of error records
+
 
 $logbook = @fopen("./import/logbook/Logbuch Berge.csv","r");        // Opens csv file
 if(!$logbook) 
 {
     exit("Datei nicht gefunden");
 }
-//if ($conn->connect_error) {
-//    die("Connection failed: " . $conn->connect_error);
-//} 
-
-$zaehler = 0;                                                       // used to count overall number of records
-$corr_insert = 0;                                                   // counts number of correctly imported records
-$err_insert = 0;                                                    // counts number of error records
 
 while (!feof($logbook))                                             // loop through each line of the logbook file
 {

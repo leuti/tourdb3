@@ -12,24 +12,21 @@
     // ---------------------------------------------------------------------------------------------
 
     // Test Cases
-    // Import from logbook (all attributes are correctly inserted, all records are imported)
-    // Import from gpx - existing track (track time is updated; correct number of track points inserted, track is update - will be eliminate later)
-    // Import from gpx - no related track existing (track is created with time, source file ref and track name)
-    // Import from gpx - # recs of tracks = total number of strava files
-    //                 - # recs of tracks with flag toReview + # recs tracks created = total number of strava files - 
-    //                 - total number of tracks
+    // Track exists: track time is updated; correct number of track points inserted, track is update - will be eliminate later
+    // No related track exists:  track is created with time, source file ref and track name
+    // # recs of tbl_tracks = total number of strava files
+    // # recs of tbl_tracks with flag toReview + # recs tracks created = total number of strava files
+    // # recs of tbl_tracks have increased by # of tracks with review flag = 1
     // Total number of track points = to import log
 
     // ACTIONS
-    // * Write result array to file
-    // * Remove update to trkTrackName (after initial migration)
-    // * Close connection when appropriate
-    // * Update table (make fields unique, set index)
-    // * Test
-    // * Document in word document
     // * Update Line number
     // * Run full import incl. logbook
-    // * Turn function updTrkName off --> target is that tourdb is always in the lead  
+    // * Test
+    // * Turn function updTrkName off --> target is that tourdb is always in the lead 
+    // * Write debug text into file
+    // * Document in word document
+    // * Update table (make fields unique, set index)
 
     // -----------------------------------
     // Set variables and parameters
@@ -39,7 +36,6 @@
 
     $debugLevel = 3;                                                    // 0 = off, 6 = all
     $recordNo = 0;                                                      // No of gpx files processed
-
     
     // -----------------------------------------
     // Main routine
