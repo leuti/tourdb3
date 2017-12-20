@@ -1,27 +1,45 @@
 <!DOCTYPE HTML><html><head>	<meta charset="utf-8"><title>import gpx</title></head>
 <body>
   <?php
-      // Open directory where the Strave GPX are stored
+      //---------------------------------------------------------------------------------------------
+      // PHP script writting the date, file name, track name and number of track points 
+      // for each track into file
+      // Echos  number of gpx file and the number of track points  
+      // Source directory: git_projects\tourdb3\import\gpx
+      //
+      // Utility
+      //
+      // Created: 7.12.2017 - Daniel Leutwyler
+      //---------------------------------------------------------------------------------------------
+
+      // Test Cases
+      // Compare against number of records in DB
+      // * Defect: äöü are not correctly displayed
+
+      // -----------------------------------
+      // Set variables and parameters    
       date_default_timezone_set('Europe/Zurich');    
       $debug = 1;
       $countFiles = 0;
       $countTrkPoints = 0;
-      $verz = dirname(__FILE__) . "\import\gpx";   // ACTION: Move to include file
-      chdir($verz);   
-      $dirHandle = opendir($verz);   // Open handle
       
-      $out_file_name = dirname(__FILE__) . "\out\analyseGpx.csv";
+      // Open directory where the Strave GPX are stored
+      $verz = dirname(__FILE__) . "\..\import\gpx";   
+      chdir($verz);   
+      $dirHandle = opendir($verz);                                        // Open handle
+      
+      $out_file_name = dirname(__FILE__) . "\..\out\analyseGpx.csv";
 
-      $out_file = @fopen($out_file_name,"w");   // was @fopen
+      $out_file = @fopen($out_file_name,"w");   
       echo "<h2>Directory $verz</h2>";
-      echo "TrackTime;FileName;TrackName;NoTrackPoints<br>";      
+      
       // Loop through each file in directory
       while ($fileName = readdir($dirHandle))
       {
         $fullFileName = $verz . "\\" . $fileName;
         
-        // Perform following statements only for files (an not for . and ..)
-        if (is_file ($fullFileName)) 
+        // Perform following statements only for gpx files
+        if (substr($fileName, strlen($fileName)-4) == ".gpx") 
         {
           $gpx = simplexml_load_file($fullFileName);  // Load XML structure
           
@@ -30,14 +48,14 @@
           //fwrite($out_file, mb_convert_encoding( $fileName, 'UTF-16LE', 'UTF-8'). ";");            // mb_convert_encoding makes sure äöü are correctly displayed
           fputs($out_file, $fileName . ";"); 
           fputs($out_file, '"');
-          //fwrite($out_file, mb_convert_encoding( $gpx->trk->name, 'UTF-16LE', 'UTF-8'). ";");
           fputs($out_file, $gpx->trk->name);
           fputs($out_file, '";');
           fputs($out_file, count($gpx->trk->trkseg->trkpt) ."\r\n");
 
-          $countFiles++;
-          $countTrkPoints=$countTrkPoints+count($gpx->trk->trkseg->trkpt);
+          $countFiles++;                                                      // Increase counter for number of files
+          $countTrkPoints=$countTrkPoints+count($gpx->trk->trkseg->trkpt);    // Increase counter for number of track points
           
+          // Echo details if debug is > 1
           if ($debug >1) {
             echo "D" . strftime("%Y%m%d", strtotime($gpx->metadata->time)) . ";";
             echo $fileName . ";";
@@ -45,17 +63,10 @@
             echo count($gpx->trk->trkseg->trkpt);
             echo "<br>";    
           }
-          /*  foreach ($gpx->trk->trkseg->trkpt as $trkpt) // ACTION: Through error message when number of trk / trkseg > 1
-          {
-            echo "lat: " . $trkpt["lat"] . "<br>";
-            echo "lon: " . $trkpt["lon"] . "<br>";
-            echo "Time: $trkpt->time<br><br>";
-            echo "Elevation: $trkpt->ele<br><br>";
-          }*/
         }
       } 
       if ($debug >0) {
-        echo "$countFiles Files are available to import and $countTrkPoints in Total<br>";    
+        echo "$countFiles Files are available to import and $countTrkPoints Track Points in Total<br>";    
       }
       /* Schliesst Handle */
       fclose($out_file);

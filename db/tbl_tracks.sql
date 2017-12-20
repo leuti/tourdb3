@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tracks` (
   `trkTimeToEnd` time DEFAULT NULL COMMENT 'Time from target to end',  
   `trkGrade` varchar(10) DEFAULT NULL COMMENT 'Schwierigkeitsgrad',
   `trkMeterUp` int(5) DEFAULT NULL COMMENT 'Meters ascended',
-  `trkMeterDown` int(5) DEFAULT NULL COMMENT 'Meters descended'
+  `trkMeterDown` int(5) DEFAULT NULL COMMENT 'Meters descended',
   `trkToReview` int(1) NOT NULL DEFAULT '0' COMMENT 'Record needs to be reviewed'
   ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;    -- CHECK 
 

@@ -34,18 +34,18 @@
     date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
     ini_set ("display_error", 1);                                       // Switch errors on
 
-    $debugLevel = 3;                                                    // 0 = off, 6 = all
+    $debugLevel = 0;                                                    // 0 = off, 6 = all
     $recordNo = 0;                                                      // No of gpx files processed
     
     // -----------------------------------------
     // Main routine
     // -----------------------------------------
 
-    $importGpxLog = dirname(__FILE__) . "\\out\\importGpx.log";         // Assign file location
+    $importGpxLog = dirname(__FILE__) . "\..\out\importGpx.log";         // Assign file location
     $err_file = @fopen($importGpxLog,"w");                              // open log file handler 
 
     // Open Directory for gxp import
-    $verz = dirname(__FILE__) . "\\import\\gpx";                        // Open directory where the GPX are stored
+    $verz = dirname(__FILE__) . "\..\import\gpx";                        // Open directory where the GPX are stored
     chdir($verz);                                                       // Change to directory
     $dirHandle = opendir($verz);                                        // Open file handle
 
@@ -153,7 +153,7 @@
         $newTrackTime = $gpx->metadata->time;
         // ACTION turn function updTrkName off --> target is that tourdb is always in the lead
         $newTrackName = $gpx->trk->name;                                // Assign track name to variable
-        $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time));   // format track time
+        $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));   // format track time
 
         $sql =  "UPDATE `tourdb2`.`tbl_tracks` ";                       // create sql statement to update track gps start time and track name
         $sql .= "SET `trkGPSStartTime` = '$trackTime', ";
@@ -195,12 +195,12 @@
     // ----------------------------------------------------------
     function insertNewTrack($conn,$trkId,$fileName,$fullFileName)
     {
-        $gpx = simplexml_load_file($fullFileName);                      // Load XML structure
-        $newTrackTime = $gpx->metadata->time;                           // Assign track time from gpx file to variable
-        $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time));    // convert track time 
+        $gpx = simplexml_load_file($fullFileName);                               // Load XML structure
+        $newTrackTime = $gpx->metadata->time;                                    // Assign track time from gpx file to variable
+        $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
         
         debugEcho(2,203,"Function insertNewTrack entered");
-        $sql = "INSERT INTO `tourdb2`.`tbl_tracks`";                    // Insert Source file name, gps start time and toReview flag
+        $sql = "INSERT INTO `tourdb2`.`tbl_tracks`";                             // Insert Source file name, gps start time and toReview flag
         $sql .= " (`trkSourceFileName`, `trkGPSStartTime`, `trkToReview`) VALUES "; 
 
         // trkSourceFileName
