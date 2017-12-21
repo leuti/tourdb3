@@ -24,7 +24,7 @@
     // * Run full import incl. logbook
     // * Test
     // * Turn function updTrkName off --> target is that tourdb is always in the lead 
-    // * Write debug text into file
+    // * Write debug text into file and replace function debug echo
     // * Document in word document
     // * Update table (make fields unique, set index)
 
@@ -34,18 +34,20 @@
     date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
     ini_set ("display_error", 1);                                       // Switch errors on
 
-    $debugLevel = 0;                                                    // 0 = off, 6 = all
+    $debugLevel = 3;                                                    // 0 = off, 6 = all
     $recordNo = 0;                                                      // No of gpx files processed
-    
+    $loopSize = 1000;                                           // Number of trkPts inserted in one go
+
     // -----------------------------------------
     // Main routine
     // -----------------------------------------
 
-    $importGpxLog = dirname(__FILE__) . "\..\out\importGpx.log";         // Assign file location
-    $err_file = @fopen($importGpxLog,"w");                              // open log file handler 
+    // Open file for import log
+    $importGpxLog = dirname(__FILE__) . "\..\out\importGpx.log";        // Assign file location
+    $logFile = @fopen($importGpxLog,"w");                               // open log file handler 
 
     // Open Directory for gxp import
-    $verz = dirname(__FILE__) . "\..\import\gpx";                        // Open directory where the GPX are stored
+    $verz = dirname(__FILE__) . "\..\import\gpx";                       // Open directory where the GPX are stored
     chdir($verz);                                                       // Change to directory
     $dirHandle = opendir($verz);                                        // Open file handle
 
@@ -66,7 +68,7 @@
             // Check if a track exists with given Strava File Name
             // ----------------------------------------------------
             $trkId = getTrackId($conn,$fileName,$fullFileName);         // function checks if track exists (returns -1 if not)
-            debugEcho(1,60,"Return value - trkId: $trkId ");
+            if ($debugLevel>1) fputs($logFile, "Line 71 - getTrackId: Return value - trkId: $trkId\r\n");
             $result_array[$recordNo]["trkId"] = $trkId;                 // trkId = ID of the track in tbl_tracks
             
             if ($trkId == -1) // If track not exists
@@ -77,7 +79,7 @@
                 // Create new track if not yet exiting
                 // ------------------------------------
                 $trkId = insertNewTrack($conn,$trkId,$fileName,$fullFileName);   // Insert track based infos in gpx file
-                debugEcho(1,71,"Return value - trkId: $trkId ");
+                if ($debugLevel>1) fputs($logFile, "Line 82 - insertNewTrack: Return value - trkId: $trkId\r\n");
                 $result_array[$recordNo]["trkId"] = $trkId;             // update trkId with newly created trkId
             } else { // If track exists
 
@@ -85,21 +87,21 @@
                 // Delete all existing track points
                 // ---------------------------------
                 $delTrkPt = delTrkPt($conn,$trkId);                     // Delete track points if already existing in DB 
-                debugEcho(1,78,"Return value - delTrkPt: $delTrkPt ");                                             
+                if ($debugLevel>1) fputs($logFile, "Line 90 - delTrkPt: Return value - delTrkPt: $delTrkPt\r\n");                                             
             }
             
             // ------------------------------------------------
             // Insert new track points for each file processed
             // ------------------------------------------------
             $insTrkPt = insertTrackPoint($conn,$fullFileName,$trkId); // Insert new track points; returns number of trkPts inserted (-1 = error)
-            debugEcho(1,85,"Return value - insTrkPt: $insTrkPt ");    
+            if ($debugLevel>1) fputs($logFile, "Line 97 - insertTrackPoint: Return value - insTrkPt: $insTrkPt\r\n");    
             $result_array[$recordNo]["noTrp"] = $insTrkPt;            // noTrp = Number of track points inserted
 
             // ----------------------------
             // Update tracks with gps info
             // ----------------------------
             $resUpdateTrack = updateTrack($conn,$fullFileName,$trkId);            // Insert new track points (returns 0 = OK / -1 = error)
-            debugEcho(1,92,"Return value - resUpdateTrack: $resUpdateTrack ");    
+            if ($debugLevel>6) fputs($logFile, "Line 104 - updateTrack: Return value - resUpdateTrack: $resUpdateTrack\r\n");    
 
             $recordNo++;                                              // Increased record number by 1
         }
@@ -119,27 +121,27 @@
     // ------------------------------------------------------
     function getTrackId($conn,$fileName,$fullFileName)
     {
-        debugEcho(2,114,"Function getTrackId entered");
+        if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 124 - Function getTrackId entered\r\n");
 
         $sql = "SELECT trkId FROM tbl_tracks ";                         // Search if a track with given gpx file name exists in db
         $sql .= "WHERE trkSourceFileName = '" . $fileName . "' ";
         $sql .= " LIMIT 1";
 
-        debugEcho(5,123,"sql: $sql");
+        if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 130 - sql: $sql\r\n");
 
         if ($tableTrackConn = mysqli_query($conn, $sql))                // sends sql statement to db
         {
             while ($tableTrack = mysqli_fetch_object($tableTrackConn))  // loops through result of query (only 1 record expected)
             {
                 $trkId = $tableTrack->trkId;                            // assigns trkId of found track to variable
-                debugEcho(3,130,"Select trkId is true ($trkId)");
+                if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 137 - Select trkId is true ($trkId)\r\n");
                 return $trkId;                                          // trkId of found track returned
             }
-                debugEcho(0,138,"No track found with Strava name $fileName");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 138 - No track found with Strava name $fileName\r\n");
                 return -1;                                              // -1 = Error
         } else
         {
-            debugEcho(0,143,"Error selecting trkId. Error Message: $conn->error");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 144 - Error selecting trkId. Error Message: $conn->error\r\n");
             return -1;                                                  // -1 = Error
         }
     }
@@ -159,13 +161,13 @@
         $sql .= "SET `trkGPSStartTime` = '$trackTime', ";
         $sql .= "`trkTrackName`= '$newTrackName' WHERE `trkId`=$trkId";
         
-        debugEcho (5,326,"sql: $sql");
+        if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
         if ($conn->query($sql) === TRUE) {
-            debugEcho(3,328,"Track name and time updated in tbl_tracks");
+            if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 166 - Track name and time updated in tbl_tracks\r\n");
             return 0;
         } else {
-            debugEcho(0,331,"Error updating track name and time! Error Message: $conn->error");
-            debugEcho(4,332,"sql: $sql");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 169 - Error updating track name and time! Error Message: $conn->error\r\n");
+            if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 170 - sql: $sql\r\n");
             return -1;
         }
     }
@@ -174,18 +176,18 @@
     // Delete existing track points and insert new track points
     // ----------------------------------------------------------
     function delTrkPt($conn,$trkId) {
-        debugEcho(2,175,"function delTrkPt entered");
+        if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 179 - function delTrkPt entered\r\n");
         $sql = "DELETE FROM `tourdb2`.`tbl_trackpoints` ";              // Delete all track points for given trkID
         $sql .= "WHERE `tbl_trackpoints`.`tptTrackFID` = $trkId";
 
-        debugEcho(5,180,"sql: $sql");
+        if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 183 - sql: $sql\r\n");
 
         if ($conn->query($sql) === TRUE) {
-            debugEcho(4,183,"All track points for Track ID ($trkId) successfully deleted");
+            if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 183 - All track points for Track ID ($trkId) successfully deleted\r\n");
             return 0;
         } else {
-            debugEcho(0,187,"Error deleting trkPt! Error Message: $conn->error");
-            debugEcho(4,188,"sql: $sql");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 189 - Error deleting trkPt! Error Message: $conn->error\r\n");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 190 - sql: $sql\r\n");
             return -1; 
         }
     }
@@ -199,7 +201,7 @@
         $newTrackTime = $gpx->metadata->time;                                    // Assign track time from gpx file to variable
         $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
         
-        debugEcho(2,203,"Function insertNewTrack entered");
+        if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 204 - Function insertNewTrack entered\r\n");
         $sql = "INSERT INTO `tourdb2`.`tbl_tracks`";                             // Insert Source file name, gps start time and toReview flag
         $sql .= " (`trkSourceFileName`, `trkGPSStartTime`, `trkToReview`) VALUES "; 
 
@@ -210,11 +212,11 @@
                            
         if ($conn->query($sql) === TRUE)                                // run sql against DB
         {
-            debugEcho(5,215,"sql: $sql");
-            debugEcho(3,216,"New track inserted successfully");
+            if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 215 - sql: $sql\r\n");
+            if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 216 - New track inserted successfully\r\n");
         } else {
-            debugEcho(0,218,"Error inserting trkPt: $conn->error");
-            debugEcho(0,219,"sql: $sql");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 218 - Error inserting trkPt: $conn->error\r\n");
+            if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 219 - sql: $sql\r\n");
             return -1;
         } 
 
@@ -226,13 +228,13 @@
             mysqli_stmt_bind_result($stmt, $trkId);                     // bind result variables
 
             while (mysqli_stmt_fetch($stmt)) {                          // Fetch result of sql statement (one result expeced)
-                debugEcho(4,235,"sql: $sql");
+                if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 231 - sql: $sql\r\n");
                 return $trkId;
             }
             mysqli_stmt_close($stmt);                                   // Close statement
         } else {
-            debugEcho(0,242,"Error selecting max(trkId): $conn->error");
-            debugEcho(4,243,"sql: $stmt");
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 236 - Error selecting max(trkId): $conn->error\r\n");
+            if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 237 - sql: $stmt\r\n");
             return -1;
         } 
     }
@@ -242,61 +244,85 @@
     // ----------------------------------------------------------
     function insertTrackPoint($conn,$fullFileName,$trkId) 
     {
-        debugEcho(2,253,"Function insertTrackPoint entered");
+        if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 253 - Function insertTrackPoint entered\r\n");
         $tptNumber = 1;
+        $loopCumul = $GLOBALS['loopSize'];
         $gpx = simplexml_load_file($fullFileName);                      // Load XML structure
-        $sql = "INSERT INTO `tourdb2`.`tbl_trackPoints`";               // create first part of insert statement 
-        $sql .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
-        $sql .= "  `tptEle`, `tptTime`) VALUES "; 
+        
+        $totalTrkPts = count($gpx->trk->trkseg->trkpt);                  // total number of track points in file
+        //$numOfLoops = ceil($totalTrkPts / $GLOBALS['trackPointLimits']);     // number of insert loops
+        $loop = 0;                                                          // set current loop to 0
 
+        $sqlBase = "INSERT INTO `tourdb2`.`tbl_trackPoints`";               // create first part of insert statement 
+        $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
+        $sqlBase .= "  `tptEle`, `tptTime`) VALUES "; 
+        
         $firstRec = 1;                                                  // flag first record as all other records need to be treated slightly different 
 
         foreach ($gpx->trk->trkseg->trkpt as $trkpt)                    // loop through each trkpt XML element in the gpx file
         {                  
             if ($firstRec == 1)                                         // if record is not first, a comma is written
                 {
-                $firstRec = 0;
+                    $sql = $sqlBase;
+                    $firstRec = 0;
             } else
             {
                 $sql .= ",";
             }
             
             $sql .= "('" . $tptNumber . "', ";                          // write tptNumber - a continuous counter for the track points
-            debugEcho(6,272,"tptNumber: $tptNumber");
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 277  - tptNumber: $tptNumber\r\n");
                     
             $sql .= "'" . $trkId . "', ";                               // tptTrackFID - reference to the track
-            debugEcho(6,276,"trkId: $trkId");
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 280 - trkId: $trkId\r\n");
                         
             $sql .= "'" . $trkpt["lat"] . "', ";                        // tptLat - latitude value 
             $message = "lat: " . $trkpt["lat"];
-            debugEcho(6,281,$message);
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 284 - $message\r\n");
             
             $sql .= "'" . $trkpt["lon"] . "', ";                        // tptLon - longitude value
             $message = "lon: " . $trkpt["lon"];
-            debugEcho(6,286,$message);
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 288 - $message\r\n");
 
             $sql .= "'" . $trkpt->ele . "', ";                          // tptEle - elevation of track point
-            debugEcho(6,290,"Elevation: $trkpt->ele");
+            
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 292 - Elevation: $trkpt->ele\r\n");
             
             $sql .= "'" . strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time)) . "')";     // tptTime - time of track point
-            debugEcho(6,294,"Time: $trkpt->time");
+            if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'], "Line 293 - Time: $trkpt->time\r\n");
+            //if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 294 - loop: $loop\r\n");
+
+            if($tptNumber == $loopCumul || $tptNumber == $totalTrkPts)
+            {        
+                $loop++;
+                if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 294 - loop: $loop\r\n");
+                
+                if ($conn->query($sql) === TRUE) {                              // execute query
+                    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 298  - tptNumber: $tptNumber\r\n");
+                    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 299  - totalTrkPts: $totalTrkPts\r\n");
+                    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 299  - loopCumul: $loopCumul\r\n");
+                    $sqldebug = substr($sql,0,100) . "<CUT>" . substr($sql,strlen($sql)-100,100);
+                    if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'],"Line 300 - Sql: " . $sqldebug . "\r\n"); 
+                    if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 301 - New track points inserted successfully\r\n");
+
+                    //$resUpdateTrack = updateTrack($conn,$fullFileName,$trkId);  // Insert new track points
+                    if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 304 - Return value - resUpdateTrack: $resUpdateTrack \r\n");    
+                    $loopCumul = $loopCumul + $GLOBALS['loopSize'];
+                    $firstRec = 1; 
+                    
+                } else {
+                    //$sqldebug = substr($sql,0,100) . "<CUT>" . substr($sql,strlen($sql)-100,100);
+                    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'],"Line 308 - Sql: " . $sql); 
+                    if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 309 - Error inserting trkPt! Error Message: $conn->error\r\n");
+                    return -1;
+                }
+            }
             
             $tptNumber++;                                               // increase track point counter by 1
-        }            
-                   
-        if ($conn->query($sql) === TRUE) {                              // execute query
-            debugEcho(6,300,"sql: $sql");
-            debugEcho(3,301,"New track points inserted successfully");
-
-            $resUpdateTrack = updateTrack($conn,$fullFileName,$trkId);                          // Insert new track points
-            debugEcho(1,304,"Return value - resUpdateTrack: $resUpdateTrack ");    
-
-            return $tptNumber-1;                                        // reduce tptNumber by une (as increase some line before)
-        } else {
-            debugEcho(6,308,"sql: $sql");
-            debugEcho(0,309,"Error inserting trkPt! Error Message: $conn->error ");
-            return -1;
-        }    
+            
+        }//$loop++;         
+        return $tptNumber-1;                                        // reduce tptNumber by une (as increase some line before)
+        //}
     }
 
     // ----------------------------------------------------------
@@ -304,7 +330,7 @@
     // ----------------------------------------------------------
     function displayResultArray($result_array)
     {
-        debugEcho(2,339,"Function displayResultArray entered");     
+        if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 321 - Function displayResultArray entered\r\n");     
         echo "<br>********* IMPORT COMPLETED *********<br>";
         echo "<br>no;fileName;trkId;trackFound;noTrp<br>";
         $noNewTrks = 0;                                                 // variable for number of newly created tracks
