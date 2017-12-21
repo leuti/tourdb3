@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tracks` (
   `trkRoute` varchar(1024) DEFAULT NULL COMMENT 'Key waypoints on the route',
   `trkDateBegin` date DEFAULT NULL COMMENT 'Date when the track started', 
   `trkDateFinish` date DEFAULT NULL COMMENT 'Date when the track finished (will be set to trkDateBegin when empty)', 
-  `trkGPSStartTime` date DEFAULT NULL COMMENT 'Content of GPX gpx->metadata->time>',
+  `trkGPSStartTime` DATETIME NULL DEFAULT NULL COMMENT 'Content of GPX gpx->metadata->time>',
   `trkSaison` varchar(50) DEFAULT NULL COMMENT 'Saison free text --> change to Foreign Key', 
   `trkTyp` varchar(50) DEFAULT NULL COMMENT 'Type free text --> change to Foreign Key',   
   `trkSubType` varchar(50) DEFAULT NULL COMMENT 'Subtype free text --> change to Foreign Key',

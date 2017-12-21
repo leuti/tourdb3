@@ -7,9 +7,8 @@ Number of files in file out/analyseGpx.csv: 586
 Run importGpx.php
 Number of files (echo importGpx.php): 586
 Number of new tracks created (echo importGpx.php): 586 
-Number of track points (echo importGpx.php): 493319
+Number of track points (echo importGpx.php): 602970
 
-Number of tracks (count tbl_tracks): 574
-Number of track points (count tbl_trackpoints): 493332 
-
+Number of tracks (count tbl_tracks): 586
+Number of track points (count tbl_trackpoints): 603339 
 
