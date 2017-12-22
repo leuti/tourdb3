@@ -17,12 +17,19 @@
 
 // -----------------------------------
 // Set variables and parameters    
-include("config.inc.php");  // Include config file
+include("config.inc.php");                              // Include config file
+date_default_timezone_set('Europe/Zurich');             // must be set when using time functions
+$debugLevel = 3;                                        // 0 = off, 6 = all
+$countTracks = 0;                                       // Internal counter for tracks processed
 $stlyeNormalColour = '#ff0000ff';                       // Colour of line in normal mode
 $stlyeNormalWidth = '3';                                // Width of line in normal mode
 $stlyeHighlightColour = '#fff000ff';                    // Colour of line in normal mode
 $stlyeHighlightWidth = '5';                             // Width of line in normal mode
 
+// Open file for import log
+$importGpxLog = dirname(__FILE__) . "\..\out\genOwnTracksKml.log";        // Assign file location
+$logFile = @fopen($importGpxLog,"w");                               // open log file handler 
+fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Set WHERE string if WHERE clause has been posted
 if(isset($_POST["whereGenKml"]) && $_POST["whereGenKml"] != ''){
@@ -82,6 +89,8 @@ $tracks = mysqli_query($conn, $sql);
 // Loop through each selected track and write main track data
 while($SingleTrack = mysqli_fetch_assoc($tracks))
 { 
+    $countTracks++;
+    if ($debugLevel>2) fputs($logFile, "Line 90 - Processing Track: " . $SingleTrack["trkId"] . "\r\n");
     $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $SingleTrack["trkId"]) . '">';
     $kml[] = '          <name>' . $SingleTrack["trkTrackName"] . '</name>';
     $kml[] = '          <visibility>1</visibility>';
@@ -95,9 +104,11 @@ while($SingleTrack = mysqli_fetch_assoc($tracks))
     $kml[] = '          <LineString>';
 
     // Select all track points for the current track
+    
     $sqlTrkPt  = "SELECT tptLat, tptLon, tptEle ";
     $sqlTrkPt .= "FROM tbl_trackPoints WHERE tptTrackFID = ";
     $sqlTrkPt .= $SingleTrack["trkId"] . " ORDER BY tptNumber"; 
+    if ($debugLevel>2) fputs($logFile, "Line 105 - sql: $sqlTrkPt\r\n");
     $trackPoints = mysqli_query($conn, $sqlTrkPt);
    
     // For each trkId loop track point and create coordinates string
@@ -130,6 +141,12 @@ $kmlOutput = join("\r\n", $kml);
 
 $outFile = @fopen("../out/ownTracksKml.kml","w");               // Open KML file for writing
 fputs($outFile, "$kmlOutput");                                  // Write kml to file
+fputs($logFile, "importGpx.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+
+fputs($logFile, "$countTracks Tracks processed\r\n");
+
+// Close all files and connections
+fclose($logFile);                                               // close log file
 mysql_close($conn);                                             // close SQL connection 
 fclose($outFile);                                               // close kml file
 ?>
