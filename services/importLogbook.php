@@ -14,13 +14,13 @@
 // -----------------------------------
 // Set variables and parameters    
 include("./config.inc.php");                                        //include config file
+header("Content-Type: text/html; charset=utf-8");
 
 $zaehler = 0;                                                       // used to count overall number of records
 $corr_insert = 0;                                                   // counts number of correctly imported records
 $err_insert = 0;                                                    // counts number of error records
 
-
-$logbook = @fopen("./import/logbook/Logbuch Berge.csv","r");        // Opens csv file
+$logbook = @fopen("../import/logbook/logbook.csv","r");        // Opens csv file
 if(!$logbook) 
 {
     exit("Datei nicht gefunden");
@@ -32,48 +32,48 @@ while (!feof($logbook))                                             // loop thro
         $zeile = substr($zeile, 0, strlen($zeile)-1);               // Ausgabe der Zeile ohne Carrage Return oder Line Feed
         if(!(feof($logbook) && $zeile == ""))                       // Verarbeitet nur Zeilen mit Inhalt
         {
-            $worte = explode(",", $zeile);                          // Zeile in Felder aufteilen
-            
+            $spalten = explode(",", $zeile);                          // Zeile in Felder aufteilen
+
             // Zuweisung der csv Felder
-            $trkLogbookId = $worte[1];                              // column ID
-            $trkPeakRef = $worte[2];                                // column RefGipfel
-            $trkStravaFileName = $worte[3];                         // column FileName Strava
-            $trkDateBegin = $worte[4];                              // column Datum Start
-            $trkDateFinish = $worte[5];                             // column Datum End
-            $trkSaison = $worte[8];                                 // column Saison
-            $trkTyp = $worte[10];                                   // column Art
-            $trkSubType = $worte[11];                               // column Unterart 
-            $trkOrg = $worte[12];                                   // column Org
-            $trkTarget = $worte[16];                                // column Ziel
-            $trkRoute = $worte[18];                                 // column Ziel Typ
-            $trkOvernightLoc = $worte[19];                          // column Route
-            $trkParticipants = $worte[24];                          // column Teilnehmer (ACTION: Zusammensetzen)
-            $trkEvent = $worte[25];                                 // column Anlass
-            $trkRemarks = $worte[26];                               // column Bemerkung
-            $trkDistance = (int)$worte[27];                         // column Distanz
-            $trkTimeOverall = $worte[28];                           // column Dauer
-            $trkGrade = $worte[29];                                 // column Schwierigkeit
-            $trkMeterUp = (int)$worte[30];                          // column Aufstieg
-            $trkMeterDown = (int)$worte[31];                        // column Abstieg
+            $trkLogbookId = $spalten[0];                              // column  0/ID
+            echo "zaehler: $zaehler    trkLogbookId: $trkLogbookId<br>";
+            $trkPeakRef = $spalten[1];                                // column  1/RefGipfel
+            $trkSourceFileName = $spalten[2];                         // column  2/FileName Strava
+            $trkDateBegin = strftime("%Y.%m.%d", strtotime($spalten[3]));  // column  3/Datum Start
+            $trkDateFinish = strftime("%Y.%m.%d", strtotime($spalten[4])); // column  4/Datum End
+            $trkSaison = $spalten[7];                                 // column  7/Saison
+            $trkTyp = $spalten[9];                                    // column  9/Art
+            $trkSubType = $spalten[10];                               // column 10/Unterart 
+            $trkOrg = $spalten[11];                                   // column 11/Org
+            $trkTrackName = $spalten[13];                             // column 13/Ziel
+            $trkRoute = $spalten[17];                                 // column 15/Route
+            $trkOvernightLoc = $spalten[18];                          // column 16/Übernachtung
+            $trkParticipants = $spalten[23];                          // column 21/Teilnehmer (ACTION: Zusammensetzen)
+            $trkEvent = $spalten[24];                                 // column 22/Anlass
+            $trkRemarks = $spalten[25];                               // column 23/Bemerkung
+            $trkDistance = (int)$spalten[26];                         // column 24/Distanz
+            $trkTimeOverall = $spalten[27];                           // column 25/Dauer
+            $trkGrade = $spalten[28];                                 // column 26/Schwierigkeit
+            $trkMeterUp = (int)$spalten[29];                          // column 27/Aufstieg
+            $trkMeterDown = (int)$spalten[30];                        // column 28/Abstieg
             
             // Create Select Statement
-            $sql = "INSERT INTO `tourdb2`.`tbl_tracks` (`trkId`, ";
-            $sql .= "`trkLogbookId`, `trkStravaFileName`, `trkPeakRef`, `trkDateBegin`, ";
-            $sql .= "`trkDateFinish`, `trkGPSStartTime`, `trkSaison`, `trkTyp`, `trkSubType`, ";
-            $sql .= "`trkOrg`, `trkTarget`, `trkRoute`, `trkOvernightLoc`, `trkParticipants`, ";
+            $sql = "INSERT INTO `tourdb2`.`tbl_tracks` (";
+            $sql .= "`trkLogbookId`, `trkSourceFileName`, `trkPeakRef`, `trkDateBegin`, ";
+            $sql .= "`trkDateFinish`, `trkSaison`, `trkTyp`, `trkSubType`, ";
+            $sql .= "`trkOrg`, `trkTrackName`, `trkRoute`, `trkOvernightLoc`, `trkParticipants`, ";
             $sql .= "`trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToEnd`, ";
-            $sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`) VALUES (NULL, ";
+            $sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`) VALUES (";
             $sql .= "'" . $trkLogbookId . "', ";
-            $sql .= "'" . $trkStravaFileName . "', "; 
+            $sql .= "'" . $trkSourceFileName . "', "; 
             $sql .= "'" . $trkPeakRef . "', "; 
             $sql .= "'" . $trkDateBegin . "', ";
             $sql .= "'" . $trkDateFinish . "', "; 
-            $sql .= "'" . $trkGPSStartTime . "', "; 
             $sql .= "'" . $trkSaison . "', "; 
             $sql .= "'" . $trkTyp . "', "; 
             $sql .= "'" . $trkSubType . "', ";
             $sql .= "'" . $trkOrg . "', "; 
-            $sql .= "'" . $trkTarget . "', "; 
+            $sql .= "'" . $trkTrackName . "', "; 
             $sql .= "'" . $trkRoute . "', "; 
             $sql .= "'" . $trkOvernightLoc . "', "; 
             $sql .= "'" . $trkParticipants . "', "; 
