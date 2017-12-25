@@ -31,7 +31,7 @@
     date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
     ini_set ("display_error", 1);                                       // Switch errors on
 
-    $debugLevel = 3;                                                    // 0 = off, 6 = all
+    $debugLevel = 0;                                                    // 0 = off, 6 = all
     $recordNo = 0;                                                      // No of gpx files processed
     $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
@@ -156,8 +156,8 @@
         $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));   // format track time
 
         $sql =  "UPDATE `tourdb2`.`tbl_tracks` ";                       // create sql statement to update track gps start time and track name
-        $sql .= "SET `trkGPSStartTime` = '$trackTime', ";
-        $sql .= "`trkTrackName`= '$newTrackName' WHERE `trkId`=$trkId";
+        $sql .= "SET `trkGPSStartTime` = '$trackTime' ";
+        $sql .= "WHERE `trkId`=$trkId";
         
         if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 163 - sql: $sql\r\n");
         if ($conn->query($sql) === TRUE) {

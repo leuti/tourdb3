@@ -36,7 +36,6 @@ while (!feof($logbook))                                             // loop thro
 
             // Zuweisung der csv Felder
             $trkLogbookId = $spalten[0];                              // column  0/ID
-            echo "zaehler: $zaehler    trkLogbookId: $trkLogbookId<br>";
             $trkPeakRef = $spalten[1];                                // column  1/RefGipfel
             $trkSourceFileName = $spalten[2];                         // column  2/FileName Strava
             $trkDateBegin = strftime("%Y.%m.%d", strtotime($spalten[3]));  // column  3/Datum Start
@@ -47,15 +46,16 @@ while (!feof($logbook))                                             // loop thro
             $trkOrg = $spalten[11];                                   // column 11/Org
             $trkTrackName = $spalten[13];                             // column 13/Ziel
             $trkRoute = $spalten[17];                                 // column 15/Route
-            $trkOvernightLoc = $spalten[18];                          // column 16/Übernachtung
-            $trkParticipants = $spalten[23];                          // column 21/Teilnehmer (ACTION: Zusammensetzen)
-            $trkEvent = $spalten[24];                                 // column 22/Anlass
-            $trkRemarks = $spalten[25];                               // column 23/Bemerkung
-            $trkDistance = (int)$spalten[26];                         // column 24/Distanz
-            $trkTimeOverall = $spalten[27];                           // column 25/Dauer
-            $trkGrade = $spalten[28];                                 // column 26/Schwierigkeit
-            $trkMeterUp = (int)$spalten[29];                          // column 27/Aufstieg
-            $trkMeterDown = (int)$spalten[30];                        // column 28/Abstieg
+            $trkOvernightLoc = $spalten[18];                          // column 18/Übernachtung
+            $trkParticipants = $spalten[23];                          // column 23/Teilnehmer (ACTION: Zusammensetzen)
+            $trkEvent = $spalten[24];                                 // column 24/Anlass
+            $trkRemarks = $spalten[25];                               // column 25/Bemerkung
+            $trkDistance = (int)$spalten[26];                         // column 26/Distanz
+            $trkTimeOverall = $spalten[27];                           // column 27/Dauer
+            $trkGrade = $spalten[28];                                 // column 28/Schwierigkeit
+            $trkMeterUp = (int)$spalten[29];                          // column 29/Aufstieg
+            $trkMeterDown = (int)$spalten[30];                        // column 30/Abstieg
+            $trkCountry = $spalten[31];                               // column 31/Country
             
             // Create Select Statement
             $sql = "INSERT INTO `tourdb2`.`tbl_tracks` (";

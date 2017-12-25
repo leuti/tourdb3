@@ -40,17 +40,18 @@ CREATE TABLE IF NOT EXISTS `tbl_tracks` (
   `trkGrade` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Schwierigkeitsgrad',
   `trkMeterUp` int(5) DEFAULT NULL COMMENT 'Meters ascended',
   `trkMeterDown` int(5) DEFAULT NULL COMMENT 'Meters descended',
+  `trkCountry` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Country',
   `trkToReview` int(1) NOT NULL DEFAULT '0' COMMENT 'Record needs to be reviewed'
   ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 --
--- Indexes for table `tbl_segments`
+-- Indexes for table `tbl_tracks`
 --
 ALTER TABLE `tbl_tracks`
   ADD PRIMARY KEY (`trkId`) USING BTREE;
 
 --
--- AUTO_INCREMENT for table `tbl_segments`
+-- AUTO_INCREMENT for table `tbl_tracks`
 --
 ALTER TABLE `tbl_tracks`
   MODIFY `trkId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=0;

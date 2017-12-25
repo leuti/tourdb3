@@ -23,9 +23,10 @@ SELECT  trkId
         , trkMeterUp
         , trkMeterDown
         , trkToReview
-        , tp.tptTrackFID
+        , trkCountry
         , count(tp.tptTrackFID)
 from tbl_trackpoints tp
-inner join tbl_tracks t on t.trkId = tp.tptTrackFID
+outer left join tbl_tracks t on t.trkId = tp.tptTrackFID
 
 group by tp.tptTrackFID
+order by trkId
