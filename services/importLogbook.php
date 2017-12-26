@@ -56,14 +56,14 @@ while (!feof($logbook))                                             // loop thro
             $trkMeterUp = (int)$spalten[29];                          // column 29/Aufstieg
             $trkMeterDown = (int)$spalten[30];                        // column 30/Abstieg
             $trkCountry = $spalten[31];                               // column 31/Country
-            
+
             // Create Select Statement
             $sql = "INSERT INTO `tourdb2`.`tbl_tracks` (";
             $sql .= "`trkLogbookId`, `trkSourceFileName`, `trkPeakRef`, `trkDateBegin`, ";
             $sql .= "`trkDateFinish`, `trkSaison`, `trkTyp`, `trkSubType`, ";
             $sql .= "`trkOrg`, `trkTrackName`, `trkRoute`, `trkOvernightLoc`, `trkParticipants`, ";
             $sql .= "`trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToEnd`, ";
-            $sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`) VALUES (";
+            $sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`) VALUES (";
             $sql .= "'" . $trkLogbookId . "', ";
             $sql .= "'" . $trkSourceFileName . "', "; 
             $sql .= "'" . $trkPeakRef . "', "; 
@@ -84,7 +84,8 @@ while (!feof($logbook))                                             // loop thro
             $sql .= "'" . $trkTimeToEnd . "', ";
             $sql .= "'" . $trkGrade . "', "; 
             $sql .= "'" . $trkMeterUp . "', "; 
-            $sql .= "'" . $trkMeterDown . "')";
+            $sql .= "'" . $trkMeterDown . "', ";
+            $sql .= "'" . $trkCountry . "')";
             
             // Schreiben in die Datenbank
             if ($conn->query($sql) === TRUE) {                      // Schreibt in die DB            
