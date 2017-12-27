@@ -1,48 +1,34 @@
+debug = true;
+
 // =====================================
 // ====== M A I N   S E C T I O N ======
 // =====================================
 $(document).ready(function() {
-    // ----------- ADMIN -------
-    // Generate single KML files - admin function 
-    /*    $(document).on('click', '#segGenKml', function (e) {
-            var xhr = new XMLHttpRequest();
-            phpLocation = document.URL + "seg_gen_single_kml.php";          // Variable to store location of php file
-            xhr.open ('POST', phpLocation, true);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
-            xhr.send(encodeURI());            
-            console.info("seg_gen_single_kml.php completed");
-        });*/
 
-    // Create Add Waypoint Dialog Box
-    // Source from JQuery UI home page - dialog
-    $( function() {
-        var $divGenKml = $('#divGenKml');
-        var $frmGenKml = $('#frmGenKml');
-        var $whereGenKml = $('input:text');
+    // Manages the behaviour when clicking on the main topic buttons
+    $('.topicButtons').each(function() {
+        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
+        $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
+        var $activeButtonA = $activeButton.find('a');                       // Get link <a> from active li element 
+        $topicButton = $($activeButtonA.attr('href'));                      // Get active panel
 
-        $divGenKml.show();
-        $frmGenKml.hide();
-
-        $('#btnGenKml').on('click', function() {
-            //$divGenKml.hide();
-            $frmGenKml.show();
-        });
-        
-        $frmGenKml.on('submit', function(e) {
-            e.preventDefault();                                             // check if required
-            var xhr = new XMLHttpRequest();
-            var xhrParams = "&whereGenKml=" + $whereGenKml.val();
+        $(this).on('click', '.mainButtonsA', function(e) {                  // When click on a topic tab (li item)
+            if (debug) { console.info(".topic-control: onclick function entered"); };
+            e.preventDefault();                                             // Prevent link behaviour
+            var $activeButtonA = $(this)                                    // Store the current link <a> element
+            var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
             
-            //var phpLocation = window.location.host + "/services/genOwnTracksKml.php";          // Variable to store location of php file
-            //var phpLocation = "http://localhost:8888/tourdb2/services/genOwnTracksKml.php";          // Variable to store location of php filevar xhrParams = "&sqlWhereClause=" + $whereGenKml;
-            var phpLocation = "./services/genOwnTracksKml.php";          // Variable to store location of php file
-            xhr.open ('POST', phpLocation, true);                // Make XMLHttpRequest 
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
-            xhr.send(encodeURI(xhrParams)); 
-            console.info("genOwnTracksKml.php completed");
-            $frmGenKml.hide();
-        });
-        
-    });
+            // Run following block if selected topic is currently not active
+            if (buttonId && !$activeButtonA.is('.active')) {
+                $topicButton.removeClass('active');                         // Make current panel inactive
+                $activeButton.removeClass('active');                        // Make current tab inactive
+
+                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+            }
+            if (debug) { console.info(".topic-control: onclick function completed"); };
+        }); 
+    }); 
 
     
 });    

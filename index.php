@@ -6,7 +6,7 @@
     <meta http-equiv="Expires" content="-1">
 	<title>Tour DB</title>
 	<!-- from https://www.jqwidgets.com/ -->
-    <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
 	
 	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
@@ -16,13 +16,13 @@
 	<script type="text/javascript" src="js/jquery-3.1.0.js"></script> <!-- JQuery from local server -->  <!-- local -->
 
 	<!-- from https://www.jqwidgets.com/ -->
-    <script type="text/javascript" src="jqw/jqwidgets/jqxcore.js"></script>
-    <script type="text/javascript" src="jqw/jqwidgets/jqxsplitter.js"></script>
-    <script type="text/javascript" src="jqw/scripts/demos.js"></script>
+    <!-- <script type="text/javascript" src="jqw/jqwidgets/jqxcore.js"></script>-->
+    <!--<script type="text/javascript" src="jqw/jqwidgets/jqxsplitter.js"></script>-->
+    <!--<script type="text/javascript" src="jqw/scripts/demos.js"></script>-->
 
 	<script type="text/javascript" src="js/jquery-ui.js"></script> <!-- JQuery UI from local server --> <!-- local -->
-	<script src="//api3.geo.admin.ch/loader.js"></script> <!-- Swissmap javascript -->
-	<script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- local -->
+	<!-- <script src="//api3.geo.admin.ch/loader.js"></script>--> <!-- Swissmap javascript -->
+	<!--<script type="text/javascript" src="js/bootstrap.min.js"></script>--> <!-- local -->
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
 
 	<!--<script src="//code.jquery.com/jquery-2.2.0.min.js"></script> -->  <!-- CDN -->
@@ -35,24 +35,24 @@
 		</div>
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
-		<ul class="topicTabs active">
-			<li id="tabDisplay" class="topicTabsLi">
-				<a class="tabMain" href="#panelDisplay"><h3>Display</h3></a>
+		<ul class="topicButtons">
+			<li id="buttonDisplay" class="topicButtonsLi active">
+				<a class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
 			</li>
-			<li id="tabMaintain" class="topicTabsLi">
-				<a class="tabMain" href="#panelMaintain"><h3>Maintain</h3></a> 
+			<li id="buttonMaintain" class="topicButtonsLi">
+				<a class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
 			</li>
-			<li id="tabImport" class="topicTabsLi">
-				<a class="tabMain" href="#panelImport"><h3>Import</h3></a> 
+			<li id="buttonImport" class="topicButtonsLi">
+				<a class="mainButtonsA" href="#panelImport"><h3>Import</h3></a> 
 			</li>
-			<li id="tabExport" class="topicTabsLi">
-				<a class="tabMain" href="#panelExport"><h3>Export</h3></a> 
+			<li id="buttonExport" class="topicButtonsLi">
+				<a class="mainButtonsA" href="#panelExport"><h3>Export</h3></a> 
 			</li>
-			<li id="tabAdmin" class="topicTabsLi">
-				<a class="tabMain" href="#panelAdmin"><h3>Admin</h3></a>
+			<li id="buttonAdmin" class="topicButtonsLi">
+				<a class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
 			</li>
-			<li id="tabLogin" class="topicTabsLi">
-				<a class="tabMain" href="#panelLogin"><h3>Login</h3></a>
+			<li id="buttonLogin" class="topicButtonsLi">
+				<a class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
 			</li>
 		</ul>
 	</header> 
@@ -96,8 +96,8 @@
 		<!-- ======================== panelAdmin ========================================== -->
 		<!-- ========================================================================== -->
 		
-		<div id="panelAdmin" class="panelAdmin">
-			<p>Ich bin das panel panelExport</p>		
+		<div id="panelAdmin" class="tourdbPanel">
+			<p>Ich bin das panel panelAdmin</p>		
 		</div> <!-- End div panelAdmin -->
 
 		<!-- ========================================================================== -->

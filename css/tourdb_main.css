@@ -31,12 +31,12 @@ table {
     color: #ccccff;}
 
 /********** TOPIC TABS **********/
-.topicTabs {
+.topicButtons {
     margin: 0;
     padding: 0;
     padding-top: 36px;}
 
-.topicTabsLi {
+.topicButtonsLi {
     display: inline-block;
     /*list-style-type: none;*/
     background-color: #cce6ff;
@@ -45,16 +45,20 @@ table {
     letter-spacing: 0.2em;
     margin-left: 20px;}
 
-.tabMain {
+.mainButtonsA {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;}
 
 /* hover states */
-.tabMain.active, .tabMain:hover {
+.mainButtonsA.active, .mainButtonsA:hover {
     background-color: #4da9ff;
     color: #9933ff;
     border-bottom: 3px solid #4da9ff;}
+
+.tourdbPanel.active { /* Formatting if active */
+        display: block;}  
+    
 
 /********** FILTER STYLES *********/
 .segFilterTabs, .waypFilterTabs, .mapFilterTabs, .mapOptionTabs, tourenFilterTabs {
