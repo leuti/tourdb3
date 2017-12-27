@@ -22,15 +22,17 @@ date_default_timezone_set('Europe/Zurich');             // must be set when usin
 $debugLevel = 3;                                        // 0 = off, 6 = all
 $countTracks = 0;                                       // Internal counter for tracks processed
 
+// --------------------------------------------------
+// Array for the styling of the lines in the kml file
 $styleArray = array(
-    array("Wanderung","FF01EDFF",3,"FF01EDFF",5),                         // gelb
+    array("Wanderung","FF01EDFF",3,"FF01EDFF",5),                           // gelb
     array("Winterwandern","#ff852eff",3,"#ff852eff",5),                     // orange
-    array("Alpintour","FF00C0FF",3,"FF00C0FF",5),                         // rot
-    array("Hochtour","FF0000FF",3,"FF0000FF",5),                          // schwarz
+    array("Alpintour","FF00C0FF",3,"FF00C0FF",5),                           // rot
+    array("Hochtour","FF0000FF",3,"FF0000FF",5),                            // schwarz
     
-    array("Sportklettern","FFD9D9D9",3,"FFD9D9D9",5),                     // hell grau
-    array("Mehrseilklettern","FFA6A6A6",3,"FFA6A6A6",5),                  // mittel grau
-    array("Alpinklettern","FF808080",3,"FF808080",5),                     // dunkel grau
+    array("Sportklettern","FFD9D9D9",3,"FFD9D9D9",5),                       // hell grau
+    array("Mehrseilklettern","FFA6A6A6",3,"FFA6A6A6",5),                    // mittel grau
+    array("Alpinklettern","FF808080",3,"FF808080",5),                       // dunkel grau
         
     array("Velotour","#FF01FF86",3,"#FF01FF86",5),                          // grün 
     
@@ -41,8 +43,8 @@ $styleArray = array(
 );
 
 // Open file for import log
-$importGpxLog = dirname(__FILE__) . "\..\out\genOwnTracksKml.log";        // Assign file location
-$logFile = @fopen($importGpxLog,"w");                               // open log file handler 
+$importGpxLog = dirname(__FILE__) . "\..\out\genOwnTracksKml.log";          // Assign file location
+$logFile = @fopen($importGpxLog,"w");                                       // open log file handler 
 fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Set WHERE string if WHERE clause has been posted
@@ -58,14 +60,11 @@ $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.googl
 $kml[] = '  <Document>';
 $kml[] = '    <name>tourdb - KmlFile</name>';
 
+// Create kml stylemaps
 $i=0;
 for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
-    {
-        $kml = createStyles($styleArray[$i], $kml);
-        
-        fputs($logFile, "Line 66 - style created --> subtype: " . $styleArray[$i][0] . " --> value: " . $styleArray[$i][1] . "\r\n");
+        $kml = createStyles($styleArray[$i], $kml);    
     }
-}
 
 // Write main section - intro
 $kml[] = '    <Folder>';
@@ -83,25 +82,21 @@ $tracks = mysqli_query($conn, $sql);
 // Loop through each selected track and write main track data
 while($SingleTrack = mysqli_fetch_assoc($tracks))
 { 
-    $countTracks++;
-    if ($debugLevel>2) fputs($logFile, "Line 90 - Processing Track: " . $SingleTrack["trkId"] . "\r\n");
+    $countTracks++;                                                             // Counter for the number of tracks produced
     $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $SingleTrack["trkId"]) . '">';
     $kml[] = '          <name>' . $SingleTrack["trkTrackName"] . '</name>';
     $kml[] = '          <visibility>1</visibility>';
     $kml[] = '          <description>' . $SingleTrack["trkId"] . ' - ' . $SingleTrack["trkRoute"] . ' (mit ' .  $SingleTrack["trkParticipants"] . ')</description>';
-   
-    fputs($logFile, "Line 93  subtype: " . $SingleTrack["trkSubType"] . "\r\n");
-    $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';                       // Set styleUrl to Others in case nothing in found
     
+    $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
     $i=0;
-    for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
+    for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
         if ($styleArray[$i][0] == $SingleTrack["trkSubType"])
         {
             $styleMapDefault = '          <styleUrl>#stylemap_' . $SingleTrack["trkSubType"] . '</styleUrl>';
             break;
         }
     }
-    fputs($logFile, "Line 96  styleMapDefault: " . $styleMapDefault . "\r\n");
     $kml[] = $styleMapDefault;
        
     $kml[] = '          <ExtendedData>';
@@ -112,11 +107,9 @@ while($SingleTrack = mysqli_fetch_assoc($tracks))
     $kml[] = '          <LineString>';
 
     // Select all track points for the current track
-    
     $sqlTrkPt  = "SELECT tptLat, tptLon, tptEle ";
     $sqlTrkPt .= "FROM tbl_trackPoints WHERE tptTrackFID = ";
     $sqlTrkPt .= $SingleTrack["trkId"] . " ORDER BY tptNumber"; 
-    if ($debugLevel>2) fputs($logFile, "Line 105 - sql: $sqlTrkPt\r\n");
     $trackPoints = mysqli_query($conn, $sqlTrkPt);
    
     // For each trkId loop track point and create coordinates string
@@ -159,8 +152,8 @@ mysql_close($conn);                                             // close SQL con
 fclose($outFile);                                               // close kml file
 
 function createStyles ($styleArray,$kml) {
-    // Generates style map and style for each subtype                          //// variable aus $styleArray lesen und einsetzen
 
+    // Generates style map and style for each subtype                          //// variable aus $styleArray lesen und einsetzen
     $styleMapId = "stylemap_" . $styleArray[0];
     $styleUrlNorm = "style_" . $styleArray[0] . "_norm";
     $styleUrlHl = "style_" . $styleArray[0] . "_hl";
