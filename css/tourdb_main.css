@@ -30,7 +30,7 @@ em { /* formatting for DB in logo*/
 table {
     color: #ccccff;}
 
-/********** TOPIC TABS **********/
+/********** TOPIC BUTTONS **********/
 .topicButtons {
     margin: 0;
     padding: 0;
@@ -56,17 +56,76 @@ table {
     color: #9933ff;
     border-bottom: 3px solid #4da9ff;}
 
-.tourdbPanel.active { /* Formatting if active */
+.tourdbPanel.active { 
         display: block;}  
-    
+
+/********** PANELS **********/
+/****************************/
+div.tourdbPanel {
+    display: none;}
+
+#displayOptionsAccordion {
+    width: 500px;}
 
 /********** FILTER STYLES *********/
+.accordionBackground {
+    background-color: #cce6ff;}
+
+.selectable .ui-selecting { 
+    background: #FECA40; }
+
+.selectable .ui-selected { 
+    background: #F39814; color: white; }
+
+.selectable {
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0;}
+
+.selectable li {
+    display: inline-block;
+    font-size: 0.8em;
+    margin: 3px; 
+    padding: 0.4em;  
+    height: 14px;
+    color: #001a33;}
+
+.UFLegend {
+    border-color: black;
+    border-width: thick;
+    font-size: 1.5em;
+    padding-bottom: 10px;}
+
+.labelNext, .labelFirst {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 3px; 
+    padding: 0.4em; 
+    height: 14px;
+    color: #001a33;}
+
+.ui-widget-content {
+    border: 1px solid white;
+    /*background: #ffffff;*/
+    color: #333333;}
+
+.ui-widget.ui-widget-content {
+    border: 1px solid #0066ff;
+    background-color: #cce6ff;}    
+
+
+
+/* Not used stylesheets */
+
+/*
 .segFilterTabs, .waypFilterTabs, .mapFilterTabs, .mapOptionTabs, tourenFilterTabs {
     float: left;
     margin: 0;
     padding: 0;
-    padding-top: 12px; /* distance top to tabs */
+    padding-top: 12px; 
     padding-bottom: 12px;}
+
 .mapOptionTabs {
     float:right;
     padding-right: 40px;}
@@ -83,8 +142,10 @@ table {
   font-weight: bold;
   display: block;
   padding: 3px 30px 3px 30px;}
+*/
 
 /* hover states */
+/*
 .segFilterTabs li.active, .segFilterTabs li:hover,
 .waypFilterTabs li.active, .waypFilterTabs li:hover,
 .mapFilterTabs li.active, .mapFilterTabs li:hover,
@@ -100,15 +161,16 @@ table {
 .tourenFilterTabs li.active a, .tourenFilterTabs li a:hover {
   color: #9933ff;
   background-color: #4da9ff;}
-
+*/
 
 /********** VIEW TABS **********/
+/*
 .segViewTabs, .waypViewTabs, .mapViewTabs {
     float: right;
     margin: 0;
     margin-right: 20px;   
     padding: 0;
-    padding-top: 12px;} /* distance top to tabs */  
+    padding-top: 12px;}   
 .segViewTabs li, .waypViewTabs li, .mapViewTabs li {
   display: inline-block;
   list-style-type: none;
@@ -120,8 +182,10 @@ table {
   color: #001a33;
   display: block;
   padding: 3px 10px 3px 10px;}
+*/
 
 /* hover states */
+/*
 .segViewTabs li.active, .segViewTabs li:hover, 
 .waypViewTabs li.active, .waypViewTabs li:hover,
 .mapViewTabs li.active, .mapViewTabs li:hover {
@@ -133,23 +197,22 @@ table {
 .mapViewTabs li.active a, .mapViewTabs li a:hover  {
   color: #9933ff;
   background-color: #4da9ff;}
+*/
 
-/********** PANELS **********/
-/****************************/
-div.tourdbPanel {
-    display: none;}
 
 /********** PANEL HOME **********/
+/*
 div#panelHome.active { /* Formatting if active */
   display: block;}
-
+*/
 /********** PANEL MAP **********/
 /* panelMap */
+/*
 div#panelMap.active {
     display: block;}
-
+*/
 /********** PANEL SEGMENTS **********/
-div#panelSegments.active, div#panelWaypoints.active, div#panelMap.active { /* Formatting if active */
+/*div#panelSegments.active, div#panelWaypoints.active, div#panelMap.active { 
     display: block;}  
 div#segPanelFilter, div#waypPanelFilter, div#mapPanelFilter, div#tourenPanelFilter {
     display: none;}
@@ -234,23 +297,26 @@ div#segPanelFilterSql.visible, div#waypPanelFilterSql.visible, div#mapPanelFilte
     padding: 5px 5px 5px 5px;}
 #results {
     float: left;}
-
+*/
 /************* MODAL WINDOW (to review) ************************/
-
+/*
 fieldset { padding:0; border:0; margin-top:25px; }
-/*h1 { font-size: 1.2em; margin: .6em 0; }*/
 div#users-contain { width: 350px; margin: 20px 0; }
 div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
 div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
 .ui-dialog .ui-state-error { padding: .3em; }
 .validateTips { border: 1px solid transparent; padding: 0.3em; }
+*/
 
 /********** PANEL WAYPOINTS **********/
-div#panelWaypoints.active { /* Formatting if active */
+/*
+div#panelWaypoints.active { 
   display: block;}
+*/
 
 /********** PANEL ROUTES **********/
 /* panelAdmin */
+/*
 div#panelAdmin.active, div#panelTour.active {
     display: block;
     height: 100%;}
@@ -265,29 +331,25 @@ div#panelAdmin.active, div#panelTour.active {
     padding: 10px;
     font-size: 120%;
     font-weight: bold;
-    /*
-    height: 100px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -150px;
-    */
     text-align: center;
     background-color: #f9f5c0;
     color: black;
     z-index: 1;}
+*/
 
 /******* FOOTER *******/
+/*
 footer { 
     position: fixed;
     bottom: 15px;
     left: 20px;}
+*/
 /*li {
     display: inline;
     padding: 0.5em;}*/
 
 /******** TABLE FORMATTING ********/
+/*
 tr.header>th {
     padding: 3px 5px 3px 5px;
     color: #e6e6ff;
@@ -305,7 +367,6 @@ td {
     font-size: 90%;
     border-bottom: 0.5px solid #4d4dff;}
 tr.coord{
-    /*font-weight: bold;*/
     color: #ccffe6;}
 .contents{
 	margin: 20px;
@@ -325,8 +386,9 @@ tr.coord{
 .loading-div img {
 	margin-top: 20%;
 	margin-left: 50%;}
-
+*/
 /******** Pagination style ********/
+/*
 .pagination{
     padding: 30px;
     margin: auto;}
@@ -352,9 +414,11 @@ tr.coord{
 .pagination li.active{
 	background: #4da9ff;
 	color: #333;}
-
+*/
 /**********************************************/
 /******** OTHER ELEMENTS **********************/
+
+/*
 p.filterElement {
     clear: both;}
 .labelFirst, .labelNext, .waypFilterLabelFirst {
@@ -372,16 +436,12 @@ p.filterElement {
     width: 40px;
     float: left;}
 .segFilterCriteria, .waypFilterCriteria, .mapFilterCriteria {
-    clear: both;
-    /*border-bottom: #F9F9F9;
-    border-bottom-style: solid;
-    border-bottom-width: 0.5px;*/}
+    clear: both;}
 .selectable .ui-selecting { 
     background: #FECA40; }
 .selectable .ui-selected { 
     background: #F39814; color: white; }
 .selectable {
-    /*float: left;*/
     list-style-type: none; 
     margin: 0; 
     padding: 0;}
@@ -393,9 +453,7 @@ p.filterElement {
     height: 14px;
     color: #001a33;}
 .ui-widget-content {
-    border: 1px solid white;
-    /* background: #ffffff; */
-    /* color: #333333; */}
+    border: 1px solid white;}
 .ui-slider-horizontal {
     height: .4em;}
 .ui-slider .ui-slider-handle {
@@ -409,16 +467,12 @@ p.filterElement {
 .ui-widget.ui-widget-content {
 	border: 1px solid #0066ff;
     background-color: #cce6ff;}
-/*.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 0.8em;}*/
+
 input.text, select.text { 
     margin-bottom:12px; 
+*/
     /*width:80%;*/ 
-    padding: .2em;}
+/*    padding: .2em;}
 .segValidateTips, .waypValidateTips {
     color: #ff0000;}
 .ui-autocomplete {
@@ -426,8 +480,9 @@ input.text, select.text {
     font-size: 0.8em;
     max-height: 100px;
     overflow-y: auto;
+*/
     /* prevent horizontal scrollbar */
-    overflow-x: hidden;
+/*    overflow-x: hidden;
     position: absolute;
 	top: 0;
 	left: 0;
@@ -463,7 +518,9 @@ ul.ui-autocomplete.ui-menu {
     background: #f6f6f6;
     color: #ccccff;
     background-color: #000033;
+*/
     /*overflow-y: auto;*/}
+/*
 #panelTourTour-sortable li {
     margin: 0 5px 5px 5px;
     padding: 5px;
@@ -476,7 +533,9 @@ ul.ui-autocomplete.ui-menu {
 .delImage{
     margin-right: 10px;
     float: left;}
+*/
 /* Overwrite jqw CSS styles */
+/*
 .jqx-widget-content {
     background-color: #000033;}
 
@@ -485,3 +544,4 @@ ul.ui-autocomplete.ui-menu {
 
 .jqx-splitter-splitbar-vertical, .jqx-splitter-splitbar-horizontal {
     border: none;}    
+*/

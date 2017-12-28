@@ -5,6 +5,11 @@ debug = true;
 // =====================================
 $(document).ready(function() {
 
+    // Initial drawing of map
+    if ( navigator.onLine ) {
+        drawMapEmpty('mapPanel_Map-ResMap');         // Draw empty map (without additional layers) 
+    };
+
     // Manages the behaviour when clicking on the main topic buttons
     $('.topicButtons').each(function() {
         var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
@@ -30,8 +35,25 @@ $(document).ready(function() {
         }); 
     }); 
 
+    $( function() {
+        $( "#displayOptionsAccordion" ).accordion({
+          collapsible: true
+        });
+    } );
     
 });    
+
+// Function drawing empty map
+function drawMapEmpty(targetDiv) {
+    var map = new ga.Map({
+        target: targetDiv,
+        view: new ol.View({resolution: 100, center: [670000, 160000]})
+    });
+
+    // Create a background layer
+    var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+    map.addLayer(lyr1);
+}
 
 
     

@@ -11,20 +11,6 @@
     // Created: 13.12.2017 - Daniel Leutwyler
     // ---------------------------------------------------------------------------------------------
 
-    // Test Cases
-    // Track exists: track time is updated; correct number of track points inserted, track is update - will be eliminate later
-    // No related track exists:  track is created with time, source file ref and track name
-    // OK --> # recs of tbl_tracks = total number of strava files
-    // OK --> # recs of tbl_tracks with flag toReview + # recs tracks created = total number of strava files
-    // # recs of tbl_tracks have increased by # of tracks with review flag = 1
-    // Total number of track points = to import log
-
-    // ACTIONS
-    // * Run full import incl. logbook
-    // * Turn function updTrkName off --> target is that tourdb is always in the lead 
-    // 
-    // 
-
     // -----------------------------------
     // Set variables and parameters
     include("./config.inc.php");                                        // include config file
@@ -152,11 +138,12 @@
     {
         $gpx = simplexml_load_file($fullFileName);                      // Load XML structure
         $newTrackTime = $gpx->metadata->time;
-        $newTrackName = $gpx->trk->name;                                // Assign track name to variable
+        $trackName = $gpx->trk->name;                                // Assign track name to variable
         $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));   // format track time
 
         $sql =  "UPDATE `tourdb2`.`tbl_tracks` ";                       // create sql statement to update track gps start time and track name
-        $sql .= "SET `trkGPSStartTime` = '$trackTime' ";
+        $sql .= "SET `trkGPSStartTime` = '$trackTime', ";
+        $sql .= "`trkTrackName` = '$trackName' ";
         $sql .= "WHERE `trkId`=$trkId";
         
         if ($GLOBALS['debugLevel']>5) fputs($GLOBALS['logFile'], "Line 163 - sql: $sql\r\n");
@@ -202,12 +189,14 @@
         $trackTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
         $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));    // convert track time 
         $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime));   // convert track time 
+        $trackName = $gpx->trk->name;                                   // Track name
                 
         $sql = "INSERT INTO `tourdb2`.`tbl_tracks`";                    // Insert Source file name, gps start time and toReview flag
         $sql .= " (`trkSourceFileName`, `trkGPSStartTime`, `trkDateBegin`, `trkDateFinish`, `trkToReview`) VALUES "; 
 
         // trkSourceFileName
         $sql .= "('" . $fileName . "', ";                               // create value bracket statement
+        $sql .= "'" . $trackName . "', ";
         $sql .= "'" . $trackTime . "', ";
         $sql .= "'" . $DateBegin . "', ";
         $sql .= "'" . $DateFinish . "', ";
