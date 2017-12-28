@@ -84,32 +84,25 @@
 						<!-- SEGMENT filter -->
 						<legend class="UFLegend">Tracks to be displayed</legend>
 
-						<!-- Filter fields
-						        Track name like 
-								Route like 
-								Date Begin within 
-								Season
-								Type select box
-								Subtype select box
-								org
-								overnight loc like
-								participant like
-								country like--> 
-						<!-- Track name contains -->
+						<!-- Track name contains (standard text field) -->
 						<div class="mapFilterCriteria">	
 							<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
 							<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="40" class="text ui-widget-content ui-corner-all">
 						</div>
 
-						<!-- Route contains -->
+						<!-- Route contains (standard text field) -->
 						<div class="mapFilterCriteria">
 							<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
 							<input name="dispFilTrk_route" id="dispFilTrk_route" size="40" class="text ui-widget-content ui-corner-all">
 						</div>
 
-							<!-- Date witin range -->
+						<!-- Date witin range -->
+						<div class="mapFilterCriteria"> 
+							<p>From Date: <input type="text" id="dispFilTrk_dateFrom" class="labelFirst" size="10"></p>
+							<p>To Date: <input type="text" id="dispFilTrk_dateTo"class="labelFirst" size="10"></p>
+						</div>
 
-						<!-- Type as select items -->
+						<!-- Type as select items (selectable) -->
 						<div class="mapFilterCriteria">
 							<label for="dispFilTrk_type" class="labelFirst">Type</label>
 							<ol id="dispFilTrk_type" class="selectable filterItems">
@@ -122,33 +115,33 @@
 							</ol>
 						</div>
 
-						<!-- Subtype as select items -->
+						<!-- Subtype as select items (selectable) -->
 						<div class="mapFilterCriteria">
 							<label for="dispFilTrk_subtype" class="labelFirst">Subtype</label>
-							<ol id="dispFilTrk_type" class="selectable filterItems">
-								<li id="dispFilTrk_type_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
-								<li id="dispFilTrk_type_Alpintour" class="ui-widget-content">Alpintour</li>
-								<li id="dispFilTrk_type_Hochtour" class="ui-widget-content">Hochtour</li>
-								<li id="dispFilTrk_type_Joggen" class="ui-widget-content">Joggen</li>
-								<li id="dispFilTrk_type_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
-								<li id="dispFilTrk_type_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
-								<li id="dispFilTrk_type_Schwimmen" class="ui-widget-content">Schwimmen</li>
-								<li id="dispFilTrk_type_Skihochtour" class="ui-widget-content">Skihochtour</li>
-								<li id="dispFilTrk_type_Skitour" class="ui-widget-content">Skitour</li>
-								<li id="dispFilTrk_type_Sportklettern" class="ui-widget-content">Sportklettern</li>
-								<li id="dispFilTrk_type_Velotour" class="ui-widget-content">Velotour</li>
-								<li id="dispFilTrk_type_Wanderung" class="ui-widget-content first">Wanderung</li>
-								<li id="dispFilTrk_type_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
+							<ol id="dispFilTrk_subtype" class="selectable filterItems">
+								<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
+								<li id="dispFilTrk_subtype_Alpintour" class="ui-widget-content">Alpintour</li>
+								<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
+								<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
+								<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
+								<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
+								<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content">Schwimmen</li>
+								<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content">Skihochtour</li>
+								<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content">Skitour</li>
+								<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content">Sportklettern</li>
+								<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content">Velotour</li>
+								<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first">Wanderung</li>
+								<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
 							</ol>
 						</div>
 						
-						<!-- participants like -->
+						<!-- participants like (standard text field) -->
 						<div class="mapFilterCriteria">	
 							<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
 							<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="40" class="text ui-widget-content ui-corner-all">
 						</div>
 
-						<!-- Country -->
+						<!-- Country (standard text field) -->
 						<div class="mapFilterCriteria">	
 							<label for="dispFilTrk_country" class="labelFirst">Country like</label>
 							<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
