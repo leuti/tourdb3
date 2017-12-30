@@ -1,3 +1,15 @@
+
+
+// =================================================
+// ====== G L O B A L   V A R   S E C T I O N ======
+// =================================================
+// Create unique file name for KML
+var today = new Date();
+
+    // file location & name for KML output
+    trackFileName = "track_" + today.getTime() + ".kml";
+    trackKmlFileNameURL = document.URL + "tmpout/" + trackFileName;
+
 // =====================================
 // ====== M A I N   S E C T I O N ======
 // =====================================
@@ -5,7 +17,7 @@ $(document).ready(function() {
 
     // Initial drawing of map
     if ( navigator.onLine ) {
-        drawMapEmpty('mapPanel_Map-ResMap');         // Draw empty map (without additional layers) 
+        drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
     };
 
     // Manages the behaviour when clicking on the main topic buttons
@@ -122,7 +134,7 @@ $(document).ready(function() {
         });
         if ( whereString.length > 0 ) {
             whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "trkTyp in (" + whereString + ")";                        // complete SELECT IN statement
+            whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
             whereStatement.push( whereString );                                     // Add to where Statement array
         }
 
@@ -134,7 +146,7 @@ $(document).ready(function() {
         });
         if ( whereString.length > 0 ) {
             whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "trkSubTyp in (" + whereString + ")";                     // complete SELECT IN statement
+            whereString = "trkSubType in (" + whereString + ")";                     // complete SELECT IN statement
             whereStatement.push( whereString );                                     // Add to where Statement array
         }           
 
@@ -166,23 +178,21 @@ $(document).ready(function() {
         // ****************************************************
         // Generate KML & draw Map 
 
-        callGenKml("tracks",sql);                       // Generate KML file; file stored in file defined by global var segKmlFileNameURL
-        callGenWaypKml(optionWhereStmt);                // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
+        callGenKml(trackFileName,"tracks",sql);                       // Generate KML file; file stored in file defined by global var segKmlFileNameURL
+        //callGenWaypKml(optionWhereStmt);                // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
         
         // Close filter panels at the end
         $('#mapPanelFilter').removeClass('visible');
 
         // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
-        var removeEl = document.getElementById('mapPanel_Map-ResMap');  // delete div .map
+        var removeEl = document.getElementById('displayMap-ResMap');  // delete div .map
         var containerEl = removeEl.parentNode;          // Get its containing element
         containerEl.removeChild(removeEl);              // Remove the elements
         var newDiv = document.createElement('div');     // create new div element
         containerEl.appendChild(newDiv);                // Add to parent element
-        newDiv.id = 'mapPanel_Map-ResMap';
-        newDiv.className = 'mapPanel_Map-ResMap'; 
-        drawMapOld('mapPanel_Map-ResMap', segKmlFileNameURL, waypKmlFileNameURL, 
-            drawHangneigung, drawWanderwege, drawHaltestellen, 
-            drawKantonsgrenzen, drawSacRegion); // Draw map to panel
+        newDiv.id = 'displayMap-ResMap';
+        newDiv.className = 'displayMap-ResMap'; 
+        drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
         mapMapNeedsLoad = false;                             // No need to load map
     });
     // ***************************
@@ -207,17 +217,127 @@ function drawMapEmpty(targetDiv) {
 
 // Function generating KML file for segments
 
-function callGenKml(kmlType, sqlWhere) {
-    // call gen_kml.php using XMLHttpRequest POST     
+function callGenKml(outFileName, kmlType, sqlWhere) {   
     var xhr = new XMLHttpRequest();
-    phpLocation = document.URL + "gen_kml.php";          // Variable to store location of php file
-    xhrParams = "sqlFilterString=" + segSqlFilterString;   // Variable for POST parameters
-    xhrParams += "&segKmlFileName=" + segKmlFileName ;
+    phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
+    xhrParams =  "outFileName=" + outFileName;
+    xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
+    xhrParams += "&sqlWhere=" + sqlWhere ;
     xhr.open ('POST', phpLocation, false);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
     xhr.send(encodeURI(xhrParams));
-    if (debug) { console.info("callGenSegKml completed"); }; 
 }   
 
+function drawMapOld(targetDiv, segKmlFile, waypKmlFile, drawHangneigung, drawWanderwege, drawHaltestellen, 
+    drawKantonsgrenzen, drawSacRegion) {
+    // ==> map.admin.ch code from here
 
+    // Create a GeoAdmin Map
+    var map = new ga.Map({
+    target: targetDiv,
+    view: new ol.View({resolution: 650, center: [660000, 190000]})
+    });
+
+    // Create a background layer
+    var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+
+    // Add the background layer in the map
+    map.addLayer(lyr1);
+
+    // Create  KML Layer for Hangneigung
+    if ( drawHangneigung ) { 
+    var lyrHangneigung = ga.layer.create('ch.swisstopo.hangneigung-ueber_30');
+    map.addLayer(lyrHangneigung);
+    }
+
+    // Create  KML Layer for Wanderwege
+    if ( drawWanderwege ) { 
+    var lyrWanderwege = ga.layer.create('ch.swisstopo.swisstlm3d-wanderwege');
+    map.addLayer(lyrWanderwege);
+    }
+
+    // Create  KML Layer for ÖV-Haltestellen
+    if ( drawHaltestellen ) { 
+    var lyrHaltestellen = ga.layer.create('ch.bav.haltestellen-oev');
+    map.addLayer(lyrHaltestellen);
+    }
+
+    // Create  KML Layer for Kantonsgrenzen
+    if ( drawKantonsgrenzen ) { 
+    var lyrKantonsgrenzen = ga.layer.create('ch.swisstopo.swissboundaries3d-kanton-flaeche.fill');
+    map.addLayer(lyrKantonsgrenzen);
+    }
+
+    // Create  KML Layer for SAC regions 
+    if ( drawSacRegion ) { 
+    var segVector = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        url: "./images/SacRegions.kml", 
+        format: new ol.format.KML({
+            projection: 'EPSG:21781'
+        })
+    })
+    });
+    map.addLayer(segVector);
+    }
+
+    // Create the KML Layer for segments
+    var segVector = new ol.layer.Vector({
+    source: new ol.source.Vector({
+    url: segKmlFile, 
+    format: new ol.format.KML({
+        projection: 'EPSG:21781'
+    })
+    })
+    });
+    map.addLayer(segVector);
+    console.info('Layer segments drawn using kml file: ' + segKmlFile );   
+
+    // Create the KML Layer for waypoints
+    var waypVector = new ol.layer.Vector({
+    source: new ol.source.Vector({
+    url: waypKmlFile, 
+    format: new ol.format.KML({
+        projection: 'EPSG:21781'
+    })
+    })
+    });
+    map.addLayer(waypVector);
+    console.info('Layer waypoints drawn using kml file: ' + waypKmlFile );
+
+    // Popup showing the position the user clicked
+    var popup = new ol.Overlay({
+    element: $('<div title="KML"></div>')[0]
+    });
+    map.addOverlay(popup);
+
+    // On click we display the feature informations
+    map.on('singleclick', function(evt) {
+    var pixel = evt.pixel;
+    var coordinate = evt.coordinate;
+    var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+    return feature;
+    });
+    var element = $(popup.getElement());
+    element.popover('destroy');
+    if (feature) {
+    popup.setPosition(coordinate);
+    element.popover({
+    'placement': 'top',
+    'animation': false,
+    'html': true,
+    'content': feature.get('description')
+    });
+    element.popover('show');
+    }
+    });
+
+    // Change cursor style when cursor is hover a feature
+    map.on('pointermove', function(evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+    return feature;
+    });
+    map.getTargetElement().style.cursor = feature ? 'pointer' : '';
+    });
+}
     

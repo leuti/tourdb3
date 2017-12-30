@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tracks` (
   `trkDateFinish` date DEFAULT NULL COMMENT 'Date when the track finished (will be set to trkDateBegin when empty)', 
   `trkGPSStartTime` DATETIME NULL DEFAULT NULL COMMENT 'Content of GPX gpx->metadata->time>',
   `trkSaison` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Saison free text', 
-  `trkTyp` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Type free text',   
+  `trkType` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Type free text',   
   `trkSubType` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Subtype free text',
   `trkOrg` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Type of organisation',
   `trkOvernightLoc` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Name of hut/hotel',

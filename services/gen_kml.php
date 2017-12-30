@@ -1,26 +1,16 @@
 <?php
-// ---------------------------------------------------------------------------------------------
-// This service generates a KML file for the tracks stored in the tourdb
-// As input the service expects a SQL WHERE clause in variable $_POST["whereGenKml"] 
-//
-// This script is intended for regular usage
-//
-// Created: 18.12.2017 - Daniel Leutwyler
-// ---------------------------------------------------------------------------------------------
+date_default_timezone_set('Europe/Zurich');
 
-// Test Cases
-// Define test cases here
-// Prerequisit for testing is that logbook data and GPX data is correctly imported
-
-// ACTIONS
-// * Add actions
-
-// -----------------------------------
-// Set variables and parameters    
-include("config.inc.php");                              // Include config file
-date_default_timezone_set('Europe/Zurich');             // must be set when using time functions
-$debugLevel = 3;                                        // 0 = off, 6 = all
+// Set debug level
+$debugLevel = 3; // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                       // Internal counter for tracks processed
+
+if ($debugLevel >= 1){
+    $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";          // Assign file location
+    $logFile = @fopen($logFileLoc,"w");     
+    fputs($logFile, "=================================================================\r\n");
+    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 10: gen_kml.php opened \r\n"); 
+};
 
 // --------------------------------------------------
 // Array for the styling of the lines in the kml file
@@ -42,16 +32,27 @@ $styleArray = array(
     array("Others","#FFCC66FF",3,"#FFCC66FF",5)                             // rosa
 );
 
-// Open file for import log
-$importGpxLog = dirname(__FILE__) . "\..\log\genOwnTracksKml.log";          // Assign file location
-$logFile = @fopen($importGpxLog,"w");                                       // open log file handler 
-fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+include("config.inc.php");  // Include config file
 
 // Set WHERE string if WHERE clause has been posted
-if(isset($_POST["whereGenKml"]) && $_POST["whereGenKml"] != ''){
-    $whereGenKml = $_POST["whereGenKml"]; 
+if(isset($_POST["sqlWhere"]) && $_POST["sqlWhere"] != ''){
+    $whereGenKml = $_POST["sqlWhere"]; 
 } else{
     $whereGenKml = '';                                  // Set to empty when no WHERE clause received
+};
+$kmlOutFileLocation = $_POST["outFileName"];
+
+fputs($logFile, "kmlOutFileLocation: $kmlOutFileLocation\r\n");
+
+//$outFileName = dirname(__FILE__) . "\\..\\tmpout\\" . $kmlOutFileLocation;
+$outFileName = "..\\tmpout\\track_1514523405976.kml";
+fputs($logFile, "outFileName: $outFileName\r\n");
+
+$outFile = fopen($outFileName, "w");
+
+if ($debugLevel >= 3){
+    // fputs($logFile, 'Line 36: $page: ' . $page_number . "\r\n");
+    fputs($logFile, 'Line 47: $kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
 };
 
 // Write headern and style section of KML
@@ -73,11 +74,15 @@ $kml[] = '        <visibility>0</visibility>';
 $kml[] = '        <open>1</open>';
 
 // Select tracks meeting given WHERE clause
-$sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType ";
+$sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
 $sql .= "FROM tbl_tracks ";
 $sql .= $whereGenKml;
-fputs($logFile, "Line 81  sql: $sql\r\n");
+
 $tracks = mysqli_query($conn, $sql);
+
+if ($debugLevel >= 3){
+    fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
+};
 
 // Loop through each selected track and write main track data
 while($SingleTrack = mysqli_fetch_assoc($tracks))
@@ -105,29 +110,8 @@ while($SingleTrack = mysqli_fetch_assoc($tracks))
     $kml[] = '            </Data>';
     $kml[] = '          </ExtendedData>';
     $kml[] = '          <LineString>';
-
-    // Select all track points for the current track
-    $sqlTrkPt  = "SELECT tptLat, tptLon, tptEle ";
-    $sqlTrkPt .= "FROM tbl_trackPoints WHERE tptTrackFID = ";
-    $sqlTrkPt .= $SingleTrack["trkId"] . " ORDER BY tptNumber"; 
-    $trackPoints = mysqli_query($conn, $sqlTrkPt);
-   
-    // For each trkId loop track point and create coordinates string
-    $first = 1;                                                             
-    while($trackPoint = mysqli_fetch_assoc($trackPoints))
-    {
-        if ($first==1)                                                          // When first don't print the space between coordinate points
-        {
-            $coord = $trackPoint["tptLon"] . ',' . $trackPoint["tptLat"] . ',' . $trackPoint["tptEle"];
-            $first = 0;
-        } else 
-        {
-            $coord .= ' ' . $trackPoint["tptLon"] . ',' . $trackPoint["tptLat"] . ',' . $trackPoint["tptEle"];
-        }
-    };
-
-    // Write coordinates and remainder of track data 
-    $kml[] = '            <coordinates>' . $coord . '</coordinates>';
+    $kml[] = '            <coordinates>' . $SingleTrack["trkCoordinates"];
+    $kml[] = '            </coordinates>';
     $kml[] = '          </LineString>';
     $kml[] = '        </Placemark>';   
 };
@@ -140,19 +124,39 @@ $kml[] = '</kml>';
 // Merge kml array into one variable
 $kmlOutput = join("\r\n", $kml);
 
-$outFile = @fopen("../out/ownTracksKml.kml","w");               // Open KML file for writing
+// Merge kml array into one variable
+$kmlOutput = join("\r\n", $kml);
+
+
+if ($debugLevel >= 3){
+    fputs($logFile, 'Line 145: kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
+};
+
+
+//$outFile = @fopen($kmlOutFileLocation,"a");               // Open KML file for writing
+
+
+
+
 fputs($outFile, "$kmlOutput");                                  // Write kml to file
-fputs($logFile, "importGpx.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 fputs($logFile, "$countTracks Tracks processed\r\n");
 
 // Close all files and connections
-fclose($logFile);                                               // close log file
+if ( $debugLevel >= 1 ) fclose($logFile);                                               // close log file
 mysql_close($conn);                                             // close SQL connection 
 fclose($outFile);                                               // close kml file
 
-function createStyles ($styleArray,$kml) {
+exit;
 
+//DEBUG
+if ($debugLevel >= 1){
+    fclose($logFile);
+};
+
+function createStyles ($styleArray,$kml) {
+    
     // Generates style map and style for each subtype                          //// variable aus $styleArray lesen und einsetzen
     $styleMapId = "stylemap_" . $styleArray[0];
     $styleUrlNorm = "style_" . $styleArray[0] . "_norm";
@@ -196,5 +200,5 @@ function createStyles ($styleArray,$kml) {
 
     return $kml;
 }
-
 ?>
+

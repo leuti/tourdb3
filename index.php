@@ -173,10 +173,10 @@
 			</div>
 
 			<!-- This div shows the output as map -->
-			<div id="mapPanel_Map" class="visible">
-				<div id="mapPanel_Map-ResMap">	<!-- Here the map of the mapments is displayed -->
+			<div id="displayMap" class="visible">
+				<div id="displayMap-ResMap">	<!-- Here the map of the mapments is displayed -->
 				</div> <!-- End mapResultMap -->
-			</div> <!-- End mapPanel_Map -->
+			</div> <!-- End displayMap -->
 
 		</div> <!-- End div panelDisplay -->
 
