@@ -1,4 +1,16 @@
 <?php
+// ---------------------------------------------------------------------------------------------
+// This script generates kml files (and potentially also gpx)
+// It should be by all functions expecting a kml and gpx output
+//
+// Created: 30.12.2017 - Daniel Leutwyler
+// ---------------------------------------------------------------------------------------------
+//
+// * Ability to select default colours for track type or one specific color (to differenciate from segments)
+
+// -----------------------------------
+// Set variables and parameters    
+
 date_default_timezone_set('Europe/Zurich');
 
 // Set debug level
@@ -9,7 +21,7 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";          // Assign file location
     $logFile = @fopen($logFileLoc,"w");     
     fputs($logFile, "=================================================================\r\n");
-    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 10: gen_kml.php opened \r\n"); 
+    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
 };
 
 // --------------------------------------------------
@@ -45,7 +57,7 @@ $kmlOutFileLocation = $_POST["outFileName"];
 fputs($logFile, "kmlOutFileLocation: $kmlOutFileLocation\r\n");
 
 //$outFileName = dirname(__FILE__) . "\\..\\tmpout\\" . $kmlOutFileLocation;
-$outFileName = "..\\tmpout\\track_1514523405976.kml";
+$outFileName = "..\\tmpout\\" . $kmlOutFileLocation;
 fputs($logFile, "outFileName: $outFileName\r\n");
 
 $outFile = fopen($outFileName, "w");

@@ -10,7 +10,6 @@
 	
 	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
-        
 </head>
 <body style="height: 100%;">
 	<!-- load jquery sources --> 
@@ -26,7 +25,6 @@
     <!-- <script type="text/javascript" src="jqw/jqwidgets/jqxcore.js"></script>-->
     <!--<script type="text/javascript" src="jqw/jqwidgets/jqxsplitter.js"></script>-->
    
-
 	<!--<script type="text/javascript" src="js/bootstrap.min.js"></script>--> <!-- local -->
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
 
@@ -75,14 +73,13 @@
 
 		<div id="panelDisplay" class="tourdbPanel active">
 			
-			<!-- this div shows the jquery accordion for the display selectioni -->
-			<div id="displayOptionsAccordion"> 
-				<h3>Tracks</h3>
+			<!-- this div shows the jquery accordion for the display selection -->
+			<div id="dispObjAccordion"> 
+				<h3>Select Tracks to be displayed</h3>
 				<div class="accordionBackground">
 					<fieldset>
-
 						<!-- SEGMENT filter -->
-						<legend class="UFLegend">Tracks to be displayed</legend>
+						<legend class="UFLegend">Tracks</legend>
 
 						<!-- Track name contains (standard text field) -->
 						<div class="mapFilterCriteria">	
@@ -147,6 +144,7 @@
 							<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
 						</div>
 
+						<!-- Button to apply filter -->
 						<div class="mapFilterCriteria">
 							<input type="submit" class="button" id="dispFilTrk_ApplyButton" value="Load Tracks" />
 						</div>

@@ -1,3 +1,13 @@
+// ---------------------------------------------------------------------------------------------
+// This is the main javascript file controling the behaviour of the tourdb page 
+// 
+// Created: 30.12.2017 - Daniel Leutwyler
+// ---------------------------------------------------------------------------------------------
+//
+// Actions:
+// * Create login page (using session)
+// * kml file names must contain session specific id (ensure multi-user capabilities)
+// * Is function drawMapEmpty required?
 
 
 // =================================================
@@ -50,15 +60,13 @@ $(document).ready(function() {
     // *********************************************
     // Initialse all jquery functional fields
 
-    // Initialise filter area as JQUERY Accordion
-    $( function() {
-        $( "#displayOptionsAccordion" ).accordion({
+    $( function() {                                                         // Initialise filter area as JQUERY Accordion
+        $( "#dispObjAccordion" ).accordion({
           collapsible: true
         });
     } );
 
-    // Initalise field to select start date as JQUERY datepicker
-    $( "#dispFilTrk_dateFrom" ).datepicker({
+    $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -68,8 +76,7 @@ $(document).ready(function() {
         buttonText: "Select date"
     });
     
-    // Initalise field to select to date as JQUERY datepicker
-    $( "#dispFilTrk_dateTo" ).datepicker({
+    $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
@@ -79,11 +86,9 @@ $(document).ready(function() {
         buttonText: "Select date"
     });
 
-    // Initialse field 'type' as JQUERY selectable
-    $( "#dispFilTrk_type" ).selectable({});
+    $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
 
-    // Initialse field 'subtype' as JQUERY selectable
-    $( "#dispFilTrk_subtype" ).selectable({});
+    $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
 
     // ******************************************************************
     // Executes code below when user clicks the 'Apply' filter button
@@ -98,7 +103,7 @@ $(document).ready(function() {
         var whereString = "";
 
         // Field track name
-        if ( ($('#dispFilTrk_trackName').val()) != "" ) {
+        if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
             whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
             whereStatement.push( whereString );
         };
@@ -136,7 +141,7 @@ $(document).ready(function() {
             whereString = whereString.slice(0,whereString.length-1);                // remove last comma
             whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
             whereStatement.push( whereString );                                     // Add to where Statement array
-        }
+        };
 
         // Field subtype
         var whereString = "";                                                       
@@ -166,20 +171,19 @@ $(document).ready(function() {
         // Put all where statements together
 
         if ( whereStatement.length > 0 ) {
-            var sql = "WHERE ";
+            var sqlWhere = "WHERE ";
 
             for (var i=0; i<whereStatement.length; i++) {
-                sql += whereStatement[i];
-                sql += " AND ";
+                sqlWhere += whereStatement[i];
+                sqlWhere += " AND ";
             }
-            sql = sql.slice(0,sql.length-5);
+            sqlWhere = sqlWhere.slice(0,sqlWhere.length-5);
         }
         
         // ****************************************************
         // Generate KML & draw Map 
 
-        callGenKml(trackFileName,"tracks",sql);                       // Generate KML file; file stored in file defined by global var segKmlFileNameURL
-        //callGenWaypKml(optionWhereStmt);                // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
+        callGenKml(trackFileName,"tracks",sqlWhere);                       // Generate KML file (file name to be used,type of kml = "tracks", sql where clause)
         
         // Close filter panels at the end
         $('#mapPanelFilter').removeClass('visible');
