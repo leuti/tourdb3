@@ -61,18 +61,58 @@ table {
 
 /********** PANELS **********/
 /****************************/
-div.tourdbPanel {
+.tourdbPanel {
     display: none;}
 
-#dispObjAccordion {
-    width: 500px;}
-
 /********** FILTER STYLES *********/
+
+.dispObjOpen.hidden, .dispObjMini.hidden {
+    display: none;
+}
+
+.dispObjOpen.visible, .dispObjMini.visible {
+    display: block;
+}
+
+#contObjectSelector {
+    width: 500px;
+    position: absolute;
+    top: 122px;
+    left: 10px;
+    z-index: 100; 
+}
+
+#dispObjMenuLarge, #dispObjMenuMini {
+    background-color: #0b17c7;
+    height: 30px;
+    padding: 5px;
+}
+
+#dispObjMenuMini {
+    width: 25px;
+}
+
+#dispObjMenuCloseImg {
+    height: 20px;
+    width: 20px;
+    padding: 5px;
+    float: left;
+}
+
+.dispObjMenuText {
+    height: 10px;
+    padding: 5px;
+    margin-left: 40px;
+    font-weight: bold;
+}
+
 .accordionBackground {
-    background-color: #cce6ff;}
+    background-color: #cce6ff;
+}
 
 .selectable .ui-selecting { 
-    background: #FECA40; }
+    background: #FECA40; 
+}
 
 .selectable .ui-selected { 
     background: #F39814; color: white; }
@@ -104,6 +144,10 @@ div.tourdbPanel {
     padding: 0.4em; 
     height: 14px;
     color: #001a33;}
+
+.ui-widget {
+    font-family: Candara, Verdana, Arial, sans-serif;
+}
 
 .ui-widget-content {
     border: 1px solid white;
@@ -203,7 +247,7 @@ div.tourdbPanel {
 /********** PANEL HOME **********/
 /*
 div#panelHome.active { /* Formatting if active */
-  display: block;}
+/*  display: block;}
 */
 /********** PANEL MAP **********/
 /* panelMap */

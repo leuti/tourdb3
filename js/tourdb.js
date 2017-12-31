@@ -8,6 +8,7 @@
 // * Create login page (using session)
 // * kml file names must contain session specific id (ensure multi-user capabilities)
 // * Is function drawMapEmpty required?
+// * can/should $(document) be replaced in this statement? $(document).on('click', '#dispObjMenuLargeClose', function(e)
 
 
 // =================================================
@@ -52,6 +53,26 @@ $(document).ready(function() {
             }
         }); 
     }); 
+
+    $(document).on('click', '#dispObjMenuLargeClose', function(e) {
+        e.preventDefault();
+        var $activeButton = $(this);
+        $activeButton.parent().removeClass('visible');
+        $activeButton.parent().addClass('hidden');
+        $('.dispObjMini').removeClass('hidden');
+        $('.dispObjMini').addClass('visible');
+
+    })
+
+    $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
+        e.preventDefault();
+        var $activeButton = $(this);
+        $activeButton.parent().removeClass('visible');
+        $activeButton.parent().addClass('hidden');
+        $('.dispObjOpen').removeClass('hidden');
+        $('.dispObjOpen').addClass('visible');
+
+    })
 
     // ==========================================================================
     // ========================== panelDisplay ==================================

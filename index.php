@@ -1,4 +1,8 @@
 <!DOCTYPE HTML>
+<!-- 
+	ACTION:
+	* Tool tipps when hoovering over buttons
+-->
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -7,9 +11,9 @@
 	<title>Tour DB</title>
 	<!-- from https://www.jqwidgets.com/ -->
     <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
-	
-	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">
+
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
+	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">	
 </head>
 <body style="height: 100%;">
 	<!-- load jquery sources --> 
@@ -73,100 +77,124 @@
 
 		<div id="panelDisplay" class="tourdbPanel active">
 			
-			<!-- this div shows the jquery accordion for the display selection -->
-			<div id="dispObjAccordion"> 
-				<h3>Select Tracks to be displayed</h3>
-				<div class="accordionBackground">
-					<fieldset>
-						<!-- SEGMENT filter -->
-						<legend class="UFLegend">Tracks</legend>
+			<!-- Div for Menu buttons -->
+			<div id="contObjectSelector">
+				<!-- This div shows only filter button > onclick opens the full accordion -->
+				<div id="dispObjMenuMini" class="dispObjMini hidden">
+					<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">
+						<img id="dispObjMenuOpenImg" src="css/images/filterLightBlue.png">
+					</a> 
+				</div>
+				<div id="dispObjMenuLarge" class="dispObjOpen visible">
+					<a id="dispObjMenuLargeClose" href="#dispObjMenuLargeClose">
+						<img id="dispObjMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
+					</a> 
+					<p class="dispObjMenuText">Select objects to be displayed</p>
+								
+					<!-- this div shows the jquery accordion for the display selection -->
+					<div id="dispObjAccordion" class="dispObjOpen visible"> 
 
-						<!-- Track name contains (standard text field) -->
-						<div class="mapFilterCriteria">	
-							<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
-							<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="40" class="text ui-widget-content ui-corner-all">
-						</div>
+						<!-- Segment Section of Accordion -->
+						<h3>Tracks</h3>
+						<div class="accordionBackground">
+							<fieldset>
+								<!-- SEGMENT filter -->
+								<legend class="UFLegend">Tracks</legend>
 
-						<!-- Route contains (standard text field) -->
-						<div class="mapFilterCriteria">
-							<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
-							<input name="dispFilTrk_route" id="dispFilTrk_route" size="40" class="text ui-widget-content ui-corner-all">
-						</div>
+								<!-- Track name contains (standard text field) -->
+								<div class="mapFilterCriteria">	
+									<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
+									<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="40" class="text ui-widget-content ui-corner-all">
+								</div>
 
-						<!-- Date witin range -->
-						<div class="mapFilterCriteria"> 
-							<p>From Date: <input type="text" id="dispFilTrk_dateFrom" class="labelFirst" size="10"></p>
-							<p>To Date: <input type="text" id="dispFilTrk_dateTo"class="labelFirst" size="10"></p>
-						</div>
+								<!-- Route contains (standard text field) -->
+								<div class="mapFilterCriteria">
+									<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
+									<input name="dispFilTrk_route" id="dispFilTrk_route" size="40" class="text ui-widget-content ui-corner-all">
+								</div>
 
-						<!-- Type as select items (selectable) -->
-						<div class="mapFilterCriteria">
-							<label for="dispFilTrk_type" class="labelFirst">Type</label>
-							<ol id="dispFilTrk_type" class="selectable filterItems">
-								<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
-								<li id="dispFilTrk_type_Ski" class="ui-widget-content">Ski</li>
-								<li id="dispFilTrk_type_Sport" class="ui-widget-content">Sport</li>
-								<li id="dispFilTrk_type_Velo" class="ui-widget-content">Velo</li>
-								<li id="dispFilTrk_type_Wasser" class="ui-widget-content">Wasser</li>
-								<li id="dispFilTrk_type_Zufuss" class="ui-widget-content first">Zufuss</li>
-							</ol>
-						</div>
+								<!-- Date witin range -->
+								<div class="mapFilterCriteria"> 
+									<p>From Date: <input type="text" id="dispFilTrk_dateFrom" class="labelFirst" size="10"></p>
+									<p>To Date: <input type="text" id="dispFilTrk_dateTo"class="labelFirst" size="10"></p>
+								</div>
 
-						<!-- Subtype as select items (selectable) -->
-						<div class="mapFilterCriteria">
-							<label for="dispFilTrk_subtype" class="labelFirst">Subtype</label>
-							<ol id="dispFilTrk_subtype" class="selectable filterItems">
-								<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
-								<li id="dispFilTrk_subtype_Alpintour" class="ui-widget-content">Alpintour</li>
-								<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
-								<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
-								<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
-								<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
-								<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content">Schwimmen</li>
-								<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content">Skihochtour</li>
-								<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content">Skitour</li>
-								<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content">Sportklettern</li>
-								<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content">Velotour</li>
-								<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first">Wanderung</li>
-								<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
-							</ol>
+								<!-- Type as select items (selectable) -->
+								<div class="mapFilterCriteria">
+									<label for="dispFilTrk_type" class="labelFirst">Type</label>
+									<ol id="dispFilTrk_type" class="selectable filterItems">
+										<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
+										<li id="dispFilTrk_type_Ski" class="ui-widget-content">Ski</li>
+										<li id="dispFilTrk_type_Sport" class="ui-widget-content">Sport</li>
+										<li id="dispFilTrk_type_Velo" class="ui-widget-content">Velo</li>
+										<li id="dispFilTrk_type_Wasser" class="ui-widget-content">Wasser</li>
+										<li id="dispFilTrk_type_Zufuss" class="ui-widget-content first">Zufuss</li>
+									</ol>
+								</div>
+
+								<!-- Subtype as select items (selectable) -->
+								<div class="mapFilterCriteria">
+									<label for="dispFilTrk_subtype" class="labelFirst">Subtype</label>
+									<ol id="dispFilTrk_subtype" class="selectable filterItems">
+										<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
+										<li id="dispFilTrk_subtype_Alpintour" class="ui-widget-content">Alpintour</li>
+										<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
+										<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
+										<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
+										<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
+										<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content">Schwimmen</li>
+										<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content">Skihochtour</li>
+										<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content">Skitour</li>
+										<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content">Sportklettern</li>
+										<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content">Velotour</li>
+										<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first">Wanderung</li>
+										<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
+									</ol>
+								</div>
+								
+								<!-- participants like (standard text field) -->
+								<div class="mapFilterCriteria">	
+									<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
+									<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="40" class="text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Country (standard text field) -->
+								<div class="mapFilterCriteria">	
+									<label for="dispFilTrk_country" class="labelFirst">Country like</label>
+									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Button to apply filter -->
+								<div class="mapFilterCriteria">
+									<input type="submit" class="button" id="dispFilTrk_ApplyButton" value="Load Tracks" />
+								</div>
+								
+							</fieldset>
 						</div>
 						
-						<!-- participants like (standard text field) -->
-						<div class="mapFilterCriteria">	
-							<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
-							<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="40" class="text ui-widget-content ui-corner-all">
+						<!-- Segment Section of Accordion -->
+						<h3>Segments</h3>
+						<div class="accordionBackground">
+							<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
+							<ul>
+							<li>List item one</li>
+							<li>List item two</li>
+							<li>List item three</li>
+							</ul>
 						</div>
 
-						<!-- Country (standard text field) -->
-						<div class="mapFilterCriteria">	
-							<label for="dispFilTrk_country" class="labelFirst">Country like</label>
-							<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Button to apply filter -->
-						<div class="mapFilterCriteria">
-							<input type="submit" class="button" id="dispFilTrk_ApplyButton" value="Load Tracks" />
+						<!-- Segment Section of Accordion -->
+						<h3>Waypoints</h3>
+						<div class="accordionBackground">
+							<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
 						</div>
 						
-					</fieldset>
-				</div>
-				<h3>Section 2</h3>
-				<div class="accordionBackground">
-					<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. </p>
-				</div>
-				<h3>Section 3</h3>
-				<div>
-					<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
-					<ul>
-					<li>List item one</li>
-					<li>List item two</li>
-					<li>List item three</li>
-					</ul>
-				</div>
-				<h3>Section 4</h3>
-				<div class="accordionBackground">
-					<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+						<!-- Segment Section of Accordion -->
+						<h3>Others</h3>
+						<div class="accordionBackground">	
+						</div>
+
+					</div>
 				</div>
 			</div>
 
