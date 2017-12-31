@@ -81,6 +81,8 @@ $(document).ready(function() {
     // *********************************************
     // Initialse all jquery functional fields
 
+    // For Object Filter Routes
+    // ------------------------
     $( function() {                                                         // Initialise filter area as JQUERY Accordion
         $( "#dispObjAccordion" ).accordion({
           collapsible: true,                                                // makes sections collapse 
@@ -112,8 +114,127 @@ $(document).ready(function() {
 
     $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
 
+    // For object filter segments
+    // --------------------------
+
+    // mapUF_sourceName
+    $( "#dispFilSeg_sourceName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=segSourceFID",
+        minLength: 2,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
+                    $( "#dispFilSeg_sourceFID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+
+    // mapUF_segType
+    $( "#dispFilSeg_segType" ).selectable({});
+    
+    // startLocName
+    $( "#dispFilSeg_startLocName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=getWaypLong",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
+                    $( "#dispFilSeg_startLocID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
+    
+    // startLocAlt 
+    $( "#dispFilSeg_startLocAlt_slider" ).slider({
+        range: true,
+        min: 0,
+        max: 5000,
+        values: [ 400, 5000 ],
+        slide: function( event, ui ) {
+            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+        }
+    });
+    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
+    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
+    
+    // startLocType
+    $( "#dispFilSeg_startLocType" ).selectable({});
+
+    // targetLocName
+    $( "#dispFilSeg_targetLocName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=getWaypLong",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
+                    $( "#dispFilSeg_targetLocID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
+
+    // targetLocAlt
+    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
+        range: true,
+        min: 0,
+        max: 5000,
+        values: [ 400, 5000 ],
+        slide: function( event, ui ) {
+            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+        }
+    });
+    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
+    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
+
+    // targetLocType
+    $( "#dispFilSeg_targetLocType" ).selectable({});
+
+    // Region
+    $( "#dispFilSeg_segRegion" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=regionID",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
+                    $( "#dispFilSeg_segRegionID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+
+    // Area
+    $( "#dispFilSeg_segArea" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=areaID",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
+                    $( "#dispFilSeg_segAreaID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
+
+    $( "#dispFilSeg_grade" ).selectable({});
+    $( "#dispFilSeg_climbGrade" ).selectable({});
+    $( "#dispFilSeg_ehaft" ).selectable({});   
+
+
+
     // ******************************************************************
-    // Executes code below when user clicks the 'Apply' filter button
+    // Executes code below when user clicks the 'Apply' filter button for tracks
 
     $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
         e.preventDefault();
@@ -221,8 +342,255 @@ $(document).ready(function() {
         drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
         mapMapNeedsLoad = false;                             // No need to load map
     });
-    // ***************************
 
+    // ***************************
+    // Executes code below when user clicks the 'Apply' filter button for segments
+    $(document).on('click', '#dispFilSeg_ApplyButton', function (e) {
+        e.preventDefault();
+        var whereStatement = [];
+
+        // ==================================================
+        // ===== Build SQL WHERE statement for segments =====
+        // ==================================================
+        
+        // Field segType
+        var whereString = "";
+        $('#dispFilSeg_segType .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "segType";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };          
+        });
+
+        // Field segName
+        if ( ($('#dispFilSeg_segName').val()) != "" ) {
+            whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
+            whereStatement.push( whereString );
+        };
+
+        // continue here !!!!!!!!!!!!!!!!!
+                    
+        // Field startLoc
+        if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
+            if ( veryFirst ) {
+                segSqlFilterString = " WHERE segStartLocationFID in (";
+                segSqlFilterString += ($('#dispFilSeg_startLocID').val()) + ")";
+                veryFirst = false;      
+            } else if ( !veryFirst ) {
+                segSqlFilterString += " AND segStartLocationFID in (";
+                segSqlFilterString += ($('#dispFilSeg_startLocID').val()) + ")";    
+            } 
+        };
+
+        // Field startLocAlt
+        if ( veryFirst ) {
+            segSqlFilterString = " WHERE startLocAlt >= ";
+            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+            segSqlFilterString += " AND startLocAlt <= ";
+            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
+            veryFirst = false;      
+        } else if ( !veryFirst ) {
+            segSqlFilterString += " AND startLocAlt >= ";
+            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+            segSqlFilterString += " AND startLocAlt <= ";
+            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );    
+        }            
+
+        // Field startLocType
+        var firstInCriteria = true;
+        $('#dispFilSeg_startLocType .ui-selected').each(function() {
+            var recordId = this.id;
+            var sqlName = "startLocType";
+            var lenCriteria = recordId.length;
+            var startCriteria = sqlName.length + 1;
+            if ( veryFirst && firstInCriteria ) {
+                segSqlFilterString = " WHERE " + sqlName + " in (";
+                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";  
+                veryFirst = false;
+                firstInCriteria = false;    
+            } else if (!veryFirst && !firstInCriteria) {
+                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
+            } else if (!veryFirst && firstInCriteria) {
+                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
+                firstInCriteria = false;
+            }
+        });
+        if ( $('#dispFilSeg_startLocType .ui-selected').length >0 ) {
+            segSqlFilterString += ")";
+        }
+
+        // Field targetLoc
+        if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
+            if ( veryFirst ) {
+                segSqlFilterString = " WHERE segTargetLocationFID in (";
+                segSqlFilterString += ($('#dispFilSeg_targetLocID').val()) + ")";
+                veryFirst = false;      
+            } else if ( !veryFirst ) {
+                segSqlFilterString += " AND segTargetLocationFID in (";
+                segSqlFilterString += ($('#dispFilSeg_targetLocID').val()) + ")";    
+            } 
+        };
+
+        // Field targetLocAlt
+        if ( veryFirst ) {
+            segSqlFilterString = " WHERE targetLocAlt >= ";
+            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+            segSqlFilterString += " AND targetLocAlt <= ";
+            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
+            veryFirst = false;      
+        } else if ( !veryFirst ) {
+            segSqlFilterString += " AND targetLocAlt >= ";
+            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+            segSqlFilterString += " AND targetLocAlt <= ";
+            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );    
+        }            
+
+        // Field targetLocType
+        var firstInCriteria = true;
+        $('#dispFilSeg_targetLocType .ui-selected').each(function() {
+            var recordId = this.id;
+            var sqlName = "targetLocType";
+            var lenCriteria = recordId.length;
+            var startCriteria = sqlName.length + 1;
+            if ( veryFirst && firstInCriteria ) {
+                segSqlFilterString = " WHERE " + sqlName + " in (";
+                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";  
+                veryFirst = false;    
+                firstInCriteria = false;
+            } else if (!veryFirst && !firstInCriteria) {
+                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
+            } else if (!veryFirst && firstInCriteria) {
+                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
+                firstInCriteria = false;
+            }               
+        });
+        if ( $('#dispFilSeg_targetLocType .ui-selected').length >0 ) {
+            segSqlFilterString += ")";
+        }
+
+        // Field region
+        if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
+            if ( veryFirst ) {
+                segSqlFilterString = " WHERE regionId in (";
+                segSqlFilterString += ($('#dispFilSeg_segRegionID').val()) + ")"; 
+                veryFirst = false;     
+            } else if ( !veryFirst ) {
+                segSqlFilterString += " AND regionId in (";
+                segSqlFilterString += ($('#dispFilSeg_segRegionID').val()) + ")";    
+            } 
+        };
+
+        // Field area
+        if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
+            if ( veryFirst ) {
+                segSqlFilterString = " WHERE areaId in(";
+                segSqlFilterString += ($('#dispFilSeg_segAreaID').val()) + ")";  
+                veryFirst = false;    
+            } else if ( !veryFirst ) {
+                segSqlFilterString += " AND areaId in (";
+                segSqlFilterString += ($('#dispFilSeg_segAreaID').val()) + ")";    
+            } 
+        };
+
+        // Field grade
+        var firstInCriteria = true;
+        $('#dispFilSeg_grade .ui-selected').each(function() {
+            var recordId = this.id;
+            var sqlName = "grade";
+            var lenCriteria = recordId.length;
+            var startCriteria = sqlName.length + 1;
+            if ( veryFirst && firstInCriteria ) {
+                segSqlFilterString = " WHERE " + sqlName + " in (";
+                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'"; 
+                veryFirst = false;     
+                firstInCriteria = false;
+            } else if (!veryFirst && !firstInCriteria) {
+                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
+            } else if (!veryFirst && firstInCriteria) {
+                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
+                firstInCriteria = false;
+            }
+        });
+        if ( $('#dispFilSeg_grade .ui-selected').length >0 ) {
+            segSqlFilterString += ")";
+        }
+
+        // Field climbGrade
+        var firstInCriteria = true;
+        $('#dispFilSeg_climbGrade .ui-selected').each(function() {
+            var recordId = this.id;
+            var sqlName = "climbGrade";
+            var lenCriteria = recordId.length;
+            var startCriteria = sqlName.length + 1;
+            if ( veryFirst && firstInCriteria ) {
+                segSqlFilterString = " WHERE " + sqlName + " in (";
+                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";   
+                veryFirst = false;   
+                firstInCriteria = false;
+            } else if (!veryFirst && !firstInCriteria) {
+                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
+            } else if (!veryFirst && firstInCriteria) {
+                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
+                firstInCriteria = false;
+            }
+        });
+        if ( $('#dispFilSeg_climbGrade .ui-selected').length >0 ) {
+            segSqlFilterString += ")";
+        }
+
+        // Field ehaft
+        var firstInCriteria = true;
+        $('#dispFilSeg_ehaft .ui-selected').each(function() {
+            var recordId = this.id;
+            var sqlName = "ehaft";
+            var lenCriteria = recordId.length;
+            var startCriteria = sqlName.length + 1;
+            if ( veryFirst && firstInCriteria ) {
+                segSqlFilterString = " WHERE " + sqlName + " in (";
+                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";    
+                veryFirst = false;  
+                firstInCriteria = false;
+            } else if (!veryFirst && !firstInCriteria) {
+                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
+            } else if (!veryFirst && firstInCriteria) {
+                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
+                firstInCriteria = false;
+            }
+        });
+        if ( $('#dispFilSeg_ehaft .ui-selected').length >0 ) {
+            segSqlFilterString += ")";
+        }
+
+        // =================================================
+        // ============ generate KML & draw Map ============
+        // =================================================
+
+        callGenSegKml(segSqlFilterString); // Generate KML file; file stored in file defined by global var segKmlFileNameURL
+        callGenWaypKml(optionWhereStmt); // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
+        
+        // Close filter panels at the end
+        $('#mapPanelFilter').removeClass('visible');
+
+        // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
+        var removeEl = document.getElementById('mapPanel_Map-ResMap');  // delete div .map
+        var containerEl = removeEl.parentNode;          // Get its containing element
+        containerEl.removeChild(removeEl);              // Remove the elements
+        var newDiv = document.createElement('div');     // create new div element
+        containerEl.appendChild(newDiv);                // Add to parent element
+        newDiv.id = 'mapPanel_Map-ResMap';
+        newDiv.className = 'mapPanel_Map-ResMap'; 
+        drawMapOld('mapPanel_Map-ResMap', segKmlFileNameURL, waypKmlFileNameURL, 
+            drawHangneigung, drawWanderwege, drawHaltestellen, 
+            drawKantonsgrenzen, drawSacRegion); // Draw map to panel
+        mapMapNeedsLoad = false;                             // No need to load map
+        
+    });
 });    
 
 // Function drawing empty map -- for documentation see: https://api3.geo.admin.ch/

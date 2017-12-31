@@ -72,6 +72,7 @@ table {
 
 .dispObjOpen.visible, .dispObjMini.visible {
     display: block;
+    margin-top: 18px;
 }
 
 #contObjectSelector {
@@ -130,7 +131,7 @@ table {
     height: 14px;
     color: #001a33;}
 
-.UFLegend {
+.filterHeader {
     border-color: black;
     border-width: thick;
     font-size: 1.5em;
@@ -279,7 +280,7 @@ div#mapPanelFilter.visible {
     background-color: #cce6ff;
     color: #001a33;
     margin-left: 20px;}
-.UFLegend, .optLegend {
+.filterHeader, .optLegend {
     border-color: black;
     border-width: thick;
     font-size: 1.5em;
@@ -479,7 +480,7 @@ p.filterElement {
 .waypFilterLabelFirst {
     width: 40px;
     float: left;}
-.segFilterCriteria, .waypFilterCriteria, .mapFilterCriteria {
+.segFilterCriteria, .waypFilterCriteria, .dispObjCriteria {
     clear: both;}
 .selectable .ui-selecting { 
     background: #FECA40; }

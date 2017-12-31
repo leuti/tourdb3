@@ -99,28 +99,28 @@
 						<div class="accordionBackground">
 							<fieldset>
 								<!-- SEGMENT filter -->
-								<legend class="UFLegend">Tracks</legend>
+								<legend class="filterHeader">Tracks</legend>
 
 								<!-- Track name contains (standard text field) -->
-								<div class="mapFilterCriteria">	
+								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
 									<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="40" class="text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Route contains (standard text field) -->
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
 									<input name="dispFilTrk_route" id="dispFilTrk_route" size="40" class="text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Date witin range -->
-								<div class="mapFilterCriteria"> 
+								<div class="dispObjCriteria"> 
 									<p>From Date: <input type="text" id="dispFilTrk_dateFrom" class="labelFirst" size="10"></p>
 									<p>To Date: <input type="text" id="dispFilTrk_dateTo"class="labelFirst" size="10"></p>
 								</div>
 
 								<!-- Type as select items (selectable) -->
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<label for="dispFilTrk_type" class="labelFirst">Type</label>
 									<ol id="dispFilTrk_type" class="selectable filterItems">
 										<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
@@ -133,7 +133,7 @@
 								</div>
 
 								<!-- Subtype as select items (selectable) -->
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<label for="dispFilTrk_subtype" class="labelFirst">Subtype</label>
 									<ol id="dispFilTrk_subtype" class="selectable filterItems">
 										<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
@@ -153,19 +153,19 @@
 								</div>
 								
 								<!-- participants like (standard text field) -->
-								<div class="mapFilterCriteria">	
+								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
 									<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="40" class="text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Country (standard text field) -->
-								<div class="mapFilterCriteria">	
+								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_country" class="labelFirst">Country like</label>
 									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Button to apply filter -->
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<input type="submit" class="button" id="dispFilTrk_ApplyButton" value="Load Tracks" />
 								</div>
 								
@@ -178,21 +178,12 @@
 							<fieldset>
 
 								<!-- SEGMENT filter -->
-								<legend class="UFLegend">Segments</legend>
+								<legend class="filterHeader">Segments</legend>
 
-								<div class="mapFilterCriteria">
-									<label for="mapUF_sourceName" class="labelNext">Quelle</label>
-									<input type="text" name="mapUF_sourceName" id="mapUF_sourceName" size="40" class="text ui-widget-content ui-corner-all">
-									<input type="hidden" id="mapUF_sourceFID">
-
-									<label for="mapUF_sourceRef" class="labelNext">Quellref.</label>
-									<input name="mapUF_sourceRef" id="mapUF_sourceRef" size="10" class="text ui-widget-content ui-corner-all">
-								</div>
-									
 								<!-- segType -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_mapType" class="labelFirst">Seg. Type: </label>
-									<ol id="mapUF_segType" class="selectable filterItems">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_mapType" class="labelFirst">Seg. Type: </label>
+									<ol id="dispFilSeg_segType" class="selectable filterItems">
 										<li id="segType_WA" class="ui-widget-content first">Wanderung</li>
 										<li id="segType_AW" class="ui-widget-content">Alpinwanderung</li>
 										<li id="segType_HT" class="ui-widget-content">Hochtour</li>
@@ -203,29 +194,29 @@
 								</div>
 
 								<!-- segName -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_segName" class="labelFirst">Seg. Name: </label>
-									<input id="mapUF_segName" class="filterItems" type="text" size="50">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_segName" class="labelFirst">Seg. Name: </label>
+									<input id="dispFilSeg_segName" class="filterItems" type="text" size="50">
 								</div>
 
 								<!--startLocName -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_startLocName" class="labelFirst">Startort: </label>
-									<input id="mapUF_startLocName" class="filterItems" type="text" size="50">
-									<input type="hidden" id="mapUF_startLocID">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_startLocName" class="labelFirst">Startort: </label>
+									<input id="dispFilSeg_startLocName" class="filterItems" type="text" size="50">
+									<input type="hidden" id="dispFilSeg_startLocID">
 								</div>
 								
 								<!--startLocAlt -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_startLocAlt_slider_values" class="labelFirst">Starthöhe:</label>
-									<input type="text" id="mapUF_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Starthöhe:</label>
+									<input type="text" id="dispFilSeg_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
-								<div id="mapUF_startLocAlt_slider"></div>
+								<div id="dispFilSeg_startLocAlt_slider"></div>
 
 								<!-- startLocType -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_startLocType" class="labelFirst">Starttyp: </label>
-									<ol id="mapUF_startLocType" class="selectable filterItems">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_startLocType" class="labelFirst">Starttyp: </label>
+									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
 										<li id="startLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="startLocType_5" class="ui-widget-content">Gipfel</li>
 										<li id="startLocType_4" class="ui-widget-content">Hütte</li>
@@ -235,23 +226,23 @@
 								</div>
 								
 								<!--TargetLocName -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_targetLocName" class="labelFirst">Zielort: </label>
-									<input id="mapUF_targetLocName" class="filterItems" type="text" size="50">
-									<input type="hidden" id="mapUF_targetLocID">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_targetLocName" class="labelFirst">Zielort: </label>
+									<input id="dispFilSeg_targetLocName" class="filterItems" type="text" size="50">
+									<input type="hidden" id="dispFilSeg_targetLocID">
 								</div>
 								
 								<!--targetLocAlt -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_targetLocAlt_slider_values" class="labelFirst">Zielhöhe:</label>
-									<input type="text" id="mapUF_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Zielhöhe:</label>
+									<input type="text" id="dispFilSeg_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
-								<div id="mapUF_targetLocAlt_slider"></div>
+								<div id="dispFilSeg_targetLocAlt_slider"></div>
 
 								<!-- targetLocType -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_targetLocType" class="labelFirst">Zieltyp: </label>
-									<ol id="mapUF_targetLocType" class="selectable filterItems">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_targetLocType" class="labelFirst">Zieltyp: </label>
+									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
 										<li id="targetLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="targetLocType_5" class="ui-widget-content">Gipfel</li>
 										<li id="targetLocType_4" class="ui-widget-content">Hütte</li>
@@ -261,23 +252,23 @@
 								</div>
 
 								<!-- region -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_segRegion" class="labelFirst">Region: </label>
-									<input id="mapUF_segRegion" class="filterItems" type="text" size="50">
-									<input type="hidden" id="mapUF_segRegionID">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_segRegion" class="labelFirst">Region: </label>
+									<input id="dispFilSeg_segRegion" class="filterItems" type="text" size="50">
+									<input type="hidden" id="dispFilSeg_segRegionID">
 								</div>
 								
 								<!-- Gebiet -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_segArea" class="labelFirst">Gebiet: </label>
-									<input id="mapUF_segArea" class="filterItems" type="text" size="50">
-									<input type="hidden" id="mapUF_segAreaID">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_segArea" class="labelFirst">Gebiet: </label>
+									<input id="dispFilSeg_segArea" class="filterItems" type="text" size="50">
+									<input type="hidden" id="dispFilSeg_segAreaID">
 								</div>
 					
 								<!-- grade -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_grade" class="labelFirst">Schwierigkeit: </label>
-									<ol id="mapUF_grade" class="selectable filterItems">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_grade" class="labelFirst">Schwierigkeit: </label>
+									<ol id="dispFilSeg_grade" class="selectable filterItems">
 										<li id="grade_T1" class="ui-widget-content first">T1</li>
 										<li id="grade_T2" class="ui-widget-content">T2</li>
 										<li id="grade_T3" class="ui-widget-content">T3</li>
@@ -295,9 +286,9 @@
 								</div>
 								
 								<!-- climbGrade -->
-								<div class="mapFilterCriteria">
-									<label for="mapUF_climbGrade" class="labelFirst">Klettergrad: </label>
-									<ol id="mapUF_climbGrade" class="selectable filterItems">
+								<div class="dispObjCriteria">
+									<label for="dispFilSeg_climbGrade" class="labelFirst">Klettergrad: </label>
+									<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
 										<li id="climbGrade_I" class="ui-widget-content first">I</li>
 										<li id="climbGrade_II" class="ui-widget-content">II</li>
 										<li id="climbGrade_III" class="ui-widget-content">III</li>
@@ -310,7 +301,7 @@
 
 								<!--tStartTarget -->
 								<!-- WAITING FOR JQUI WIDGET
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<br>t St-Zi  min. <input type="text" name="tStartTargetMin">
 									max. <input type="text" name="tStartTargetMax">
 								</div>
@@ -318,7 +309,7 @@
 									
 								<!--mUStartTarget -->
 								<!-- WAITING FOR JQUI WIDGET
-								<div class="mapFilterCriteria">
+								<div class="dispObjCriteria">
 									<br>Aufstieg  min. <input type="text" name="mUStartTargetMin">
 									max. <input type="text" name="mUStartTargetMax"><br>
 								</div>
@@ -326,8 +317,8 @@
 
 
 								<!-- Button to apply filter -->
-								<div class="mapFilterCriteria">
-									<input type="submit" class="button" id="mapApplyFilterUser" value="Apply Filter" />
+								<div class="dispObjCriteria">
+									<input type="submit" class="button" id="dispFilSeg_ApplyButton" value="Apply Filter" />
 								</div>
 
 							</fieldset>
