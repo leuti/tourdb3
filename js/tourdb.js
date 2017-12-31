@@ -83,7 +83,8 @@ $(document).ready(function() {
 
     $( function() {                                                         // Initialise filter area as JQUERY Accordion
         $( "#dispObjAccordion" ).accordion({
-          collapsible: true
+          collapsible: true,                                                // makes sections collapse 
+          heightStyle: "content"                                            // hight of section dependent on content of section
         });
     } );
 
