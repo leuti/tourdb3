@@ -9,6 +9,7 @@
 // * kml file names must contain session specific id (ensure multi-user capabilities)
 // * Is function drawMapEmpty required?
 // * can/should $(document) be replaced in this statement? $(document).on('click', '#dispObjMenuLargeClose', function(e)
+// * remove unnecessary where statement for filters (e.g. between dates, altitues)
 
 
 // =================================================
@@ -353,7 +354,7 @@ $(document).ready(function() {
         // ===== Build SQL WHERE statement for segments =====
         // ==================================================
         
-        // Field segType
+        // Field segment type selected
         var whereString = "";
         $('#dispFilSeg_segType .ui-selected').each(function() {
             var itemId = this.id;
@@ -368,204 +369,126 @@ $(document).ready(function() {
             };          
         });
 
-        // Field segName
+        // Field segment name
+        var whereString = "";
         if ( ($('#dispFilSeg_segName').val()) != "" ) {
             whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
             whereStatement.push( whereString );
         };
 
-        // continue here !!!!!!!!!!!!!!!!!
-                    
-        // Field startLoc
+        // Field Start Location (ID selected)
+        var whereString = "";
         if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
-            if ( veryFirst ) {
-                segSqlFilterString = " WHERE segStartLocationFID in (";
-                segSqlFilterString += ($('#dispFilSeg_startLocID').val()) + ")";
-                veryFirst = false;      
-            } else if ( !veryFirst ) {
-                segSqlFilterString += " AND segStartLocationFID in (";
-                segSqlFilterString += ($('#dispFilSeg_startLocID').val()) + ")";    
-            } 
+            whereString = "segStartLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+            whereStatement.push( whereString );
         };
 
-        // Field startLocAlt
-        if ( veryFirst ) {
-            segSqlFilterString = " WHERE startLocAlt >= ";
-            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
-            segSqlFilterString += " AND startLocAlt <= ";
-            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
-            veryFirst = false;      
-        } else if ( !veryFirst ) {
-            segSqlFilterString += " AND startLocAlt >= ";
-            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
-            segSqlFilterString += " AND startLocAlt <= ";
-            segSqlFilterString += $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );    
-        }            
+        // Field Altitude of start location 
+        var whereString = "";
+        whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
+        whereStatement.push( whereString );     
 
-        // Field startLocType
-        var firstInCriteria = true;
+        // Field type of start location
+        var whereString = "";
         $('#dispFilSeg_startLocType .ui-selected').each(function() {
-            var recordId = this.id;
+            var itemId = this.id;
             var sqlName = "startLocType";
-            var lenCriteria = recordId.length;
+            var lenCriteria = itemId.length;
             var startCriteria = sqlName.length + 1;
-            if ( veryFirst && firstInCriteria ) {
-                segSqlFilterString = " WHERE " + sqlName + " in (";
-                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";  
-                veryFirst = false;
-                firstInCriteria = false;    
-            } else if (!veryFirst && !firstInCriteria) {
-                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
-            } else if (!veryFirst && firstInCriteria) {
-                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
-                firstInCriteria = false;
-            }
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };       
         });
-        if ( $('#dispFilSeg_startLocType .ui-selected').length >0 ) {
-            segSqlFilterString += ")";
-        }
 
-        // Field targetLoc
+        // Field target location (ID selected)
+        var whereString = "";
         if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
-            if ( veryFirst ) {
-                segSqlFilterString = " WHERE segTargetLocationFID in (";
-                segSqlFilterString += ($('#dispFilSeg_targetLocID').val()) + ")";
-                veryFirst = false;      
-            } else if ( !veryFirst ) {
-                segSqlFilterString += " AND segTargetLocationFID in (";
-                segSqlFilterString += ($('#dispFilSeg_targetLocID').val()) + ")";    
-            } 
+            whereString = "segTargetLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+            whereStatement.push( whereString );
         };
 
-        // Field targetLocAlt
-        if ( veryFirst ) {
-            segSqlFilterString = " WHERE targetLocAlt >= ";
-            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
-            segSqlFilterString += " AND targetLocAlt <= ";
-            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
-            veryFirst = false;      
-        } else if ( !veryFirst ) {
-            segSqlFilterString += " AND targetLocAlt >= ";
-            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
-            segSqlFilterString += " AND targetLocAlt <= ";
-            segSqlFilterString += $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );    
-        }            
+        // Field target location altitude
+        var whereString = "";
+        whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
+        whereStatement.push( whereString );            
 
-        // Field targetLocType
-        var firstInCriteria = true;
-        $('#dispFilSeg_targetLocType .ui-selected').each(function() {
-            var recordId = this.id;
-            var sqlName = "targetLocType";
-            var lenCriteria = recordId.length;
-            var startCriteria = sqlName.length + 1;
-            if ( veryFirst && firstInCriteria ) {
-                segSqlFilterString = " WHERE " + sqlName + " in (";
-                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";  
-                veryFirst = false;    
-                firstInCriteria = false;
-            } else if (!veryFirst && !firstInCriteria) {
-                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
-            } else if (!veryFirst && firstInCriteria) {
-                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
-                firstInCriteria = false;
-            }               
-        });
-        if ( $('#dispFilSeg_targetLocType .ui-selected').length >0 ) {
-            segSqlFilterString += ")";
-        }
+        // Field target location type
+        var whereString = "";
+        var itemId = this.id;
+        var sqlName = "targetLocType";
+        var lenCriteria = itemId.length;
+        var startCriteria = sqlName.length + 1;
+        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };
 
         // Field region
+        var whereString = "";
         if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
-            if ( veryFirst ) {
-                segSqlFilterString = " WHERE regionId in (";
-                segSqlFilterString += ($('#dispFilSeg_segRegionID').val()) + ")"; 
-                veryFirst = false;     
-            } else if ( !veryFirst ) {
-                segSqlFilterString += " AND regionId in (";
-                segSqlFilterString += ($('#dispFilSeg_segRegionID').val()) + ")";    
-            } 
+            whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
+            whereStatement.push( whereString );
         };
+        
 
         // Field area
+        var whereString = "";
         if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
-            if ( veryFirst ) {
-                segSqlFilterString = " WHERE areaId in(";
-                segSqlFilterString += ($('#dispFilSeg_segAreaID').val()) + ")";  
-                veryFirst = false;    
-            } else if ( !veryFirst ) {
-                segSqlFilterString += " AND areaId in (";
-                segSqlFilterString += ($('#dispFilSeg_segAreaID').val()) + ")";    
-            } 
+            whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
+            whereStatement.push( whereString );
         };
-
+       
         // Field grade
-        var firstInCriteria = true;
+        var whereString = "";
         $('#dispFilSeg_grade .ui-selected').each(function() {
-            var recordId = this.id;
+            var itemId = this.id;
             var sqlName = "grade";
-            var lenCriteria = recordId.length;
+            var lenCriteria = itemId.length;
             var startCriteria = sqlName.length + 1;
-            if ( veryFirst && firstInCriteria ) {
-                segSqlFilterString = " WHERE " + sqlName + " in (";
-                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'"; 
-                veryFirst = false;     
-                firstInCriteria = false;
-            } else if (!veryFirst && !firstInCriteria) {
-                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
-            } else if (!veryFirst && firstInCriteria) {
-                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
-                firstInCriteria = false;
-            }
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
         });
-        if ( $('#dispFilSeg_grade .ui-selected').length >0 ) {
-            segSqlFilterString += ")";
-        }
-
+        
         // Field climbGrade
-        var firstInCriteria = true;
+        var whereString = "";
         $('#dispFilSeg_climbGrade .ui-selected').each(function() {
-            var recordId = this.id;
+            var itemId = this.id;
             var sqlName = "climbGrade";
-            var lenCriteria = recordId.length;
+            var lenCriteria = itemId.length;
             var startCriteria = sqlName.length + 1;
-            if ( veryFirst && firstInCriteria ) {
-                segSqlFilterString = " WHERE " + sqlName + " in (";
-                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";   
-                veryFirst = false;   
-                firstInCriteria = false;
-            } else if (!veryFirst && !firstInCriteria) {
-                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
-            } else if (!veryFirst && firstInCriteria) {
-                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
-                firstInCriteria = false;
-            }
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
         });
-        if ( $('#dispFilSeg_climbGrade .ui-selected').length >0 ) {
-            segSqlFilterString += ")";
-        }
 
-        // Field ehaft
-        var firstInCriteria = true;
+        // Field Ernsthaftigkeit
+        var whereString = "";
         $('#dispFilSeg_ehaft .ui-selected').each(function() {
-            var recordId = this.id;
+            var itemId = this.id;
             var sqlName = "ehaft";
-            var lenCriteria = recordId.length;
+            var lenCriteria = itemId.length;
             var startCriteria = sqlName.length + 1;
-            if ( veryFirst && firstInCriteria ) {
-                segSqlFilterString = " WHERE " + sqlName + " in (";
-                segSqlFilterString += "'" + recordId.slice(startCriteria,lenCriteria) + "'";    
-                veryFirst = false;  
-                firstInCriteria = false;
-            } else if (!veryFirst && !firstInCriteria) {
-                segSqlFilterString += ",'" + recordId.slice(startCriteria,lenCriteria) + "'";
-            } else if (!veryFirst && firstInCriteria) {
-                segSqlFilterString += " AND " + sqlName + " in ('" + recordId.slice(startCriteria,lenCriteria) + "'";
-                firstInCriteria = false;
-            }
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
         });
-        if ( $('#dispFilSeg_ehaft .ui-selected').length >0 ) {
-            segSqlFilterString += ")";
-        }
 
         // =================================================
         // ============ generate KML & draw Map ============
