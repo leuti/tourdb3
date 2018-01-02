@@ -518,19 +518,28 @@ $(document).ready(function() {
     // ========================== panelInput ====================================
     // ==========================================================================
 
-    // ***************************
-    // Executes code below when user clicks the 'Apply' filter button for segments
+    // ***************************************************************
+    // Executes code below when user clicks the 'Upload File' button
     $(document).on('click', '#buttonUploadFile', function (e) {
-        e.preventDefault();
-        var xhr = new XMLHttpRequest();
+        e.preventDefault();                                                                                 
+        var xhr = new XMLHttpRequest();                                                                     // create new xhr object
+        
+        // Execute following code JSON object is received from importGpx.php service
         xhr.onload = function() {
-            if (xhr.status === 200) {
-                responseObject = JSON.parse(xhr.responseText);
+            if (xhr.status === 200) {                                                                       // when all OK
+                responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
 
-                for (var i = 0; i < responseObject.length; i++) {
-                    var trkName = responseObject[i].trkTrackName ;
-                };
+                $('#impUpdTrk_trkTrackName').attr('value', responseObject.trkTrackName);                    // assign values of JSON to input fields
+                $('#impUpdTrk_trkRoute').attr('value', responseObject.trkRoute);
+                $('#impUpdTrk_trkDateBegin').attr('value', responseObject.trkDateBegin);
+                $('#impUpdTrk_trkDateFinish').attr('value', responseObject.trkDateFinish);
+                $('#impUpdTrk_trkDistance').attr('value', responseObject.trkDistance);
+                $('#impUpdTrk_trkTimeOverall').attr('value', responseObject.trkTimeOverall);
+                $('#impUpdTrk_trkMeterUp').attr('value', responseObject.trkMeterUp);
+                $('#impUpdTrk_trkMeterDown').attr('value', responseObject.trkMeterDown);
+                $('#impUpdTrk_trkCountry').attr('value', responseObject.trkCountry);
 
+                // Close upload file div and open form to update track data
                 $('#pImpFileUpload').addClass('hidden');
                 $('#pImpFileUpload').removeClass('visible');
                 $('#pImpUpdateTrack').addClass('visible');
@@ -539,27 +548,39 @@ $(document).ready(function() {
         }
 
         phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
-        //phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
-        //xhrParams =  "outFileName=" + outFileName;
-        //xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
-        //xhrParams += "&sqlWhere=" + sqlWhere ;
-        
-        //var fileName = $( "input:file" ).val();
-
-        var fileName = document.getElementById('inputFile').files[0];
-        //fileName = $('#inputFile').files[0];
-        
-        var formData = new FormData();
-        formData.append('filename', fileName);
-        formData.append('sessionid', 123456);
-        formData.append('filetype', "gpx");
-        xhr.open ('POST', phpLocation, true);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
-        xhr.send(formData);
-        //xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
-        //xhr.send(encodeURI(xhrParams));
-
+        var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
+        var formData = new FormData();                                  // create new formData object
+        formData.append('filename', fileName);                          // append parameter filename
+        formData.append('sessionid', 123456);                           // append parameter session ID
+        formData.append('filetype', "gpx");                             // append parameter file type
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        xhr.send(formData);                                             // send formData object to service using xhr
     });
 
+    $(document).on('click', '#impUpdTrk_save', function (e) {
+        e.preventDefault();
+        var track = [];
+        track["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
+        track["trkRoute"] = $('#impUpdTrk_trkRoute').val();
+        track["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
+        track["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
+        track["Saison"] = $('#impUpdTrk_trkSaison').val();
+        track["trkType"] = $('#impUpdTrk_trkType').val();
+        track["trkSubType"] = $('#impUpdTrk_trkSubType').val();
+        track["trkOrg"] = $('#impUpdTrk_trkOrg').val();
+        track["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
+        track["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
+        track["trkEvent"] = $('#impUpdTrk_trkEvent').val();
+        track["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
+        track["trkDistance"] = $('#impUpdTrk_trkDistance').val();
+        track["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
+        track["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
+        track["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
+        track["trkGrade"] = $('#impUpdTrk_trkGrade').val();
+        track["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
+        track["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
+        track["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
+    });
 // =============================================
 // ============ F U N C T I O N S ==============
 // =============================================

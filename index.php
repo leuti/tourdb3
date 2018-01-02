@@ -373,135 +373,134 @@
 			</div>
 
 			<div id="pImpUpdateTrack" class="pImpDiv hidden">
-			
 				<fieldset>
         		
 					<!-- SEGMENT filter -->
-					<legend class="UFLegend">Import Track</legend>
+					<legend class="filterHeader">Import Track</legend>
 
 					<!-- Track Name -->
-					<div class="mapFilterCriteria">
+					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkTrackName" class="labelNext">Track Name</label>
 						<input type="text" name="impUpdTrk_trkTrackName" id="impUpdTrk_trkTrackName" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 						
 					<!-- Route -->
-					<div class="mapFilterCriteria">
+					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkRoute" class="labelNext">Route</label>
 						<input type="text" name="impUpdTrk_trkRoute" id="impUpdTrk_trkRoute" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Begin -->
-					<div class="mapFilterCriteria">
+					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkDateBegin" class="labelNext">Date Begin</label>
 						<input type="text" name="impUpdTrk_trkDateBegin" id="impUpdTrk_trkDateBegin" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Finish -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_DateFinish" class="labelNext">Date Finish</label>
-						<input type="text" name="impUpdTrk_DateFinish" id="impUpdTrk_DateFinish" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkDateFinish" class="labelNext">Date Finish</label>
+						<input type="text" name="impUpdTrk_trkDateFinish" id="impUpdTrk_trkDateFinish" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Saison -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Saison" class="labelNext">Saison</label>
-						<input type="text" name="impUpdTrk_Saison" id="impUpdTrk_Saison" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkSaison" class="labelNext">Saison</label>
+						<input type="text" name="impUpdTrk_trkSaison" id="impUpdTrk_trkSaison" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Type -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Type" class="labelNext">Type</label>
-						<input type="text" name="impUpdTrk_Type" id="impUpdTrk_Type" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkType" class="labelNext">Type</label>
+						<input type="text" name="impUpdTrk_trkType" id="impUpdTrk_trkType" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date SubType -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_SubType" class="labelNext">SubType</label>
-						<input type="text" name="impUpdTrk_SubType" id="impUpdTrk_SubType" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkSubType" class="labelNext">SubType</label>
+						<input type="text" name="impUpdTrk_trkSubType" id="impUpdTrk_trkSubType" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Org -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Org" class="labelNext">Organisation</label>
-						<input type="text" name="impUpdTrk_Org" id="impUpdTrk_Org" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkOrg" class="labelNext">Organisation</label>
+						<input type="text" name="impUpdTrk_trkOrg" id="impUpdTrk_trkOrg" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Overnight Location -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_OvernightLoc" class="labelNext">Location</label>
-						<input type="text" name="impUpdTrk_OvernightLoc" id="impUpdTrk_OvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkOvernightLoc" class="labelNext">Location</label>
+						<input type="text" name="impUpdTrk_trkOvernightLoc" id="impUpdTrk_trkOvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Participants -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Participants" class="labelNext">Participants</label>
-						<input type="text" name="impUpdTrk_Participants" id="impUpdTrk_Participants" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkParticipants" class="labelNext">Participants</label>
+						<input type="text" name="impUpdTrk_trkParticipants" id="impUpdTrk_trkParticipants" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Event -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Event" class="labelNext">Event</label>
-						<input type="text" name="impUpdTrk_Event" id="impUpdTrk_Event" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkEvent" class="labelNext">Event</label>
+						<input type="text" name="impUpdTrk_trkEvent" id="impUpdTrk_trkEvent" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Remarks -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Remarks" class="labelNext">Remarks</label>
-						<input type="text" name="impUpdTrk_Remarks" id="impUpdTrk_Remarks" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkRemarks" class="labelNext">Remarks</label>
+						<input type="text" name="impUpdTrk_trkRemarks" id="impUpdTrk_trkRemarks" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Distance -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Distance" class="labelNext">Distance</label>
-						<input type="text" name="impUpdTrk_Distance" id="impUpdTrk_Distance" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkDistance" class="labelNext">Distance</label>
+						<input type="text" name="impUpdTrk_trkDistance" id="impUpdTrk_trkDistance" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Time Overall -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_TimeOverall" class="labelNext">Overall Time</label>
-						<input type="text" name="impUpdTrk_TimeOverall" id="impUpdTrk_TimeOverall" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkTimeOverall" class="labelNext">Overall Time</label>
+						<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date TimeToTarget -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_TimeToTarget" class="labelNext">Date End</label>
-						<input type="text" name="impUpdTrk_TimeToTarget" id="impUpdTrk_TimeToTarget" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkTimeToTarget" class="labelNext">Date End</label>
+						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date TimeToEnd -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_TimeToEnd" class="labelNext">Time To End</label>
-						<input type="text" name="impUpdTrk_TimeToEnd" id="impUpdTrk_TimeToEnd" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkTimeToEnd" class="labelNext">Time To End</label>
+						<input type="text" name="impUpdTrk_trkTimeToEnd" id="impUpdTrk_trkTimeToEnd" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Grade -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Grade" class="labelNext">Grade</label>
-						<input type="text" name="impUpdTrk_Grade" id="impUpdTrk_Grade" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkGrade" class="labelNext">Grade</label>
+						<input type="text" name="impUpdTrk_trkGrade" id="impUpdTrk_trkGrade" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date MeterUp -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_MeterUp" class="labelNext">Meter Up</label>
-						<input type="text" name="impUpdTrk_MeterUp" id="impUpdTrk_MeterUp" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkMeterUp" class="labelNext">Meter Up</label>
+						<input type="text" name="impUpdTrk_trkMeterUp" id="impUpdTrk_trkMeterUp" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date MeterDown -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_MeterDown" class="labelNext">Meter Down</label>
-						<input type="text" name="impUpdTrk_MeterDown" id="impUpdTrk_MeterDown" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkMeterDown" class="labelNext">Meter Down</label>
+						<input type="text" name="impUpdTrk_trkMeterDown" id="impUpdTrk_trkMeterDown" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Country -->
-					<div class="mapFilterCriteria">
-						<label for="impUpdTrk_Country" class="labelNext">Country</label>
-						<input type="text" name="impUpdTrk_Country" id="impUpdTrk_Country" size="40" class="text ui-widget-content ui-corner-all">
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkCountry" class="labelNext">Country</label>
+						<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-
 					<br><br>
-					<input type="submit" class="button" id="mapApplyFilterUser" value="Daten filtern" />
+					<input type="submit" class="button" id="impUpdTrk_save" value="Save Track" />
+					<input type="submit" class="button" id="impUpdTrk_cancel" value="Cancel import" />
 				</fieldset>
 			</div>
 			

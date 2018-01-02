@@ -169,6 +169,8 @@ table {
 #pImpFileUpload.visible, #pImpUpdateTrack.visible {
     display: block;
     background-color: #cce6ff;
+    width: 600px;
+    margin: auto;
 }
 /* Not used stylesheets */
 
