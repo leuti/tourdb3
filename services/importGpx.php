@@ -70,11 +70,14 @@ if ( $filetype == "gpx") {
     $trackName = $returnArray[1];
     $coordArray = $returnArray[2];
     $coordString = "";
-    if ($debugLevel>1) fputs($logFile, "Line 71 - insertTmpTrackPoint: Return value - tmpTrkId: $tmpTrkId\r\n");    
+    if ($debugLevel>1) fputs($logFile, "Line 73 - tmpTrkId: $tmpTrkId\r\n");   
+    if ($debugLevel>1) fputs($logFile, "Line 74 - trackName: $trackName\r\n");   
+    //if ($debugLevel>1) fputs($logFile, "Line 71 - coordArray: $coordArray\r\n");   
+    if ($debugLevel>1) fputs($logFile, "Line 76 - insertTmpTrackPoint: Return value - tmpTrkId: $tmpTrkId\r\n");    
 
     // join array $coordArray into a string
     foreach ( $coordArray as $coordLine) {
-        $coordString .= $coordLine + ' '; 
+        $coordString = $coordString . $coordLine; 
     };
     if ($debugLevel>1) fputs($logFile, "Line 69 - coordString: $coordString\r\n");    
 
@@ -90,7 +93,7 @@ if ( $filetype == "gpx") {
         "trkLogbookId"=>"",
         "trkSourceFileName"=>"",
         "trkPeakRef"=>"",
-        "trkTrackName"=>$trackName,
+        "trkTrackName"=>"$trackName",
         "trkRoute"=>"",
         "trkDateBegin"=>"",
         "trkDateFinish"=>"",
@@ -162,15 +165,15 @@ function insertTmpTrackPoint($conn,$sessionid, $filename)
         }
         
         $sql .= "('" . $tptNumber . "', ";                          // write tptNumber - a continuous counter for the track points
-        $sql .= "'" . $tmpTrkId . "', ";                               // tptTrackFID - reference to the track         
+        $sql .= "'" . $tmpTrkId . "', ";                            // tptTrackFID - reference to the track         
         $sql .= "'" . $trkpt["lat"] . "', ";                        // tptLat - latitude value 
         $sql .= "'" . $trkpt["lon"] . "', ";                        // tptLon - longitude value
         $sql .= "'" . $trkpt->ele . "', ";                          // tptEle - elevation of track point
         $sql .= "'" . strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time)) . "')";     // tptTime - time of track point
         
+        $coordString = $trkpt["lon"] . ',' . $trkpt["lat"] . ',' . $trkpt->ele . ' ';
 
-        array_push( $coordArray, ' ' . $trkpt["tptLon"] . ',' . $trkpt["tptLat"] . ',' . $trkpt["tptEle"]);
-                                                                    // write Lon, Lat and Ele into coordArray array
+        array_push( $coordArray, $coordString );                    // write Lon, Lat and Ele into coordArray array
 
         if($tptNumber == $loopCumul || $tptNumber == $totalTrkPts)  // If current loop size or last track is reached
         {        
@@ -188,11 +191,11 @@ function insertTmpTrackPoint($conn,$sessionid, $filename)
                 if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 296 - Error inserting trkPt! Error Message: $conn->error\r\n");
                 return -1;
             }
-        }
-        
+        }       
         $tptNumber++;                                               // increase track point counter by 1
-    } 
-    //if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 305 - Return value - resUpdateTrack: $resUpdateTrack \r\n");    
+    }
+
+    fputs($logFile,"Line 198 - trackName: $trackName\r\n");    
     return array($tmpTrkId,$trackName,$coordArray);                                                  // return tmp trackId and track name in array
 }
 ?>

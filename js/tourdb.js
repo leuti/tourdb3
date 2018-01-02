@@ -523,6 +523,16 @@ $(document).ready(function() {
     $(document).on('click', '#buttonUploadFile', function (e) {
         e.preventDefault();
         var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                responseObject = JSON.parse(xhr.responseText);
+
+                for (var i = 0; i < responseObject.length; i++) {
+                    var trkName = responseObject[i].trkTrackName ;
+                };
+            }
+        }
+
         phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
         //phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
         //xhrParams =  "outFileName=" + outFileName;
