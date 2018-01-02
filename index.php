@@ -360,7 +360,16 @@
 		<!-- ========================================================================== -->
 		
 		<div id="panelImport" class="tourdbPanel">
-			<p>Ich bin das panel panelImport</p>
+			
+			<form enctype="multipart/form-data">
+				<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+				Diese Datei hochladen: <input id="inputFile" name="userfile" type="file" />
+			</form>
+
+			<div class="buttonUpload">
+				<input type="submit" class="button" id="buttonUploadFile" value="Upload File" />
+			</div>
+			
 		</div> <!-- End div panelImport -->
 
 		<!-- ========================================================================== -->

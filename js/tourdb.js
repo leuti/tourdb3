@@ -62,7 +62,6 @@ $(document).ready(function() {
         $activeButton.parent().addClass('hidden');
         $('.dispObjMini').removeClass('hidden');
         $('.dispObjMini').addClass('visible');
-
     })
 
     $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
@@ -72,7 +71,6 @@ $(document).ready(function() {
         $activeButton.parent().addClass('hidden');
         $('.dispObjOpen').removeClass('hidden');
         $('.dispObjOpen').addClass('visible');
-
     })
 
     // ==========================================================================
@@ -516,6 +514,42 @@ $(document).ready(function() {
     });
 });    
 
+    // ==========================================================================
+    // ========================== panelInput ====================================
+    // ==========================================================================
+
+    // ***************************
+    // Executes code below when user clicks the 'Apply' filter button for segments
+    $(document).on('click', '#buttonUploadFile', function (e) {
+        e.preventDefault();
+        var xhr = new XMLHttpRequest();
+        phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
+        //phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
+        //xhrParams =  "outFileName=" + outFileName;
+        //xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
+        //xhrParams += "&sqlWhere=" + sqlWhere ;
+        
+        //var fileName = $( "input:file" ).val();
+
+        var fileName = document.getElementById('inputFile').files[0];
+        //fileName = $('#inputFile').files[0];
+        
+        var formData = new FormData();
+        formData.append('filename', fileName);
+        formData.append('sessionid', 123456);
+        formData.append('filetype', "gpx");
+        xhr.open ('POST', phpLocation, true);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
+        xhr.send(formData);
+        //xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
+        //xhr.send(encodeURI(xhrParams));
+
+    });
+
+// =============================================
+// ============ F U N C T I O N S ==============
+// =============================================
+
+
 // Function drawing empty map -- for documentation see: https://api3.geo.admin.ch/
 function drawMapEmpty(targetDiv) {
     var map = new ga.Map({
@@ -527,10 +561,6 @@ function drawMapEmpty(targetDiv) {
     var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
     map.addLayer(lyr1);
 }
-
-// =============================================
-// ============ F U N C T I O N S ==============
-// =============================================
 
 // Function generating KML file for segments
 
