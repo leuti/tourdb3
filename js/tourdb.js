@@ -530,6 +530,11 @@ $(document).ready(function() {
                 for (var i = 0; i < responseObject.length; i++) {
                     var trkName = responseObject[i].trkTrackName ;
                 };
+
+                $('#pImpFileUpload').addClass('hidden');
+                $('#pImpFileUpload').removeClass('visible');
+                $('#pImpUpdateTrack').addClass('visible');
+                $('#pImpUpdateTrack').removeClass('hidden');
             }
         }
 

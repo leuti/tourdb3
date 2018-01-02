@@ -117,14 +117,16 @@ if ( $filetype == "gpx") {
         "trkToReview"=>"",
         "trkCoordinates"=>$coordString
     );
-    // 
-
+    
     // return JSON object to client
     echo json_encode($newTrack);
 
-    // remove imported file
+    // remove imported file & close connections
+    if ( file_exists) unlink ($uploadfile);                                     // remove file if existing
+    //rmdir($uploaddir, 0777);                                                  // remove upload directory          
+
     $conn->close();                                                             // Close DB connection
-    //rmdir($uploaddir, 0777);                                                    // remove upload directory          
+
 } else {
     fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
 }
@@ -145,7 +147,6 @@ function insertTmpTrackPoint($conn,$sessionid, $filename)
 
     $totalTrkPts = count($gpx->trk->trkseg->trkpt);                 // total number of track points in file
     $loop = 0;                                                      // set current loop to 0 (only required for debug purposes)
-
 
     $sqlBase = "INSERT INTO `tourdb2`.`tmp_trackPoints`";           // create first part of insert statement 
     $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
@@ -196,6 +197,6 @@ function insertTmpTrackPoint($conn,$sessionid, $filename)
     }
 
     fputs($logFile,"Line 198 - trackName: $trackName\r\n");    
-    return array($tmpTrkId,$trackName,$coordArray);                                                  // return tmp trackId and track name in array
+    return array($tmpTrkId,$trackName,$coordArray);                 // return tmp trackId, track name and coordinate array in array
 }
 ?>

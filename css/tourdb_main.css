@@ -159,8 +159,17 @@ table {
     border: 1px solid #0066ff;
     background-color: #cce6ff;}    
 
+/********** panelImport **********/
+/*********************************/
 
+#pImpFileUpload.hidden, #pImpUpdateTrack.hidden {
+    display: none;
+}
 
+#pImpFileUpload.visible, #pImpUpdateTrack.visible {
+    display: block;
+    background-color: #cce6ff;
+}
 /* Not used stylesheets */
 
 /*
