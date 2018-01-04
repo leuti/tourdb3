@@ -12,12 +12,13 @@
 // filetype: type of file to be imported (gpx or kml)
 //
 // Actions:
-// * Process file upload: https://www.w3schools.com/php/php_file_upload.asp
-// * error handling if filename/filetype is empty
-// * Impl. solution to have unique sessionids (in function insertTrackPoint)
+// * error handling if filename/filetype is empty   
 // * remove upload directory not yet working
 // * merge insert statement and select max(trackId) into one transaction
-// * remove commennt from remove file
+// * remove comment from remove file
+// * Clean up tblTracks and tblTrackPoints
+// * Remove test from insert track statement
+// * Create kml file (as JSON array) and return to client --> for display of mini map
 
 // Created: 13.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
@@ -31,16 +32,17 @@ $debugLevel = 3;                                                    // 0 = off, 
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 $trackobj = array();                                                // array storing track data in array
 
-// Open file for import log
-$importGpxLog = dirname(__FILE__) . "\..\log\importGpx.log";        // Assign file location
-$logFile = @fopen($importGpxLog,"w");                               // open log file handler 
-fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
-
+// variables passed on by client (as formData object)
 $sessionid = $_REQUEST['sessionid'];                                // ID of current user session - required to make site multiuser capable
 $request = $_REQUEST['request'];                                    // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
 $filename = basename($_FILES['filename']['name']);                  // file name of chosen gps file
 $filetype = $_REQUEST['filetype'];                                  // Type of upload file (gpx or kml)
 $trackobj[] = $_REQUEST['trackobj'];                                // Array of track data 
+
+// Open file for import log
+$importGpxLog = dirname(__FILE__) . "\..\log\importGpx.log";        // Assign file location
+$logFile = @fopen($importGpxLog,"w");                               // open log file handler 
+fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 foreach ($trackobj as $key => $value) {
     fputs($logFile, "Line 46 - $key: $value\r\n");
@@ -53,6 +55,11 @@ if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");
 
 if ($request == "temp") {
 
+    // ---------------------------------------------------------------------------------
+    // request type is "temp" meaning that track records are created on temporary basis
+    // ---------------------------------------------------------------------------------
+
+    // define directory and copy file 
     $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
     $uploadfile = $uploaddir . $filename;
     if ( $debugLevel > 2) fputs($logFile, "Line 54 - uploaddir: $uploaddir\r\n");  
@@ -69,41 +76,38 @@ if ($request == "temp") {
     }  
 
     // -----------------------------------------
-    // Main routine
+    // Main process for gpx files
     // -----------------------------------------
 
     if ( $filetype == "gpx") {
-        // 
+        // Call function to insert track data
         $returnArray = insertTrack($conn,$filename,$uploadfile);
-        $trackid = $returnArray[0];
-        $trackobj = $returnArray[1];
+        $trackid = $returnArray[0];                                   // return id of newly created track
+        $trackobj = $returnArray[1];                                  // track object with all know track data derived from file
+        
         fputs($logFile, "Line 80 - trackid: $trackid\r\n");
         foreach ($trackobj as $key => $value) {
             fputs($logFile, "Line 82 - $key: $value\r\n");
         }
         
-        $returnArray = array();
-        // insert track points found in file in table tmp_trackpoints with unique FID
-        $returnArray = insertTrackPoint($conn,$trackid,$uploadfile);       // Insert new track points; returns temp ID for track
+        $returnArray = array();                                       // Clear return array
+
+        // insert track points found in file in table tmp_trackpoints with given track id
+        $returnArray = insertTrackPoint($conn,$trackid,$uploadfile);  // Insert new track points; returns temp ID for track
         
-        $trackid = $returnArray[0];
-        $coordArray = $returnArray[1];
+        $trackid = $returnArray[0];                                   // return id of newly created track
+        $coordArray = $returnArray[1];                                // array string with coordinates
        
-        
-
-        $coordString = "";
-        //if ($debugLevel>1) fputs($logFile, "Line 74 - trackName: $trackName\r\n");   
-        //if ($debugLevel>1) fputs($logFile, "Line 71 - coordArray: $coordArray\r\n");   
-        //if ($debugLevel>1) fputs($logFile, "Line 76 - insertTrackPoint: Return value - tmpTrkId: $tmpTrkId\r\n");    
-
-        // join array $coordArray into a string
-        foreach ( $coordArray as $coordLine) {
+        $coordString = "";                                            // clear var coordString
+       // join array $coordArray into a string
+        foreach ( $coordArray as $coordLine) {                        // Create string containing the coordinates
             $coordString = $coordString . $coordLine; 
         };
 
         // create JSON object with known gpx data
-        $trackobj['trkCoordinates'] = $coordString; // later
-                // calculate distance based on gpx data
+        $trackobj['trkCoordinates'] = $coordString;                   // add field coordinates to track object
+
+        // calculate distance based on gpx data
 
         // calculate time based on gpx data
 
@@ -113,13 +117,13 @@ if ($request == "temp") {
         foreach ($trackobj as $key => $value) {
             fputs($logFile, "Line 144 - $key: $value\r\n");
         }
-        echo json_encode($trackobj);
+        echo json_encode($trackobj);                                  // echo track object to client
 
         // remove imported file & close connections
-//        if ( file_exists) unlink ($uploadfile);                                     // remove file if existing
-        //rmdir($uploaddir, 0777);                                                  // remove upload directory          
+        if ( file_exists) unlink ($uploadfile);                       // remove file if existing
+        rmdir($uploaddir, 0777);                                      // remove upload directory          
 
-        $conn->close();                                                             // Close DB connection
+        $conn->close();                                               // Close DB connection
 
     } else if ($filetype == "kml") {
         fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
@@ -138,7 +142,7 @@ function insertTrack($conn,$filename,$uploadfile)
 {
     if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 199 - Function insertTrack entered\r\n");
 
-    $gpx = simplexml_load_file($uploadfile);                      // Load XML structure
+    $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
     $newTrackTime = $gpx->metadata->time;                           // Assign track time from gpx file to variable
     $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
     $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));    // convert track time 
@@ -172,10 +176,11 @@ function insertTrack($conn,$filename,$uploadfile)
     if ($stmt = mysqli_prepare($conn, $sql)) 
     {
         mysqli_stmt_execute($stmt);                                 // execute select statement
-        mysqli_stmt_bind_result($stmt, $trackid);                     // bind result variables
+        mysqli_stmt_bind_result($stmt, $trackid);                   // bind result variables
 
         while (mysqli_stmt_fetch($stmt)) {                          // Fetch result of sql statement (one result expeced)
             if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 177 - sql: $sql\r\n");
+            
             // create JSON object with known gpx data
             $trackobj = array (
                 "trkId"=>$trackid,
@@ -190,7 +195,7 @@ function insertTrack($conn,$filename,$uploadfile)
                 "trkMeterDown"=>"",
             );
         }
-        return array($trackid,$trackobj);                 // return tmp trackId, track name and coordinate array in array
+        return array($trackid,$trackobj);                           // return tmp trackId, track name and coordinate array in array
         mysqli_stmt_close($stmt);                                   // Close statement
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 195 - Error selecting max(trkId): $conn->error\r\n");
@@ -198,7 +203,6 @@ function insertTrack($conn,$filename,$uploadfile)
         return -1;
     } 
 }
-
 
 // ----------------------------------------------------------
 // Insert track points into table
@@ -234,7 +238,7 @@ function insertTrackPoint($conn,$trackid,$filename)
         }
         
         $sql .= "('" . $tptNumber . "', ";                          // write tptNumber - a continuous counter for the track points
-        $sql .= "'" . $trackid . "', ";                            // tptTrackFID - reference to the track         
+        $sql .= "'" . $trackid . "', ";                             // tptTrackFID - reference to the track         
         $sql .= "'" . $trkpt["lat"] . "', ";                        // tptLat - latitude value 
         $sql .= "'" . $trkpt["lon"] . "', ";                        // tptLon - longitude value
         $sql .= "'" . $trkpt->ele . "', ";                          // tptEle - elevation of track point
@@ -263,6 +267,6 @@ function insertTrackPoint($conn,$trackid,$filename)
         }       
         $tptNumber++;                                               // increase track point counter by 1
     }
-    return array($trackid,$coordArray);                 // return tmp trackId, track name and coordinate array in array
+    return array($trackid,$coordArray);                             // return tmp trackId, track name and coordinate array in array
 }
 ?>
