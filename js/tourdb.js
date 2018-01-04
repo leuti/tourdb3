@@ -524,7 +524,7 @@ $(document).ready(function() {
         e.preventDefault();                                                                                 
         var xhr = new XMLHttpRequest();                                                                     // create new xhr object
         
-        // Execute following code JSON object is received from importGpx.php service
+        // Execute following code JSON object is received from importGpsTmp.php service
         xhr.onload = function() {
             if (xhr.status === 200) {                                                                       // when all OK
                 responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
@@ -538,6 +538,7 @@ $(document).ready(function() {
                 $('#impUpdTrk_trkMeterUp').attr('value', responseObject.trkMeterUp);
                 $('#impUpdTrk_trkMeterDown').attr('value', responseObject.trkMeterDown);
                 $('#impUpdTrk_trkCountry').attr('value', responseObject.trkCountry);
+                $('#impUpdTrk_trkCoordinates').attr('value', responseObject.trkCoordinates);
 
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').addClass('hidden');
@@ -547,24 +548,27 @@ $(document).ready(function() {
             }
         }
 
-        phpLocation = document.URL + "services/importGpx.php";          // Variable to store location of php file
+        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
         var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
         var formData = new FormData();                                  // create new formData object
-        formData.append('filename', fileName);                          // append parameter filename
         formData.append('sessionid', 123456);                           // append parameter session ID
+        formData.append('request', 'temp')
+        formData.append('filename', fileName);                          // append parameter filename
         formData.append('filetype', "gpx");                             // append parameter file type
+        formData.append('trackobj', '')
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.send(formData);                                             // send formData object to service using xhr
     });
 
     $(document).on('click', '#impUpdTrk_save', function (e) {
         e.preventDefault();
+        
         var track = [];
         track["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
         track["trkRoute"] = $('#impUpdTrk_trkRoute').val();
         track["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
         track["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
-        track["Saison"] = $('#impUpdTrk_trkSaison').val();
+        track["trkSaison"] = $('#impUpdTrk_trkSaison').val();
         track["trkType"] = $('#impUpdTrk_trkType').val();
         track["trkSubType"] = $('#impUpdTrk_trkSubType').val();
         track["trkOrg"] = $('#impUpdTrk_trkOrg').val();
@@ -580,11 +584,19 @@ $(document).ready(function() {
         track["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
         track["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
         track["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-    });
+
+        var xhr = new XMLHttpRequest();                                 // create new xhr object
+        phpLocation = document.URL + "services/importGpsFin.php";       // Variable to store location of php file
+        var formData = new FormData();                                  // create new formData object
+        formData.append('trackobj', track);                             // track object
+        formData.append('sessionid', 123456);                           // append parameter session ID
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        xhr.send(formData);                                             // send formData object to service using xhr
+});
+
 // =============================================
 // ============ F U N C T I O N S ==============
 // =============================================
-
 
 // Function drawing empty map -- for documentation see: https://api3.geo.admin.ch/
 function drawMapEmpty(targetDiv) {
@@ -723,4 +735,3 @@ function drawMapOld(targetDiv, segKmlFile, waypKmlFile, drawHangneigung, drawWan
     map.getTargetElement().style.cursor = feature ? 'pointer' : '';
     });
 }
-    

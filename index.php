@@ -375,7 +375,7 @@
 			<div id="pImpUpdateTrack" class="pImpDiv hidden">
 				<fieldset>
         		
-					<!-- SEGMENT filter -->
+					<!-- Import Tracks -->
 					<legend class="filterHeader">Import Track</legend>
 
 					<!-- Track Name -->
@@ -402,100 +402,106 @@
 						<input type="text" name="impUpdTrk_trkDateFinish" id="impUpdTrk_trkDateFinish" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Saison -->
+					<!-- Saison -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkSaison" class="labelNext">Saison</label>
 						<input type="text" name="impUpdTrk_trkSaison" id="impUpdTrk_trkSaison" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Type -->
+					<!-- Type -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkType" class="labelNext">Type</label>
 						<input type="text" name="impUpdTrk_trkType" id="impUpdTrk_trkType" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date SubType -->
+					<!-- SubType -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkSubType" class="labelNext">SubType</label>
 						<input type="text" name="impUpdTrk_trkSubType" id="impUpdTrk_trkSubType" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Org -->
+					<!-- Org -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkOrg" class="labelNext">Organisation</label>
 						<input type="text" name="impUpdTrk_trkOrg" id="impUpdTrk_trkOrg" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Overnight Location -->
+					<!-- Overnight Location -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkOvernightLoc" class="labelNext">Location</label>
 						<input type="text" name="impUpdTrk_trkOvernightLoc" id="impUpdTrk_trkOvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Participants -->
+					<!-- Participants -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkParticipants" class="labelNext">Participants</label>
 						<input type="text" name="impUpdTrk_trkParticipants" id="impUpdTrk_trkParticipants" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Event -->
+					<!-- Event -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkEvent" class="labelNext">Event</label>
 						<input type="text" name="impUpdTrk_trkEvent" id="impUpdTrk_trkEvent" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Remarks -->
+					<!-- Remarks -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkRemarks" class="labelNext">Remarks</label>
 						<input type="text" name="impUpdTrk_trkRemarks" id="impUpdTrk_trkRemarks" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Distance -->
+					<!-- Distance -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkDistance" class="labelNext">Distance</label>
 						<input type="text" name="impUpdTrk_trkDistance" id="impUpdTrk_trkDistance" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Time Overall -->
+					<!-- Time Overall -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkTimeOverall" class="labelNext">Overall Time</label>
 						<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date TimeToTarget -->
+					<!-- TimeToTarget -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkTimeToTarget" class="labelNext">Date End</label>
 						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date TimeToEnd -->
+					<!-- TimeToEnd -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkTimeToEnd" class="labelNext">Time To End</label>
 						<input type="text" name="impUpdTrk_trkTimeToEnd" id="impUpdTrk_trkTimeToEnd" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Grade -->
+					<!-- Grade -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkGrade" class="labelNext">Grade</label>
 						<input type="text" name="impUpdTrk_trkGrade" id="impUpdTrk_trkGrade" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date MeterUp -->
+					<!-- MeterUp -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkMeterUp" class="labelNext">Meter Up</label>
 						<input type="text" name="impUpdTrk_trkMeterUp" id="impUpdTrk_trkMeterUp" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date MeterDown -->
+					<!-- MeterDown -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkMeterDown" class="labelNext">Meter Down</label>
 						<input type="text" name="impUpdTrk_trkMeterDown" id="impUpdTrk_trkMeterDown" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Date Country -->
+					<!-- Country -->
 					<div class="impUpdateCriteria">
 						<label for="impUpdTrk_trkCountry" class="labelNext">Country</label>
 						<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="text ui-widget-content ui-corner-all">
+					</div>
+
+					<!-- Da Coordinates -->
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkCoordinates" class="labelNext">Coordinates</label>
+						<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<br><br>
