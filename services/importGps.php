@@ -19,6 +19,7 @@
 // * Clean up tblTracks and tblTrackPoints
 // * Remove test from insert track statement
 // * Create kml file (as JSON array) and return to client --> for display of mini map
+// * Ensure that tracks are deleted even if user does not send cancel or save
 
 // Created: 13.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
@@ -30,28 +31,25 @@ date_default_timezone_set('Europe/Zurich');                         // must be s
 
 $debugLevel = 3;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
-$trackobj = array();                                                // array storing track data in array
-
-// variables passed on by client (as formData object)
-$sessionid = $_REQUEST['sessionid'];                                // ID of current user session - required to make site multiuser capable
-$request = $_REQUEST['request'];                                    // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-$filename = basename($_FILES['filename']['name']);                  // file name of chosen gps file
-$filetype = $_REQUEST['filetype'];                                  // Type of upload file (gpx or kml)
-$trackobj[] = $_REQUEST['trackobj'];                                // Array of track data 
 
 // Open file for import log
 $importGpxLog = dirname(__FILE__) . "\..\log\importGpx.log";        // Assign file location
-$logFile = @fopen($importGpxLog,"w");                               // open log file handler 
+$logFile = @fopen($importGpxLog,"a");                               // open log file handler 
+fputs($logFile, "\r\n============================================================\r\n");    
 fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
-foreach ($trackobj as $key => $value) {
-    fputs($logFile, "Line 46 - $key: $value\r\n");
+if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )
+{
+    $request = $_REQUEST["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
+    fputs($logFile, "Request (_REQUEST): $request\r\n");    
+} else {
+    // variables passed on by client (as formData object)
+    $receivedData = json_decode ( file_get_contents('php://input'), true );
+    $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
+    fputs($logFile, "Line 52: Request (JSON): $request\r\n");    
 }
 
-if ( $debugLevel > 2) fputs($logFile, "Line 49 - sessionid: $sessionid\r\n");  
-if ( $debugLevel > 2) fputs($logFile, "Line 50 - request: $request\r\n");  
-if ( $debugLevel > 2) fputs($logFile, "Line 51 - filename: $filename\r\n");  
-if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
+$trackobj = array();                                                // array storing track data in array
 
 if ($request == "temp") {
 
@@ -59,6 +57,15 @@ if ($request == "temp") {
     // request type is "temp" meaning that track records are created on temporary basis
     // ---------------------------------------------------------------------------------
 
+  
+    // Read posted parameters
+    $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
+    $filename = basename($_FILES['filename']['name']);                  // file name of chosen gps file
+    $filetype = $_REQUEST["filetype"];                                  // Type of upload file (gpx or kml)
+
+    fputs($logFile, "Parameters: \r\n");    
+    fputs($logFile, "sessionid:$sessionid | filename:$filename | filetype:$filetype\r\n");    
+    
     // define directory and copy file 
     $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
     $uploadfile = $uploaddir . $filename;
@@ -130,7 +137,47 @@ if ($request == "temp") {
     } else {
         fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
     }
+
 } else if ( $request == "save") {
+
+    // ---------------------------------------------------------------------------------
+    // request type is "save" meaning that track records are updated and finalised
+    // ---------------------------------------------------------------------------------
+
+    $trackobj = array();                                                // array storing track data in array
+    $sessionid = $receivedData["sessionid"];                                // ID of current user session - required to make site multiuser capable
+    $request = $receivedData["request"];                                    // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
+    $filetype = $receivedData["filetype"];                                  // Type of upload file (gpx or kml)
+    $trackobj = $receivedData["trackobj"];                                // Array of track data 
+
+    if ( $debugLevel > 2) fputs($logFile, "Line 49 - sessionid: $sessionid\r\n");  
+    if ( $debugLevel > 2) fputs($logFile, "Line 50 - request: $request\r\n");  
+    //if ( $debugLevel > 2) fputs($logFile, "Line 51 - filename: $filename\r\n");  
+    if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
+
+    foreach ($trackobj as $key => $value) {
+        fputs($logFile, "Line 161 - $key: $value\r\n");
+
+        $sql = "UPDATE `tourdb2`.`tbl_tracks` ";                    // Insert Source file name, gps start time and toReview flag
+        $sql .= "SET `trkSaison` = 'saison', ";
+        $sql .= "`trkType` = 'type', "; 
+        $sql .= "`trkType` = 'type', "; 
+        $sql .= "`trkType` = 'type', "; 
+        $sql .= "`trkType` = 'type', "; 
+        $sql .= "WHERE `tbl_tracks`.`trkId` = 685 "; 
+           
+        fputs($GLOBALS['logFile'], "Line 143 - sql: $sql\r\n");
+    
+        if ($conn->query($sql) === TRUE)                                // run sql against DB
+        {
+            if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
+        } else {
+            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
+            return -1;
+        }  
+    }
+
+    echo "done";
 
 } else if ( $request == "cancel") {
 

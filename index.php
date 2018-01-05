@@ -464,7 +464,7 @@
 
 					<!-- TimeToTarget -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeToTarget" class="labelNext">Date End</label>
+						<label for="impUpdTrk_trkTimeToTarget" class="labelNext">Time to Target</label>
 						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 

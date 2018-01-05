@@ -552,10 +552,9 @@ $(document).ready(function() {
         var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
         var formData = new FormData();                                  // create new formData object
         formData.append('sessionid', 123456);                           // append parameter session ID
-        formData.append('request', 'temp')
+        formData.append('request', 'temp')                              // temp request to create track temporarily
         formData.append('filename', fileName);                          // append parameter filename
         formData.append('filetype', "gpx");                             // append parameter file type
-        formData.append('trackobj', '')
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.send(formData);                                             // send formData object to service using xhr
     });
@@ -563,35 +562,49 @@ $(document).ready(function() {
     $(document).on('click', '#impUpdTrk_save', function (e) {
         e.preventDefault();
         
-        var track = [];
-        track["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
-        track["trkRoute"] = $('#impUpdTrk_trkRoute').val();
-        track["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
-        track["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
-        track["trkSaison"] = $('#impUpdTrk_trkSaison').val();
-        track["trkType"] = $('#impUpdTrk_trkType').val();
-        track["trkSubType"] = $('#impUpdTrk_trkSubType').val();
-        track["trkOrg"] = $('#impUpdTrk_trkOrg').val();
-        track["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
-        track["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
-        track["trkEvent"] = $('#impUpdTrk_trkEvent').val();
-        track["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
-        track["trkDistance"] = $('#impUpdTrk_trkDistance').val();
-        track["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
-        track["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
-        track["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
-        track["trkGrade"] = $('#impUpdTrk_trkGrade').val();
-        track["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
-        track["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
-        track["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-
         var xhr = new XMLHttpRequest();                                 // create new xhr object
-        phpLocation = document.URL + "services/importGpsFin.php";       // Variable to store location of php file
-        var formData = new FormData();                                  // create new formData object
-        formData.append('trackobj', track);                             // track object
-        formData.append('sessionid', 123456);                           // append parameter session ID
+        // Execute following code JSON object is received from importGpsTmp.php service
+        xhr.onload = function() {
+            if (xhr.status === 200) {                                   // when all OK
+                //responseObject = JSON.parse(xhr.responseText);          // transfer JSON into response object array
+            }
+        }
+
+        var trackobj = {};
+        var jsonObject = {};
+        trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
+        trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
+        trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
+        trackobj["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
+        trackobj["trkSaison"] = $('#impUpdTrk_trkSaison').val();
+        trackobj["trkType"] = $('#impUpdTrk_trkType').val();
+        trackobj["trkSubType"] = $('#impUpdTrk_trkSubType').val();
+        trackobj["trkOrg"] = $('#impUpdTrk_trkOrg').val();
+        trackobj["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
+        trackobj["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
+        trackobj["trkEvent"] = $('#impUpdTrk_trkEvent').val();
+        trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
+        trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
+        trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
+        trackobj["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
+        trackobj["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
+        trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
+        trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
+        trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
+        trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
+        trackobj["trkCoordinate"] = $('#impUpdTrk_trkCoordinates').val();      
+
+        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+        //var formData = new FormData();                                  // create new formData object
+        jsonObject["sessionid"] = "123456";                             // append parameter session ID
+        jsonObject["request"] = 'save';                              // temp request to create track temporarily
+        jsonObject["filetype"] = "gpx";                                 // append parameter file type
+        jsonObject["trackobj"] = trackobj;                              // send track object
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-        xhr.send(formData);                                             // send formData object to service using xhr
+        console.info(jsonObject);
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        jsn = JSON.stringify(jsonObject);
+        xhr.send( jsn );                                           // send formData object to service using xhr
 });
 
 // =============================================
