@@ -162,16 +162,25 @@ table {
 /********** panelImport **********/
 /*********************************/
 
-#pImpFileUpload.hidden, #pImpUpdateTrack.hidden {
+.pImpDiv {
     display: none;
 }
 
-#pImpFileUpload.visible, #pImpUpdateTrack.visible {
+.pImpDiv.active {
     display: block;
     background-color: #cce6ff;
     width: 600px;
     margin: auto;
 }
+
+#pImpSaveSuccess {
+    display: none;
+}
+
+.statusMessage {
+    color: red;
+}
+
 /* Not used stylesheets */
 
 /*

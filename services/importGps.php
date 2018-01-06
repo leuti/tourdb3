@@ -4,7 +4,10 @@
 // record is created. Before loading the gpx track points all previous track points are deleted. 
 // When a gpx for an existing track is imported, the track time is updated.
 //
-// This script is intended for regular usage
+// This service is called in two different manner: 
+// A) for the request 'temp' the parameters are // passed as dataForm object. This is due to the 
+//    fact that the file to be uploaded has to be transferred to this service. 
+// B) for the other requests a JSON is passed
 //
 // Parameters:
 // sessionid: id of user session; used to ensure multi-user capabilities
@@ -20,6 +23,8 @@
 // * Remove test from insert track statement
 // * Create kml file (as JSON array) and return to client --> for display of mini map
 // * Ensure that tracks are deleted even if user does not send cancel or save
+// * Update index.php upon successful / failed save by sending HTML code back
+// * Switch to panelDisplay after successful save (show status message)
 
 // Created: 13.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
@@ -38,7 +43,8 @@ $logFile = @fopen($importGpxLog,"a");                               // open log 
 fputs($logFile, "\r\n============================================================\r\n");    
 fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
-if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )
+// Evaluate request type
+if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call to this service was done with dataForm (temp)
 {
     $request = $_REQUEST["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     fputs($logFile, "Request (_REQUEST): $request\r\n");    
@@ -49,14 +55,11 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )
     fputs($logFile, "Line 52: Request (JSON): $request\r\n");    
 }
 
-$trackobj = array();                                                // array storing track data in array
-
 if ($request == "temp") {
 
     // ---------------------------------------------------------------------------------
     // request type is "temp" meaning that track records are created on temporary basis
     // ---------------------------------------------------------------------------------
-
   
     // Read posted parameters
     $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
@@ -88,20 +91,20 @@ if ($request == "temp") {
 
     if ( $filetype == "gpx") {
         // Call function to insert track data
+        $trackobj = array();                                                // array storing track data in array
         $returnArray = insertTrack($conn,$filename,$uploadfile);
         $trackid = $returnArray[0];                                   // return id of newly created track
         $trackobj = $returnArray[1];                                  // track object with all know track data derived from file
         
         fputs($logFile, "Line 80 - trackid: $trackid\r\n");
-        foreach ($trackobj as $key => $value) {
+        foreach ($trackobj as $dbField => $value) {
             fputs($logFile, "Line 82 - $key: $value\r\n");
         }
         
-        $returnArray = array();                                       // Clear return array
+        //$returnArray = array();                                       // Clear return array
 
         // insert track points found in file in table tmp_trackpoints with given track id
-        $returnArray = insertTrackPoint($conn,$trackid,$uploadfile);  // Insert new track points; returns temp ID for track
-        
+        $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns temp ID for track
         $trackid = $returnArray[0];                                   // return id of newly created track
         $coordArray = $returnArray[1];                                // array string with coordinates
        
@@ -121,9 +124,6 @@ if ($request == "temp") {
         // calcuate meters up and down based on gpx data
         
         // return JSON object to client
-        foreach ($trackobj as $key => $value) {
-            fputs($logFile, "Line 144 - $key: $value\r\n");
-        }
         echo json_encode($trackobj);                                  // echo track object to client
 
         // remove imported file & close connections
@@ -155,28 +155,24 @@ if ($request == "temp") {
     //if ( $debugLevel > 2) fputs($logFile, "Line 51 - filename: $filename\r\n");  
     if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
 
-    foreach ($trackobj as $key => $value) {
-        fputs($logFile, "Line 161 - $key: $value\r\n");
+    $sql = "UPDATE `tourdb2`.`tbl_tracks` SET ";                    // Insert Source file name, gps start time and toReview flag
 
-        $sql = "UPDATE `tourdb2`.`tbl_tracks` ";                    // Insert Source file name, gps start time and toReview flag
-        $sql .= "SET `trkSaison` = 'saison', ";
-        $sql .= "`trkType` = 'type', "; 
-        $sql .= "`trkType` = 'type', "; 
-        $sql .= "`trkType` = 'type', "; 
-        $sql .= "`trkType` = 'type', "; 
-        $sql .= "WHERE `tbl_tracks`.`trkId` = 685 "; 
-           
-        fputs($GLOBALS['logFile'], "Line 143 - sql: $sql\r\n");
-    
-        if ($conn->query($sql) === TRUE)                                // run sql against DB
-        {
-            if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
-        } else {
-            if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
-            return -1;
-        }  
+    foreach ($trackobj as $dbField => $content) {
+        $sql .= "`$dbField`='$content',";
     }
-
+    $sql = substr($sql,0,strlen($sql)-1);
+    $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"]; 
+    
+    fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
+    
+    if ($conn->query($sql) === TRUE)                                // run sql against DB
+    {
+        if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
+    } else {
+        if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
+        return -1;
+    } 
+    
     echo "done";
 
 } else if ( $request == "cancel") {
@@ -254,9 +250,9 @@ function insertTrack($conn,$filename,$uploadfile)
 // ----------------------------------------------------------
 // Insert track points into table
 // ----------------------------------------------------------
-function insertTrackPoint($conn,$trackid,$filename) 
+function insertTrackPoints($conn,$trackid,$filename) 
 {
-    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 207 - Function insertTrackPoint entered\r\n");
+    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 207 - Function insertTrackPoints entered\r\n");
     
     $tptNumber = 1;                                                 // Set counter for tptNumber to 1
     $loopCumul = $GLOBALS['loopSize'];                              // loopCumul is the sum of loop sizes processed

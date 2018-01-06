@@ -361,7 +361,7 @@
 		
 		<div id="panelImport" class="tourdbPanel">
 			
-			<div id="pImpFileUpload" class="pImpDiv visible">
+			<div id="pImpFileUpload" class="pImpDiv active">
 				<form enctype="multipart/form-data">
 					<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
 					Diese Datei hochladen: <input id="inputFile" name="userfile" type="file" />
@@ -372,11 +372,17 @@
 				</div>
 			</div>
 
-			<div id="pImpUpdateTrack" class="pImpDiv hidden">
+			<div id="pImpUpdateTrack" class="pImpDiv">
 				<fieldset>
         		
 					<!-- Import Tracks -->
 					<legend class="filterHeader">Import Track</legend>
+
+					<!-- Track Name -->
+					<div class="impUpdateCriteria">
+						<label for="impUpdTrk_trkId" class="labelNext">Track ID</label>
+						<input type="text" name="impUpdTrk_trkId" id="impUpdTrk_trkId" size="40" class="text ui-widget-content ui-corner-all">
+					</div>
 
 					<!-- Track Name -->
 					<div class="impUpdateCriteria">
@@ -508,6 +514,10 @@
 					<input type="submit" class="button" id="impUpdTrk_save" value="Save Track" />
 					<input type="submit" class="button" id="impUpdTrk_cancel" value="Cancel import" />
 				</fieldset>
+			</div>
+
+			<div id="pImpSaveSuccess" class="statusMessage">
+				Track successfully saved.
 			</div>
 			
 		</div> <!-- End div panelImport -->

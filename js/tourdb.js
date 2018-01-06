@@ -434,7 +434,6 @@ $(document).ready(function() {
             whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
             whereStatement.push( whereString );
         };
-        
 
         // Field area
         var whereString = "";
@@ -529,6 +528,7 @@ $(document).ready(function() {
             if (xhr.status === 200) {                                                                       // when all OK
                 responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
 
+                $('#impUpdTrk_trkId').attr('value', responseObject.trkId); 
                 $('#impUpdTrk_trkTrackName').attr('value', responseObject.trkTrackName);                    // assign values of JSON to input fields
                 $('#impUpdTrk_trkRoute').attr('value', responseObject.trkRoute);
                 $('#impUpdTrk_trkDateBegin').attr('value', responseObject.trkDateBegin);
@@ -541,10 +541,8 @@ $(document).ready(function() {
                 $('#impUpdTrk_trkCoordinates').attr('value', responseObject.trkCoordinates);
 
                 // Close upload file div and open form to update track data
-                $('#pImpFileUpload').addClass('hidden');
-                $('#pImpFileUpload').removeClass('visible');
-                $('#pImpUpdateTrack').addClass('visible');
-                $('#pImpUpdateTrack').removeClass('hidden');
+                $('#pImpFileUpload').removeClass('active');
+                $('#pImpUpdateTrack').addClass('active');
             }
         }
 
@@ -566,12 +564,18 @@ $(document).ready(function() {
         // Execute following code JSON object is received from importGpsTmp.php service
         xhr.onload = function() {
             if (xhr.status === 200) {                                   // when all OK
-                //responseObject = JSON.parse(xhr.responseText);          // transfer JSON into response object array
+                // Make panelImport disappear and panelDisplay appear
+                //$('#panelImport').removeClass('active');
+                //$('#panelDisplay').addClass('active');
+                $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
+                $('#pImpUpdateTrack').removeClass('active');                   // hide update form
+                $("#pImpSaveSuccess").show().delay(5000).fadeOut();
             }
         }
 
         var trackobj = {};
         var jsonObject = {};
+        trackobj["trkId"] = $('#impUpdTrk_trkId').val();
         trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
         trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
         trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
@@ -592,7 +596,7 @@ $(document).ready(function() {
         trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
         trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
         trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-        trackobj["trkCoordinate"] = $('#impUpdTrk_trkCoordinates').val();      
+        trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();      
 
         phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
         //var formData = new FormData();                                  // create new formData object
@@ -605,6 +609,8 @@ $(document).ready(function() {
         xhr.setRequestHeader( "Content-Type", "application/json" );
         jsn = JSON.stringify(jsonObject);
         xhr.send( jsn );                                           // send formData object to service using xhr
+
+        
 });
 
 // =============================================
