@@ -1,3 +1,12 @@
+<?php
+	// Start session before ending it (for users coming back from sub pages)
+	session_start();
+	
+	// End session
+	session_destroy();
+	$_SESSION = array();								// empty SESSION variable
+?>
+
 <!DOCTYPE HTML>
 <!-- 
 	ACTION:
@@ -47,7 +56,10 @@
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="topicButtons">
-			<li id="buttonDisplay" class="topicButtonsLi active">
+			<li id="buttonLogin" class="topicButtonsLi active">
+				<a class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
+			</li>
+			<li id="buttonDisplay" class="topicButtonsLi">
 				<a class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
 			</li>
 			<li id="buttonMaintain" class="topicButtonsLi">
@@ -62,9 +74,6 @@
 			<li id="buttonAdmin" class="topicButtonsLi">
 				<a class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
 			</li>
-			<li id="buttonLogin" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
-			</li>
 		</ul>
 	</header> 
 
@@ -72,10 +81,39 @@
 	<section id="main" style="height: 100%;">
 		
 		<!-- ========================================================================== -->
+		<!-- ======================== panelLogin ========================================== -->
+		<!-- ========================================================================== -->
+		
+		<div id="panelLogin" class="tourdbPanel active">
+			<div id=loginForm>
+
+				<fieldset>
+        		
+					<!-- Import Tracks -->
+					<legend class="loginHeader">Enter you login credentials</legend>
+
+					<div>
+						<label for="loginName" class="labelFirst">User Login</label>
+						<input id="loginName" class="loginFields" type="text" size="50">
+					</div>
+					<div>
+						<label for="loginPasswd" class="labelFirst">Password</label>
+						<input id="loginPasswd" class="loginFields" type="text" size="50">
+					</div>
+
+					<div class="buttonLogin">
+						<input type="submit" class="button" id="buttonLogin" value="Login" />
+					</div>
+				</fieldset>
+			</div>
+			
+		</div> <!-- End div panelLogin -->
+
+		<!-- ========================================================================== -->
 		<!-- ========================== panelDisplay ================================== -->
 		<!-- ========================================================================== -->
 
-		<div id="panelDisplay" class="tourdbPanel active">
+		<div id="panelDisplay" class="tourdbPanel">
 			
 			<!-- Div for Menu buttons -->
 			<div id="contObjectSelector">
@@ -537,14 +575,6 @@
 		<div id="panelAdmin" class="tourdbPanel">
 			<p>Ich bin das panel panelAdmin</p>		
 		</div> <!-- End div panelAdmin -->
-
-		<!-- ========================================================================== -->
-		<!-- ======================== panelLogin ========================================== -->
-		<!-- ========================================================================== -->
-		
-		<div id="panelLogin" class="tourdbPanel">
-			<p>Ich bin das panel panelLogin</p>
-		</div> <!-- End div panelLogin -->
 
 	</section> <!-- End main -->
 

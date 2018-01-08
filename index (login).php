@@ -24,6 +24,6 @@
 		<p><input name="login"> Login</p>
 		<p><input name="passwd"> Password</p>	 
 		<p><input type="submit" value="login"></p>
-		</form>
+	</form>
 </body>
 </html>

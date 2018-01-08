@@ -73,6 +73,44 @@ $(document).ready(function() {
         $('.dispObjOpen').addClass('visible');
     })
 
+
+    // ==========================================================================
+    // ========================== panelLogin ====================================
+    // ==========================================================================
+
+    // ***************************************************************
+    // Executes code below when user clicks the 'Login' button
+    $(document).on('click', '#buttonLogin', function (e) {
+        e.preventDefault();                                                                                 
+        var xhr = new XMLHttpRequest();                                                                     // create new xhr object
+        
+        // Execute following code JSON object is received from importGpsTmp.php service
+        xhr.onload = function() {
+            if (xhr.status === 200) {                                                                       // when all OK
+                responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+
+                sessionid = responseObject.sessionid; 
+                loginstatus = responseObject.loginstatus;
+
+                
+                // if loginstatus = OK --> switch to panelDisplay
+                //                     --> make other menues visible
+                // if loginstatus = ERROR --> display error message, clear fields
+
+            }
+        }
+
+        var jsonObject = {};
+        phpLocation = document.URL + "services/login.php";          // Variable to store location of php file
+        jsonObject["loginName"] = ($('#loginName').val());;                             // append parameter session ID
+        jsonObject["loginPasswd"] = ($('#loginPasswd').val());                              // temp request to create track temporarily
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        jsn = JSON.stringify(jsonObject);
+        xhr.send( jsn );                                           // send formData object to service using xhr   
+    });
+
+
     // ==========================================================================
     // ========================== panelDisplay ==================================
     // ==========================================================================
@@ -550,7 +588,7 @@ $(document).ready(function() {
         phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
         var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
         var formData = new FormData();                                  // create new formData object
-        formData.append('sessionid', 123456);                           // append parameter session ID
+        formData.append('sessionid', sessionid);                           // append parameter session ID
         formData.append('request', 'temp')                              // temp request to create track temporarily
         formData.append('filename', fileName);                          // append parameter filename
         formData.append('filetype', "gpx");                             // append parameter file type
