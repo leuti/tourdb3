@@ -104,24 +104,26 @@
 								<!-- Track name contains (standard text field) -->
 								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
-									<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="40" class="text ui-widget-content ui-corner-all">
+									<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Route contains (standard text field) -->
 								<div class="dispObjCriteria">
 									<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
-									<input name="dispFilTrk_route" id="dispFilTrk_route" size="40" class="text ui-widget-content ui-corner-all">
+									<input name="dispFilTrk_route" id="dispFilTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Date witin range -->
-								<div class="dispObjCriteria"> 
-									<p>From Date: <input type="text" id="dispFilTrk_dateFrom" class="labelFirst" size="10"></p>
-									<p>To Date: <input type="text" id="dispFilTrk_dateTo"class="labelFirst" size="10"></p>
+								<div class="dispObjCriteria">
+									<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
+									<input name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
+									<label for="dispFilTrk_dateTo" class="labelNext">From Date</label>
+									<input name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Type as select items (selectable) -->
 								<div class="dispObjCriteria">
-									<label for="dispFilTrk_type" class="labelFirst">Type</label>
+									<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilTrk_type" class="selectable filterItems">
 										<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
 										<li id="dispFilTrk_type_Ski" class="ui-widget-content">Ski</li>
@@ -134,7 +136,7 @@
 
 								<!-- Subtype as select items (selectable) -->
 								<div class="dispObjCriteria">
-									<label for="dispFilTrk_subtype" class="labelFirst">Subtype</label>
+									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilTrk_subtype" class="selectable filterItems">
 										<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
 										<li id="dispFilTrk_subtype_Alpintour" class="ui-widget-content">Alpintour</li>
@@ -155,13 +157,13 @@
 								<!-- participants like (standard text field) -->
 								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
-									<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="40" class="text ui-widget-content ui-corner-all">
+									<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Country (standard text field) -->
 								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_country" class="labelFirst">Country like</label>
-									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="40" class="text ui-widget-content ui-corner-all">
+									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
 								</div>
 
 								<!-- Button to apply filter -->
@@ -182,7 +184,7 @@
 
 								<!-- segType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_mapType" class="labelFirst">Seg. Type: </label>
+									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_segType" class="selectable filterItems">
 										<li id="segType_WA" class="ui-widget-content first">Wanderung</li>
 										<li id="segType_AW" class="ui-widget-content">Alpinwanderung</li>
@@ -195,27 +197,28 @@
 
 								<!-- segName -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segName" class="labelFirst">Seg. Name: </label>
+									<label for="dispFilSeg_segName" class="labelFirst">Segment Name contains</label>
 									<input id="dispFilSeg_segName" class="filterItems" type="text" size="50">
 								</div>
 
 								<!--startLocName -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocName" class="labelFirst">Startort: </label>
+									<label for="dispFilSeg_startLocName" class="labelFirst">Select Start Location</label>
 									<input id="dispFilSeg_startLocName" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_startLocID">
 								</div>
 								
-								<!--startLocAlt -->
+								<!--startLocAlt
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Starthöhe:</label>
+									<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Start Altitude</label>
 									<input type="text" id="dispFilSeg_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
 								<div id="dispFilSeg_startLocAlt_slider"></div>
+								-->
 
 								<!-- startLocType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocType" class="labelFirst">Starttyp: </label>
+									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
 										<li id="startLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="startLocType_5" class="ui-widget-content">Gipfel</li>
@@ -227,21 +230,22 @@
 								
 								<!--TargetLocName -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocName" class="labelFirst">Zielort: </label>
+									<label for="dispFilSeg_targetLocName" class="labelFirst">Target Location</label>
 									<input id="dispFilSeg_targetLocName" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_targetLocID">
 								</div>
-								
-								<!--targetLocAlt -->
+
+								<!--targetLocAlt 
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Zielhöhe:</label>
+									<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Target Altitude</label>
 									<input type="text" id="dispFilSeg_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
 								<div id="dispFilSeg_targetLocAlt_slider"></div>
+								-->
 
 								<!-- targetLocType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocType" class="labelFirst">Zieltyp: </label>
+									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
 										<li id="targetLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="targetLocType_5" class="ui-widget-content">Gipfel</li>
@@ -253,21 +257,21 @@
 
 								<!-- region -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segRegion" class="labelFirst">Region: </label>
+									<label for="dispFilSeg_segRegion" class="labelFirst">Region</label>
 									<input id="dispFilSeg_segRegion" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_segRegionID">
 								</div>
 								
 								<!-- Gebiet -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segArea" class="labelFirst">Gebiet: </label>
+									<label for="dispFilSeg_segArea" class="labelFirst">Area</label>
 									<input id="dispFilSeg_segArea" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_segAreaID">
 								</div>
 					
 								<!-- grade -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_grade" class="labelFirst">Schwierigkeit: </label>
+									<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_grade" class="selectable filterItems">
 										<li id="grade_T1" class="ui-widget-content first">T1</li>
 										<li id="grade_T2" class="ui-widget-content">T2</li>
@@ -287,7 +291,7 @@
 								
 								<!-- climbGrade -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_climbGrade" class="labelFirst">Klettergrad: </label>
+									<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
 										<li id="climbGrade_I" class="ui-widget-content first">I</li>
 										<li id="climbGrade_II" class="ui-widget-content">II</li>
@@ -329,11 +333,6 @@
 						<div class="accordionBackground">
 							<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
 						</div>
-						
-						<!-- Segment Section of Accordion -->
-						<h3>Others</h3>
-						<div class="accordionBackground">	
-						</div>
 
 					</div>
 				</div>
@@ -362,9 +361,10 @@
 		<div id="panelImport" class="tourdbPanel">
 			
 			<div id="pImpFileUpload" class="pImpDiv active">
+				<h3 id=headerUploadFile>Select File to upload </h3>
 				<form enctype="multipart/form-data">
 					<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-					Diese Datei hochladen: <input id="inputFile" name="userfile" type="file" />
+					<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
 				</form>
 
 				<div class="buttonUpload">
@@ -380,134 +380,134 @@
 
 					<!-- Track Name -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkId" class="labelNext">Track ID</label>
-						<input type="text" name="impUpdTrk_trkId" id="impUpdTrk_trkId" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkId" class="updTrackLabelFirst">Track ID</label>
+						<input type="text" name="impUpdTrk_trkId" id="impUpdTrk_trkId" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Track Name -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTrackName" class="labelNext">Track Name</label>
-						<input type="text" name="impUpdTrk_trkTrackName" id="impUpdTrk_trkTrackName" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTrackName" class="updTrackLabelFirst">Track Name</label>
+						<input type="text" name="impUpdTrk_trkTrackName" id="impUpdTrk_trkTrackName" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 						
 					<!-- Route -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkRoute" class="labelNext">Route</label>
-						<input type="text" name="impUpdTrk_trkRoute" id="impUpdTrk_trkRoute" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkRoute" class="updTrackLabelFirst">Route</label>
+						<input type="text" name="impUpdTrk_trkRoute" id="impUpdTrk_trkRoute" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Begin -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkDateBegin" class="labelNext">Date Begin</label>
-						<input type="text" name="impUpdTrk_trkDateBegin" id="impUpdTrk_trkDateBegin" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkDateBegin" class="updTrackLabelFirst">Date Begin</label>
+						<input type="text" name="impUpdTrk_trkDateBegin" id="impUpdTrk_trkDateBegin" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Date Finish -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkDateFinish" class="labelNext">Date Finish</label>
-						<input type="text" name="impUpdTrk_trkDateFinish" id="impUpdTrk_trkDateFinish" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
+						<input type="text" name="impUpdTrk_trkDateFinish" id="impUpdTrk_trkDateFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Saison -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkSaison" class="labelNext">Saison</label>
-						<input type="text" name="impUpdTrk_trkSaison" id="impUpdTrk_trkSaison" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkSaison" class="updTrackLabelFirst">Saison</label>
+						<input type="text" name="impUpdTrk_trkSaison" id="impUpdTrk_trkSaison" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Type -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkType" class="labelNext">Type</label>
-						<input type="text" name="impUpdTrk_trkType" id="impUpdTrk_trkType" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkType" class="updTrackLabelFirst">Type</label>
+						<input type="text" name="impUpdTrk_trkType" id="impUpdTrk_trkType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- SubType -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkSubType" class="labelNext">SubType</label>
-						<input type="text" name="impUpdTrk_trkSubType" id="impUpdTrk_trkSubType" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkSubType" class="updTrackLabelFirst">SubType</label>
+						<input type="text" name="impUpdTrk_trkSubType" id="impUpdTrk_trkSubType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Org -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkOrg" class="labelNext">Organisation</label>
-						<input type="text" name="impUpdTrk_trkOrg" id="impUpdTrk_trkOrg" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkOrg" class="updTrackLabelFirst">Organisation</label>
+						<input type="text" name="impUpdTrk_trkOrg" id="impUpdTrk_trkOrg" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Overnight Location -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkOvernightLoc" class="labelNext">Location</label>
+						<label for="impUpdTrk_trkOvernightLoc" class="updTrackLabelFirst">Location</label>
 						<input type="text" name="impUpdTrk_trkOvernightLoc" id="impUpdTrk_trkOvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Participants -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkParticipants" class="labelNext">Participants</label>
-						<input type="text" name="impUpdTrk_trkParticipants" id="impUpdTrk_trkParticipants" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkParticipants" class="updTrackLabelFirst">Participants</label>
+						<input type="text" name="impUpdTrk_trkParticipants" id="impUpdTrk_trkParticipants" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Event -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkEvent" class="labelNext">Event</label>
-						<input type="text" name="impUpdTrk_trkEvent" id="impUpdTrk_trkEvent" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkEvent" class="updTrackLabelFirst">Event</label>
+						<input type="text" name="impUpdTrk_trkEvent" id="impUpdTrk_trkEvent" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Remarks -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkRemarks" class="labelNext">Remarks</label>
-						<input type="text" name="impUpdTrk_trkRemarks" id="impUpdTrk_trkRemarks" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkRemarks" class="updTrackLabelFirst">Remarks</label>
+						<input type="text" name="impUpdTrk_trkRemarks" id="impUpdTrk_trkRemarks" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Distance -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkDistance" class="labelNext">Distance</label>
-						<input type="text" name="impUpdTrk_trkDistance" id="impUpdTrk_trkDistance" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkDistance" class="updTrackLabelFirst">Distance</label>
+						<input type="text" name="impUpdTrk_trkDistance" id="impUpdTrk_trkDistance" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Time Overall -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeOverall" class="labelNext">Overall Time</label>
-						<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTimeOverall" class="updTrackLabelFirst">Overall Time</label>
+						<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- TimeToTarget -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeToTarget" class="labelNext">Time to Target</label>
-						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTimeToTarget" class="updTrackLabelFirst">Time to Target</label>
+						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- TimeToEnd -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeToEnd" class="labelNext">Time To End</label>
-						<input type="text" name="impUpdTrk_trkTimeToEnd" id="impUpdTrk_trkTimeToEnd" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTimeToEnd" class="updTrackLabelFirst">Time To End</label>
+						<input type="text" name="impUpdTrk_trkTimeToEnd" id="impUpdTrk_trkTimeToEnd" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Grade -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkGrade" class="labelNext">Grade</label>
-						<input type="text" name="impUpdTrk_trkGrade" id="impUpdTrk_trkGrade" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkGrade" class="updTrackLabelFirst">Grade</label>
+						<input type="text" name="impUpdTrk_trkGrade" id="impUpdTrk_trkGrade" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- MeterUp -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkMeterUp" class="labelNext">Meter Up</label>
-						<input type="text" name="impUpdTrk_trkMeterUp" id="impUpdTrk_trkMeterUp" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkMeterUp" class="updTrackLabelFirst">Meter Up</label>
+						<input type="text" name="impUpdTrk_trkMeterUp" id="impUpdTrk_trkMeterUp" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- MeterDown -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkMeterDown" class="labelNext">Meter Down</label>
-						<input type="text" name="impUpdTrk_trkMeterDown" id="impUpdTrk_trkMeterDown" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkMeterDown" class="updTrackLabelFirst">Meter Down</label>
+						<input type="text" name="impUpdTrk_trkMeterDown" id="impUpdTrk_trkMeterDown" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Country -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkCountry" class="labelNext">Country</label>
-						<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkCountry" class="updTrackLabelFirst">Country</label>
+						<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Da Coordinates -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkCoordinates" class="labelNext">Coordinates</label>
-						<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
+						<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<br><br>

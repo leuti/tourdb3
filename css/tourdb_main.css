@@ -64,6 +64,11 @@ table {
 .tourdbPanel {
     display: none;}
 
+.button {
+    float: right;
+    margin: 10px;
+}
+
 /********** FILTER STYLES *********/
 
 .dispObjOpen.hidden, .dispObjMini.hidden {
@@ -76,28 +81,38 @@ table {
 }
 
 #contObjectSelector {
-    width: 500px;
+    width: 432px;
     position: absolute;
     top: 122px;
     left: 10px;
     z-index: 100; 
 }
 
+/* display search main bar on top - both large and small */
 #dispObjMenuLarge, #dispObjMenuMini {
     background-color: #0b17c7;
     height: 30px;
     padding: 5px;
 }
 
+/* display search main bar on top - small */
 #dispObjMenuMini {
-    width: 25px;
+    width: 30px;
 }
 
+/* display search main bar on top - icon in large menu */
 #dispObjMenuCloseImg {
     height: 20px;
     width: 20px;
     padding: 5px;
     float: left;
+}
+
+/* display search main bar on top - icon in small menu */
+#dispObjMenuOpenImg {
+    height: 20px;
+    width: 20px;
+    padding: 5px;
 }
 
 .dispObjMenuText {
@@ -107,8 +122,39 @@ table {
     font-weight: bold;
 }
 
+/* Background Accordion */
 .accordionBackground {
     background-color: #cce6ff;
+}
+
+/* Controls u.a. border inside accordion */
+.ui-accordion .ui-accordion-content {
+    padding: 0.5em 0.5em;
+    border-top: 0;
+    overflow: auto;
+}
+
+/* Background Accordion Header not active */
+.ui-state-default{
+    background-color: #cacaca;
+}
+
+/* Background Accordion Header active*/
+.ui-state-active{
+    background: #007fff;
+}
+
+/* Input field of search form */
+.dispInput{
+    position: absolute;
+    left: 150px;
+    padding: 2px;
+}
+
+.updTrackInput{
+    display: inline-block;
+    float: left;
+    padding: 2px;
 }
 
 .selectable .ui-selecting { 
@@ -116,12 +162,14 @@ table {
 }
 
 .selectable .ui-selected { 
-    background: #F39814; color: white; }
+    background: #F39814; color: white; 
+}
 
 .selectable {
     list-style-type: none; 
     margin: 0; 
-    padding: 0;}
+    padding: 0;
+}
 
 .selectable li {
     display: inline-block;
@@ -129,35 +177,50 @@ table {
     margin: 3px; 
     padding: 0.4em;  
     height: 14px;
-    color: #001a33;}
+    color: #001a33;
+}
 
 .filterHeader {
     border-color: black;
     border-width: thick;
     font-size: 1.5em;
-    padding-bottom: 10px;}
+    padding-bottom: 10px;
+}
 
-.labelNext, .labelFirst {
+/* Form Label - first on line */
+.labelFirst, .labelNext {
     display: inline-block;
     font-size: 0.8em;
     font-weight: bold;
     margin: 3px; 
     padding: 0.4em; 
     height: 14px;
-    color: #001a33;}
+    color: #001a33;
+}
+
+/* Form Label - not first on line */
+.labelNext {
+    margin-left: 10px;
+}
+
+.ui-selectee {
+    border: 1px solid white;
+}
 
 .ui-widget {
     font-family: Candara, Verdana, Arial, sans-serif;
 }
 
 .ui-widget-content {
-    border: 1px solid white;
-    /*background: #ffffff;*/
-    color: #333333;}
+    /*border: 1px solid white;
+    background: #ffffff;*/
+    color: #333333;
+}
 
 .ui-widget.ui-widget-content {
     border: 1px solid #0066ff;
-    background-color: #cce6ff;}    
+    background-color: #cce6ff;
+}    
 
 /********** panelImport **********/
 /*********************************/
@@ -167,10 +230,36 @@ table {
 }
 
 .pImpDiv.active {
+    margin: auto;
+    margin-top: 200px;
     display: block;
     background-color: #cce6ff;
     width: 600px;
-    margin: auto;
+    color: #333333;
+}
+#headerUploadFile {
+    margin: 20px;
+    padding: 10px;
+    color: #333333;
+    font-size: 1.5em;
+}
+
+.updTrackLabelFirst{
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: 250px;
+    text-align: right;
+}
+
+#inputFile {
+    margin: 20px;
+    padding: 10px;
+}
+
+#pImpUpdateTrack{
+    margin-top: 40px;
+    padding: 0.5em 0.5em;
 }
 
 #pImpSaveSuccess {

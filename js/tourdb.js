@@ -84,8 +84,9 @@ $(document).ready(function() {
     // ------------------------
     $( function() {                                                         // Initialise filter area as JQUERY Accordion
         $( "#dispObjAccordion" ).accordion({
-          collapsible: true,                                                // makes sections collapse 
-          heightStyle: "content"                                            // hight of section dependent on content of section
+            heightStyle: "content",                                            // hight of section dependent on content of section
+            autoHeight: false,
+            collapsible: true
         });
     } );
 
@@ -611,6 +612,35 @@ $(document).ready(function() {
         xhr.send( jsn );                                           // send formData object to service using xhr
 
         
+});
+
+$(document).on('click', '#impUpdTrk_cancel', function (e) {
+    e.preventDefault();
+    
+    var xhr = new XMLHttpRequest();                                 // create new xhr object
+    // Execute following code JSON object is received from importGpsTmp.php service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                   // when all OK
+            $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
+            $('#pImpUpdateTrack').removeClass('active');                   // hide update form
+            $("#pImpSaveSuccess").show().delay(5000).fadeOut();
+        }
+    }
+
+    var trackobj = {};
+    var jsonObject = {};
+    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
+    
+    phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+    //var formData = new FormData();                                  // create new formData object
+    jsonObject["sessionid"] = "123456";                             // append parameter session ID
+    jsonObject["request"] = 'cancel';                              // temp request to create track temporarily
+    jsonObject["filetype"] = "gpx";                                 // append parameter file type
+    jsonObject["trackobj"] = trackobj;                              // send track object
+    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    jsn = JSON.stringify(jsonObject);
+    xhr.send( jsn );                                           // send formData object to service using xhr   
 });
 
 // =============================================

@@ -13,18 +13,6 @@
 // sessionid: id of user session; used to ensure multi-user capabilities
 // filename: name of file to be uploaded (one at a time); file is expected at import/gpx or import/kml
 // filetype: type of file to be imported (gpx or kml)
-//
-// Actions:
-// * error handling if filename/filetype is empty   
-// * remove upload directory not yet working
-// * merge insert statement and select max(trackId) into one transaction
-// * remove comment from remove file
-// * Clean up tblTracks and tblTrackPoints
-// * Remove test from insert track statement
-// * Create kml file (as JSON array) and return to client --> for display of mini map
-// * Ensure that tracks are deleted even if user does not send cancel or save
-// * Update index.php upon successful / failed save by sending HTML code back
-// * Switch to panelDisplay after successful save (show status message)
 
 // Created: 13.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
@@ -173,9 +161,38 @@ if ($request == "temp") {
         return -1;
     } 
     
-    echo "done";
+    echo "Track saved";
 
 } else if ( $request == "cancel") {
+
+        // ---------------------------------------------------------------------------------
+    // request type is "save" meaning that track records are updated and finalised
+    // ---------------------------------------------------------------------------------
+
+    $trackobj = array();                                                // array storing track data in array
+    $sessionid = $receivedData["sessionid"];                                // ID of current user session - required to make site multiuser capable
+    $request = $receivedData["request"];                                    // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
+    $filetype = $receivedData["filetype"];                                  // Type of upload file (gpx or kml)
+    $trackobj = $receivedData["trackobj"];                                // Array of track data 
+
+    if ( $debugLevel > 2) fputs($logFile, "Line 49 - sessionid: $sessionid\r\n");  
+    if ( $debugLevel > 2) fputs($logFile, "Line 50 - request: $request\r\n");  
+    if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
+
+    $sql = "DELETE FROM `tourdb2`.`tbl_tracks` ";                    // Insert Source file name, gps start time and toReview flag
+    $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"]; 
+    
+    fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
+    
+    if ($conn->query($sql) === TRUE)                                // run sql against DB
+    {
+        if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
+    } else {
+        if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
+        return -1;
+    } 
+    
+    echo "Track cancelled";
 
 } else {
 
