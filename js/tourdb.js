@@ -91,8 +91,17 @@ $(document).ready(function() {
 
                 sessionid = responseObject.sessionid; 
                 loginstatus = responseObject.loginstatus;
+                if ( loginstatus == "ERROR")
+                { 
+                    $('#loginStatus').text('Login failed');
+                    $('#loginStatus').show().delay(5000).fadeOut();
+                }
 
-                
+                // Open Panel Display
+                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                buttonId = $activeButtonA.hash;     
+
+
                 // if loginstatus = OK --> switch to panelDisplay
                 //                     --> make other menues visible
                 // if loginstatus = ERROR --> display error message, clear fields
@@ -606,9 +615,8 @@ $(document).ready(function() {
                 // Make panelImport disappear and panelDisplay appear
                 //$('#panelImport').removeClass('active');
                 //$('#panelDisplay').addClass('active');
-                $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
-                $('#pImpUpdateTrack').removeClass('active');                   // hide update form
-                $("#pImpSaveSuccess").show().delay(5000).fadeOut();
+                $('#pImpSaveStatus').text('Track successfully saved');
+                $('#pImpSaveStatus').show().delay(5000).fadeOut();
             }
         }
 
@@ -648,8 +656,6 @@ $(document).ready(function() {
         xhr.setRequestHeader( "Content-Type", "application/json" );
         jsn = JSON.stringify(jsonObject);
         xhr.send( jsn );                                           // send formData object to service using xhr
-
-        
 });
 
 $(document).on('click', '#impUpdTrk_cancel', function (e) {

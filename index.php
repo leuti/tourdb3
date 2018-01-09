@@ -57,22 +57,22 @@
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="topicButtons">
 			<li id="buttonLogin" class="topicButtonsLi active">
-				<a class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
+				<a id="a_panelLogin" class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
 			</li>
 			<li id="buttonDisplay" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
+				<a id="a_panelDisplay" class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
 			</li>
 			<li id="buttonMaintain" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
+				<a id="a_panelMaintain" class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
 			</li>
 			<li id="buttonImport" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelImport"><h3>Import</h3></a> 
+				<a id="a_panelImprt" class="mainButtonsA" href="#panelImport"><h3>Import</h3></a> 
 			</li>
 			<li id="buttonExport" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelExport"><h3>Export</h3></a> 
+				<a id="a_panelExport" class="mainButtonsA" href="#panelExport"><h3>Export</h3></a> 
 			</li>
 			<li id="buttonAdmin" class="topicButtonsLi">
-				<a class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
+				<a id="" class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
 			</li>
 		</ul>
 	</header> 
@@ -104,7 +104,11 @@
 					<div class="buttonLogin">
 						<input type="submit" class="button" id="buttonLogin" value="Login" />
 					</div>
+					
+					<div id="loginStatus" class="statusMessage">	
+					</div>
 				</fieldset>
+				
 			</div>
 			
 		</div> <!-- End div panelLogin -->
@@ -554,8 +558,7 @@
 				</fieldset>
 			</div>
 
-			<div id="pImpSaveSuccess" class="statusMessage">
-				Track successfully saved.
+			<div id="pImpSaveStatus" class="statusMessage">
 			</div>
 			
 		</div> <!-- End div panelImport -->
