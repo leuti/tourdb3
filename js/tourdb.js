@@ -37,24 +37,24 @@ $(document).ready(function() {
         var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
         $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
         var $activeButtonA = $activeButton.find('a');                       // Get link <a> from active li element 
-        $topicButton = $($activeButtonA.attr('href'));                      // Get active panel
+        $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
+    });
 
-        $(this).on('click', '.mainButtonsA', function(e) {                  // When click on a topic tab (li item)
-            e.preventDefault();                                             // Prevent link behaviour
-            var $activeButtonA = $(this)                                    // Store the current link <a> element
-            var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
-            
-            // Run following block if selected topic is currently not active
-            if (buttonId && !$activeButtonA.is('.active')) {
-                $topicButton.removeClass('active');                         // Make current panel inactive
-                $activeButton.removeClass('active');                        // Make current tab inactive
+    $(this).on('click', '.mainButtonsA', function(e) {                  // When click on a topic tab (li item)
+        e.preventDefault();                                             // Prevent link behaviour
+        var $activeButtonA = $(this)                                    // Store the current link <a> element
+        var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+        
+        // Run following block if selected topic is currently not active
+        if (buttonId && !$activeButtonA.is('.active')) {
+            $topicButton.removeClass('active');                         // Make current panel inactive
+            $activeButton.removeClass('active');                        // Make current tab inactive
 
-                $topicButton = $(buttonId).addClass('active');              // Make new panel active
-                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-            }
-        }); 
+            $topicButton = $(buttonId).addClass('active');              // Make new panel active
+            $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+        }
     }); 
-
+    
     $(document).on('click', '#dispObjMenuLargeClose', function(e) {
         e.preventDefault();
         var $activeButton = $(this);
@@ -72,7 +72,6 @@ $(document).ready(function() {
         $('.dispObjOpen').removeClass('hidden');
         $('.dispObjOpen').addClass('visible');
     })
-
 
     // ==========================================================================
     // ========================== panelLogin ====================================
@@ -95,23 +94,28 @@ $(document).ready(function() {
                 { 
                     $('#loginStatus').text('Login failed');
                     $('#loginStatus').show().delay(5000).fadeOut();
+                } else {
+                    // Open Panel Display
+                    var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                    //$topicButton = $($activeButtonA.attr('href'));
+                    buttonId = $activeButtonA.attr('href'); 
+                    
+                    // Run following block if selected topic is currently not active
+                    $topicButton.removeClass('active');                         // Make current panel inactive
+                    $activeButton.removeClass('active');                        // Make current tab inactive
+                    $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                    $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                    $('.loginReq').removeClass('loginReq');
+                    $('#buttonLogin').addClass('loginReq');
+                    
                 }
-
-                // Open Panel Display
-                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
-                buttonId = $activeButtonA.hash;     
-
-
-                // if loginstatus = OK --> switch to panelDisplay
-                //                     --> make other menues visible
-                // if loginstatus = ERROR --> display error message, clear fields
-
             }
         }
 
         var jsonObject = {};
+        $loginName = ($('#loginName').val());
         phpLocation = document.URL + "services/login.php";          // Variable to store location of php file
-        jsonObject["loginName"] = ($('#loginName').val());;                             // append parameter session ID
+        jsonObject["loginName"] = $loginName;                             // append parameter session ID
         jsonObject["loginPasswd"] = ($('#loginPasswd').val());                              // temp request to create track temporarily
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.setRequestHeader( "Content-Type", "application/json" );
@@ -119,170 +123,164 @@ $(document).ready(function() {
         xhr.send( jsn );                                           // send formData object to service using xhr   
     });
 
-
     // ==========================================================================
     // ========================== panelDisplay ==================================
     // ==========================================================================
     
-    // *********************************************
+    // ............................................................................
     // Initialse all jquery functional fields
-
-    // For Object Filter Routes
-    // ------------------------
     $( function() {                                                         // Initialise filter area as JQUERY Accordion
         $( "#dispObjAccordion" ).accordion({
             heightStyle: "content",                                            // hight of section dependent on content of section
             autoHeight: false,
             collapsible: true
         });
+    
+        $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+        
+        $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
+
+        $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
+
+        // For object filter segments
+        // --------------------------
+
+        // mapUF_sourceName
+        $( "#dispFilSeg_sourceName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=segSourceFID",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
+                        $( "#dispFilSeg_sourceFID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+
+        // mapUF_segType
+        $( "#dispFilSeg_segType" ).selectable({});
+        
+        // startLocName
+        $( "#dispFilSeg_startLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_startLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
+        
+        // startLocAlt 
+        $( "#dispFilSeg_startLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
+        
+        // startLocType
+        $( "#dispFilSeg_startLocType" ).selectable({});
+
+        // targetLocName
+        $( "#dispFilSeg_targetLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_targetLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
+
+        // targetLocAlt
+        $( "#dispFilSeg_targetLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
+
+        // targetLocType
+        $( "#dispFilSeg_targetLocType" ).selectable({});
+
+        // Region
+        $( "#dispFilSeg_segRegion" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=regionID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
+                        $( "#dispFilSeg_segRegionID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+
+        // Area
+        $( "#dispFilSeg_segArea" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=areaID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
+                        $( "#dispFilSeg_segAreaID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
+
+        $( "#dispFilSeg_grade" ).selectable({});
+        $( "#dispFilSeg_climbGrade" ).selectable({});
+        $( "#dispFilSeg_ehaft" ).selectable({});   
+
     } );
 
-    $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd', 
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-    
-    $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-
-    $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
-
-    $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
-
-    // For object filter segments
-    // --------------------------
-
-    // mapUF_sourceName
-    $( "#dispFilSeg_sourceName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=segSourceFID",
-        minLength: 2,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
-                    $( "#dispFilSeg_sourceFID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-
-    // mapUF_segType
-    $( "#dispFilSeg_segType" ).selectable({});
-    
-    // startLocName
-    $( "#dispFilSeg_startLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_startLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-    
-    // startLocAlt 
-    $( "#dispFilSeg_startLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    
-    // startLocType
-    $( "#dispFilSeg_startLocType" ).selectable({});
-
-    // targetLocName
-    $( "#dispFilSeg_targetLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_targetLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
-
-    // targetLocAlt
-    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-
-    // targetLocType
-    $( "#dispFilSeg_targetLocType" ).selectable({});
-
-    // Region
-    $( "#dispFilSeg_segRegion" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=regionID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
-                    $( "#dispFilSeg_segRegionID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
-
-    // Area
-    $( "#dispFilSeg_segArea" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=areaID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
-                    $( "#dispFilSeg_segAreaID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-
-    $( "#dispFilSeg_grade" ).selectable({});
-    $( "#dispFilSeg_climbGrade" ).selectable({});
-    $( "#dispFilSeg_ehaft" ).selectable({});   
-
-
-
-    // ******************************************************************
+    // ............................................................................
     // Executes code below when user clicks the 'Apply' filter button for tracks
-
     $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
         e.preventDefault();
         
@@ -390,7 +388,7 @@ $(document).ready(function() {
         mapMapNeedsLoad = false;                             // No need to load map
     });
 
-    // ***************************
+    // ............................................................................
     // Executes code below when user clicks the 'Apply' filter button for segments
     $(document).on('click', '#dispFilSeg_ApplyButton', function (e) {
         e.preventDefault();
@@ -565,8 +563,8 @@ $(document).ready(function() {
     // ========================== panelInput ====================================
     // ==========================================================================
 
-    // ***************************************************************
-    // Executes code below when user clicks the 'Upload File' button
+    // ............................................................................
+    // Upon click on the 'Upload File' button --> call importGps.php in temp mode
     $(document).on('click', '#buttonUploadFile', function (e) {
         e.preventDefault();                                                                                 
         var xhr = new XMLHttpRequest();                                                                     // create new xhr object
@@ -591,6 +589,8 @@ $(document).ready(function() {
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
                 $('#pImpUpdateTrack').addClass('active');
+                //$('#inputFile').val();
+                document.getElementById("inputFile").value = "";
             }
         }
 
@@ -601,10 +601,13 @@ $(document).ready(function() {
         formData.append('request', 'temp')                              // temp request to create track temporarily
         formData.append('filename', fileName);                          // append parameter filename
         formData.append('filetype', "gpx");                             // append parameter file type
+        formData.append('loginname', $loginName);                             // append parameter file type
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.send(formData);                                             // send formData object to service using xhr
     });
 
+    // ............................................................................
+    // Upon click on the 'Save' button --> call importGps.php in save mode
     $(document).on('click', '#impUpdTrk_save', function (e) {
         e.preventDefault();
         
@@ -617,6 +620,20 @@ $(document).ready(function() {
                 //$('#panelDisplay').addClass('active');
                 $('#pImpSaveStatus').text('Track successfully saved');
                 $('#pImpSaveStatus').show().delay(5000).fadeOut();
+
+                // Open Panel Display
+                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                buttonId = $activeButtonA.attr('href'); 
+                
+                // Run following block if selected topic is currently not active
+                $topicButton.removeClass('active');                         // Make current panel inactive
+                $activeButton.removeClass('active');                        // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                
+                // Close upload file div and open form to update track data
+                $('#pImpFileUpload').addClass('active');
+                $('#pImpUpdateTrack').removeClass('active');
             }
         }
 
@@ -643,7 +660,8 @@ $(document).ready(function() {
         trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
         trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
         trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-        trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();      
+        trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
+        trackobj["trkLoginName"] = $loginName;    
 
         phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
         //var formData = new FormData();                                  // create new formData object

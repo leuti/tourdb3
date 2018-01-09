@@ -56,24 +56,27 @@
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="topicButtons">
-			<li id="buttonLogin" class="topicButtonsLi active">
+				<li id="buttonLogin" class="topicButtonsLi active">
 				<a id="a_panelLogin" class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
 			</li>
-			<li id="buttonDisplay" class="topicButtonsLi">
+			<li id="buttonDisplay" class="topicButtonsLi loginReq">
 				<a id="a_panelDisplay" class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
 			</li>
-			<li id="buttonMaintain" class="topicButtonsLi">
-				<a id="a_panelMaintain" class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
-			</li>
-			<li id="buttonImport" class="topicButtonsLi">
+			<li id="buttonImport" class="topicButtonsLi loginReq">
 				<a id="a_panelImprt" class="mainButtonsA" href="#panelImport"><h3>Import</h3></a> 
 			</li>
-			<li id="buttonExport" class="topicButtonsLi">
+			<!--
+			<li id="buttonExport" class="topicButtonsLi loginReq">
 				<a id="a_panelExport" class="mainButtonsA" href="#panelExport"><h3>Export</h3></a> 
 			</li>
-			<li id="buttonAdmin" class="topicButtonsLi">
+
+			<li id="buttonMaintain" class="topicButtonsLi loginReq">
+				<a id="a_panelMaintain" class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
+			</li>			
+			<li id="buttonAdmin" class="topicButtonsLi loginReq">
 				<a id="" class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
 			</li>
+			-->
 		</ul>
 	</header> 
 

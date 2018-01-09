@@ -31,6 +31,10 @@ table {
     color: #ccccff;}
 
 /********** TOPIC BUTTONS **********/
+.topicButtonsLi.loginReq {
+    display: none;
+}
+
 .topicButtons {
     margin: 0;
     padding: 0;

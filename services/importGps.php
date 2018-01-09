@@ -53,9 +53,10 @@ if ($request == "temp") {
     $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
     $filename = basename($_FILES['filename']['name']);                  // file name of chosen gps file
     $filetype = $_REQUEST["filetype"];                                  // Type of upload file (gpx or kml)
+    $loginname = $_REQUEST["loginname"];                                // Login name
 
     fputs($logFile, "Parameters: \r\n");    
-    fputs($logFile, "sessionid:$sessionid | filename:$filename | filetype:$filetype\r\n");    
+    fputs($logFile, "sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
     
     // define directory and copy file 
     $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
@@ -80,10 +81,10 @@ if ($request == "temp") {
     if ( $filetype == "gpx") {
         // Call function to insert track data
         $trackobj = array();                                                // array storing track data in array
-        $returnArray = insertTrack($conn,$filename,$uploadfile);
+        $returnArray = insertTrack($conn,$filename,$uploadfile,$loginname);
         $trackid = $returnArray[0];                                   // return id of newly created track
         $trackobj = $returnArray[1];                                  // track object with all know track data derived from file
-        
+
         fputs($logFile, "Line 80 - trackid: $trackid\r\n");
         foreach ($trackobj as $dbField => $value) {
             fputs($logFile, "Line 82 - $key: $value\r\n");
@@ -144,6 +145,7 @@ if ($request == "temp") {
     if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
 
     $sql = "UPDATE `tourdb2`.`tbl_tracks` SET ";                    // Insert Source file name, gps start time and toReview flag
+    $sql .= "`trkLoginName`='$loginname',";
 
     foreach ($trackobj as $dbField => $content) {
         $sql .= "`$dbField`='$content',";
@@ -182,7 +184,7 @@ if ($request == "temp") {
     $sql = "DELETE FROM `tourdb2`.`tbl_tracks` ";                    // Insert Source file name, gps start time and toReview flag
     $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"]; 
     
-    fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
+    fputs($GLOBALS['logFile'], "Line 186 - sql: $sql\r\n");
     
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {
@@ -198,7 +200,7 @@ if ($request == "temp") {
 
 }
 
-function insertTrack($conn,$filename,$uploadfile)
+function insertTrack($conn,$filename,$uploadfile,$loginname)
 {
     if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 199 - Function insertTrack entered\r\n");
 
@@ -211,7 +213,7 @@ function insertTrack($conn,$filename,$uploadfile)
             
     $sql = "INSERT INTO `tourdb2`.`tbl_tracks`";                    // Insert Source file name, gps start time and toReview flag
     $sql .= " (`trkSourceFileName`, `trkRoute`, `trkTrackName`, `trkGPSStartTime`, ";
-    $sql .= " `trkDateBegin`, `trkDateFinish`) VALUES "; 
+    $sql .= " `trkDateBegin`, `trkDateFinish`, `trkLoginName`) VALUES "; 
 
     // trkSourceFileName
     $sql .= "('" . $filename . "', ";                               // create value bracket statement
@@ -219,7 +221,8 @@ function insertTrack($conn,$filename,$uploadfile)
     $sql .= "'" . $trackName . "', ";
     $sql .= "'" . $GpsStartTime . "', ";
     $sql .= "'" . $DateBegin . "', ";
-    $sql .= "'" . $DateFinish . "') ";
+    $sql .= "'" . $DateFinish . "', ";
+    $sql .= "'" . $loginname . "') ";
 
     fputs($GLOBALS['logFile'], "Line 143 - sql: $sql\r\n");
 
