@@ -35,12 +35,12 @@ fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");
 if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call to this service was done with dataForm (temp)
 {
     $request = $_REQUEST["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-    fputs($logFile, "Request (_REQUEST): $request\r\n");    
+    fputs($logFile, "Line 38: Request (_REQUEST): $request\r\n");    
 } else {
     // variables passed on by client (as formData object)
     $receivedData = json_decode ( file_get_contents('php://input'), true );
     $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-    fputs($logFile, "Line 52: Request (JSON): $request\r\n");    
+    fputs($logFile, "Line 43: Request (JSON): $request\r\n");    
 }
 
 if ($request == "temp") {
@@ -55,78 +55,93 @@ if ($request == "temp") {
     $filetype = $_REQUEST["filetype"];                                  // Type of upload file (gpx or kml)
     $loginname = $_REQUEST["loginname"];                                // Login name
 
-    fputs($logFile, "Parameters: \r\n");    
-    fputs($logFile, "sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
+    fputs($logFile, "Line 58: Parameters: \r\n");    
+    fputs($logFile, "Line 59: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
     
-    // define directory and copy file 
-    $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
-    $uploadfile = $uploaddir . $filename;
-    if ( $debugLevel > 2) fputs($logFile, "Line 54 - uploaddir: $uploaddir\r\n");  
-    if ( $debugLevel > 2) fputs($logFile, "Line 55 - uploadfile: $uploadfile\r\n");  
-        
-    if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
-        mkdir($uploaddir, 0777);
-    }
+    // check if file extension is kml or gpx
+    $filetype = pathinfo($filename);
+    $filetype = $filetype['extension'];
+    fputs($logFile, "Line 64; filetype = $filetype \r\n");    
 
-    if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
-        if ( $debugLevel > 2) fputs($logFile, "Line 62 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
-    } else {
-        fputs($logFile, "Line 64 - error uploading file " . $_FILES['filename']['name'] . " to: $uploaddir\r\n"); 
-    }  
-
-    // -----------------------------------------
-    // Main process for gpx files
-    // -----------------------------------------
-
-    if ( $filetype == "gpx") {
-        // Call function to insert track data
-        $trackobj = array();                                                // array storing track data in array
-        $returnArray = insertTrack($conn,$filename,$uploadfile,$loginname);
-        $trackid = $returnArray[0];                                   // return id of newly created track
-        $trackobj = $returnArray[1];                                  // track object with all know track data derived from file
-
-        fputs($logFile, "Line 80 - trackid: $trackid\r\n");
-        foreach ($trackobj as $dbField => $value) {
-            fputs($logFile, "Line 82 - $key: $value\r\n");
+    if ( $filetype == "gpx" || $filetype == "kml" ) {
+        // define directory and copy file 
+        $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
+        $uploadfile = $uploaddir . $filename;
+        if ( $debugLevel > 2) fputs($logFile, "Line 54 - uploaddir: $uploaddir\r\n");  
+        if ( $debugLevel > 2) fputs($logFile, "Line 55 - uploadfile: $uploadfile\r\n");  
+            
+        if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
+            mkdir($uploaddir, 0777);
         }
+
+        if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
+            if ( $debugLevel > 2) fputs($logFile, "Line 62 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
+        } else {
+            fputs($logFile, "Line 64 - error uploading file " . $_FILES['filename']['name'] . " to: $uploaddir\r\n"); 
+        }  
+
+        // -----------------------------------------
+        // Main process for gpx files
+        // -----------------------------------------
+
+        if ( $filetype == "gpx") {
+            // Call function to insert track data
+            $trackobj = array();                                                // array storing track data in array
+            $returnArray = insertTrack($conn,$filename,$uploadfile,$loginname);
+            $trackid = $returnArray[0];                                   // return id of newly created track
+            $trackobj = $returnArray[1];                                  // track object with all know track data derived from file
+
+            fputs($logFile, "Line 80 - trackid: $trackid\r\n");
+            foreach ($trackobj as $dbField => $value) {
+                fputs($logFile, "Line 82 - $key: $value\r\n");
+            }
+            
+            //$returnArray = array();                                       // Clear return array
+
+            // insert track points found in file in table tmp_trackpoints with given track id
+            $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns temp ID for track
+            $trackid = $returnArray[0];                                   // return id of newly created track
+            $coordArray = $returnArray[1];                                // array string with coordinates
         
-        //$returnArray = array();                                       // Clear return array
+            $coordString = "";                                            // clear var coordString
+        // join array $coordArray into a string
+            foreach ( $coordArray as $coordLine) {                        // Create string containing the coordinates
+                $coordString = $coordString . $coordLine; 
+            };
 
-        // insert track points found in file in table tmp_trackpoints with given track id
-        $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns temp ID for track
-        $trackid = $returnArray[0];                                   // return id of newly created track
-        $coordArray = $returnArray[1];                                // array string with coordinates
-       
-        $coordString = "";                                            // clear var coordString
-       // join array $coordArray into a string
-        foreach ( $coordArray as $coordLine) {                        // Create string containing the coordinates
-            $coordString = $coordString . $coordLine; 
-        };
+            // create JSON object with known gpx data
+            $trackobj['trkCoordinates'] = $coordString;                   // add field coordinates to track object
+            $trackobj['status'] = 'OK';
+            $trackobj['errmessage'] = '';
 
-        // create JSON object with known gpx data
-        $trackobj['trkCoordinates'] = $coordString;                   // add field coordinates to track object
+            // calculate distance based on gpx data
 
-        // calculate distance based on gpx data
+            // calculate time based on gpx data
 
-        // calculate time based on gpx data
+            // calcuate meters up and down based on gpx data
+            
+            // return JSON object to client
+            echo json_encode($trackobj);                                  // echo track object to client
 
-        // calcuate meters up and down based on gpx data
-        
-        // return JSON object to client
-        echo json_encode($trackobj);                                  // echo track object to client
+            // remove imported file & close connections
+            if ( file_exists) unlink ($uploadfile);                       // remove file if existing
+            rmdir($uploaddir, 0777);                                      // remove upload directory          
 
-        // remove imported file & close connections
-        if ( file_exists) unlink ($uploadfile);                       // remove file if existing
-        rmdir($uploaddir, 0777);                                      // remove upload directory          
+            $conn->close();                                               // Close DB connection
 
-        $conn->close();                                               // Close DB connection
-
-    } else if ($filetype == "kml") {
-        fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
+        } else if ($filetype == "kml") {
+            fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
+        } else {
+            fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
+        }
     } else {
-        fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
+        fputs($logFile, "Line 67: extension is kml or gpx: $filetype \r\n");    
+        $trackobj['status'] = 'ERR';
+        $trackobj['errmessage'] = 'Wrong file extension';
+        echo json_encode($trackobj);                                  // echo track object to client
+        exit;        
+        fputs($logFile, "extension is kml or gpx: $filetype \r\n");    
     }
-
 } else if ( $request == "save") {
 
     // ---------------------------------------------------------------------------------

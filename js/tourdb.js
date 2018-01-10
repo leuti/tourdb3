@@ -18,13 +18,13 @@
 // Create unique file name for KML
 var today = new Date();
 
-    // file location & name for KML output
-    trackFileName = "track_" + today.getTime() + ".kml";
-    trackKmlFileNameURL = document.URL + "tmpout/" + trackFileName;
+// file location & name for KML output
+trackFileName = "track_" + today.getTime() + ".kml";
+trackKmlFileNameURL = document.URL + "tmpout/" + trackFileName;
 
-// =====================================
-// ====== M A I N   S E C T I O N ======
-// =====================================
+// ======================================================
+// ====== Perform these actions when page is ready ======
+// ======================================================
 $(document).ready(function() {
 
     // Initial drawing of map
@@ -32,7 +32,7 @@ $(document).ready(function() {
         drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
     };
 
-    // Manages the behaviour when clicking on the main topic buttons
+    // Evaluate which button/panel is active
     $('.topicButtons').each(function() {
         var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
         $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
@@ -40,7 +40,8 @@ $(document).ready(function() {
         $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
     });
 
-    $(this).on('click', '.mainButtonsA', function(e) {                  // When click on a topic tab (li item)
+    // Change to selected panel
+    $(this).on('click', '.mainButtonsA', function(e) {                  
         e.preventDefault();                                             // Prevent link behaviour
         var $activeButtonA = $(this)                                    // Store the current link <a> element
         var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
@@ -54,30 +55,12 @@ $(document).ready(function() {
             $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
         }
     }); 
-    
-    $(document).on('click', '#dispObjMenuLargeClose', function(e) {
-        e.preventDefault();
-        var $activeButton = $(this);
-        $activeButton.parent().removeClass('visible');
-        $activeButton.parent().addClass('hidden');
-        $('.dispObjMini').removeClass('hidden');
-        $('.dispObjMini').addClass('visible');
-    })
-
-    $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
-        e.preventDefault();
-        var $activeButton = $(this);
-        $activeButton.parent().removeClass('visible');
-        $activeButton.parent().addClass('hidden');
-        $('.dispObjOpen').removeClass('hidden');
-        $('.dispObjOpen').addClass('visible');
-    })
-
+      
     // ==========================================================================
     // ========================== panelLogin ====================================
     // ==========================================================================
 
-    // ***************************************************************
+    // ............................................................................
     // Executes code below when user clicks the 'Login' button
     $(document).on('click', '#buttonLogin', function (e) {
         e.preventDefault();                                                                                 
@@ -123,349 +106,394 @@ $(document).ready(function() {
         jsn = JSON.stringify(jsonObject);
         xhr.send( jsn );                                           // send formData object to service using xhr   
     });
+});
 
-    // ==========================================================================
-    // ========================== panelDisplay ==================================
-    // ==========================================================================
-    
-    // ............................................................................
-    // Initialse all jquery functional fields
-    $( function() {                                                         // Initialise filter area as JQUERY Accordion
-        $( "#dispObjAccordion" ).accordion({
-            heightStyle: "content",                                            // hight of section dependent on content of section
-            autoHeight: false,
-            collapsible: true
-        });
-    
-        $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
-            dateFormat: 'yy-mm-dd', 
-            changeMonth: true,
-            changeYear: true,
-            showOn: "button",
-            buttonImage: "css/images/calendar.gif",
-            buttonImageOnly: true,
-            buttonText: "Select date"
-        });
-        
-        $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            showOn: "button",
-            buttonImage: "css/images/calendar.gif",
-            buttonImageOnly: true,
-            buttonText: "Select date"
-        });
+// ==========================================================================
+// ========================== panelDisplay ==================================
+// ==========================================================================
 
-        $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
+// On click the minimize large display objects icon to minimized
+$(document).on('click', '#dispObjMenuLargeClose', function(e) {
+    e.preventDefault();
+    var $activeButton = $(this);
+    $activeButton.parent().removeClass('visible');
+    $activeButton.parent().addClass('hidden');
+    $('.dispObjMini').removeClass('hidden');
+    $('.dispObjMini').addClass('visible');
+})
 
-        $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
+// On click of minimized filter icon --> open large display objects mask
+$(document).on('click', '#dispObjMenuMiniOpen', function(e) {
+    e.preventDefault();
+    var $activeButton = $(this);
+    $activeButton.parent().removeClass('visible');
+    $activeButton.parent().addClass('hidden');
+    $('.dispObjOpen').removeClass('hidden');
+    $('.dispObjOpen').addClass('visible');
+})
 
-        // For object filter segments
-        // --------------------------
-
-        // mapUF_sourceName
-        $( "#dispFilSeg_sourceName" ).autocomplete({
-            source: "services/get_auto_complete_values.php?field=segSourceFID",
-            minLength: 2,
-            select: function( event, ui ) {
-                $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
-            },
-            change: function( event, ui ) {
-                if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
-                        $( "#dispFilSeg_sourceFID" ).val( '' );
-                }
-            }
-        });
-        var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-
-        // mapUF_segType
-        $( "#dispFilSeg_segType" ).selectable({});
-        
-        // startLocName
-        $( "#dispFilSeg_startLocName" ).autocomplete({
-            source: "services/get_auto_complete_values.php?field=getWaypLong",
-            minLength: 1,
-            select: function( event, ui ) {
-                $( "#dispFilSeg_startLocID" ).val( ui.item.id );
-            },
-            change: function( event, ui ) {
-                if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
-                        $( "#dispFilSeg_startLocID" ).val( '' );
-                }
-            }
-        });
-        var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-        
-        // startLocAlt 
-        $( "#dispFilSeg_startLocAlt_slider" ).slider({
-            range: true,
-            min: 0,
-            max: 5000,
-            values: [ 400, 5000 ],
-            slide: function( event, ui ) {
-                $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-            }
-        });
-        $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
-        "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-        
-        // startLocType
-        $( "#dispFilSeg_startLocType" ).selectable({});
-
-        // targetLocName
-        $( "#dispFilSeg_targetLocName" ).autocomplete({
-            source: "services/get_auto_complete_values.php?field=getWaypLong",
-            minLength: 1,
-            select: function( event, ui ) {
-                $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
-            },
-            change: function( event, ui ) {
-                if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
-                        $( "#dispFilSeg_targetLocID" ).val( '' );
-                }
-            }
-        });
-        var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
-
-        // targetLocAlt
-        $( "#dispFilSeg_targetLocAlt_slider" ).slider({
-            range: true,
-            min: 0,
-            max: 5000,
-            values: [ 400, 5000 ],
-            slide: function( event, ui ) {
-                $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-            }
-        });
-        $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
-        "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-
-        // targetLocType
-        $( "#dispFilSeg_targetLocType" ).selectable({});
-
-        // Region
-        $( "#dispFilSeg_segRegion" ).autocomplete({
-            source: "services/get_auto_complete_values.php?field=regionID",
-            minLength: 1,
-            select: function( event, ui ) {
-                $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
-            },
-            change: function( event, ui ) {
-                if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
-                        $( "#dispFilSeg_segRegionID" ).val( '' );
-                }
-            }
-        });
-        var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
-
-        // Area
-        $( "#dispFilSeg_segArea" ).autocomplete({
-            source: "services/get_auto_complete_values.php?field=areaID",
-            minLength: 1,
-            select: function( event, ui ) {
-                $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
-            },
-            change: function( event, ui ) {
-                if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
-                        $( "#dispFilSeg_segAreaID" ).val( '' );
-                }
-            }
-        });
-        var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-
-        $( "#dispFilSeg_grade" ).selectable({});
-        $( "#dispFilSeg_climbGrade" ).selectable({});
-        $( "#dispFilSeg_ehaft" ).selectable({});   
-
-    } );
-
-    // ............................................................................
-    // Executes code below when user clicks the 'Apply' filter button for tracks
-    $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
-        e.preventDefault();
-        
-        // *****************************************************
-        // Build SQL WHERE statement for segments
-        
-        var whereStatement = [];
-        var whereString = "";
-
-        // Field track name
-        if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
-            whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
-            whereStatement.push( whereString );
-        };
-
-        // Field route
-        if ( ($('#dispFilTrk_route').val()) != "" ) {
-            whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
-            whereStatement.push( whereString );
-        };
-
-        // Field date begin (date finished not used)
-        fromDate = "1968-01-01";                                                    // Set from date in case no date is entered
-        var today = new Date();                                                     // Set to date to today in case no date is entered
-        month = today.getMonth()+1;                                                 // Extract month (January = 0)
-        toDate = today.getFullYear() + '-' + month + '-' + today.getDate();         // Set to date to today (format yyyy-mm-dd)
-
-        if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
-            fromDate = ($('#dispFilTrk_dateFrom').val());
-        };
-
-        if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
-            toDate = ($('#dispFilTrk_dateTo').val())                                // Add to where Statement array
-        };
-
-        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
-        whereStatement.push( whereString );                                         // Add to where Statement array
-
-        // Field type
-        var whereString = "";
-        $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
-            var itemId = this.id                                                    // Extract id of selected item
-            whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
-        });
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };
-
-        // Field subtype
-        var whereString = "";                                                       
-        $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
-            var itemId = this.id                                                    // Extract id of selected item
-            whereString = whereString + "'" + itemId.slice(19) + "',";              // Substring tyye from id
-        });
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "trkSubType in (" + whereString + ")";                     // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        }           
-
-        // Field participants
-        if ( ($('#dispFilTrk_participants').val()) != "" ) {
-            whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
-            whereStatement.push( whereString );
-        };
-
-        // Field country
-        if ( ($('#dispFilTrk_country').val()) != "" ) {
-            whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
-            whereStatement.push( whereString );
-        };
-        
-        // ************************************
-        // Put all where statements together
-
-        if ( whereStatement.length > 0 ) {
-            var sqlWhere = "WHERE ";
-
-            for (var i=0; i<whereStatement.length; i++) {
-                sqlWhere += whereStatement[i];
-                sqlWhere += " AND ";
-            }
-            sqlWhere = sqlWhere.slice(0,sqlWhere.length-5);
-        }
-        
-        // ****************************************************
-        // Generate KML & draw Map 
-
-        callGenKml(trackFileName,"tracks",sqlWhere);                       // Generate KML file (file name to be used,type of kml = "tracks", sql where clause)
-        
-        // Close filter panels at the end
-        $('#mapPanelFilter').removeClass('visible');
-
-        // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
-        var removeEl = document.getElementById('displayMap-ResMap');  // delete div .map
-        var containerEl = removeEl.parentNode;          // Get its containing element
-        containerEl.removeChild(removeEl);              // Remove the elements
-        var newDiv = document.createElement('div');     // create new div element
-        containerEl.appendChild(newDiv);                // Add to parent element
-        newDiv.id = 'displayMap-ResMap';
-        newDiv.className = 'displayMap-ResMap'; 
-        drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
-        mapMapNeedsLoad = false;                             // No need to load map
+// Initialse all jquery functional fields for the mask display objects
+$( function() {  
+    // Initialise filter area as JQUERY Accordion                                                       
+    $( "#dispObjAccordion" ).accordion({
+        heightStyle: "content",                                            // hight of section dependent on content of section
+        autoHeight: false,
+        collapsible: true
     });
 
-    // ............................................................................
-    // Executes code below when user clicks the 'Apply' filter button for segments
-    $(document).on('click', '#dispFilSeg_ApplyButton', function (e) {
-        e.preventDefault();
-        var whereStatement = [];
+    $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+        dateFormat: 'yy-mm-dd', 
+        changeMonth: true,
+        changeYear: true,
+        showOn: "button",
+        buttonImage: "css/images/calendar.gif",
+        buttonImageOnly: true,
+        buttonText: "Select date"
+    });
+    
+    $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        showOn: "button",
+        buttonImage: "css/images/calendar.gif",
+        buttonImageOnly: true,
+        buttonText: "Select date"
+    });
 
-        // ==================================================
-        // ===== Build SQL WHERE statement for segments =====
-        // ==================================================
-        
-        // Field segment type selected
-        var whereString = "";
-        $('#dispFilSeg_segType .ui-selected').each(function() {
-            var itemId = this.id;
-            var sqlName = "segType";
-            var lenCriteria = itemId.length;
-            var startCriteria = sqlName.length + 1;
-            whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
-            if ( whereString.length > 0 ) {
-                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-                whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
-                whereStatement.push( whereString );                                     // Add to where Statement array
-            };          
-        });
+    $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
 
-        // Field segment name
-        var whereString = "";
-        if ( ($('#dispFilSeg_segName').val()) != "" ) {
-            whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
-            whereStatement.push( whereString );
-        };
+    $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
 
-        // Field Start Location (ID selected)
-        var whereString = "";
-        if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
-            whereString = "segStartLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
-            whereStatement.push( whereString );
-        };
+    // For object filter segments
+    // --------------------------
 
-        // Field Altitude of start location 
-        var whereString = "";
-        whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
-        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
-        whereStatement.push( whereString );     
+    // mapUF_sourceName
+    $( "#dispFilSeg_sourceName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=segSourceFID",
+        minLength: 2,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
+                    $( "#dispFilSeg_sourceFID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
 
-        // Field type of start location
-        var whereString = "";
-        $('#dispFilSeg_startLocType .ui-selected').each(function() {
-            var itemId = this.id;
-            var sqlName = "startLocType";
-            var lenCriteria = itemId.length;
-            var startCriteria = sqlName.length + 1;
-            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-            if ( whereString.length > 0 ) {
-                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-                whereStatement.push( whereString );                                     // Add to where Statement array
-            };       
-        });
+    // mapUF_segType
+    $( "#dispFilSeg_segType" ).selectable({});
+    
+    // startLocName
+    $( "#dispFilSeg_startLocName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=getWaypLong",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
+                    $( "#dispFilSeg_startLocID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
+    
+    // startLocAlt 
+    $( "#dispFilSeg_startLocAlt_slider" ).slider({
+        range: true,
+        min: 0,
+        max: 5000,
+        values: [ 400, 5000 ],
+        slide: function( event, ui ) {
+            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+        }
+    });
+    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
+    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
+    
+    // startLocType
+    $( "#dispFilSeg_startLocType" ).selectable({});
 
-        // Field target location (ID selected)
-        var whereString = "";
-        if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
-            whereString = "segTargetLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
-            whereStatement.push( whereString );
-        };
+    // targetLocName
+    $( "#dispFilSeg_targetLocName" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=getWaypLong",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
+                    $( "#dispFilSeg_targetLocID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
 
-        // Field target location altitude
-        var whereString = "";
-        whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
-        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
-        whereStatement.push( whereString );            
+    // targetLocAlt
+    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
+        range: true,
+        min: 0,
+        max: 5000,
+        values: [ 400, 5000 ],
+        slide: function( event, ui ) {
+            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+        }
+    });
+    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
+    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
 
-        // Field target location type
-        var whereString = "";
+    // targetLocType
+    $( "#dispFilSeg_targetLocType" ).selectable({});
+
+    // Region
+    $( "#dispFilSeg_segRegion" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=regionID",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
+                    $( "#dispFilSeg_segRegionID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+
+    // Area
+    $( "#dispFilSeg_segArea" ).autocomplete({
+        source: "services/get_auto_complete_values.php?field=areaID",
+        minLength: 1,
+        select: function( event, ui ) {
+            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
+                    $( "#dispFilSeg_segAreaID" ).val( '' );
+            }
+        }
+    });
+    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
+
+    $( "#dispFilSeg_grade" ).selectable({});
+    $( "#dispFilSeg_climbGrade" ).selectable({});
+    $( "#dispFilSeg_ehaft" ).selectable({});   
+
+} );
+
+// Executes code below when user clicks the 'Apply' filter button for tracks
+$(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
+    e.preventDefault();
+    
+    // *****************************************************
+    // Build SQL WHERE statement for segments
+    
+    var whereStatement = [];
+    var whereString = "";
+
+    // Field track name
+    if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
+        whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field route
+    if ( ($('#dispFilTrk_route').val()) != "" ) {
+        whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field date begin (date finished not used)
+    fromDate = "1968-01-01";                                                    // Set from date in case no date is entered
+    var today = new Date();                                                     // Set to date to today in case no date is entered
+    month = today.getMonth()+1;                                                 // Extract month (January = 0)
+    toDate = today.getFullYear() + '-' + month + '-' + today.getDate();         // Set to date to today (format yyyy-mm-dd)
+
+    if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
+        fromDate = ($('#dispFilTrk_dateFrom').val());
+    };
+
+    if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
+        toDate = ($('#dispFilTrk_dateTo').val())                                // Add to where Statement array
+    };
+
+    whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
+    whereStatement.push( whereString );                                         // Add to where Statement array
+
+    // Field type
+    var whereString = "";
+    $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
+        var itemId = this.id                                                    // Extract id of selected item
+        whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
+    });
+    if ( whereString.length > 0 ) {
+        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+        whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
+        whereStatement.push( whereString );                                     // Add to where Statement array
+    };
+
+    // Field subtype
+    var whereString = "";                                                       
+    $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
+        var itemId = this.id                                                    // Extract id of selected item
+        whereString = whereString + "'" + itemId.slice(19) + "',";              // Substring tyye from id
+    });
+    if ( whereString.length > 0 ) {
+        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+        whereString = "trkSubType in (" + whereString + ")";                     // complete SELECT IN statement
+        whereStatement.push( whereString );                                     // Add to where Statement array
+    }           
+
+    // Field participants
+    if ( ($('#dispFilTrk_participants').val()) != "" ) {
+        whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field country
+    if ( ($('#dispFilTrk_country').val()) != "" ) {
+        whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
+        whereStatement.push( whereString );
+    };
+    
+    // ************************************
+    // Put all where statements together
+
+    if ( whereStatement.length > 0 ) {
+        var sqlWhere = "WHERE ";
+
+        for (var i=0; i<whereStatement.length; i++) {
+            sqlWhere += whereStatement[i];
+            sqlWhere += " AND ";
+        }
+        sqlWhere = sqlWhere.slice(0,sqlWhere.length-5);
+    }
+    
+    // ****************************************************
+    // Generate KML & draw Map 
+
+    callGenKml(trackFileName,"tracks",sqlWhere);                       // Generate KML file (file name to be used,type of kml = "tracks", sql where clause)
+    
+    // Close filter panels at the end
+    $('#mapPanelFilter').removeClass('visible');
+
+    // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
+    var removeEl = document.getElementById('displayMap-ResMap');  // delete div .map
+    var containerEl = removeEl.parentNode;          // Get its containing element
+    containerEl.removeChild(removeEl);              // Remove the elements
+    var newDiv = document.createElement('div');     // create new div element
+    containerEl.appendChild(newDiv);                // Add to parent element
+    newDiv.id = 'displayMap-ResMap';
+    newDiv.className = 'displayMap-ResMap'; 
+    drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
+    mapMapNeedsLoad = false;                             // No need to load map
+});
+
+// Executes code below when user clicks the 'Apply' filter button for segments
+$(document).on('click', '#dispFilSeg_ApplyButton', function (e) {
+    e.preventDefault();
+    var whereStatement = [];
+
+    // ===== Build SQL WHERE statement for segments =====
+    
+    // Field segment type selected
+    var whereString = "";
+    $('#dispFilSeg_segType .ui-selected').each(function() {
         var itemId = this.id;
-        var sqlName = "targetLocType";
+        var sqlName = "segType";
+        var lenCriteria = itemId.length;
+        var startCriteria = sqlName.length + 1;
+        whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };          
+    });
+
+    // Field segment name
+    var whereString = "";
+    if ( ($('#dispFilSeg_segName').val()) != "" ) {
+        whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
+        whereStatement.push( whereString );
+    };
+
+    // Field Start Location (ID selected)
+    var whereString = "";
+    if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
+        whereString = "segStartLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+        whereStatement.push( whereString );
+    };
+
+    // Field Altitude of start location 
+    var whereString = "";
+    whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
+    whereStatement.push( whereString );     
+
+    // Field type of start location
+    var whereString = "";
+    $('#dispFilSeg_startLocType .ui-selected').each(function() {
+        var itemId = this.id;
+        var sqlName = "startLocType";
+        var lenCriteria = itemId.length;
+        var startCriteria = sqlName.length + 1;
+        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };       
+    });
+
+    // Field target location (ID selected)
+    var whereString = "";
+    if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
+        whereString = "segTargetLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+        whereStatement.push( whereString );
+    };
+
+    // Field target location altitude
+    var whereString = "";
+    whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
+    whereStatement.push( whereString );            
+
+    // Field target location type
+    var whereString = "";
+    var itemId = this.id;
+    var sqlName = "targetLocType";
+    var lenCriteria = itemId.length;
+    var startCriteria = sqlName.length + 1;
+    whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+    if ( whereString.length > 0 ) {
+        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+        whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+        whereStatement.push( whereString );                                     // Add to where Statement array
+    };
+
+    // Field region
+    var whereString = "";
+    if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
+        whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
+        whereStatement.push( whereString );
+    };
+
+    // Field area
+    var whereString = "";
+    if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
+        whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
+        whereStatement.push( whereString );
+    };
+    
+    // Field grade
+    var whereString = "";
+    $('#dispFilSeg_grade .ui-selected').each(function() {
+        var itemId = this.id;
+        var sqlName = "grade";
         var lenCriteria = itemId.length;
         var startCriteria = sqlName.length + 1;
         whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
@@ -474,107 +502,77 @@ $(document).ready(function() {
             whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
             whereStatement.push( whereString );                                     // Add to where Statement array
         };
-
-        // Field region
-        var whereString = "";
-        if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
-            whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
-            whereStatement.push( whereString );
-        };
-
-        // Field area
-        var whereString = "";
-        if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
-            whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
-            whereStatement.push( whereString );
-        };
-       
-        // Field grade
-        var whereString = "";
-        $('#dispFilSeg_grade .ui-selected').each(function() {
-            var itemId = this.id;
-            var sqlName = "grade";
-            var lenCriteria = itemId.length;
-            var startCriteria = sqlName.length + 1;
-            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-            if ( whereString.length > 0 ) {
-                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-                whereStatement.push( whereString );                                     // Add to where Statement array
-            };
-        });
-        
-        // Field climbGrade
-        var whereString = "";
-        $('#dispFilSeg_climbGrade .ui-selected').each(function() {
-            var itemId = this.id;
-            var sqlName = "climbGrade";
-            var lenCriteria = itemId.length;
-            var startCriteria = sqlName.length + 1;
-            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-            if ( whereString.length > 0 ) {
-                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-                whereStatement.push( whereString );                                     // Add to where Statement array
-            };
-        });
-
-        // Field Ernsthaftigkeit
-        var whereString = "";
-        $('#dispFilSeg_ehaft .ui-selected').each(function() {
-            var itemId = this.id;
-            var sqlName = "ehaft";
-            var lenCriteria = itemId.length;
-            var startCriteria = sqlName.length + 1;
-            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-            if ( whereString.length > 0 ) {
-                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-                whereStatement.push( whereString );                                     // Add to where Statement array
-            };
-        });
-
-        // =================================================
-        // ============ generate KML & draw Map ============
-        // =================================================
-
-        callGenSegKml(segSqlFilterString); // Generate KML file; file stored in file defined by global var segKmlFileNameURL
-        callGenWaypKml(optionWhereStmt); // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
-        
-        // Close filter panels at the end
-        $('#mapPanelFilter').removeClass('visible');
-
-        // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
-        var removeEl = document.getElementById('mapPanel_Map-ResMap');  // delete div .map
-        var containerEl = removeEl.parentNode;          // Get its containing element
-        containerEl.removeChild(removeEl);              // Remove the elements
-        var newDiv = document.createElement('div');     // create new div element
-        containerEl.appendChild(newDiv);                // Add to parent element
-        newDiv.id = 'mapPanel_Map-ResMap';
-        newDiv.className = 'mapPanel_Map-ResMap'; 
-        drawMapOld('mapPanel_Map-ResMap', segKmlFileNameURL, waypKmlFileNameURL, 
-            drawHangneigung, drawWanderwege, drawHaltestellen, 
-            drawKantonsgrenzen, drawSacRegion); // Draw map to panel
-        mapMapNeedsLoad = false;                             // No need to load map
-        
     });
+    
+    // Field climbGrade
+    var whereString = "";
+    $('#dispFilSeg_climbGrade .ui-selected').each(function() {
+        var itemId = this.id;
+        var sqlName = "climbGrade";
+        var lenCriteria = itemId.length;
+        var startCriteria = sqlName.length + 1;
+        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };
+    });
+
+    // Field Ernsthaftigkeit
+    var whereString = "";
+    $('#dispFilSeg_ehaft .ui-selected').each(function() {
+        var itemId = this.id;
+        var sqlName = "ehaft";
+        var lenCriteria = itemId.length;
+        var startCriteria = sqlName.length + 1;
+        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };
+    });
+
+    // =================================================
+    // ============ generate KML & draw Map ============
+    // =================================================
+
+    callGenSegKml(segSqlFilterString); // Generate KML file; file stored in file defined by global var segKmlFileNameURL
+    callGenWaypKml(optionWhereStmt); // Generate KML file; file stored in file defined by global var segKmlFileNameURL 
+    
+    // Close filter panels at the end
+    $('#mapPanelFilter').removeClass('visible');
+
+    // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
+    var removeEl = document.getElementById('mapPanel_Map-ResMap');  // delete div .map
+    var containerEl = removeEl.parentNode;          // Get its containing element
+    containerEl.removeChild(removeEl);              // Remove the elements
+    var newDiv = document.createElement('div');     // create new div element
+    containerEl.appendChild(newDiv);                // Add to parent element
+    newDiv.id = 'mapPanel_Map-ResMap';
+    newDiv.className = 'mapPanel_Map-ResMap'; 
+    drawMapOld('mapPanel_Map-ResMap', segKmlFileNameURL, waypKmlFileNameURL, 
+        drawHangneigung, drawWanderwege, drawHaltestellen, 
+        drawKantonsgrenzen, drawSacRegion); // Draw map to panel
+    mapMapNeedsLoad = false;                             // No need to load map
+    
 });    
 
-    // ==========================================================================
-    // ========================== panelInput ====================================
-    // ==========================================================================
+// ==========================================================================
+// ========================== panelImport ===================================
+// ==========================================================================
 
-    // ............................................................................
-    // Upon click on the 'Upload File' button --> call importGps.php in temp mode
-    $(document).on('click', '#buttonUploadFile', function (e) {
-        e.preventDefault();                                                                                 
-        var xhr = new XMLHttpRequest();                                                                     // create new xhr object
-        
-        // Execute following code JSON object is received from importGpsTmp.php service
-        xhr.onload = function() {
-            if (xhr.status === 200) {                                                                       // when all OK
-                responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
-
+// Upon click on the 'Upload File' button --> call importGps.php in temp mode
+$(document).on('click', '#buttonUploadFile', function (e) {
+    e.preventDefault();                                                                                 
+    var xhr = new XMLHttpRequest();                                                                     // create new xhr object
+    
+    // Execute following code JSON object is received from importGpsTmp.php service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                                                       // when all OK
+            responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+            if ( responseObject.status == 'OK') {
                 $('#impUpdTrk_trkId').attr('value', responseObject.trkId); 
                 $('#impUpdTrk_trkTrackName').attr('value', responseObject.trkTrackName);                    // assign values of JSON to input fields
                 $('#impUpdTrk_trkRoute').attr('value', responseObject.trkRoute);
@@ -590,13 +588,19 @@ $(document).ready(function() {
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
                 $('#pImpUpdateTrack').addClass('active');
-                //$('#inputFile').val();
                 document.getElementById("inputFile").value = "";
-            }
-        }
+            } else {
+                $('#statusMessage').text('Invalid file extension');
+                $("#statusMessage").show().delay(5000).fadeOut();
+                document.getElementById("inputFile").value = "";
+            } 
 
+        }
+    }
+
+    var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
+    if ( fileName ) {
         phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-        var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
         var formData = new FormData();                                  // create new formData object
         formData.append('sessionid', sessionid);                           // append parameter session ID
         formData.append('request', 'temp')                              // temp request to create track temporarily
@@ -605,78 +609,79 @@ $(document).ready(function() {
         formData.append('loginname', $loginName);                             // append parameter file type
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.send(formData);                                             // send formData object to service using xhr
-    });
-
-    // ............................................................................
-    // Upon click on the 'Save' button --> call importGps.php in save mode
-    $(document).on('click', '#impUpdTrk_save', function (e) {
-        e.preventDefault();
-        
-        var xhr = new XMLHttpRequest();                                 // create new xhr object
-        // Execute following code JSON object is received from importGpsTmp.php service
-        xhr.onload = function() {
-            if (xhr.status === 200) {                                   // when all OK
-                // Make panelImport disappear and panelDisplay appear
-                //$('#panelImport').removeClass('active');
-                //$('#panelDisplay').addClass('active');
-                $('#statusMessage').text('Track successfully saved');
-                $('#statusMessage').show().delay(5000).fadeOut();
-
-                // Open Panel Display
-                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
-                buttonId = $activeButtonA.attr('href'); 
-                
-                // Run following block if selected topic is currently not active
-                $topicButton.removeClass('active');                         // Make current panel inactive
-                $activeButton.removeClass('active');                        // Make current tab inactive
-                $topicButton = $(buttonId).addClass('active');              // Make new panel active
-                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-                
-                // Close upload file div and open form to update track data
-                $('#pImpFileUpload').addClass('active');
-                $('#pImpUpdateTrack').removeClass('active');
-            }
-        }
-
-        var trackobj = {};
-        var jsonObject = {};
-        trackobj["trkId"] = $('#impUpdTrk_trkId').val();
-        trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
-        trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
-        trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
-        trackobj["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
-        trackobj["trkSaison"] = $('#impUpdTrk_trkSaison').val();
-        trackobj["trkType"] = $('#impUpdTrk_trkType').val();
-        trackobj["trkSubType"] = $('#impUpdTrk_trkSubType').val();
-        trackobj["trkOrg"] = $('#impUpdTrk_trkOrg').val();
-        trackobj["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
-        trackobj["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
-        trackobj["trkEvent"] = $('#impUpdTrk_trkEvent').val();
-        trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
-        trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
-        trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
-        trackobj["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
-        trackobj["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
-        trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
-        trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
-        trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
-        trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-        trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
-        trackobj["trkLoginName"] = $loginName;    
-
-        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-        //var formData = new FormData();                                  // create new formData object
-        jsonObject["sessionid"] = "123456";                             // append parameter session ID
-        jsonObject["request"] = 'save';                              // temp request to create track temporarily
-        jsonObject["filetype"] = "gpx";                                 // append parameter file type
-        jsonObject["trackobj"] = trackobj;                              // send track object
-        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-        console.info(jsonObject);
-        xhr.setRequestHeader( "Content-Type", "application/json" );
-        jsn = JSON.stringify(jsonObject);
-        xhr.send( jsn );                                           // send formData object to service using xhr
+    } else {
+        $('#statusMessage').text('No file selected');
+        $("#statusMessage").show().delay(5000).fadeOut();
+    }
 });
 
+// Upon click on the 'Save' button --> call importGps.php in save mode
+$(document).on('click', '#impUpdTrk_save', function (e) {
+    e.preventDefault();
+    
+    var xhr = new XMLHttpRequest();                                 // create new xhr object
+    // Execute following code JSON object is received from importGpsTmp.php service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                   // when all OK
+            // Make panelImport disappear and panelDisplay appear
+            $('#statusMessage').text('Track successfully saved');
+            $('#statusMessage').show().delay(5000).fadeOut();
+
+            // Open Panel Display
+            var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+            buttonId = $activeButtonA.attr('href'); 
+            
+            // Run following block if selected topic is currently not active
+            $topicButton.removeClass('active');                         // Make current panel inactive
+            $activeButton.removeClass('active');                        // Make current tab inactive
+            $topicButton = $(buttonId).addClass('active');              // Make new panel active
+            $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+            
+            // Close upload file div and open form to update track data
+            $('#pImpFileUpload').addClass('active');
+            $('#pImpUpdateTrack').removeClass('active');
+        }
+    }
+
+    var trackobj = {};
+    var jsonObject = {};
+    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
+    trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
+    trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
+    trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
+    trackobj["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
+    trackobj["trkSaison"] = $('#impUpdTrk_trkSaison').val();
+    trackobj["trkType"] = $('#impUpdTrk_trkType').val();
+    trackobj["trkSubType"] = $('#impUpdTrk_trkSubType').val();
+    trackobj["trkOrg"] = $('#impUpdTrk_trkOrg').val();
+    trackobj["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
+    trackobj["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
+    trackobj["trkEvent"] = $('#impUpdTrk_trkEvent').val();
+    trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
+    trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
+    trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
+    trackobj["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
+    trackobj["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
+    trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
+    trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
+    trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
+    trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
+    trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
+    trackobj["trkLoginName"] = $loginName;    
+
+    phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+    jsonObject["request"] = 'save';                              // temp request to create track temporarily
+    jsonObject["filetype"] = "gpx";                                 // append parameter file type
+    jsonObject["trackobj"] = trackobj;                              // send track object
+    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+    console.info(jsonObject);
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    jsn = JSON.stringify(jsonObject);
+    xhr.send( jsn );                                           // send formData object to service using xhr
+});
+
+// On click on the 'cancel' button --> cancel update & delete temp track
 $(document).on('click', '#impUpdTrk_cancel', function (e) {
     e.preventDefault();
     
@@ -697,7 +702,7 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     //var formData = new FormData();                                  // create new formData object
-    jsonObject["sessionid"] = "123456";                             // append parameter session ID
+    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'cancel';                              // temp request to create track temporarily
     jsonObject["filetype"] = "gpx";                                 // append parameter file type
     jsonObject["trackobj"] = trackobj;                              // send track object
@@ -737,7 +742,7 @@ function callGenKml(outFileName, kmlType, sqlWhere) {
 }   
 
 function drawMapOld(targetDiv, segKmlFile, waypKmlFile, drawHangneigung, drawWanderwege, drawHaltestellen, 
-    drawKantonsgrenzen, drawSacRegion) {
+drawKantonsgrenzen, drawSacRegion) {
     // ==> map.admin.ch code from here
 
     // Create a GeoAdmin Map
@@ -842,9 +847,9 @@ function drawMapOld(targetDiv, segKmlFile, waypKmlFile, drawHangneigung, drawWan
 
     // Change cursor style when cursor is hover a feature
     map.on('pointermove', function(evt) {
-    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-    return feature;
-    });
-    map.getTargetElement().style.cursor = feature ? 'pointer' : '';
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return feature;
+        });
+        map.getTargetElement().style.cursor = feature ? 'pointer' : '';
     });
 }

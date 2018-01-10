@@ -5,18 +5,32 @@ html, body {
     background-color: #000033; 
     color: #ccccff;
     height: 100%;}
+
 h1, h2, h3 {
-    margin: 0px;}
+    margin: 0px;
+}
+
 h1 {
     margin-bottom: 12px;
     text-align: left;
     font-size: 54pt;
-    color: rgb(157,195,230);}
+    color: rgb(157,195,230);
+}
+
 h2 {
+    display: block;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #000033;
+}
+
+h3 {
     color: #cce6ff;
     font-size: 100%;
     font-weight: bold;
-    padding: 4px;}
+    padding: 4px;
+}
+
 p {
     margin: 0px;}
 #logo { /* formatting for logo in general */
@@ -29,6 +43,8 @@ em { /* formatting for DB in logo*/
     clear: both;} /* ensures that main content doesn't flow around top section */
 table {
     color: #ccccff;}
+
+
 
 /********** TOPIC BUTTONS **********/
 .topicButtonsLi.loginReq {
@@ -65,12 +81,27 @@ table {
 
 /********** PANELS **********/
 /****************************/
+#formInputFile {
+    height: 20px;
+}
+
 .tourdbPanel {
     display: none;}
 
 .button {
     float: right;
     margin: 10px;
+}
+
+.formCenter, .pImpDiv.active {
+    margin-top: 40px;
+    padding: 0.5em 0.5em;
+    margin: auto;
+    margin-top: 200px;
+    display: block;
+    background-color: #cce6ff;
+    width: 600px;
+    color: #333333;
 }
 
 /********** FILTER STYLES *********/
@@ -233,7 +264,7 @@ table {
     display: none;
 }
 
-.pImpDiv.active {
+/*.pImpDiv.active {
     margin: auto;
     margin-top: 200px;
     display: block;
@@ -241,6 +272,7 @@ table {
     width: 600px;
     color: #333333;
 }
+*/
 #headerUploadFile {
     margin: 20px;
     padding: 10px;
@@ -259,6 +291,7 @@ table {
 #inputFile {
     margin: 20px;
     padding: 10px;
+    font-family: Candara, Verdana, Arial, sans-serif;
 }
 
 #pImpUpdateTrack{

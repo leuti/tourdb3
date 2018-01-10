@@ -57,24 +57,24 @@
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="topicButtons">
 				<li id="buttonLogin" class="topicButtonsLi active">
-				<a id="a_panelLogin" class="mainButtonsA" href="#panelLogin"><h3>Login</h3></a>
+				<a id="a_panelLogin" class="mainButtonsA" href="#panelLogin"><h2>Login</h2></a>
 			</li>
 			<li id="buttonDisplay" class="topicButtonsLi loginReq">
-				<a id="a_panelDisplay" class="mainButtonsA" href="#panelDisplay"><h3>Display</h3></a>
+				<a id="a_panelDisplay" class="mainButtonsA" href="#panelDisplay"><h2>Display</h2></a>
 			</li>
 			<li id="buttonImport" class="topicButtonsLi loginReq">
-				<a id="a_panelImprt" class="mainButtonsA" href="#panelImport"><h3>Import</h3></a> 
+				<a id="a_panelImport" class="mainButtonsA" href="#panelImport"><h2>Import</h2></a> 
 			</li>
 			<!--
 			<li id="buttonExport" class="topicButtonsLi loginReq">
-				<a id="a_panelExport" class="mainButtonsA" href="#panelExport"><h3>Export</h3></a> 
+				<a id="a_panelExport" class="mainButtonsA" href="#panelExport"><h2>Export</h2></a> 
 			</li>
 
 			<li id="buttonMaintain" class="topicButtonsLi loginReq">
-				<a id="a_panelMaintain" class="mainButtonsA" href="#panelMaintain"><h3>Maintain</h3></a> 
+				<a id="a_panelMaintain" class="mainButtonsA" href="#panelMaintain"><h2>Maintain</h2></a> 
 			</li>			
 			<li id="buttonAdmin" class="topicButtonsLi loginReq">
-				<a id="" class="mainButtonsA" href="#panelAdmin"><h3>Admin</h3></a>
+				<a id="" class="mainButtonsA" href="#panelAdmin"><h2>Admin</h2></a>
 			</li>
 			-->
 		</ul>
@@ -87,12 +87,12 @@
 		<!-- ======================== panelLogin ========================================== -->
 		<!-- ========================================================================== -->
 		<div id="panelLogin" class="tourdbPanel active">
-			<div id=loginForm>
+			<div id=loginForm class="formCenter">
 
 				<fieldset>
         		
 					<!-- Import Tracks -->
-					<legend class="loginHeader">Enter you login credentials</legend>
+					<legend class="filterHeader">Enter you login credentials</legend>
 
 					<div>
 						<label for="loginName" class="labelFirst">User Login</label>
@@ -138,7 +138,7 @@
 					<div id="dispObjAccordion" class="dispObjOpen visible"> 
 
 						<!-- Segment Section of Accordion -->
-						<h3>Tracks</h3>
+						<h2>Tracks</h2>
 						<div class="accordionBackground">
 							<fieldset>
 								<!-- SEGMENT filter -->
@@ -218,7 +218,7 @@
 						</div>
 						
 						<!-- Segment Section of Accordion -->
-						<h3>Segments</h3>
+						<h2>Segments</h2>
 						<div class="accordionBackground">
 							<fieldset>
 
@@ -372,7 +372,7 @@
 						</div>
 
 						<!-- Segment Section of Accordion -->
-						<h3>Waypoints</h3>
+						<h2>Waypoints</h2>
 						<div class="accordionBackground">
 							<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
 						</div>
@@ -401,19 +401,22 @@
 		<!-- ========================================================================== -->		
 		<div id="panelImport" class="tourdbPanel">
 			
-			<div id="pImpFileUpload" class="pImpDiv active">
-				<h3 id=headerUploadFile>Select File to upload </h3>
-				<form enctype="multipart/form-data">
-					<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-					<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
-				</form>
+			<div id="pImpFileUpload" class="formCenter pImpDiv active">
+				<fieldset>
+					<legend class="filterHeader">Select File to upload</legend>
+					<p>Select a single file to upload to the tourdb</p>
+					<form id="formInputFile" enctype="multipart/form-data">
+						<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+						<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
+					</form>
 
-				<div class="buttonUpload">
-					<input type="submit" class="button" id="buttonUploadFile" value="Upload File" />
-				</div>
+					<div class="buttonUpload">
+						<input type="submit" class="button" id="buttonUploadFile" value="Upload File" />
+					</div>
+				</fieldset>
 			</div>
 
-			<div id="pImpUpdateTrack" class="pImpDiv">
+			<div id="pImpUpdateTrack" class="formCenter pImpDiv">
 				<fieldset>
         		
 					<!-- Import Tracks -->
