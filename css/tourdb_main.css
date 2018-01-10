@@ -270,8 +270,22 @@ table {
     display: none;
 }
 
-.statusMessage {
+#footer { 
+    position: fixed;
+    bottom: 15px;
+    left: 20px;
+}
+
+#footerText{
+    float: left;
+}
+
+#statusMessage {
+    float: right;
+    position: fixed;
+    right: 20px;
     color: red;
+    font-size: 1.5em;
 }
 
 /* Not used stylesheets */

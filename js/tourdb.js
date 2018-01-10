@@ -92,8 +92,8 @@ $(document).ready(function() {
                 loginstatus = responseObject.loginstatus;
                 if ( loginstatus == "ERROR")
                 { 
-                    $('#loginStatus').text('Login failed');
-                    $('#loginStatus').show().delay(5000).fadeOut();
+                    $('#statusMessage').text('Login failed');
+                    $('#statusMessage').show().delay(5000).fadeOut();
                 } else {
                     // Open Panel Display
                     var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
@@ -107,7 +107,8 @@ $(document).ready(function() {
                     $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                     $('.loginReq').removeClass('loginReq');
                     $('#buttonLogin').addClass('loginReq');
-                    
+                    $('#statusMessage').text('Login successful');
+                    $("#statusMessage").show().delay(5000).fadeOut();
                 }
             }
         }
@@ -618,8 +619,8 @@ $(document).ready(function() {
                 // Make panelImport disappear and panelDisplay appear
                 //$('#panelImport').removeClass('active');
                 //$('#panelDisplay').addClass('active');
-                $('#pImpSaveStatus').text('Track successfully saved');
-                $('#pImpSaveStatus').show().delay(5000).fadeOut();
+                $('#statusMessage').text('Track successfully saved');
+                $('#statusMessage').show().delay(5000).fadeOut();
 
                 // Open Panel Display
                 var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
@@ -685,7 +686,8 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
         if (xhr.status === 200) {                                   // when all OK
             $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
             $('#pImpUpdateTrack').removeClass('active');                   // hide update form
-            $("#pImpSaveSuccess").show().delay(5000).fadeOut();
+            $('#statusMessage').text('Import cancelled');
+            $("#statusMessage").show().delay(5000).fadeOut();
         }
     }
 
