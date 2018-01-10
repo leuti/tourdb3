@@ -56,7 +56,7 @@
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="topicButtons">
-				<li id="buttonLogin" class="topicButtonsLi active">
+			<li id="buttonLogin" class="topicButtonsLi active" style="display:none;">
 				<a id="a_panelLogin" class="mainButtonsA" href="#panelLogin"><h2>Login</h2></a>
 			</li>
 			<li id="buttonDisplay" class="topicButtonsLi loginReq">

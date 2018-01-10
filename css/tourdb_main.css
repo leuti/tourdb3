@@ -63,18 +63,28 @@ table {
     /*border-bottom: 3px solid #cce6ff;*/
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    margin-left: 20px;}
+    margin-left: 20px;
+    /*border-bottom: 3px solid #cce6ff;*/
+}
+
+.topicButtonsLi.active {
+    background-color: #4da9ff;
+    /*border-bottom: 3px solid #4da9ff;
+    border-bottom: 3px solid #4da9ff;*/
+}
+
+.topicButtonsLi:hover {
+    background-color: #b16af8;
+    /*border-bottom: 3px solid #4da9ff;
+    border-bottom: 3px solid #4da9ff;*/
+}
 
 .mainButtonsA {
     display: block;
     color: #001a33;
-    padding: 3px 30px 3px 30px;}
-
-/* hover states */
-.mainButtonsA.active, .mainButtonsA:hover {
-    background-color: #4da9ff;
-    color: #9933ff;
-    border-bottom: 3px solid #4da9ff;}
+    padding: 3px 30px 3px 30px;
+    /*border-bottom: 3px solid #cce6ff;*/
+}
 
 .tourdbPanel.active { 
         display: block;}  

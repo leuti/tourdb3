@@ -27,11 +27,6 @@ trackKmlFileNameURL = document.URL + "tmpout/" + trackFileName;
 // ======================================================
 $(document).ready(function() {
 
-    // Initial drawing of map
-    if ( navigator.onLine ) {
-        drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
-    };
-
     // Evaluate which button/panel is active
     $('.topicButtons').each(function() {
         var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
@@ -92,6 +87,7 @@ $(document).ready(function() {
                     $('#buttonLogin').addClass('loginReq');
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut();
+                    drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                 }
             }
         }
@@ -605,7 +601,6 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         formData.append('sessionid', sessionid);                           // append parameter session ID
         formData.append('request', 'temp')                              // temp request to create track temporarily
         formData.append('filename', fileName);                          // append parameter filename
-        formData.append('filetype', "gpx");                             // append parameter file type
         formData.append('loginname', $loginName);                             // append parameter file type
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         xhr.send(formData);                                             // send formData object to service using xhr
@@ -672,7 +667,6 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'save';                              // temp request to create track temporarily
-    jsonObject["filetype"] = "gpx";                                 // append parameter file type
     jsonObject["trackobj"] = trackobj;                              // send track object
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     console.info(jsonObject);
@@ -704,7 +698,6 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     //var formData = new FormData();                                  // create new formData object
     jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'cancel';                              // temp request to create track temporarily
-    jsonObject["filetype"] = "gpx";                                 // append parameter file type
     jsonObject["trackobj"] = trackobj;                              // send track object
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
