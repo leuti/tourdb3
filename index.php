@@ -581,7 +581,7 @@
 
 	<footer id="footer">
         <div id=footerText>&copy; tourdb 3 - 2017 leuti - Version 20171227</div>
-		<div id="statusMessage">Ich bin der Status</div>
+		<div id="statusMessage"></div>
     </footer>
 	
 </body>

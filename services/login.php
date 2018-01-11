@@ -1,7 +1,6 @@
 <?php
-
 // ---------------------------------------------------------------------------------------------
-// blablba
+// Service verifying if the provided login and password are valid
 //
 // Input Parameters (JSON object):
 // loginName: login name entered by user
@@ -16,7 +15,6 @@ include("./config.inc.php");                                        // include c
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
 $debugLevel = 3;                                                    // 0 = off, 6 = all
-$loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file for import log
 $importGpxLog = dirname(__FILE__) . "\..\log\login.log";        // Assign file location
@@ -30,7 +28,6 @@ $loginName = $receivedData["loginName"];
 $loginPasswd = $receivedData["loginPasswd"];
 
 fputs($logFile, "Line 52: Request (JSON): $loginName & $loginPasswd\r\n");    
-
 
 // Start or restart session 
 session_start();
@@ -56,6 +53,5 @@ session_start();
         $returnObject['loginstatus'] = "ERROR";
     }
     echo json_encode($returnObject); 
-    fputs($logFile, "Line 58: sessionid: " . $returnObject['sessionid'] . " || " . $returnObject['loginstatus'] . "\r\n");    
-    
+    fputs($logFile, "Line 58: sessionid: " . $returnObject['sessionid'] . " || " . $returnObject['loginstatus'] . "\r\n");        
 ?>

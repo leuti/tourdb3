@@ -2,7 +2,7 @@
 
     $db_username 		= 'leuti'; //database username
     $db_password 		= 'yTBgve0xgIAgaGyF8nXj'; //database password
-    $db_name 			= 'tourdb2_dev'; //database name
+    $db_name 			= 'tourdb2_prod'; //database name
     $db_host 			= ''; //hostname or IP
     $item_per_page 		= 20; //item to display per page
 

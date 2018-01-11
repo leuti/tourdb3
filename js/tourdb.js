@@ -618,23 +618,27 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     // Execute following code JSON object is received from importGpsTmp.php service
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
-            // Make panelImport disappear and panelDisplay appear
-            $('#statusMessage').text('Track successfully saved');
-            $('#statusMessage').show().delay(5000).fadeOut();
+            if ( responseObject.status == 'OK') {
+                // Make panelImport disappear and panelDisplay appear
+                $('#statusMessage').text('Track successfully saved');
+                $('#statusMessage').show().delay(5000).fadeOut();
 
-            // Open Panel Display
-            var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
-            buttonId = $activeButtonA.attr('href'); 
-            
-            // Run following block if selected topic is currently not active
-            $topicButton.removeClass('active');                         // Make current panel inactive
-            $activeButton.removeClass('active');                        // Make current tab inactive
-            $topicButton = $(buttonId).addClass('active');              // Make new panel active
-            $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-            
-            // Close upload file div and open form to update track data
-            $('#pImpFileUpload').addClass('active');
-            $('#pImpUpdateTrack').removeClass('active');
+                // Open Panel Display
+                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                buttonId = $activeButtonA.attr('href'); 
+                
+                // Run following block if selected topic is currently not active
+                $topicButton.removeClass('active');                         // Make current panel inactive
+                $activeButton.removeClass('active');                        // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                
+                // Close upload file div and open form to update track data
+                $('#pImpFileUpload').addClass('active');
+                $('#pImpUpdateTrack').removeClass('active');
+                var trackobj = {};
+                var jsonObject = {};
+            }
         }
     }
 
@@ -683,10 +687,12 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     // Execute following code JSON object is received from importGpsTmp.php service
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
-            $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
-            $('#pImpUpdateTrack').removeClass('active');                   // hide update form
-            $('#statusMessage').text('Import cancelled');
-            $("#statusMessage").show().delay(5000).fadeOut();
+            if ( responseObject.status == 'OK') {
+                $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
+                $('#pImpUpdateTrack').removeClass('active');                   // hide update form
+                $('#statusMessage').text('Import cancelled');
+                $("#statusMessage").show().delay(5000).fadeOut();
+            }
         }
     }
 
