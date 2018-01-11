@@ -584,17 +584,28 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
-                $('#impUpdTrk_trkId').attr('value', responseObject.trkId); 
-                $('#impUpdTrk_trkTrackName').attr('value', responseObject.trkTrackName);                    // assign values of JSON to input fields
-                $('#impUpdTrk_trkRoute').attr('value', responseObject.trkRoute);
-                $('#impUpdTrk_trkDateBegin').attr('value', responseObject.trkDateBegin);
-                $('#impUpdTrk_trkDateFinish').attr('value', responseObject.trkDateFinish);
-                $('#impUpdTrk_trkDistance').attr('value', responseObject.trkDistance);
-                $('#impUpdTrk_trkTimeOverall').attr('value', responseObject.trkTimeOverall);
-                $('#impUpdTrk_trkMeterUp').attr('value', responseObject.trkMeterUp);
-                $('#impUpdTrk_trkMeterDown').attr('value', responseObject.trkMeterDown);
-                $('#impUpdTrk_trkCountry').attr('value', responseObject.trkCountry);
-                $('#impUpdTrk_trkCoordinates').attr('value', responseObject.trkCoordinates);
+                $('#impUpdTrk_trkId').val(responseObject.trkId); 
+                $('#impUpdTrk_trkTrackName').val(responseObject.trkTrackName);                    // assign values of JSON to input fields
+                $('#impUpdTrk_trkRoute').val(responseObject.trkRoute);
+                $('#impUpdTrk_trkDateBegin').val(responseObject.trkDateBegin);
+                $('#impUpdTrk_trkDateFinish').val(responseObject.trkDateFinish);
+                $('#impUpdTrk_trkSaison').val(responseObject.trkSaison);
+                $('#impUpdTrk_trkType').val(responseObject.trkType);
+                $('#impUpdTrk_trkSubType').val(responseObject.trkSubType);
+                $('#impUpdTrk_trkOrg').val(responseObject.trkOrg);
+                $('#impUpdTrk_trkOvernightLoc').val(responseObject.trkOvernightLoc);
+                $('#impUpdTrk_trkParticipants').val(responseObject.trkParticipants);
+                $('#impUpdTrk_trkEvent').val(responseObject.trkEvent);
+                $('#impUpdTrk_trkRemarks').val(responseObject.trkRemarks);
+                $('#impUpdTrk_trkDistance').val(responseObject.trkDistance);
+                $('#impUpdTrk_trkTimeOverall').val(responseObject.trkTimeOverall);
+                $('#impUpdTrk_trkTimeToTarget').val(responseObject.trkTimeToTarget);
+                $('#impUpdTrk_trkTimeToEnd').val(responseObject.trkTimeToEnd);
+                $('#impUpdTrk_trkGrade').val(responseObject.trkGrade);
+                $('#impUpdTrk_trkMeterUp').val(responseObject.trkMeterUp);
+                $('#impUpdTrk_trkMeterDown').val(responseObject.trkMeterDown);
+                $('#impUpdTrk_trkCountry').val(responseObject.trkCountry);
+                $('#impUpdTrk_trkCoordinates').val(responseObject.trkCoordinates);
 
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
@@ -637,6 +648,8 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
                 // Make panelImport disappear and panelDisplay appear
                 $('#statusMessage').text('Track successfully saved');
                 $('#statusMessage').show().delay(5000).fadeOut();
+
+                //$('.updTrackInput').value = "";
 
                 // Open Panel Display
                 var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
@@ -692,6 +705,7 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
     xhr.send( jsn );                                           // send formData object to service using xhr
+    
 });
 
 // On click on the 'cancel' button --> cancel update & delete temp track
@@ -723,7 +737,7 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
-    xhr.send( jsn );                                           // send formData object to service using xhr   
+    xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
 // =============================================

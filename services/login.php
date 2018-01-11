@@ -35,7 +35,7 @@ session_start();
     // in case this script is started from login page
     if(isset($loginName))
     {
-        if($loginName == "" && $loginPasswd == "")
+        if($loginName == "leut" && $loginPasswd == "sugus")
         {
             $_SESSION["login"] = $loginName;
             fputs($logFile, "Line 44: $loginName\r\n");   

@@ -96,7 +96,7 @@
 					</div>
 					<div>
 						<label for="loginPasswd" class="labelFirst">Password</label>
-						<input id="loginPasswd" class="loginFields" type="text" size="50">
+						<input id="loginPasswd" class="loginFields" type="password" size="50">
 					</div>
 
 					<div class="buttonLogin">

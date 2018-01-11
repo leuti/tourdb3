@@ -22,7 +22,7 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 3;                                                    // 0 = off, 6 = all
+$debugLevel = 7;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file for import log
@@ -257,13 +257,26 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
                 "trkId"=>$trackid,
                 "trkSourceFileName"=>"$filename",
                 "trkTrackName"=>"$trackName",
+                "trkRoute"=>"",
                 "trkDateBegin"=>"$DateBegin",
                 "trkDateFinish"=>"$DateFinish",
                 "trkGPSStartTime"=>"$GpsStartTime",
+                "trkSaison"=>"",
+                "trkType"=>"",
+                "trkSubType"=>"",
+                "trkOrg"=>"",
+                "trkOvernightLoc"=>"",
+                "trkParticipants"=>"",
+                "trkEvent"=>"",
+                "trkRemarks"=>"",
                 "trkDistance"=>"",
                 "trkTimeOverall"=>"",
+                "trkTimeToTarget"=>"",
+                "trkTimeToEnd"=>"",
+                "trkGrade"=>"",
                 "trkMeterUp"=>"",
                 "trkMeterDown"=>"",
+                "trkCountry"=>""
             );
         }
         return array($trackid,$trackobj);                               // return tmp trackId, track name and coordinate array in array
@@ -291,7 +304,7 @@ function insertTrackPoints($conn,$trackid,$filename)
     $totalTrkPts = count($gpx->trk->trkseg->trkpt);                     // total number of track points in file
     $loop = 0;                                                          // set current loop to 0 (only required for debug purposes)
 
-    $sqlBase = "INSERT INTO `tmp_trackPoints`";               // create first part of insert statement 
+    $sqlBase = "INSERT INTO `tbl_trackPoints`";               // create first part of insert statement 
     $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
     $sqlBase .= "  `tptEle`, `tptTime`) VALUES "; 
     
@@ -308,14 +321,20 @@ function insertTrackPoints($conn,$trackid,$filename)
             $sql .= ",";
         }
         
+        if ( $trkpt->ele == "" ) {
+            $elevation = 0;
+        } else {
+            $elevation = $trkpt->ele;
+        }
+
         $sql .= "('" . $tptNumber . "', ";                              // write tptNumber - a continuous counter for the track points
         $sql .= "'" . $trackid . "', ";                                 // tptTrackFID - reference to the track         
         $sql .= "'" . $trkpt["lat"] . "', ";                            // tptLat - latitude value 
         $sql .= "'" . $trkpt["lon"] . "', ";                            // tptLon - longitude value
-        $sql .= "'" . $trkpt->ele . "', ";                              // tptEle - elevation of track point
+        $sql .= "'" . $elevation . "', ";                              // tptEle - elevation of track point
         $sql .= "'" . strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time)) . "')";     // tptTime - time of track point
         
-        $coordString = $trkpt["lon"] . ',' . $trkpt["lat"] . ',' . $trkpt->ele . ' ';
+        $coordString = $trkpt["lon"] . ',' . $trkpt["lat"] . ',' . $elevation . ' ';
 
         array_push( $coordArray, $coordString );                        // write Lon, Lat and Ele into coordArray array
 
@@ -325,7 +344,7 @@ function insertTrackPoints($conn,$trackid,$filename)
             if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 249 - loop: $loop\r\n");
             
             if ($conn->query($sql) === TRUE) {                          // execute query
-                if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'],"Line 252 - Sql: " . $sqldebug . "\r\n"); 
+                if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'],"Line 252 - Sql: " . $sql . "\r\n"); 
                 if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 253 - New track points inserted successfully\r\n");
                 $loopCumul = $loopCumul + $GLOBALS['loopSize'];         // Raise current loop size by overall loop size
                 $firstRec = 1;                                          // Next record will be 'first'
