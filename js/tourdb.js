@@ -297,28 +297,41 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     };
 
     // Field route
+    var whereString = "";
     if ( ($('#dispFilTrk_route').val()) != "" ) {
         whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
         whereStatement.push( whereString );
     };
 
     // Field date begin (date finished not used)
-    fromDate = "1968-01-01";                                                    // Set from date in case no date is entered
+    var whereString = "";                                                       // clear where string
+    fromDateArt = "1968-01-01";                                                 // Set from date in case no date is entered
     var today = new Date();                                                     // Set to date to today in case no date is entered
     month = today.getMonth()+1;                                                 // Extract month (January = 0)
-    toDate = today.getFullYear() + '-' + month + '-' + today.getDate();         // Set to date to today (format yyyy-mm-dd)
-
+    toDateArt = today.getFullYear() + '-' + month + '-' + today.getDate();      // Set to date to today (format yyyy-mm-dd)
+    
     if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
         fromDate = ($('#dispFilTrk_dateFrom').val());
-    };
+    } else {
+        fromDate = "";
+    }
 
     if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
         toDate = ($('#dispFilTrk_dateTo').val())                                // Add to where Statement array
-    };
+    } else {
+        toDate = "";
+    }
 
-    whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
-    whereStatement.push( whereString );                                         // Add to where Statement array
-
+    if ( fromDate != "" && toDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
+    } else if ( fromDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDateArt + "'";                      // complete WHERE BETWEEN statement
+    } else if ( toDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDateArt + "' AND '" + toDate + "'";                      // complete WHERE BETWEEN statement
+    }
+    if ( whereString.length > 0 ) {
+        whereStatement.push( whereString );                                         // Add to where Statement array
+    }
     // Field type
     var whereString = "";
     $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
@@ -344,12 +357,14 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     }           
 
     // Field participants
+    var whereString = "";
     if ( ($('#dispFilTrk_participants').val()) != "" ) {
         whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
         whereStatement.push( whereString );
     };
 
     // Field country
+    var whereString = "";
     if ( ($('#dispFilTrk_country').val()) != "" ) {
         whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
         whereStatement.push( whereString );

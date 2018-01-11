@@ -8,10 +8,6 @@
 ?>
 
 <!DOCTYPE HTML>
-<!-- 
-	ACTION:
-	* Tool tipps when hoovering over buttons
--->
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -24,7 +20,7 @@
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">	
 </head>
-<body style="height: 100%;">
+<body> <!--style="height: 100%;">-->
 	<!-- load jquery sources --> 
 	<script type="text/javascript" src="js/jquery-3.1.0.js"></script> <!-- JQuery from local server -->  <!-- local -->
 	<script type="text/javascript" src="js/jquery-ui.js"></script> <!-- JQuery UI from local server --> <!-- local -->
@@ -81,7 +77,7 @@
 	</header> 
 
     <!-- In the div #main all page content is diplayed -->
-	<section id="main" style="height: 100%;">
+	<section id="main"> <!-- style="height: 100%;">-->
 		
 		<!-- ========================================================================== -->
 		<!-- ======================== panelLogin ========================================== -->

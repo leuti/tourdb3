@@ -44,8 +44,6 @@ em { /* formatting for DB in logo*/
 table {
     color: #ccccff;}
 
-
-
 /********** TOPIC BUTTONS **********/
 .topicButtonsLi.loginReq {
     display: none;
@@ -331,6 +329,10 @@ table {
     font-size: 1.5em;
 }
 
+#displayMap-ResMap {
+    height: 80%;
+    margin: 30px;
+}
 /* Not used stylesheets */
 
 /*
