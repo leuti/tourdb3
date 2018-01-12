@@ -10,13 +10,14 @@
 
 // -----------------------------------
 // Set variables and parameters    
-
 date_default_timezone_set('Europe/Zurich');
+include("config.inc.php");  // Include config file
 
 // Set debug level
 $debugLevel = 3; // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                       // Internal counter for tracks processed
 
+// Open log file
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";          // Assign file location
     $logFile = @fopen($logFileLoc,"w");     
@@ -44,26 +45,22 @@ $styleArray = array(
     array("Others","#FFCC66FF",3,"#FFCC66FF",5)                             // rosa
 );
 
-include("config.inc.php");  // Include config file
+// Read received parameters
+$loginName = $_POST["loginName"];                           // login name
 
 // Set WHERE string if WHERE clause has been posted
 if(isset($_POST["sqlWhere"]) && $_POST["sqlWhere"] != ''){
     $whereGenKml = $_POST["sqlWhere"]; 
 } else{
-    $whereGenKml = '';                                  // Set to empty when no WHERE clause received
+    $whereGenKml = '';                                      // Set to empty when no WHERE clause received
 };
-$kmlOutFileLocation = $_POST["outFileName"];
 
-fputs($logFile, "kmlOutFileLocation: $kmlOutFileLocation\r\n");
+$kmlOutFileLocation = $_POST["outFileName"];                // output file name
+$outFileName = "..\\tmp\\kml_disp\\" . $kmlOutFileLocation;
 
-//$outFileName = dirname(__FILE__) . "\\..\\tmpout\\" . $kmlOutFileLocation;
-$outFileName = "..\\tmpout\\" . $kmlOutFileLocation;
-fputs($logFile, "outFileName: $outFileName\r\n");
-
-$outFile = fopen($outFileName, "w");
+$outFile = fopen($outFileName, "w");                        // Open kml output file
 
 if ($debugLevel >= 3){
-    // fputs($logFile, 'Line 36: $page: ' . $page_number . "\r\n");
     fputs($logFile, 'Line 47: $kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
 };
 

@@ -20,7 +20,7 @@ var today = new Date();
 
 // file location & name for KML output
 trackFileName = "track_" + today.getTime() + ".kml";
-trackKmlFileNameURL = document.URL + "tmpout/" + trackFileName;
+trackKmlFileNameURL = document.URL + "tmp/kml_disp/" + trackFileName;
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -380,9 +380,12 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
             sqlWhere += whereStatement[i];
             sqlWhere += " AND ";
         }
-        sqlWhere = sqlWhere.slice(0,sqlWhere.length-5);
+        sqlWhere = sqlWhere + " trkLoginName ='" + $loginName + "'";
+        //sqlWhere = sqlWhere.slice(0,sqlWhere.length-5);
+    } else {
+        sqlWhere = "WHERE trkLoginName ='" + $loginName + "'";
     }
-    
+
     // ****************************************************
     // Generate KML & draw Map 
 
@@ -400,6 +403,8 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     newDiv.id = 'displayMap-ResMap';
     newDiv.className = 'displayMap-ResMap'; 
     drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
+    $('.dispObjMini').removeClass('hidden');
+    $('.dispObjMini').addClass('visible');
     mapMapNeedsLoad = false;                             // No need to load map
 });
 
@@ -764,6 +769,7 @@ function callGenKml(outFileName, kmlType, sqlWhere) {
     xhrParams =  "outFileName=" + outFileName;
     xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
     xhrParams += "&sqlWhere=" + sqlWhere ;
+    xhrParams += "&loginName" + loginName
     xhr.open ('POST', phpLocation, false);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
     xhr.send(encodeURI(xhrParams));

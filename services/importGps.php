@@ -22,7 +22,7 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 7;                                                    // 0 = off, 6 = all
+$debugLevel = 3;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file for import log
@@ -60,7 +60,7 @@ if ($request == "temp") {
     // check if file extension is kml or gpx    
     if ( $filetype == "gpx" || $filetype == "kml" ) {
         // if file type = gpx or kml --> create directory and copy file 
-        $uploaddir = '../import/gpx/uploads/' . $sessionid . '/';       // Session id used to create unique directory
+        $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';       // Session id used to create unique directory
         $uploadfile = $uploaddir . $filename;
             
         if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
@@ -83,7 +83,7 @@ if ($request == "temp") {
             // write content of trackobj to log file
             if ($debugLevel > 2) {
                 foreach ($trackobj as $dbField => $value) {
-                    fputs($logFile, "Line 82 - $key: $value\r\n");
+                    fputs($logFile, "Line 82 - $dbField: $value\r\n");
                 }
             }
 
@@ -112,6 +112,7 @@ if ($request == "temp") {
             echo json_encode($trackobj);                                // echo JSON object to client
 
             // remove imported file & close connections
+            fclose($uploadfile);
             if ( file_exists) unlink ($uploadfile);                     // remove file if existing
             rmdir($uploaddir, 0777);                                    // remove upload directory          
 

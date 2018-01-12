@@ -3,7 +3,7 @@ work/
 jqw/
 log/
 import/
-out/
+out (move to log)/
 tmp/
 test/
 tmpout/
