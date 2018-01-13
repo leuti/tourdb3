@@ -140,6 +140,14 @@
 								<!-- SEGMENT filter -->
 								<legend class="filterHeader">Tracks</legend>
 
+								<!-- Track ID -->
+								<div class="dispObjCriteria">	
+									<label for="dispFilTrk_trackIdFrom" class="labelFirst">Track ID From</label>
+									<input type="text" name="dispFilTrk_trackIdFrom" id="dispFilTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
+									<label for="dispFilTrk_trackIdTo" class="labelNext">Track ID To</label>
+									<input type="text" name="dispFilTrk_trackIdTo" id="dispFilTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
+								</div>
+
 								<!-- Track name contains (standard text field) -->
 								<div class="dispObjCriteria">	
 									<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
@@ -402,7 +410,7 @@
 					<legend class="filterHeader">Select File to upload</legend>
 					<p>Select a single file to upload to the tourdb</p>
 					<form id="formInputFile" enctype="multipart/form-data">
-						<input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+						<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
 						<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
 					</form>
 
@@ -544,10 +552,10 @@
 						<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Da Coordinates -->
+					<!-- Coordinates -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
-						<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+						<!-- <label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label> -->
+						<input type="hidden" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<br><br>

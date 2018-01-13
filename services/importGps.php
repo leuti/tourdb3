@@ -177,7 +177,6 @@ if ($conn->query($sql) === TRUE)                                        // run s
 
     if ( $debugLevel > 2) fputs($logFile, "Line 49 - sessionid: $sessionid\r\n");  
     if ( $debugLevel > 2) fputs($logFile, "Line 50 - request: $request\r\n");  
-    if ( $debugLevel > 2) fputs($logFile, "Line 52 - filetype: $filetype\r\n");   
 
     $sql = "DELETE FROM `tbl_tracks` ";                       // Insert Source file name, gps start time and toReview flag
     $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"]; 

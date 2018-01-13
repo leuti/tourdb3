@@ -290,6 +290,28 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     var whereStatement = [];
     var whereString = "";
 
+    // Field track ID
+    if ( ($('#dispFilTrk_trackIdFrom').val()) != "" ) {                           
+        trackIdFrom = $('#dispFilTrk_trackIdFrom').val();
+    };
+    if ( ($('#dispFilTrk_trackIdTo').val()) != "" ) {                           
+        trackIdTo = $('#dispFilTrk_trackIdTo').val();
+    };
+
+    if ( trackIdFrom != "" && trackIdTo != "" ) {
+        whereString = "trkID >= " + trackIdFrom + " AND trkId <= " + trackIdTo;   // complete WHERE BETWEEN statement
+    } else if ( trackIdFrom != "" ) {
+        whereString = "trkID >= " + trackIdFrom;                                  // complete WHERE BETWEEN statement
+    } else if ( trackIdTo != "" ) {
+        whereString = "trkId <= " + trackIdTo;                                    // complete WHERE BETWEEN statement
+    }
+    trackIdFrom = "";
+    trackIdTo = "";
+
+    if ( whereString.length > 0 ) {
+        whereStatement.push( whereString );                                       // Add to where Statement array
+    }
+
     // Field track name
     if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
         whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
@@ -332,6 +354,7 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     if ( whereString.length > 0 ) {
         whereStatement.push( whereString );                                         // Add to where Statement array
     }
+
     // Field type
     var whereString = "";
     $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
