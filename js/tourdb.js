@@ -87,7 +87,7 @@ $(document).ready(function() {
                     $('#buttonLogin').addClass('loginReq');
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut();
-                    drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                    $map = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                 }
             }
         }
@@ -293,9 +293,13 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     // Field track ID
     if ( ($('#dispFilTrk_trackIdFrom').val()) != "" ) {                           
         trackIdFrom = $('#dispFilTrk_trackIdFrom').val();
+    } else {
+        trackIdFrom = "";
     };
     if ( ($('#dispFilTrk_trackIdTo').val()) != "" ) {                           
         trackIdTo = $('#dispFilTrk_trackIdTo').val();
+    } else {
+        trackIdTo = "";
     };
 
     if ( trackIdFrom != "" && trackIdTo != "" ) {
@@ -412,23 +416,29 @@ $(document).on('click', '#dispFilTrk_ApplyButton', function (e) {
     // ****************************************************
     // Generate KML & draw Map 
 
-    callGenKml(trackFileName,"tracks",sqlWhere);                       // Generate KML file (file name to be used,type of kml = "tracks", sql where clause)
+    callGenKml(trackFileName,"tracks",sqlWhere);                        // Generate KML file (file name to be used,type of kml = "tracks", sql where clause)
     
     // Close filter panels at the end
-    $('#mapPanelFilter').removeClass('visible');
+    //$('#mapPanelFilter').removeClass('visible');
 
     // Panel MAP: Remove map div and redraw map if mapMapNeedsLoad is true
-    var removeEl = document.getElementById('displayMap-ResMap');  // delete div .map
-    var containerEl = removeEl.parentNode;          // Get its containing element
-    containerEl.removeChild(removeEl);              // Remove the elements
-    var newDiv = document.createElement('div');     // create new div element
-    containerEl.appendChild(newDiv);                // Add to parent element
+    /*
+    var removeEl = document.getElementById('displayMap-ResMap');        // delete div .map
+    var containerEl = removeEl.parentNode;                              // Get its containing element
+    containerEl.removeChild(removeEl);                                  // Remove the elements
+    var newDiv = document.createElement('div');                         // create new div element
+    containerEl.appendChild(newDiv);                                    // Add to parent element
     newDiv.id = 'displayMap-ResMap';
     newDiv.className = 'displayMap-ResMap'; 
-    drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
+    */
+    //drawMapOld('displayMap-ResMap', trackKmlFileNameURL, "", 0, 0, 0, 1, 0); // Draw map to panel
+    //drawMapNew('displayMap-ResMap', trackKmlFileNameURL);               // Draw track map to panel
+    drawMapNew($map, trackKmlFileNameURL);
+    addMapFeatures();                                                   // add specific map features
+
     $('.dispObjMini').removeClass('hidden');
     $('.dispObjMini').addClass('visible');
-    mapMapNeedsLoad = false;                             // No need to load map
+    //mapMapNeedsLoad = false;                                          // No need to load map
 });
 
 // Executes code below when user clicks the 'Apply' filter button for segments
@@ -780,26 +790,78 @@ function drawMapEmpty(targetDiv) {
     });
 
     // Create a background layer
-    var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+    //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+    var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-grau');
     map.addLayer(lyr1);
+    return map;
 }
 
-// Function generating KML file for segments
+function drawMapNew(map, soureFile) {
+    // ==> map.admin.ch code from here
 
-function callGenKml(outFileName, kmlType, sqlWhere) {   
-    var xhr = new XMLHttpRequest();
-    phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
-    xhrParams =  "outFileName=" + outFileName;
-    xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
-    xhrParams += "&sqlWhere=" + sqlWhere ;
-    xhrParams += "&loginName" + loginName
-    xhr.open ('POST', phpLocation, false);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
-    xhr.send(encodeURI(xhrParams));
-}   
+    // Create a GeoAdmin Map
+    /*var map = new ga.Map({
+    target: targetDiv,
+    view: new ol.View({resolution: 650, center: [660000, 190000]})
+    });
+    */
+    // Create a background layer
+    //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+    //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+
+    // Add the background layer in the map
+    //map.addLayer(lyr1);
+
+    // Create the KML Layer for segments
+    var segVector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: soureFile, 
+            format: new ol.format.KML({projection: 'EPSG:21781'})
+        })
+    });
+    map.addLayer(segVector);
+}
+
+function addMapFeatures() {
+    // Popup showing the position the user clicked
+    var popup = new ol.Overlay({
+        element: $('<div title="KML"></div>')[0]
+    });
+    map.addOverlay(popup);
+
+    // On click we display the feature informations
+    map.on('singleclick', function(evt) {
+        var pixel = evt.pixel;
+        var coordinate = evt.coordinate;
+        var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            return feature;
+        });
+        var element = $(popup.getElement());
+        element.popover('destroy');
+        if (feature) {
+        popup.setPosition(coordinate);
+        element.popover({
+            'placement': 'top',
+            'animation': false,
+            'html': true,
+            'content': feature.get('description')
+        });
+        element.popover('show');
+        }
+    });
+
+    // Change cursor style when cursor is hover a feature
+    map.on('pointermove', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return feature;
+        });
+        map.getTargetElement().style.cursor = feature ? 'pointer' : '';
+    });
+}
+
 
 function drawMapOld(targetDiv, segKmlFile, waypKmlFile, drawHangneigung, drawWanderwege, drawHaltestellen, 
-drawKantonsgrenzen, drawSacRegion) {
+    drawKantonsgrenzen, drawSacRegion) {
     // ==> map.admin.ch code from here
 
     // Create a GeoAdmin Map
@@ -909,4 +971,17 @@ drawKantonsgrenzen, drawSacRegion) {
         });
         map.getTargetElement().style.cursor = feature ? 'pointer' : '';
     });
+}
+
+// Function generating KML file for segments
+function callGenKml(outFileName, kmlType, sqlWhere) {   
+    var xhr = new XMLHttpRequest();
+    phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
+    xhrParams =  "outFileName=" + outFileName;
+    xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
+    xhrParams += "&sqlWhere=" + sqlWhere ;
+    xhrParams += "&loginName" + loginName
+    xhr.open ('POST', phpLocation, false);                // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // Set header to encode special characters like %
+    xhr.send(encodeURI(xhrParams));
 }
