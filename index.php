@@ -215,7 +215,7 @@
 
 								<!-- Button to apply filter -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button" id="dispFilTrk_ApplyButton" value="Load Tracks" />
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_ApplyButton" value="Load Tracks" />
 								</div>
 								
 							</fieldset>
@@ -369,7 +369,7 @@
 
 								<!-- Button to apply filter -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button" id="dispFilSeg_ApplyButton" value="Apply Filter" />
+									<input type="submit" class="button applyFilterButton" id="dispFilSeg_ApplyButton" value="Apply Filter" />
 								</div>
 
 							</fieldset>

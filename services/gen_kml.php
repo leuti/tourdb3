@@ -20,7 +20,7 @@ $countTracks = 0;                                       // Internal counter for 
 // Open log file
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";          // Assign file location
-    $logFile = @fopen($logFileLoc,"w");     
+    $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
 };
@@ -46,29 +46,41 @@ $styleArray = array(
 );
 
 // Read received parameters
-$loginName = $_POST["loginName"];                           // login name
+//$loginName = $_POST["loginName"];                           // login name
+
+// variables passed on by client (as formData object)
+$receivedData = json_decode ( file_get_contents('php://input'), true );
+$sqlWhereTracks = $receivedData["sqlWhereTracks"];
+$sqlWhereSegments = $receivedData["sqlWhereSegments"];
+
+if ($debugLevel >= 3){
+    fputs($logFile, 'Line 57: sqlWhereTracks: ' . $sqlWhereTracks . "\r\n");
+    fputs($logFile, 'Line 58: sqlWhereSegments: ' . $sqlWhereSegments . "\r\n");
+};
 
 // Set WHERE string if WHERE clause has been posted
+/*
 if(isset($_POST["sqlWhere"]) && $_POST["sqlWhere"] != ''){
     $whereGenKml = $_POST["sqlWhere"]; 
 } else{
     $whereGenKml = '';                                      // Set to empty when no WHERE clause received
 };
+*/
 
-$kmlOutFileLocation = $_POST["outFileName"];                // output file name
-$outFileName = "..\\tmp\\kml_disp\\" . $kmlOutFileLocation;
+//$kmlOutFileLocation = $_POST["outFileName"];                // output file name
+//$outFileName = "..\\tmp\\kml_disp\\" . $kmlOutFileLocation;
 
-$outFile = fopen($outFileName, "w");                        // Open kml output file
+//$outFile = fopen($outFileName, "w");                        // Open kml output file
 
-if ($debugLevel >= 3){
-    fputs($logFile, 'Line 47: $kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
-};
+//if ($debugLevel >= 3){
+//    fputs($logFile, 'Line 47: $kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
+//};
 
 // Write headern and style section of KML
 $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
 $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">';
 $kml[] = '  <Document>';
-$kml[] = '    <name>tourdb - KmlFile</name>';
+$kml[] = '    <name>tourdb - tracks</name>';
 
 // Create kml stylemaps
 $i=0;
@@ -78,14 +90,14 @@ for ($i; $i<11; $i++) {                                 // 10 is the number of e
 
 // Write main section - intro
 $kml[] = '    <Folder>';
-$kml[] = '      <name>tourdb exported KML</name>';
+$kml[] = '      <name>tourdb exported tracks</name>';
 $kml[] = '        <visibility>0</visibility>';
 $kml[] = '        <open>1</open>';
 
 // Select tracks meeting given WHERE clause
 $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
 $sql .= "FROM tbl_tracks ";
-$sql .= $whereGenKml;
+$sql .= $sqlWhereTracks;
 
 $tracks = mysqli_query($conn, $sql);
 
@@ -132,23 +144,17 @@ $kml[] = '</kml>';
 
 // Merge kml array into one variable
 $kmlOutput = join("\r\n", $kml);
-
-// Merge kml array into one variable
-$kmlOutput = join("\r\n", $kml);
-
+$returnObject['trackKml'] = $kmlOutput;  
+echo json_encode($returnObject);  
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 145: kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
 };
 
-
 //$outFile = @fopen($kmlOutFileLocation,"a");               // Open KML file for writing
 
-
-
-
-fputs($outFile, "$kmlOutput");                                  // Write kml to file
-fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+//fputs($outFile, "$kmlOutput");                                  // Write kml to file
+//fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 fputs($logFile, "$countTracks Tracks processed\r\n");
 
