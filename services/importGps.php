@@ -77,22 +77,47 @@ if ($request == "temp") {
         if ( $filetype == "gpx") {
             // Call function to insert track data
             $trackobj = array();                                        // array storing track data in array
-            $returnArray = insertTrack($conn,$filename,$uploadfile,$loginname);
-            $trackid = $returnArray[0];                                 // return id of newly created track
-            $trackobj = $returnArray[1];                                // track object with all know track data derived from file
+            $trackobj = insertTrack($conn,$filename,$uploadfile,$loginname);
+            $trackid = $trackobj["trkId"];                                 // return id of newly created track                              // track object with all know track data derived from file
             // write content of trackobj to log file
             if ($debugLevel > 2) {
                 foreach ($trackobj as $dbField => $value) {
-                    fputs($logFile, "Line 82 - $dbField: $value\r\n");
+                    fputs($logFile, "Line 85 - $dbField: $value\r\n");
                 }
             }
 
             // insert track points found in file in table tmp_trackpoints with given track id
             $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns array
-            $trackid = $returnArray[0];                                 // return id of newly created track
-            $coordArray = $returnArray[1];                              // array string with coordinates
-            $coordString = "";                                          // clear var coordString
+            $trackid = $returnArray["trackid"];                                 // return id of newly created track
+            $coordArray = $returnArray["coordArray"];                              // array string with coordinates
             
+            $trackid = $returnArray["trackid"];
+            $tptNumber = $returnArray["tptNumber"];
+            $lon = $returnArray["lon"];
+            $lat = $returnArray["lat"];
+            $ele = $returnArray["ele"];
+            $startEle = $returnArray["startEle"];
+            $startTime = $returnArray["startTime"];
+            $peakEle = $returnArray["peakEle"];
+            $peakTime = $returnArray["peakTime"];
+            $meterDown = $returnArray["meterDown"];
+            $meterUp = $returnArray["meterUp"];
+            $lowEle = $returnArray["lowEle"];
+            $lowTime = $returnArray["lowTime"];
+            $tptNumber = $returnArray["tptNumber"];
+            
+            $coordString = "";                                          // clear var coordString
+        
+            fputs($GLOBALS['logFile'], "-----------------------------\r\n");       
+            fputs($GLOBALS['logFile'], "startEle   : $startEle\r\n");
+            fputs($GLOBALS['logFile'], "startTime  : $startTime\r\n");
+            fputs($GLOBALS['logFile'], "peakEle    : $peakEle\r\n");
+            fputs($GLOBALS['logFile'], "peakTime   : $peakTime\r\n");
+            fputs($GLOBALS['logFile'], "lowEle     : $lowEle\r\n");
+            fputs($GLOBALS['logFile'], "lowTime    : $lowTime\r\n");
+            fputs($GLOBALS['logFile'], "meterDown  : $meterDown\r\n");
+            fputs($GLOBALS['logFile'], "meterUp    : $meterUp\r\n");
+                        
             // join array $coordArray into a string
             foreach ( $coordArray as $coordPoint) {                     // Create string containing the coordinates
                 $coordString = $coordString . $coordPoint; 
@@ -113,7 +138,7 @@ if ($request == "temp") {
 
             // remove imported file & close connections
             fclose($uploadfile);
-            if ( file_exists) unlink ($uploadfile);                     // remove file if existing
+            if (file_exists) unlink ($uploadfile);                     // remove file if existing
             rmdir($uploaddir, 0777);                                    // remove upload directory          
 
             $conn->close();                                             // Close DB connection
@@ -194,22 +219,25 @@ if ($conn->query($sql) === TRUE)                                        // run s
     $trackobj['errmessage'] = '';                                       // add error message to return object
     echo json_encode($trackobj);                                        // echo track object to client
 } 
+
+// =================================================
+// Function to insert tracks to DB
 function insertTrack($conn,$filename,$uploadfile,$loginname)
 {
-    if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 199 - Function insertTrack entered\r\n");
+    if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 231 - Function insertTrack entered\r\n");
 
     $gpx = simplexml_load_file($uploadfile);                            // Load XML structure
     if ( $gpx->metadata->time != "") 
     {
-        fputs($GLOBALS['logFile'], "Line 203 - nicht leer\r\n");
+        fputs($GLOBALS['logFile'], "Line 236 - nicht leer\r\n");
         $newTrackTime = $gpx->metadata->time;                               // Assign track time from gpx file to variable
-        fputs($GLOBALS['logFile'], "Line 203 - newtracktime: $newTrackTime\r\n");
+        fputs($GLOBALS['logFile'], "Line 238 - newtracktime: $newTrackTime\r\n");
         $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-        fputs($GLOBALS['logFile'], "Line 203 - GpsStartTime: $GpsStartTime\r\n");
+        fputs($GLOBALS['logFile'], "Line 240 - GpsStartTime: $GpsStartTime\r\n");
         $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));        // convert track time 
-        fputs($GLOBALS['logFile'], "Line 203 - DateBegin: $DateBegin\r\n");
+        fputs($GLOBALS['logFile'], "Line 242 - DateBegin: $DateBegin\r\n");
         $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime));       // convert track time 
-        fputs($GLOBALS['logFile'], "Line 203 - DateFinish: $DateFinish\r\n");
+        fputs($GLOBALS['logFile'], "Line 244 - DateFinish: $DateFinish\r\n");
         
     } else {
         $GpsStartTime = "";    // convert track time 
@@ -253,7 +281,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
             if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 177 - sql: $sql\r\n");
             
             // create JSON object with known gpx data
-            $trackobj = array (
+            $returnArray = array (
                 "trkId"=>$trackid,
                 "trkSourceFileName"=>"$filename",
                 "trkTrackName"=>"$trackName",
@@ -279,7 +307,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
                 "trkCountry"=>""
             );
         }
-        return array($trackid,$trackobj);                               // return tmp trackId, track name and coordinate array in array
+        return $returnArray;                 // return tmp trackId, track name and coordinate array in array
         mysqli_stmt_close($stmt);                                       // Close statement
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 195 - Error selecting max(trkId): $conn->error\r\n");
@@ -288,9 +316,9 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
     } 
 }
 
-// ----------------------------------------------------------
+// ==========================================================
 // Insert track points into table
-// ----------------------------------------------------------
+
 function insertTrackPoints($conn,$trackid,$filename) 
 {
     if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 207 - Function insertTrackPoints entered\r\n");
@@ -310,31 +338,111 @@ function insertTrackPoints($conn,$trackid,$filename)
     
     $firstRec = 1;                                                      // flag first record as all other records need to be treated slightly different 
 
-    foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        // loop through each trkpt XML element in the gpx file
-    {                  
-        if ($firstRec == 1)                                             // if record is not first, a comma is written
-            {
-                $sql = $sqlBase;                                        // Add first part of sql to variable $sql
-                $firstRec = 0;
-        } else
-        {
-            $sql .= ",";
-        }
-        
-        if ( $trkpt->ele == "" ) {
-            $elevation = 0;
-        } else {
-            $elevation = $trkpt->ele;
-        }
+    settype($ele, "float");
+    settype($previousEle, "float");
+    settype($startEle , "float");
+    settype($peakEle , "float");
+    settype($lowEle , "float");
+    settype($meterUp , "float");
+    settype($meterDown , "float");
+    $startTime = ""; 
+    $peakTime = ""; 
+    $lowTime = ""; 
 
+    foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        // loop through each trkpt XML element in the gpx file
+    {               
+        // read content of file
+        $lat = $trkpt["lat"];
+        $lon = $trkpt["lon"];
+        if ( $trkpt->ele == "" ) {
+            $ele = 0;
+        } else {
+            $ele = $trkpt->ele;
+        }
+        $time = strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time));
+        
+        if ($firstRec == 1)  {                                          // if record is not first, a comma is written
+    
+            // set sql string
+            $sql = $sqlBase;                                        // Add first part of sql to variable $sql
+            $firstRec = 0;
+            
+            // initialise variables
+            $startTime = $time;
+            $startEle = floatval($ele);
+            $peakTime = $time;
+            $peakEle = floatval($ele);
+            $lowEle = floatval($ele);
+            $lowTime = $time;
+            $meterUp = 0;
+            $meterDown = 0;
+
+            fputs($GLOBALS['logFile'], "Line 376 <-EINS->\r\n");
+        } else {
+            // separate sql string
+            $sql .= ",";
+            fputs($GLOBALS['logFile'], "Line 380 <-ZWEI->\r\n");
+            // calc variables
+
+            // this way to calculate elevation gain / loss due to bug ( if ( $ele > $previousEle ) not working )
+            $deltaEle = $ele - $previousEle;
+            $deltaPeakEle = $ele - $peakEle;
+            $deltaLowEle = $ele - $lowEle;
+
+            // calc distance to previous waypoint
+            fputs($GLOBALS['logFile'], "Line 398 - ele        : $ele\r\n");
+            fputs($GLOBALS['logFile'], "Line 399 - previousEle: $previousEle\r\n");
+            fputs($GLOBALS['logFile'], "Line 399 - deltaEle   : $deltaEle\r\n");
+        
+            if ( $deltaEle > 0 ) {                              // elevation gained
+                if ( $deltaPeakEle > 0 ) {
+                    $peakTime = $time;
+                    $peakEle = $ele;
+                    $meterUp = $meterUp + $deltaEle; 
+                    fputs($GLOBALS['logFile'], "<-ONE->\r\n");
+                } else {
+                    $meterUp = $meterUp + $deltaEle; 
+                    fputs($GLOBALS['logFile'], "<-TWO->\r\n");
+                }
+            } else {
+                if ( $deltaPeakEle < 0 ) {
+                    $lowTime = $time;
+                    $lowEle = $ele;
+                    $meterDown = $meterDown + $deltaEle;
+                    fputs($GLOBALS['logFile'], "<-THREE->\r\n");
+                } else {
+                    $meterDown = $meterDown + $deltaEle;
+                    fputs($GLOBALS['logFile'], "<-FOUR->\r\n");
+                }
+            }
+
+            //fputs($GLOBALS['logFile'], "<-none->\r\n");
+        }
+        $previousEle = $ele;
+
+        fputs($GLOBALS['logFile'], "---------- AFTER ---------------\r\n");       
+        fputs($GLOBALS['logFile'], "tptNumber  : $tptNumber\r\n");
+        fputs($GLOBALS['logFile'], "lon        : $lon\r\n");
+        fputs($GLOBALS['logFile'], "lat        : $lat\r\n");
+        fputs($GLOBALS['logFile'], "ele        : $ele\r\n");
+        fputs($GLOBALS['logFile'], "previousEle: $previousEle\r\n");
+        fputs($GLOBALS['logFile'], "startEle   : $startEle\r\n");
+        fputs($GLOBALS['logFile'], "startTime  : $startTime\r\n");
+        fputs($GLOBALS['logFile'], "peakEle    : $peakEle\r\n");
+        fputs($GLOBALS['logFile'], "lowEle     : $lowEle\r\n");
+        fputs($GLOBALS['logFile'], "lowTime    : $lowTime\r\n");
+        fputs($GLOBALS['logFile'], "peakTime   : $peakTime\r\n");
+        fputs($GLOBALS['logFile'], "meterUp    : $meterUp\r\n");
+        fputs($GLOBALS['logFile'], "meterDown  : $meterDown\r\n");
+        
         $sql .= "('" . $tptNumber . "', ";                              // write tptNumber - a continuous counter for the track points
         $sql .= "'" . $trackid . "', ";                                 // tptTrackFID - reference to the track         
-        $sql .= "'" . $trkpt["lat"] . "', ";                            // tptLat - latitude value 
-        $sql .= "'" . $trkpt["lon"] . "', ";                            // tptLon - longitude value
-        $sql .= "'" . $elevation . "', ";                              // tptEle - elevation of track point
-        $sql .= "'" . strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time)) . "')";     // tptTime - time of track point
+        $sql .= "'" . $lat . "', ";                            // tptLat - latitude value 
+        $sql .= "'" . $lon . "', ";                            // tptLon - longitude value
+        $sql .= "'" . $ele . "', ";                              // tptEle - elevation of track point
+        $sql .= "'" . $time . "')";     // tptTime - time of track point
         
-        $coordString = $trkpt["lon"] . ',' . $trkpt["lat"] . ',' . $elevation . ' ';
+        $coordString = "$lon, $lat, $ele ";
 
         array_push( $coordArray, $coordString );                        // write Lon, Lat and Ele into coordArray array
 
@@ -357,6 +465,24 @@ function insertTrackPoints($conn,$trackid,$filename)
         }       
         $tptNumber++;                                                   // increase track point counter by 1
     }
-    return array($trackid,$coordArray);                                 // return tmp trackId, track name and coordinate array in array
+
+    $returnArray = array (
+        "trackid"=>$trackid,  
+        "coordArray"=>$coordArray,
+        "tptNumber"=>$tptNumber,
+        "lon"=>$lon,
+        "lat"=>$lat,
+        "ele"=>$ele,
+        "startEle"=>$startEle,
+        "startTime"=>$startTime,
+        "peakEle"=>$peakEle,
+        "peakTime"=>$peakTime,
+        "meterDown"=>$meterDown,
+        "meterUp"=>$meterUp,
+        "lowEle"=>$lowEle,
+        "lowTime"=>$lowTime,
+        "tptNumber"=>$tptNumber
+    );
+    return $returnArray;                                 // return tmp trackId, track name and coordinate array in array
 }
 ?>
