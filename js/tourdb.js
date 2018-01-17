@@ -574,10 +574,9 @@ $(document).on('click', '.applyFilterButton', function (e) {
             sqlWhereSegments += whereStatement[i];
             sqlWhereSegments += " AND ";
         }
-        sqlWhereSegments = sqlWhereSegments + " trkLoginName ='" + $loginName + "'";
-        //sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
+        sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
     } else {
-        sqlWhereSegments = "WHERE trkLoginName ='" + $loginName + "'";
+        sqlWhereSegments = "WHERE 1";
     }
 
     // ****************************************************
@@ -585,11 +584,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
     // evaluate if sqlWhereTracks and sqlWhereSegments have changed
     if ( sqlWhereTracks == sqlWhereTracksPrev ) {
-        sqlWhereTracks = "";
+        genTrackKml = false;
+    } else {
+        genTrackKml = true;
     }
 
     if ( sqlWhereSegments == sqlWhereSegmentsPrev ) {
-        sqlWhereSegments = "";
+        genSegKml = false;
+    } else {
+        genSegKml = true;
     }
 
     var xhr = new XMLHttpRequest();
@@ -599,9 +602,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
             if ( responseObject["status"] == "OK") {
 
-                segKmlFileName = "kml/seg-" + today.getTime() + ".kml";
-                segKmlFileNameURL = document.URL + segKmlFileName;
-                
                 $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
 
                 // Create the KML Layer for segments
@@ -615,8 +615,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 });
                 $map.addLayer(KMLvector);
 
-                $('.dispObjMini').removeClass('hidden');
+                $('.dispObjOpen').removeClass('visible');
+                $('.dispObjOpen').addClass('hidden');
                 $('.dispObjMini').addClass('visible');
+                $('.dispObjMini').removeClass('hidden');
             
                 sqlWhereTracksPrev = sqlWhereTracks;
                 sqlWhereSegmentsPrev = sqlWhereSegments;
@@ -624,16 +626,20 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
     }
 
-    // send required parameters to gen_kml.php
-    var jsonObject = {};
-    phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // send session ID
-    jsonObject["sqlWhereTracks"] = sqlWhereTracks;                             // append parameter session ID
-    jsonObject["sqlWhereSegments"] = sqlWhereSegments;                             
-    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-    xhr.setRequestHeader( "Content-Type", "application/json" );
-    jsn = JSON.stringify(jsonObject);
-    xhr.send( jsn );                                           // send formData object to service using xhr   
+    if ( genTrackKml && genSegKml ) {
+        // send required parameters to gen_kml.php
+        var jsonObject = {};
+        phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
+        jsonObject["sessionid"] = sessionid;                             // send session ID
+        jsonObject["sqlWhereTracks"] = sqlWhereTracks;                             // append parameter session ID
+        jsonObject["genTrackKml"] = genTrackKml;                             //  
+        jsonObject["sqlWhereSegments"] = sqlWhereSegments;                             
+        jsonObject["genSegKml"] = genSegKml;                             // append parameter session ID
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        jsn = JSON.stringify(jsonObject);
+        xhr.send( jsn );                                           // send formData object to service using xhr   
+    }
 });
 
 // ==========================================================================

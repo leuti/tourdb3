@@ -52,7 +52,9 @@ $styleArray = array(
 $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];
 $sqlWhereTracks = $receivedData["sqlWhereTracks"];
+$genTrackKml = $receivedData["genTrackKml"];
 $sqlWhereSegments = $receivedData["sqlWhereSegments"];
+$genSegKml = $receivedData["genSegKml"];
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 56: sessionid: ' . $sessionid . "\r\n");
