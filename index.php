@@ -389,6 +389,8 @@
 			<div id="displayMap" class="visible">
 				<div id="displayMap-ResMap">	<!-- Here the map of the mapments is displayed -->
 				</div> <!-- End mapResultMap -->
+				<div id="displayMap-ResMap2">	<!-- Here the map of the mapments is displayed -->
+				</div> <!-- End mapResultMap -->
 			</div> <!-- End displayMap -->
 
 		</div> <!-- End div panelDisplay -->

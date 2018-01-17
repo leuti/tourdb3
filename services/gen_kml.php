@@ -14,7 +14,7 @@ date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");  // Include config file
 
 // Set debug level
-$debugLevel = 3; // 0 = off, 1 = min, 3 = a lot, 5 = all 
+$debugLevel = 6; // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                       // Internal counter for tracks processed
 
 // Open log file
@@ -50,10 +50,12 @@ $styleArray = array(
 
 // variables passed on by client (as formData object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
+$sessionid = $receivedData["sessionid"];
 $sqlWhereTracks = $receivedData["sqlWhereTracks"];
 $sqlWhereSegments = $receivedData["sqlWhereSegments"];
 
 if ($debugLevel >= 3){
+    fputs($logFile, 'Line 56: sessionid: ' . $sessionid . "\r\n");
     fputs($logFile, 'Line 57: sqlWhereTracks: ' . $sqlWhereTracks . "\r\n");
     fputs($logFile, 'Line 58: sqlWhereSegments: ' . $sqlWhereSegments . "\r\n");
 };
@@ -67,14 +69,19 @@ if(isset($_POST["sqlWhere"]) && $_POST["sqlWhere"] != ''){
 };
 */
 
-//$kmlOutFileLocation = $_POST["outFileName"];                // output file name
-//$outFileName = "..\\tmp\\kml_disp\\" . $kmlOutFileLocation;
+// create upload dir / file name
+$kml_dir = '../tmp/kml_disp/' . $sessionid . '/';       // Session id used to create unique directory
+$kmlFileURL = $kml_dir . 'tracks.kml';
+    
+if (!is_dir ( $kml_dir )) {                                   // Create directory with name = session id
+    mkdir($kml_dir, 0777);
+}
 
-//$outFile = fopen($outFileName, "w");                        // Open kml output file
+$outFile = fopen($kmlFileURL, "w");                        // Open kml output file
 
-//if ($debugLevel >= 3){
-//    fputs($logFile, 'Line 47: $kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
-//};
+if ($debugLevel >= 3){
+    fputs($logFile, 'Line 47: $kmlFileURL: ' . $kmlFileURL . "\r\n");
+};
 
 // Write headern and style section of KML
 $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -144,8 +151,6 @@ $kml[] = '</kml>';
 
 // Merge kml array into one variable
 $kmlOutput = join("\r\n", $kml);
-$returnObject['trackKml'] = $kmlOutput;  
-echo json_encode($returnObject);  
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 145: kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
@@ -153,9 +158,12 @@ if ($debugLevel >= 3){
 
 //$outFile = @fopen($kmlOutFileLocation,"a");               // Open KML file for writing
 
-//fputs($outFile, "$kmlOutput");                                  // Write kml to file
-//fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+fputs($outFile, "$kmlOutput");                                  // Write kml to file
+$returnObject['status'] = 'OK';                                 // add status field (OK) to trackobj
+$returnObject['errmessage'] = '';                               // add empty error message to trackobj
+echo json_encode($returnObject);                                // echo JSON object to client
 
+fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 fputs($logFile, "$countTracks Tracks processed\r\n");
 
 // Close all files and connections
