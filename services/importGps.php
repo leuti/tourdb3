@@ -16,6 +16,11 @@
 
 // Created: 13.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
+// Action:
+// $ele = $ele * 1 --> test and remove all types
+// calculate distance
+// 
+
 
 // -----------------------------------
 // Set variables and parameters
@@ -53,13 +58,14 @@ if ($request == "temp") {
     $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
     $filename = basename($_FILES['filename']['name']);                  // file name of gps file to be processed
     $loginname = $_REQUEST["loginname"];                                // Login name
-    $filetype = pathinfo($filename);                                    // evaluate file extension 
-    $filetype = $filetype['extension'];
+    $fileinfo = pathinfo($filename);                                    // evaluate file extension 
+    $filetype = $fileinfo['extension'];
     if ($debugLevel > 2) fputs($logFile, "Line 58: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
 
-    // check if file extension is kml or gpx    
+    // if file type = gpx or kml --> create directory and copy file 
     if ( $filetype == "gpx" || $filetype == "kml" ) {
-        // if file type = gpx or kml --> create directory and copy file 
+        
+        // create upload dir / file name
         $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';       // Session id used to create unique directory
         $uploadfile = $uploaddir . $filename;
             
@@ -67,6 +73,7 @@ if ($request == "temp") {
             mkdir($uploaddir, 0777);
         }
 
+        // move file to upload dir
         if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
             if ( $debugLevel > 2) fputs($logFile, "Line 71 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
         } else {
@@ -75,10 +82,11 @@ if ($request == "temp") {
 
         // steps processed with gpx files
         if ( $filetype == "gpx") {
+
             // Call function to insert track data
-            $trackobj = array();                                        // array storing track data in array
             $trackobj = insertTrack($conn,$filename,$uploadfile,$loginname);
             $trackid = $trackobj["trkId"];                                 // return id of newly created track                              // track object with all know track data derived from file
+            
             // write content of trackobj to log file
             if ($debugLevel > 2) {
                 foreach ($trackobj as $dbField => $value) {
@@ -86,11 +94,10 @@ if ($request == "temp") {
                 }
             }
 
-            // insert track points found in file in table tmp_trackpoints with given track id
+            // insert track points found in file in table trackpoints with given track id
             $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns array
-            $trackid = $returnArray["trackid"];                                 // return id of newly created track
-            $coordArray = $returnArray["coordArray"];                              // array string with coordinates
-            
+
+            // assign variable (only for log)
             $trackid = $returnArray["trackid"];
             $tptNumber = $returnArray["tptNumber"];
             $lon = $returnArray["lon"];
@@ -104,10 +111,7 @@ if ($request == "temp") {
             $meterUp = $returnArray["meterUp"];
             $lowEle = $returnArray["lowEle"];
             $lowTime = $returnArray["lowTime"];
-            $tptNumber = $returnArray["tptNumber"];
             
-            $coordString = "";                                          // clear var coordString
-        
             fputs($GLOBALS['logFile'], "-----------------------------\r\n");       
             fputs($GLOBALS['logFile'], "startEle   : $startEle\r\n");
             fputs($GLOBALS['logFile'], "startTime  : $startTime\r\n");
@@ -117,25 +121,24 @@ if ($request == "temp") {
             fputs($GLOBALS['logFile'], "lowTime    : $lowTime\r\n");
             fputs($GLOBALS['logFile'], "meterDown  : $meterDown\r\n");
             fputs($GLOBALS['logFile'], "meterUp    : $meterUp\r\n");
-                        
-            // join array $coordArray into a string
-            foreach ( $coordArray as $coordPoint) {                     // Create string containing the coordinates
-                $coordString = $coordString . $coordPoint; 
-            };
-
+                     
+            
+            
+            
+            
             // create JSON object as return object
-            $trackobj['trkCoordinates'] = $coordString;                 // add field coordinates to track object
+            $trackobj['trkCoordinates'] = $returnArray["coordString"];                 // add field coordinates to track object
+            $trackobj["trkTimeToPeak"] = $returnArray["trkTimeToPeak"];
+            $trackobj["trkMeterDown"] = $returnArray["trkMeterDown"];
+            $trackobj["trkMeterUp"] = $returnArray["trkMeterUp"];
+            $trackobj['trkDistance'] = $returnArray["trkDistance"];
+            $trackobj['trkTimeOverall'] = $returnArray["trkTimeOverall"];
+            $trackobj['trkTimeToFinish'] = $returnArray["trkTimeToFinish"];
             $trackobj['status'] = 'OK';                                 // add status field (OK) to trackobj
             $trackobj['errmessage'] = '';                               // add empty error message to trackobj
 
-            // calculate distance based on gpx data
-
-            // calculate time based on gpx data
-
-            // calcuate meters up and down based on gpx data
-            
             echo json_encode($trackobj);                                // echo JSON object to client
-
+            
             // remove imported file & close connections
             fclose($uploadfile);
             if (file_exists) unlink ($uploadfile);                     // remove file if existing
@@ -285,26 +288,9 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
                 "trkId"=>$trackid,
                 "trkSourceFileName"=>"$filename",
                 "trkTrackName"=>"$trackName",
-                "trkRoute"=>"",
                 "trkDateBegin"=>"$DateBegin",
                 "trkDateFinish"=>"$DateFinish",
-                "trkGPSStartTime"=>"$GpsStartTime",
-                "trkSaison"=>"",
-                "trkType"=>"",
-                "trkSubType"=>"",
-                "trkOrg"=>"",
-                "trkOvernightLoc"=>"",
-                "trkParticipants"=>"",
-                "trkEvent"=>"",
-                "trkRemarks"=>"",
-                "trkDistance"=>"",
-                "trkTimeOverall"=>"",
-                "trkTimeToTarget"=>"",
-                "trkTimeToEnd"=>"",
-                "trkGrade"=>"",
-                "trkMeterUp"=>"",
-                "trkMeterDown"=>"",
-                "trkCountry"=>""
+                "trkGPSStartTime"=>"$GpsStartTime"
             );
         }
         return $returnArray;                 // return tmp trackId, track name and coordinate array in array
@@ -359,7 +345,7 @@ function insertTrackPoints($conn,$trackid,$filename)
         } else {
             $ele = $trkpt->ele;
         }
-        $time = strftime("%Y.%m.%d %H:%M:%S", strtotime($trkpt->time));
+        $time = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
         
         if ($firstRec == 1)  {                                          // if record is not first, a comma is written
     
@@ -376,6 +362,7 @@ function insertTrackPoints($conn,$trackid,$filename)
             $lowTime = $time;
             $meterUp = 0;
             $meterDown = 0;
+            $distance = 0;
 
             fputs($GLOBALS['logFile'], "Line 376 <-EINS->\r\n");
         } else {
@@ -384,12 +371,14 @@ function insertTrackPoints($conn,$trackid,$filename)
             fputs($GLOBALS['logFile'], "Line 380 <-ZWEI->\r\n");
             // calc variables
 
-            // this way to calculate elevation gain / loss due to bug ( if ( $ele > $previousEle ) not working )
+            // this way to calculate elevation gain / loss due to bug ( if ( $ele > $previousEle )             
             $deltaEle = $ele - $previousEle;
             $deltaPeakEle = $ele - $peakEle;
             $deltaLowEle = $ele - $lowEle;
 
             // calc distance to previous waypoint
+            $distance = $distance + 1;
+
             fputs($GLOBALS['logFile'], "Line 398 - ele        : $ele\r\n");
             fputs($GLOBALS['logFile'], "Line 399 - previousEle: $previousEle\r\n");
             fputs($GLOBALS['logFile'], "Line 399 - deltaEle   : $deltaEle\r\n");
@@ -442,9 +431,9 @@ function insertTrackPoints($conn,$trackid,$filename)
         $sql .= "'" . $ele . "', ";                              // tptEle - elevation of track point
         $sql .= "'" . $time . "')";     // tptTime - time of track point
         
-        $coordString = "$lon, $lat, $ele ";
+        $coordPoint = "$lon, $lat, $ele ";
 
-        array_push( $coordArray, $coordString );                        // write Lon, Lat and Ele into coordArray array
+        array_push( $coordArray, $coordPoint );                        // write Lon, Lat and Ele into coordArray array
 
         if($tptNumber == $loopCumul || $tptNumber == $totalTrkPts)      // If current loop size or last track is reached
         {        
@@ -466,23 +455,50 @@ function insertTrackPoints($conn,$trackid,$filename)
         $tptNumber++;                                                   // increase track point counter by 1
     }
 
+    // calculate times 
+    $datetime1 = new DateTime($peakTime);//start time
+    $datetime2 = new DateTime($startTime);//end time
+    $interval = $datetime1->diff($datetime2);
+    $timeToPeak = $interval->format('%H:%i:%s');
+
+    $datetime1 = new DateTime($time);//start time
+    $datetime2 = new DateTime($startTime);//end time
+    $interval = $datetime1->diff($datetime2);
+    $overallTime = $interval->format('%H:%i:%s');
+    
+    $datetime1 = new DateTime($time);//start time
+    $datetime2 = new DateTime($peakTime);//end time
+    $interval = $datetime1->diff($datetime2);
+    $timeToFinish = $interval->format('%H:%i:%s');
+
+    // join array $coordArray into a string
+    $coordString = "";
+    foreach ( $coordArray as $coordPoint) {                     // Create string containing the coordinates
+        $coordString = $coordString . $coordPoint; 
+    };
+
     $returnArray = array (
         "trackid"=>$trackid,  
-        "coordArray"=>$coordArray,
         "tptNumber"=>$tptNumber,
         "lon"=>$lon,
         "lat"=>$lat,
         "ele"=>$ele,
+        "trkDistance"=>$distance,
         "startEle"=>$startEle,
         "startTime"=>$startTime,
         "peakEle"=>$peakEle,
         "peakTime"=>$peakTime,
-        "meterDown"=>$meterDown,
-        "meterUp"=>$meterUp,
+        "trkTimeToPeak"=>$timeToPeak,
+        "trkTimeToFinish"=>$timeToFinish,
+        "trkMeterDown"=>$meterDown,
+        "trkMeterUp"=>$meterUp,
+        "trkTimeOverall"=>$overallTime,
         "lowEle"=>$lowEle,
         "lowTime"=>$lowTime,
-        "tptNumber"=>$tptNumber
+        "tptNumber"=>$tptNumber,
+        "coordString"=>$coordString
     );
+
     return $returnArray;                                 // return tmp trackId, track name and coordinate array in array
 }
 ?>

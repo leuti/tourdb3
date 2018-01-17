@@ -662,8 +662,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#impUpdTrk_trkRemarks').val(responseObject.trkRemarks);
                 $('#impUpdTrk_trkDistance').val(responseObject.trkDistance);
                 $('#impUpdTrk_trkTimeOverall').val(responseObject.trkTimeOverall);
-                $('#impUpdTrk_trkTimeToTarget').val(responseObject.trkTimeToTarget);
-                $('#impUpdTrk_trkTimeToEnd').val(responseObject.trkTimeToEnd);
+                $('#impUpdTrk_trkTimeToPeak').val(responseObject.trkTimeToPeak);
+                $('#impUpdTrk_trkTimeToFinish').val(responseObject.trkTimeToFinish);
                 $('#impUpdTrk_trkGrade').val(responseObject.trkGrade);
                 $('#impUpdTrk_trkMeterUp').val(responseObject.trkMeterUp);
                 $('#impUpdTrk_trkMeterDown').val(responseObject.trkMeterDown);
@@ -750,8 +750,8 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
     trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
     trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
-    trackobj["trkTimeToTarget"] = $('#impUpdTrk_trkTimeToTarget').val();
-    trackobj["trkTimeToEnd"] = $('#impUpdTrk_trkTimeToEnd').val();
+    trackobj["trkTimeToPeak"] = $('#impUpdTrk_trkTimeToPeak').val();
+    trackobj["trkTimeToFinish"] = $('#impUpdTrk_trkTimeToFinish').val();
     trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
     trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
     trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();

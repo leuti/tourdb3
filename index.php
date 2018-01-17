@@ -516,16 +516,16 @@
 						<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- TimeToTarget -->
+					<!-- TimeToPeak -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeToTarget" class="updTrackLabelFirst">Time to Target</label>
-						<input type="text" name="impUpdTrk_trkTimeToTarget" id="impUpdTrk_trkTimeToTarget" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTimeToPeak" class="updTrackLabelFirst">Time to Peak</label>
+						<input type="text" name="impUpdTrk_trkTimeToPeak" id="impUpdTrk_trkTimeToPeak" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- TimeToEnd -->
+					<!-- TimeToFinish -->
 					<div class="impUpdateCriteria">
-						<label for="impUpdTrk_trkTimeToEnd" class="updTrackLabelFirst">Time To End</label>
-						<input type="text" name="impUpdTrk_trkTimeToEnd" id="impUpdTrk_trkTimeToEnd" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkTimeToFinish" class="updTrackLabelFirst">Time To Finish</label>
+						<input type="text" name="impUpdTrk_trkTimeToFinish" id="impUpdTrk_trkTimeToFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<!-- Grade -->
@@ -554,8 +554,8 @@
 
 					<!-- Coordinates -->
 					<div class="impUpdateCriteria">
-						<!-- <label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label> -->
-						<input type="hidden" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+						<label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
+						<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
 					<br><br>

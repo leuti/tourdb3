@@ -62,7 +62,7 @@ while (!feof($logbook))                                             // loop thro
             $sql .= "`trkLogbookId`, `trkSourceFileName`, `trkPeakRef`, `trkDateBegin`, ";
             $sql .= "`trkDateFinish`, `trkSaison`, `trkTyp`, `trkSubType`, ";
             $sql .= "`trkOrg`, `trkTrackName`, `trkRoute`, `trkOvernightLoc`, `trkParticipants`, ";
-            $sql .= "`trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToEnd`, ";
+            $sql .= "`trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToFinish`, ";
             $sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`) VALUES (";
             $sql .= "'" . $trkLogbookId . "', ";
             $sql .= "'" . $trkSourceFileName . "', "; 
@@ -81,7 +81,7 @@ while (!feof($logbook))                                             // loop thro
             $sql .= "'" . $trkRemarks . "', "; 
             $sql .= "'" . $trkDistance . "', "; 
             $sql .= "'" . $trkTimeOverall . "', ";
-            $sql .= "'" . $trkTimeToEnd . "', ";
+            $sql .= "'" . $trkTimeToFinish . "', ";
             $sql .= "'" . $trkGrade . "', "; 
             $sql .= "'" . $trkMeterUp . "', "; 
             $sql .= "'" . $trkMeterDown . "', ";
