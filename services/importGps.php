@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------------------
 // Action:
 // $ele = $ele * 1 --> test and remove all types
+// trkLowEle & trkPeakEle are returned as arrays
 // calculate distance
 // Eigentlich müsste im temp mode noch nichts in die DB geschrieben werden (zumindest nicht für die tblTracks)
 // Return -1 ist wohl nicht das korrekte Verhalten
@@ -34,14 +35,15 @@
 // trackObj - trkDistance
 // trackObj - trkGPSStartTime
 // trackObj - trkId
-// trackObj - trkMeterDown
-// trackObj - trkMeterUp
 // trackObj - trkLowEle
 // trackObj - trkLowTime
+// trackObj - trkMeterDown
+// trackObj - trkMeterUp
 // trackObj - trkPeakEle
 // trackObj - trkPeakTime
 // trackObj - trkSourceFileName
 // trackObj - trkStartEle
+// trackObj - trkStartTime
 // trackObj - trkTimeOverall
 // trackObj - trkTimeToFinish
 // trackObj - trkTimeToPeak
@@ -140,7 +142,7 @@ if ($request == "temp") {
             $outObject = array (
                 "status"=>"OK",
                 "erressage"=>"",
-                "trackObj"=>$trackObj
+                "trackObj"=>$trackObjOut
             );
 
             echo json_encode($outObject);                                // echo JSON object to client
@@ -173,21 +175,21 @@ if ($request == "temp") {
     // request type is "save" meaning that track records are updated and finalised
     // ---------------------------------------------------------------------------------
 
-    $trackobj = array();                                                // array storing track data in array
+    $trackObjIn = array();                                                // array storing track data in array
     $sessionid = $receivedData["sessionid"];                            // ID of current user session - required to make site multiuser capable
     $request = $receivedData["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-    $trackobj = $receivedData["trackobj"];                              // Array of track data 
+    $trackObjIn = $receivedData["trackobj"];                              // Array of track data 
 
     if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request\r\n");  
     
     $sql = "UPDATE `tbl_tracks` SET ";                        // Insert Source file name, gps start time and toReview flag
     $sql .= "`trkLoginName`='$loginname',";
 
-    foreach ($trackobj as $dbField => $content) {                       // Generate update statement
+    foreach ($trackObjIn as $dbField => $content) {                       // Generate update statement
         $sql .= "`$dbField`='$content',";
     }
     $sql = substr($sql,0,strlen($sql)-1);                               // remove last ,
-    $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"];      
+    $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
     
     if ($debugLevel>2) fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
     
@@ -210,15 +212,15 @@ if ($request == "temp") {
     // request type is "save" meaning that track records are updated and finalised
     // ---------------------------------------------------------------------------------
 
-    $trackobj = array();                                                // array storing track data in array
+    $trackObjIn = array();                                                // array storing track data in array
     $sessionid = $receivedData["sessionid"];                            // ID of current user session - required to make site multiuser capable
-    $trackobj = $receivedData["trackobj"];                              // Array of track data 
+    $trackObjIn = $receivedData["trackobj"];                              // Array of track data 
 
     if ( $debugLevel > 2) fputs($logFile, "Line 49 - sessionid: $sessionid\r\n");  
     if ( $debugLevel > 2) fputs($logFile, "Line 50 - request: $request\r\n");  
 
     $sql = "DELETE FROM `tbl_tracks` ";                       // Insert Source file name, gps start time and toReview flag
-    $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackobj["trkId"]; 
+    $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"]; 
     
     fputs($GLOBALS['logFile'], "Line 186 - sql: $sql\r\n");
     
@@ -504,24 +506,18 @@ function insertTrackPoints($conn,$trackid,$filename)
     };
 
     $trackObj = array (
-        "trackid"=>$trackid,  
-        "tptNumber"=>$tptNumber,
-        "lon"=>$lon,
-        "lat"=>$lat,
-        "ele"=>$ele,
         "trkDistance"=>$distance,
-        "startEle"=>$startEle,
-        "startTime"=>$startTime,
-        "peakEle"=>$peakEle,
-        "peakTime"=>$peakTime,
+        "trkStartEle"=>$startEle,
+        "trkStartTime"=>$startTime,
+        "trkPeakEle"=>$peakEle,
+        "trkPeakTime"=>$peakTime,
         "trkTimeToPeak"=>$timeToPeak,
         "trkTimeToFinish"=>$timeToFinish,
         "trkMeterDown"=>$meterDown,
         "trkMeterUp"=>$meterUp,
         "trkTimeOverall"=>$overallTime,
-        "lowEle"=>$lowEle,
-        "lowTime"=>$lowTime,
-        "tptNumber"=>$tptNumber,
+        "trkLowEle"=>$lowEle,
+        "trkLowTime"=>$lowTime,
         "trkCoordinates"=>$coordString
     );
     $returnObject = array (
