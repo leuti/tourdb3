@@ -651,7 +651,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
     var xhr = new XMLHttpRequest();                                                                     // create new xhr object
     
-    // Execute following code JSON object is received from importGpsTmp.php service
+    // Execute following code JSON object is received from importGpsTmp.php - TEMP service
     xhr.onload = function() {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
@@ -678,7 +678,14 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#impUpdTrk_trkMeterDown').val(responseObject.trkMeterDown);
                 $('#impUpdTrk_trkCountry').val(responseObject.trkCountry);
                 $('#impUpdTrk_trkCoordinates').val(responseObject.trkCoordinates);
-
+                
+                // not displayed fields
+                $trkStartEle = responseObject.startEle;                        // new db field
+                $trkPeakEle = responseObject.peakEle;                          // new db field
+                $trkPeakTime = responseObject.peakTime;                        // new db field
+                $trkLowEle = responseObject.lowEle;                            // new db field
+                $trkLowTime = responseObject.lowTime;                          // new db field
+                
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
                 $('#pImpUpdateTrack').addClass('active');
@@ -767,6 +774,13 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
     trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
     trackobj["trkLoginName"] = $loginName;    
+
+    // not displayed fields
+    trackobj["trkStartEle"] = $trkStartEle;                        // new db field
+    trackobj["trkPeakEle"] = $trkPeakEle;                          // new db field
+    trackobj["trkPeakTime"] = $trkPeakTime;                        // new db field
+    trackobj["trkLowEle"] = $trkLowEle;                            // new db field
+    trackobj["trkLowTime"] = $trkLowTime;                          // new db field
 
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     jsonObject["sessionid"] = sessionid;                             // append parameter session ID

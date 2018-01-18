@@ -19,7 +19,33 @@
 // Action:
 // $ele = $ele * 1 --> test and remove all types
 // calculate distance
-// 
+// Eigentlich müsste im temp mode noch nichts in die DB geschrieben werden (zumindest nicht für die tblTracks)
+// Return -1 ist wohl nicht das korrekte Verhalten
+//
+// Current activity: I am moving all fields of trackObj into a separate array called trackObj and I would like to embed
+// this to returnObj. 
+
+// Return object
+// status
+// errmessage
+// trackObj - trkCoordinates
+// trackObj - trkDateBegin
+// trackObj - trkDateFinish
+// trackObj - trkDistance
+// trackObj - trkGPSStartTime
+// trackObj - trkId
+// trackObj - trkMeterDown
+// trackObj - trkMeterUp
+// trackObj - trkLowEle
+// trackObj - trkLowTime
+// trackObj - trkPeakEle
+// trackObj - trkPeakTime
+// trackObj - trkSourceFileName
+// trackObj - trkStartEle
+// trackObj - trkTimeOverall
+// trackObj - trkTimeToFinish
+// trackObj - trkTimeToPeak
+// trackObj - trkTrackName
 
 
 // -----------------------------------
@@ -27,7 +53,7 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 3;                                                    // 0 = off, 6 = all
+$debugLevel = 6;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file for import log
@@ -67,8 +93,7 @@ if ($request == "temp") {
         
         // create upload dir / file name
         $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';       // Session id used to create unique directory
-        $uploadfile = $uploaddir . $filename;
-            
+        $uploadfile = $uploaddir . $filename;           
         if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
             mkdir($uploaddir, 0777);
         }
@@ -84,60 +109,41 @@ if ($request == "temp") {
         if ( $filetype == "gpx") {
 
             // Call function to insert track data
-            $trackobj = insertTrack($conn,$filename,$uploadfile,$loginname);
-            $trackid = $trackobj["trkId"];                                 // return id of newly created track                              // track object with all know track data derived from file
+            $returnObject = insertTrack($conn,$filename,$uploadfile,$loginname);
+            $trackObj = $returnObject["trackObj"];
+            $trackid = $trackObj["trkId"];                                 // return id of newly created track                              // track object with all know track data derived from file
             
-            // write content of trackobj to log file
-            if ($debugLevel > 2) {
-                foreach ($trackobj as $dbField => $value) {
-                    fputs($logFile, "Line 85 - $dbField: $value\r\n");
-                }
+            fputs($logFile, "Line 114 - trackid: $trackid\r\n");
+        
+            // write content of trackobj1 to log file
+            foreach ($trackObj as $dbField => $value) {
+                $trackObjOut["$dbField"]=$value; 
+            }
+            
+            foreach ($trackObjOut as $dbField => $value) {
+                fputs($logFile, "Line 129 - $dbField: $value\r\n");
             }
 
             // insert track points found in file in table trackpoints with given track id
-            $returnArray = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns array
+            $returnObject = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns array
 
-            // assign variable (only for log)
-            $trackid = $returnArray["trackid"];
-            $tptNumber = $returnArray["tptNumber"];
-            $lon = $returnArray["lon"];
-            $lat = $returnArray["lat"];
-            $ele = $returnArray["ele"];
-            $startEle = $returnArray["startEle"];
-            $startTime = $returnArray["startTime"];
-            $peakEle = $returnArray["peakEle"];
-            $peakTime = $returnArray["peakTime"];
-            $meterDown = $returnArray["meterDown"];
-            $meterUp = $returnArray["meterUp"];
-            $lowEle = $returnArray["lowEle"];
-            $lowTime = $returnArray["lowTime"];
+            $trackObj = $returnObject['trackObj'];                                 // add status field (OK) to trackobj
             
-            fputs($GLOBALS['logFile'], "-----------------------------\r\n");       
-            fputs($GLOBALS['logFile'], "startEle   : $startEle\r\n");
-            fputs($GLOBALS['logFile'], "startTime  : $startTime\r\n");
-            fputs($GLOBALS['logFile'], "peakEle    : $peakEle\r\n");
-            fputs($GLOBALS['logFile'], "peakTime   : $peakTime\r\n");
-            fputs($GLOBALS['logFile'], "lowEle     : $lowEle\r\n");
-            fputs($GLOBALS['logFile'], "lowTime    : $lowTime\r\n");
-            fputs($GLOBALS['logFile'], "meterDown  : $meterDown\r\n");
-            fputs($GLOBALS['logFile'], "meterUp    : $meterUp\r\n");
-                     
-            
-            
-            
-            
-            // create JSON object as return object
-            $trackobj['trkCoordinates'] = $returnArray["coordString"];                 // add field coordinates to track object
-            $trackobj["trkTimeToPeak"] = $returnArray["trkTimeToPeak"];
-            $trackobj["trkMeterDown"] = $returnArray["trkMeterDown"];
-            $trackobj["trkMeterUp"] = $returnArray["trkMeterUp"];
-            $trackobj['trkDistance'] = $returnArray["trkDistance"];
-            $trackobj['trkTimeOverall'] = $returnArray["trkTimeOverall"];
-            $trackobj['trkTimeToFinish'] = $returnArray["trkTimeToFinish"];
-            $trackobj['status'] = 'OK';                                 // add status field (OK) to trackobj
-            $trackobj['errmessage'] = '';                               // add empty error message to trackobj
+            // write content of trackobj to log file
+            foreach ($trackObj as $dbField => $value) {
+                $trackObjOut["$dbField"]=$value; 
+            }
+            foreach ($trackObjOut as $dbField => $value) {
+                fputs($logFile, "Line 136 - $dbField: $value\r\n");
+            }
 
-            echo json_encode($trackobj);                                // echo JSON object to client
+            $outObject = array (
+                "status"=>"OK",
+                "erressage"=>"",
+                "trackObj"=>$trackObj
+            );
+
+            echo json_encode($outObject);                                // echo JSON object to client
             
             // remove imported file & close connections
             fclose($uploadfile);
@@ -152,10 +158,13 @@ if ($request == "temp") {
             fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
         }
     } else {
-        fputs($logFile, "Line 126: extension is NOT kml or gpx: $filetype \r\n");    
-        $trackobj['status'] = 'ERR';                                    // add err status to return object
-        $trackobj['errmessage'] = 'Wrong file extension';               // add error message to return object
-        echo json_encode($trackobj);                                    // echo track object to client
+        fputs($logFile, "Line 126: extension is NOT kml or gpx: $filetype \r\n");  
+          
+        $outObject = array (
+            'status'=>'ERR',                                    // add err status to return object
+            'errmessage'=>'Wrong file extension',               // add error message to return object
+        );
+        echo json_encode($outObject);                                    // echo track object to client
         exit;                                                           // exit from php
     }
 } else if ( $request == "save") {
@@ -169,7 +178,7 @@ if ($request == "temp") {
     $request = $receivedData["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     $trackobj = $receivedData["trackobj"];                              // Array of track data 
 
-    if ( $debugLevel > 2) fputs($logFile, "Line 143: sessionid: $sessionid - request: $request\r\n");  
+    if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request\r\n");  
     
     $sql = "UPDATE `tbl_tracks` SET ";                        // Insert Source file name, gps start time and toReview flag
     $sql .= "`trkLoginName`='$loginname',";
@@ -182,17 +191,19 @@ if ($request == "temp") {
     
     if ($debugLevel>2) fputs($GLOBALS['logFile'], "Line 164 - sql: $sql\r\n");
     
-if ($conn->query($sql) === TRUE)                                        // run sql against DB
+    if ($conn->query($sql) === TRUE)                                        // run sql against DB
     {
         if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
         return -1;
     } 
-    $trackobj['status'] = 'OK';                                         // add err status to return object
-    $trackobj['errmessage'] = '';                                       // add error message to return object
-    echo json_encode($trackobj);                                        // echo track object to client
-
+    $outObject = array (
+        'status'=>'OK',                                    // add err status to return object
+        'errmessage'=>'',               // add error message to return object
+    );
+    echo json_encode($outObject);    
+    
 } else if ( $request == "cancel") {
 
         // ---------------------------------------------------------------------------------
@@ -218,9 +229,11 @@ if ($conn->query($sql) === TRUE)                                        // run s
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
         return -1;
     } 
-    $trackobj['status'] = 'OK';                                         // add err status to return object
-    $trackobj['errmessage'] = '';                                       // add error message to return object
-    echo json_encode($trackobj);                                        // echo track object to client
+    $outObject = array (
+        'status'=>'OK',                                    // add err status to return object
+        'errmessage'=>'',               // add error message to return object
+    );
+    echo json_encode($outObject);    
 } 
 
 // =================================================
@@ -263,14 +276,18 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
     $sql .= "'" . $DateFinish . "', ";
     $sql .= "'" . $loginname . "') ";
 
-    fputs($GLOBALS['logFile'], "Line 143 - sql: $sql\r\n");
+    fputs($GLOBALS['logFile'], "Line 263 - sql: $sql\r\n");
 
     if ($conn->query($sql) === TRUE)                                    // run sql against DB
     {
         if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 163 - New track inserted successfully\r\n");
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
-        return -1;
+        $returnObject = array (
+            "status"=>"ERR",
+            "errmessage"=>"Error inserting new track"
+        );
+        return $returnObject;
     } 
 
     $sql = "SELECT max(`trkId`) FROM `tbl_tracks` ";          // Search for trkId of record just created
@@ -284,7 +301,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
             if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 177 - sql: $sql\r\n");
             
             // create JSON object with known gpx data
-            $returnArray = array (
+            $trackObj = array (
                 "trkId"=>$trackid,
                 "trkSourceFileName"=>"$filename",
                 "trkTrackName"=>"$trackName",
@@ -293,12 +310,21 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
                 "trkGPSStartTime"=>"$GpsStartTime"
             );
         }
-        return $returnArray;                 // return tmp trackId, track name and coordinate array in array
+        $returnObject = array (
+            "status"=>"OK",
+            "erressage"=>"",
+            "trackObj"=>$trackObj
+        );
+        return $returnObject;                 // return tmp trackId, track name and coordinate array in array
         mysqli_stmt_close($stmt);                                       // Close statement
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 195 - Error selecting max(trkId): $conn->error\r\n");
         if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 196 - sql: $stmt\r\n");
-        return -1;
+        $returnObject = array (
+            "status"=>"ERR",
+            "errmessage"=>"Error finding trackId"
+        );
+        return $returnObject;
     } 
 }
 
@@ -477,7 +503,7 @@ function insertTrackPoints($conn,$trackid,$filename)
         $coordString = $coordString . $coordPoint; 
     };
 
-    $returnArray = array (
+    $trackObj = array (
         "trackid"=>$trackid,  
         "tptNumber"=>$tptNumber,
         "lon"=>$lon,
@@ -496,9 +522,21 @@ function insertTrackPoints($conn,$trackid,$filename)
         "lowEle"=>$lowEle,
         "lowTime"=>$lowTime,
         "tptNumber"=>$tptNumber,
-        "coordString"=>$coordString
+        "trkCoordinates"=>$coordString
+    );
+    $returnObject = array (
+        "status"=>"OK",
+        "errmessage"=>"",
+        "trackObj"=>$trackObj
     );
 
-    return $returnArray;                                 // return tmp trackId, track name and coordinate array in array
+    return $returnObject;                                 // return tmp trackId, track name and coordinate array in array
+}
+
+function dump_variable ($var, $logFile) {
+    ob_start();
+    var_dump($var);
+    $output = ob_get_clean();
+    fwrite($logFile, $output);
 }
 ?>
