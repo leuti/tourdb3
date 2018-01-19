@@ -656,35 +656,36 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
-                $('#impUpdTrk_trkId').val(responseObject.trkId); 
-                $('#impUpdTrk_trkTrackName').val(responseObject.trkTrackName);                    // assign values of JSON to input fields
-                $('#impUpdTrk_trkRoute').val(responseObject.trkRoute);
-                $('#impUpdTrk_trkDateBegin').val(responseObject.trkDateBegin);
-                $('#impUpdTrk_trkDateFinish').val(responseObject.trkDateFinish);
-                $('#impUpdTrk_trkSaison').val(responseObject.trkSaison);
-                $('#impUpdTrk_trkType').val(responseObject.trkType);
-                $('#impUpdTrk_trkSubType').val(responseObject.trkSubType);
-                $('#impUpdTrk_trkOrg').val(responseObject.trkOrg);
-                $('#impUpdTrk_trkOvernightLoc').val(responseObject.trkOvernightLoc);
-                $('#impUpdTrk_trkParticipants').val(responseObject.trkParticipants);
-                $('#impUpdTrk_trkEvent').val(responseObject.trkEvent);
-                $('#impUpdTrk_trkRemarks').val(responseObject.trkRemarks);
-                $('#impUpdTrk_trkDistance').val(responseObject.trkDistance);
-                $('#impUpdTrk_trkTimeOverall').val(responseObject.trkTimeOverall);
-                $('#impUpdTrk_trkTimeToPeak').val(responseObject.trkTimeToPeak);
-                $('#impUpdTrk_trkTimeToFinish').val(responseObject.trkTimeToFinish);
-                $('#impUpdTrk_trkGrade').val(responseObject.trkGrade);
-                $('#impUpdTrk_trkMeterUp').val(responseObject.trkMeterUp);
-                $('#impUpdTrk_trkMeterDown').val(responseObject.trkMeterDown);
-                $('#impUpdTrk_trkCountry').val(responseObject.trkCountry);
-                $('#impUpdTrk_trkCoordinates').val(responseObject.trkCoordinates);
+                trackobj = responseObject.trackObj;
+                $('#impUpdTrk_trkId').val(trackobj.trkId); 
+                $('#impUpdTrk_trkTrackName').val(trackobj.trkTrackName);                    // assign values of JSON to input fields
+                $('#impUpdTrk_trkRoute').val(trackobj.trkRoute);
+                $('#impUpdTrk_trkDateBegin').val(trackobj.trkDateBegin);
+                $('#impUpdTrk_trkDateFinish').val(trackobj.trkDateFinish);
+                $('#impUpdTrk_trkSaison').val(trackobj.trkSaison);
+                $('#impUpdTrk_trkType').val(trackobj.trkType);
+                $('#impUpdTrk_trkSubType').val(trackobj.trkSubType);
+                $('#impUpdTrk_trkOrg').val(trackobj.trkOrg);
+                $('#impUpdTrk_trkOvernightLoc').val(trackobj.trkOvernightLoc);
+                $('#impUpdTrk_trkParticipants').val(trackobj.trkParticipants);
+                $('#impUpdTrk_trkEvent').val(trackobj.trkEvent);
+                $('#impUpdTrk_trkRemarks').val(trackobj.trkRemarks);
+                $('#impUpdTrk_trkDistance').val(trackobj.trkDistance);
+                $('#impUpdTrk_trkTimeOverall').val(trackobj.trkTimeOverall);
+                $('#impUpdTrk_trkTimeToPeak').val(trackobj.trkTimeToPeak);
+                $('#impUpdTrk_trkTimeToFinish').val(trackobj.trkTimeToFinish);
+                $('#impUpdTrk_trkGrade').val(trackobj.trkGrade);
+                $('#impUpdTrk_trkMeterUp').val(trackobj.trkMeterUp);
+                $('#impUpdTrk_trkMeterDown').val(trackobj.trkMeterDown);
+                $('#impUpdTrk_trkCountry').val(trackobj.trkCountry);
+                $('#impUpdTrk_trkCoordinates').val(trackobj.trkCoordinates);
                 
                 // not displayed fields
-                $trkStartEle = responseObject.startEle;                        // new db field
-                $trkPeakEle = responseObject.peakEle;                          // new db field
-                $trkPeakTime = responseObject.peakTime;                        // new db field
-                $trkLowEle = responseObject.lowEle;                            // new db field
-                $trkLowTime = responseObject.lowTime;                          // new db field
+                $trkStartEle = trackobj.trkStartEle;                        // new db field
+                $trkPeakEle = trackobj.trkPeakEle;                          // new db field
+                $trkPeakTime = trackobj.trkPeakTime;                        // new db field
+                $trkLowEle = trackobj.trkLowEle;                            // new db field
+                $trkLowTime = trackobj.trkLowTime;                          // new db field
                 
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
@@ -720,7 +721,7 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     e.preventDefault();
     
     var xhr = new XMLHttpRequest();                                 // create new xhr object
-    // Execute following code JSON object is received from importGpsTmp.php service
+    // Execute following code JSON object is received from importGpsTmp.php SAVE service
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
             if ( responseObject.status == 'OK') {

@@ -144,7 +144,6 @@ if ($request == "temp") {
                 "erressage"=>"",
                 "trackObj"=>$trackObjOut
             );
-
             echo json_encode($outObject);                                // echo JSON object to client
             
             // remove imported file & close connections
@@ -337,32 +336,20 @@ function insertTrackPoints($conn,$trackid,$filename)
 {
     if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 207 - Function insertTrackPoints entered\r\n");
     
+    // define variables
     $tptNumber = 1;                                                     // Set counter for tptNumber to 1
     $loopCumul = $GLOBALS['loopSize'];                                  // loopCumul is the sum of loop sizes processed
+    $coordArray = array();                                              // initialize array to store coordinates in kml style
+    $loop = 0;                                                          // set current loop to 0 (only required for debug purposes)
+    $firstRec = 1;                                                      // flag first record as all other records need to be treated slightly different 
     $gpx = simplexml_load_file($filename);                              // Load XML structure
     $trackName = $gpx->trk->name;  
-    $coordArray = array();                                              // initialize array to store coordinates in kml style
-
     $totalTrkPts = count($gpx->trk->trkseg->trkpt);                     // total number of track points in file
-    $loop = 0;                                                          // set current loop to 0 (only required for debug purposes)
 
     $sqlBase = "INSERT INTO `tbl_trackPoints`";               // create first part of insert statement 
     $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
     $sqlBase .= "  `tptEle`, `tptTime`) VALUES "; 
     
-    $firstRec = 1;                                                      // flag first record as all other records need to be treated slightly different 
-
-    settype($ele, "float");
-    settype($previousEle, "float");
-    settype($startEle , "float");
-    settype($peakEle , "float");
-    settype($lowEle , "float");
-    settype($meterUp , "float");
-    settype($meterDown , "float");
-    $startTime = ""; 
-    $peakTime = ""; 
-    $lowTime = ""; 
-
     foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        // loop through each trkpt XML element in the gpx file
     {               
         // read content of file
@@ -373,6 +360,7 @@ function insertTrackPoints($conn,$trackid,$filename)
         } else {
             $ele = $trkpt->ele;
         }
+        $ele = $ele * 1;
         $time = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
         
         if ($firstRec == 1)  {                                          // if record is not first, a comma is written
@@ -383,10 +371,10 @@ function insertTrackPoints($conn,$trackid,$filename)
             
             // initialise variables
             $startTime = $time;
-            $startEle = floatval($ele);
+            $startEle = $ele;
             $peakTime = $time;
-            $peakEle = floatval($ele);
-            $lowEle = floatval($ele);
+            $peakEle = $ele;
+            $lowEle = $ele;
             $lowTime = $time;
             $meterUp = 0;
             $meterDown = 0;
@@ -400,35 +388,34 @@ function insertTrackPoints($conn,$trackid,$filename)
             // calc variables
 
             // this way to calculate elevation gain / loss due to bug ( if ( $ele > $previousEle )             
-            $deltaEle = $ele - $previousEle;
-            $deltaPeakEle = $ele - $peakEle;
-            $deltaLowEle = $ele - $lowEle;
-
+            $eleGain = $ele - $previousEle;
+            $eleGainVsPeak = $ele - $peakEle;
+            
             // calc distance to previous waypoint
             $distance = $distance + 1;
 
             fputs($GLOBALS['logFile'], "Line 398 - ele        : $ele\r\n");
             fputs($GLOBALS['logFile'], "Line 399 - previousEle: $previousEle\r\n");
-            fputs($GLOBALS['logFile'], "Line 399 - deltaEle   : $deltaEle\r\n");
+            fputs($GLOBALS['logFile'], "Line 399 - deltaEle   : $eleGain\r\n");
         
-            if ( $deltaEle > 0 ) {                              // elevation gained
-                if ( $deltaPeakEle > 0 ) {
+            if ( $eleGain > 0 ) {                              // elevation gained
+                if ( $eleGainVsPeak > 0 ) {
                     $peakTime = $time;
                     $peakEle = $ele;
-                    $meterUp = $meterUp + $deltaEle; 
+                    $meterUp = $meterUp + $eleGain; 
                     fputs($GLOBALS['logFile'], "<-ONE->\r\n");
                 } else {
-                    $meterUp = $meterUp + $deltaEle; 
+                    $meterUp = $meterUp + $eleGain; 
                     fputs($GLOBALS['logFile'], "<-TWO->\r\n");
                 }
             } else {
-                if ( $deltaPeakEle < 0 ) {
+                if ( $eleGainVsPeak < 0 ) {
                     $lowTime = $time;
                     $lowEle = $ele;
-                    $meterDown = $meterDown + $deltaEle;
+                    $meterDown = $meterDown + $eleGain;
                     fputs($GLOBALS['logFile'], "<-THREE->\r\n");
                 } else {
-                    $meterDown = $meterDown + $deltaEle;
+                    $meterDown = $meterDown + $eleGain;
                     fputs($GLOBALS['logFile'], "<-FOUR->\r\n");
                 }
             }
