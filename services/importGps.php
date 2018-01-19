@@ -136,6 +136,7 @@ if ($request == "temp") {
             foreach ($trackObj as $dbField => $value) {
                 $trackObjOut["$dbField"]=$value; 
             }
+
             /*
             foreach ($trackObjOut as $dbField => $value) {
                 fputs($logFile, "Line 136 - $dbField: $value\r\n");
@@ -350,6 +351,8 @@ function insertTrackPoints($conn,$trackid,$filename)
     $gpx = simplexml_load_file($filename);                              // Load XML structure
     $trackName = $gpx->trk->name;  
     $totalTrkPts = count($gpx->trk->trkseg->trkpt);                     // total number of track points in file
+    $overallDistance = (float) 0;
+    $distance = (float) 0;
 
     $sqlBase = "INSERT INTO `tbl_trackPoints`";               // create first part of insert statement 
     $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
@@ -396,8 +399,14 @@ function insertTrackPoints($conn,$trackid,$filename)
             $eleGainVsPeak = $ele - $peakEle;
             
             // calc distance to previous waypoint
-            $distance = $distance + 1;
-        
+            
+            $distance = haversineGreatCircleDistance(
+                floatval($previousLat), floatval($previousLon), floatval($lat), floatval($lon), 6371000);
+            $overallDistance = $overallDistance + $distance;
+            
+            fputs($GLOBALS['logFile'],"Line 404>distance:$distance\r\n");            
+            fputs($GLOBALS['logFile'],"Line 405>previousLat:$previousLat|previousLon:$previousLon|lat:$lat|lon:$lon|overallDist:$overallDistance\r\n");
+
             if ( $eleGain > 0 ) {                              // elevation gained
                 if ( $eleGainVsPeak > 0 ) {
                     $peakTime = $time;
@@ -422,8 +431,10 @@ function insertTrackPoints($conn,$trackid,$filename)
 
             //fputs($GLOBALS['logFile'], "<-none->\r\n");
         }
-        fputs($GLOBALS['logFile'],"Line 421>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
+        fputs($GLOBALS['logFile'],"Line 421>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
         $previousEle = $ele;
+        $previousLat = $lat;
+        $previousLon = $lon;
 
         /*
         fputs($GLOBALS['logFile'], "---------- AFTER ---------------\r\n");       
@@ -513,7 +524,7 @@ function insertTrackPoints($conn,$trackid,$filename)
         "trkTimeOverall"=>$overallTime,
         "trkMeterDown"=>$meterDown,
         "trkMeterUp"=>$meterUp,
-        "trkDistance"=>$distance,
+        "trkDistance"=>round($overallDistance/1000, 2),
         "trkCoordinates"=>$coordString
     );
     $returnObject = array (
@@ -525,10 +536,35 @@ function insertTrackPoints($conn,$trackid,$filename)
     return $returnObject;                                 // return tmp trackId, track name and coordinate array in array
 }
 
-function dump_variable ($var, $logFile) {
-    ob_start();
-    var_dump($var);
-    $output = ob_get_clean();
-    fwrite($logFile, $output);
+/**
+ * Calculates the great-circle distance between two points, with
+ * the Haversine formula.
+ * @param float $latitudeFrom Latitude of start point in [deg decimal]
+ * @param float $longitudeFrom Longitude of start point in [deg decimal]
+ * @param float $latitudeTo Latitude of target point in [deg decimal]
+ * @param float $longitudeTo Longitude of target point in [deg decimal]
+ * @param float $earthRadius Mean earth radius in [m]
+ * @return float Distance between points in [m] (same as earthRadius)
+ */
+function haversineGreatCircleDistance(
+$latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
+{
+    fputs($GLOBALS['logFile'],"function haversineGreatCircleDistance entered\r\n");
+    fputs($GLOBALS['logFile'],"Line 559>latitudeFrom:$latitudeFrom|longitudeFrom:$longitudeFrom|latitudeTo:$latitudeTo|longitudeTo:$longitudeTo\r\n");
+    // convert from degrees to radians
+    $latFrom = deg2rad($latitudeFrom);
+    $lonFrom = deg2rad($longitudeFrom);
+    $latTo = deg2rad($latitudeTo);
+    $lonTo = deg2rad($longitudeTo);
+
+    $latDelta = $latTo - $latFrom;
+    $lonDelta = $lonTo - $lonFrom;
+
+    $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+    fputs($GLOBALS['logFile'],"Line 559>latFrom:$latFrom|lonFrom:$lonFrom|latTo:$latTo|lonTo:$lonTo|latDelta:$latDelta|lonDelta|$lonDelta|angle|$angle\r\n");
+    return $angle * $earthRadius;
+ 
 }
 ?>
