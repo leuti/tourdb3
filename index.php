@@ -164,7 +164,7 @@
 								<div class="dispObjCriteria">
 									<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
 									<input name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
-									<label for="dispFilTrk_dateTo" class="labelNext">From Date</label>
+									<label for="dispFilTrk_dateTo" class="labelNext">To Date</label>
 									<input name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
 								</div>
 

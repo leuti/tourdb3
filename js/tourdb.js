@@ -686,6 +686,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkPeakTime = trackobj.trkPeakTime;                        // new db field
                 $trkLowEle = trackobj.trkLowEle;                            // new db field
                 $trkLowTime = trackobj.trkLowTime;                          // new db field
+                $trkFinishEle = trackobj.trkFinishEle;
+                $trkFinishTime = trackobj.trkFinishTime;
                 
                 // Close upload file div and open form to update track data
                 $('#pImpFileUpload').removeClass('active');
@@ -774,7 +776,7 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
     trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
     trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
-    trackobj["trkLoginName"] = $loginName;    
+    //trackobj["trkLoginName"] = $loginName;    
 
     // not displayed fields
     trackobj["trkStartEle"] = $trkStartEle;                        // new db field
@@ -782,10 +784,13 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     trackobj["trkPeakTime"] = $trkPeakTime;                        // new db field
     trackobj["trkLowEle"] = $trkLowEle;                            // new db field
     trackobj["trkLowTime"] = $trkLowTime;                          // new db field
+    trackobj["trkFinishEle"] = $trkFinishEle;                      // new db field
+    trackobj["trkFinishTime"] = $trkFinishTime;                    // new db field
 
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'save';                              // temp request to create track temporarily
+    jsonObject["loginname"] = $loginName; 
     jsonObject["trackobj"] = trackobj;                              // send track object
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     console.info(jsonObject);
