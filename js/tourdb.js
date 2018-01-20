@@ -28,6 +28,8 @@ segmentFileNameURL = document.URL + "tmp/kml_disp/" + segmentFileName;
 sqlWhereTracksPrev = "";                                            // variable to store previous sql where statement
 sqlWhereSegmentsPrev = "";                                          // the gen_kml.php is only called if statement has changed
 
+var KMLvectorTracks;
+
 // ======================================================
 // ====== Perform these actions when page is ready ======
 // ======================================================
@@ -625,8 +627,18 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
                 $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
 
-                    $displayingLayers = [];
-                    $displayingLayers = $map.getLayers();
+                    //$displayingLayers = [];
+                    //$displayingLayers = $map.getLayers();
+
+                    if ( KMLvectorTracks ) { 
+                        $map.getLayers().forEach(function(el) {
+                            $gugus = el;
+                            $kukuk = el.get('name');
+                            if (el.get('name') == 'tracks_layer') {
+                            console.log(el);
+                            }
+                        })
+                    }
 
                     function removeAddLayer() {
                         if (KMLvectorTracks) {
@@ -635,7 +647,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                     }
 
                 // Create the KML Layer for segments
-                var KMLvectorTracks = new ol.layer.Vector({
+                KMLvectorTracks = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         url: $trackFile,
                         format: new ol.format.KML({
@@ -643,6 +655,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                         })
                     })
                 });
+                KMLvectorTracks.set('name', 'tracks_layer');
                 $map.addLayer(KMLvectorTracks);
 
                 $('.dispObjOpen').removeClass('visible');
