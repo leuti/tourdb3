@@ -222,9 +222,10 @@
 									<input type="submit" class="button applyFilterButton" id="dispFilTrk_AddObjButton" value="Add Tracks" />
 								</div>
 								<!-- Button to reset filter -->
+								<!--
 								<div class="dispObjCriteria">
 									<input type="submit" class="button applyFilterButton" id="dispFilTrk_ResetButton" value="Reset Filter" />
-								</div>
+								</div>-->
 								
 							</fieldset>
 						</div>
@@ -383,9 +384,10 @@
 									<input type="submit" class="button applyFilterButton" id="dispFilSeg_AddObjButton" value="Add Segments" />
 								</div>
 								<!-- Button to reset filter -->
+								<!--
 								<div class="dispObjCriteria">
 									<input type="submit" class="button applyFilterButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
-								</div>
+								</div>-->
 
 							</fieldset>
 						</div>

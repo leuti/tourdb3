@@ -625,11 +625,11 @@ $(document).on('click', '.applyFilterButton', function (e) {
                             $map.removeLayer(el);
                         })
                         mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                        mapSTlayer_grau.set('name', 'mapSTlayer_grau');
+                        //mapSTlayer_grau.set('name', 'mapSTlayer_grau');
                         $map.addLayer(mapSTlayer_grau);
                     }
 
-                    // Create the KML Layer for segments
+                // Create the KML Layer for segments
                 tracksLayer = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         url: $trackFile,
@@ -638,7 +638,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                         })
                     })
                 });
-                tracksLayer.set('name', 'trackslayer');
+                //tracksLayer.set('name', 'trackslayer');
                 $map.addLayer(tracksLayer);
 
                 $('.dispObjOpen').removeClass('visible');
@@ -875,7 +875,7 @@ function drawMapEmpty(targetDiv) {
     // Create a background layer
     //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-    mapSTlayer_grau.set('name', 'mapSTlayer_grau');
+    //mapSTlayer_grau.set('name', 'mapSTlayer_grau');
     map.addLayer(mapSTlayer_grau);
     return map;
 }

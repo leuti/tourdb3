@@ -45,9 +45,6 @@ $styleArray = array(
     array("Others","#FFCC66FF",3,"#FFCC66FF",5)                             // rosa
 );
 
-// Read received parameters
-//$loginName = $_POST["loginName"];                           // login name
-
 // variables passed on by client (as formData object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];
@@ -60,103 +57,183 @@ if ($debugLevel >= 3){
     fputs($logFile, 'Line 56: sessionid: ' . $sessionid . "\r\n");
     fputs($logFile, 'Line 57: sqlWhereTracks: ' . $sqlWhereTracks . "\r\n");
     fputs($logFile, 'Line 58: sqlWhereSegments: ' . $sqlWhereSegments . "\r\n");
+    fputs($logFile, 'Line 57: genTrackKml: ' . $genTrackKml . "\r\n");
+    fputs($logFile, 'Line 58: genSegKml: ' . $genSegKml . "\r\n");
 };
-
-// Set WHERE string if WHERE clause has been posted
-/*
-if(isset($_POST["sqlWhere"]) && $_POST["sqlWhere"] != ''){
-    $whereGenKml = $_POST["sqlWhere"]; 
-} else{
-    $whereGenKml = '';                                      // Set to empty when no WHERE clause received
-};
-*/
 
 // create upload dir / file name
 $kml_dir = '../tmp/kml_disp/' . $sessionid . '/';       // Session id used to create unique directory
-$kmlFileURL = $kml_dir . 'tracks.kml';
-    
 if (!is_dir ( $kml_dir )) {                                   // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
 
-$outFile = fopen($kmlFileURL, "w");                        // Open kml output file
+if ( $genTrackKml ) {
+    $trackKmlFileURL = $kml_dir . 'tracks.kml';
+    $trackOutFile = fopen($trackKmlFileURL, "w");                        // Open kml output file
 
-if ($debugLevel >= 3){
-    fputs($logFile, 'Line 47: $kmlFileURL: ' . $kmlFileURL . "\r\n");
-};
+    if ($debugLevel >= 3){
+        fputs($logFile, 'Line 47: $trackKmlFileURL: ' . $trackKmlFileURL . "\r\n");
+    };
 
-// Write headern and style section of KML
-$kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
-$kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">';
-$kml[] = '  <Document>';
-$kml[] = '    <name>tourdb - tracks</name>';
+    // Write headern and style section of KML
+    $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
+    $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">';
+    $kml[] = '  <Document>';
+    $kml[] = '    <name>tourdb - tracks</name>';
 
-// Create kml stylemaps
-$i=0;
-for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
-        $kml = createStyles($styleArray[$i], $kml);    
-    }
-
-// Write main section - intro
-$kml[] = '    <Folder>';
-$kml[] = '      <name>tourdb exported tracks</name>';
-$kml[] = '        <visibility>0</visibility>';
-$kml[] = '        <open>1</open>';
-
-// Select tracks meeting given WHERE clause
-$sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
-$sql .= "FROM tbl_tracks ";
-$sql .= $sqlWhereTracks;
-
-$tracks = mysqli_query($conn, $sql);
-
-if ($debugLevel >= 3){
-    fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
-};
-
-// Loop through each selected track and write main track data
-while($SingleTrack = mysqli_fetch_assoc($tracks))
-{ 
-    $countTracks++;                                                             // Counter for the number of tracks produced
-    $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $SingleTrack["trkId"]) . '">';
-    $kml[] = '          <name>' . $SingleTrack["trkTrackName"] . '</name>';
-    $kml[] = '          <visibility>1</visibility>';
-    $kml[] = '          <description>' . $SingleTrack["trkId"] . ' - ' . $SingleTrack["trkRoute"] . ' (mit ' .  $SingleTrack["trkParticipants"] . ')</description>';
-    
-    $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
+    // Create kml stylemaps
     $i=0;
-    for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
-        if ($styleArray[$i][0] == $SingleTrack["trkSubType"])
-        {
-            $styleMapDefault = '          <styleUrl>#stylemap_' . $SingleTrack["trkSubType"] . '</styleUrl>';
-            break;
+    for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
+            $kml = createStyles($styleArray[$i], $kml);    
         }
-    }
-    $kml[] = $styleMapDefault;
-       
-    $kml[] = '          <ExtendedData>';
-    $kml[] = '            <Data name="type">';
-    $kml[] = '              <value>linepolygon</value>';
-    $kml[] = '            </Data>';
-    $kml[] = '          </ExtendedData>';
-    $kml[] = '          <LineString>';
-    $kml[] = '            <coordinates>' . $SingleTrack["trkCoordinates"];
-    $kml[] = '            </coordinates>';
-    $kml[] = '          </LineString>';
-    $kml[] = '        </Placemark>';   
-};
 
-// Write KML trailer
-$kml[] = '    </Folder>';
-$kml[] = '  </Document>';
-$kml[] = '</kml>';
+    // Write main section - intro
+    $kml[] = '    <Folder>';
+    $kml[] = '      <name>tourdb exported tracks</name>';
+    $kml[] = '        <visibility>0</visibility>';
+    $kml[] = '        <open>1</open>';
 
-// Merge kml array into one variable
-$kmlOutput = join("\r\n", $kml);
+    // Select tracks meeting given WHERE clause
+    $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
+    $sql .= "FROM tbl_tracks ";
+    $sql .= $sqlWhereTracks;
 
-//$outFile = @fopen($kmlOutFileLocation,"a");               // Open KML file for writing
+    $records = mysqli_query($conn, $sql);
 
-fputs($outFile, "$kmlOutput");                                  // Write kml to file
+    if ($debugLevel >= 3){
+        fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
+    };
+
+    // Loop through each selected track and write main track data
+    while($singleRecord = mysqli_fetch_assoc($records))
+    { 
+        $countTracks++;                                                             // Counter for the number of tracks produced
+        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
+        $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
+        $kml[] = '          <visibility>1</visibility>';
+        $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
+        
+        $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
+        $i=0;
+        for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
+            if ($styleArray[$i][0] == $singleRecord["trkSubType"])
+            {
+                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';
+                break;
+            }
+        }
+        $kml[] = $styleMapDefault;
+        
+        $kml[] = '          <ExtendedData>';
+        $kml[] = '            <Data name="type">';
+        $kml[] = '              <value>linepolygon</value>';
+        $kml[] = '            </Data>';
+        $kml[] = '          </ExtendedData>';
+        $kml[] = '          <LineString>';
+        $kml[] = '            <coordinates>' . $singleRecord["trkCoordinates"];
+        $kml[] = '            </coordinates>';
+        $kml[] = '          </LineString>';
+        $kml[] = '        </Placemark>';   
+    };
+
+    // Write KML trailer
+    $kml[] = '    </Folder>';
+    $kml[] = '  </Document>';
+    $kml[] = '</kml>';
+
+    // Merge kml array into one variable
+    $kmlOutput = join("\r\n", $kml);
+
+    //$trackOutFile = @fopen($kmltrackOutFileLocation,"a");               // Open KML file for writing
+
+    fputs($trackOutFile, "$kmlOutput");                                  // Write kml to file
+
+}
+
+if ( $genSegKml ) {
+    $segKmlFileURL = $kml_dir . 'segments.kml';
+    $segOutFile = fopen($segKmlFileURL, "w");                        // Open kml output file
+
+    if ($debugLevel >= 3){
+        fputs($logFile, 'Line 47: $segKmlFileURL: ' . $segKmlFileURL . "\r\n");
+    };
+
+    // Write headern and style section of KML
+    $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
+    $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">';
+    $kml[] = '  <Document>';
+    $kml[] = '    <name>tourdb - segments</name>';
+
+    // Create kml stylemaps
+    $i=0;
+    for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
+            $kml = createStyles($styleArray[$i], $kml);    
+        }
+
+    // Write main section - intro
+    $kml[] = '    <Folder>';
+    $kml[] = '      <name>tourdb exported segments</name>';
+    $kml[] = '        <visibility>0</visibility>';
+    $kml[] = '        <open>1</open>';
+
+    // ----- HERE -----------------
+    // Select tracks meeting given WHERE clause
+    $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
+    $sql .= "FROM tbl_tracks ";
+    $sql .= $sqlWhereSegments;
+
+    $records = mysqli_query($conn, $sql);
+
+    if ($debugLevel >= 3){
+        fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
+    };
+
+    // Loop through each selected track and write main track data
+    while($singleRecord = mysqli_fetch_assoc($records))
+    { 
+        $countTracks++;                                                             // Counter for the number of tracks produced
+        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
+        $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
+        $kml[] = '          <visibility>1</visibility>';
+        $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
+        
+        $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
+        $i=0;
+        for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
+            if ($styleArray[$i][0] == $singleRecord["trkSubType"])
+            {
+                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';
+                break;
+            }
+        }
+        $kml[] = $styleMapDefault;
+        
+        $kml[] = '          <ExtendedData>';
+        $kml[] = '            <Data name="type">';
+        $kml[] = '              <value>linepolygon</value>';
+        $kml[] = '            </Data>';
+        $kml[] = '          </ExtendedData>';
+        $kml[] = '          <LineString>';
+        $kml[] = '            <coordinates>' . $singleRecord["trkCoordinates"];
+        $kml[] = '            </coordinates>';
+        $kml[] = '          </LineString>';
+        $kml[] = '        </Placemark>';   
+    };
+
+    // Write KML trailer
+    $kml[] = '    </Folder>';
+    $kml[] = '  </Document>';
+    $kml[] = '</kml>';
+
+    // Merge kml array into one variable
+    $kmlOutput = join("\r\n", $kml);
+
+    //$segOutFile = @fopen($kmlsegOutFileLocation,"a");               // Open KML file for writing
+
+    fputs($segOutFile, "$kmlOutput");                                  // Write kml to file
+
+}
+
 $returnObject['status'] = 'OK';                                 // add status field (OK) to trackobj
 $returnObject['errmessage'] = '';                               // add empty error message to trackobj
 echo json_encode($returnObject);                                // echo JSON object to client
@@ -167,7 +244,7 @@ fputs($logFile, "$countTracks Tracks processed\r\n");
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                               // close log file
 mysql_close($conn);                                             // close SQL connection 
-fclose($outFile);                                               // close kml file
+fclose($trackOutFile);                                               // close kml file
 
 exit;
 
