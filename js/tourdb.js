@@ -28,7 +28,9 @@ segmentFileNameURL = document.URL + "tmp/kml_disp/" + segmentFileName;
 sqlWhereTracksPrev = "";                                            // variable to store previous sql where statement
 sqlWhereSegmentsPrev = "";                                          // the gen_kml.php is only called if statement has changed
 
-var KMLvectorTracks;
+var tracksLayer;
+var mapSTlayer_grau;
+
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -630,24 +632,32 @@ $(document).on('click', '.applyFilterButton', function (e) {
                     //$displayingLayers = [];
                     //$displayingLayers = $map.getLayers();
 
-                    if ( KMLvectorTracks ) { 
+                    if ( tracksLayer ) { 
                         $map.getLayers().forEach(function(el) {
-                            $gugus = el;
-                            $kukuk = el.get('name');
-                            if (el.get('name') == 'tracks_layer') {
-                            console.log(el);
+                            if ( el.get('name') == 'trackslayer') {
+                                $map.removeLayer(el);
                             }
+                            /*$gugus = el;
+                            $kukuk = el.get('name');
+                            if (el.get('name') == 'trackslayer') {
+                            console.log(el);
+                            }*/
                         })
                     }
+/*
+                    map.getLayers().forEach(function (layer) {
+                        map.removeLayer(layer);
+                    });
 
                     function removeAddLayer() {
-                        if (KMLvectorTracks) {
-                            removeLayer(KMLvectorTracks);
+                        if (tracksLayer) {
+                            removeLayer(tracksLayer);
                         }
                     }
+                    */
 
                 // Create the KML Layer for segments
-                KMLvectorTracks = new ol.layer.Vector({
+                tracksLayer = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         url: $trackFile,
                         format: new ol.format.KML({
@@ -655,8 +665,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
                         })
                     })
                 });
-                KMLvectorTracks.set('name', 'tracks_layer');
-                $map.addLayer(KMLvectorTracks);
+                tracksLayer.set('name', 'trackslayer');
+                $map.addLayer(tracksLayer);
 
                 $('.dispObjOpen').removeClass('visible');
                 $('.dispObjOpen').addClass('hidden');
@@ -889,8 +899,9 @@ function drawMapEmpty(targetDiv) {
 
     // Create a background layer
     //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
-    var mapLayer = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-    map.addLayer(mapLayer);
+    mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+    mapSTlayer_grau.set('name', 'mapSTlayer_grau');
+    map.addLayer(mapSTlayer_grau);
     return map;
 }
 
