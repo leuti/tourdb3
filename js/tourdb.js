@@ -296,15 +296,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     
     $clickedButton = this.id;
 
-    // dispFilTrk_ResetButton
-    // dispFilTrk_AddObjButton
-    // dispFilTrk_NewLoadButton
-    // dispFilSeg_ResetButton
-    // dispFilSeg_AddObjButton
-    // dispFilSeg_NewLoadButton
-
     if ( $clickedButton == 'dispFilTrk_ResetButton' ) {
-
     }
 
     if ( $clickedButton == 'dispFilTrk_AddObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' ) {
@@ -423,7 +415,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
         
         // ************************************
         // Put all where statements together
-
         if ( whereStatement.length > 0 ) {
             var sqlWhereTracks = "WHERE ";
 
@@ -439,7 +430,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     }
   
     if ( $clickedButton == 'dispFilSeg_ResetButton' ) {
-        
     }
 
     if ( $clickedButton == 'dispFilSeg_AddObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) { 
@@ -629,34 +619,17 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
                 $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
 
-                    //$displayingLayers = [];
-                    //$displayingLayers = $map.getLayers();
-
-                    if ( tracksLayer ) { 
+                    if ( tracksLayer && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
+                        $clickedButton == 'dispFilSeg_NewLoadButton' )) { 
                         $map.getLayers().forEach(function(el) {
-                            if ( el.get('name') == 'trackslayer') {
-                                $map.removeLayer(el);
-                            }
-                            /*$gugus = el;
-                            $kukuk = el.get('name');
-                            if (el.get('name') == 'trackslayer') {
-                            console.log(el);
-                            }*/
+                            $map.removeLayer(el);
                         })
+                        mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                        mapSTlayer_grau.set('name', 'mapSTlayer_grau');
+                        $map.addLayer(mapSTlayer_grau);
                     }
-/*
-                    map.getLayers().forEach(function (layer) {
-                        map.removeLayer(layer);
-                    });
 
-                    function removeAddLayer() {
-                        if (tracksLayer) {
-                            removeLayer(tracksLayer);
-                        }
-                    }
-                    */
-
-                // Create the KML Layer for segments
+                    // Create the KML Layer for segments
                 tracksLayer = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         url: $trackFile,
@@ -679,7 +652,9 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
     }
 
-    if ( genTrackKml || genSegKml ) {
+    if ( ( $clickedButton == 'dispFilTrk_AddObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
+        $clickedButton == 'dispFilSeg_AddObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) && 
+        genTrackKml || genSegKml ) {
         // send required parameters to gen_kml.php
         var jsonObject = {};
         phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
