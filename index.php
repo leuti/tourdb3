@@ -213,9 +213,17 @@
 									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
 								</div>
 
-								<!-- Button to apply filter -->
+								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_ApplyButton" value="Load Tracks" />
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_NewLoadButton" value="New Load" />
+								</div>
+								<!-- Button to add selection to existing objects -->
+								<div class="dispObjCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_AddObjButton" value="Add Tracks" />
+								</div>
+								<!-- Button to reset filter -->
+								<div class="dispObjCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_ResetButton" value="Reset Filter" />
 								</div>
 								
 							</fieldset>
@@ -365,11 +373,18 @@
 									max. <input type="text" name="mUStartTargetMax"><br>
 								</div>
 								-->
-
-
-								<!-- Button to apply filter -->
+								
+								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilSeg_ApplyButton" value="Apply Filter" />
+									<input type="submit" class="button applyFilterButton" id="dispFilSeg_NewLoadButton" value="New Load" />
+								</div>
+								<!-- Button to add selection to existing objects -->
+								<div class="dispObjCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispFilSeg_AddObjButton" value="Add Segments" />
+								</div>
+								<!-- Button to reset filter -->
+								<div class="dispObjCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
 								</div>
 
 							</fieldset>
@@ -389,8 +404,10 @@
 			<div id="displayMap" class="visible">
 				<div id="displayMap-ResMap">	<!-- Here the map of the mapments is displayed -->
 				</div> <!-- End mapResultMap -->
-				<div id="displayMap-ResMap2">	<!-- Here the map of the mapments is displayed -->
-				</div> <!-- End mapResultMap -->
+				<!--
+					<div id="displayMap-ResMap2">
+				</div> --><!-- End mapResultMap -->
+			
 			</div> <!-- End displayMap -->
 
 		</div> <!-- End div panelDisplay -->

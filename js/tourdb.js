@@ -92,7 +92,7 @@ $(document).ready(function() {
                     $('.loginReq').removeClass('loginReq');
                     $('#buttonLogin').addClass('loginReq');
                     $('#statusMessage').text('Login successful');
-                    $("#statusMessage").show().delay(5000).fadeOut();
+                    $("#statusMessage").show().delay(5000).fadeOut(); 
                     $map = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                 }
             }
@@ -290,293 +290,314 @@ $( function() {
 $(document).on('click', '.applyFilterButton', function (e) {
     e.preventDefault();
     
-    // *****************************************************
-    // Build SQL WHERE statement for tracks
-    var whereStatement = [];
-    
-    // Field track ID
-    var whereString = "";
-    trackIdFrom = "";
-    trackIdTo = "";
-    if ( ($('#dispFilTrk_trackIdFrom').val()) != "" ) {                           
-        trackIdFrom = $('#dispFilTrk_trackIdFrom').val();
-    } else {
+    $clickedButton = this.id;
+
+    // dispFilTrk_ResetButton
+    // dispFilTrk_AddObjButton
+    // dispFilTrk_NewLoadButton
+    // dispFilSeg_ResetButton
+    // dispFilSeg_AddObjButton
+    // dispFilSeg_NewLoadButton
+
+    if ( $clickedButton == 'dispFilTrk_ResetButton' ) {
+
+    }
+
+    if ( $clickedButton == 'dispFilTrk_AddObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' ) {
+        // *****************************************************
+        // Build SQL WHERE statement for tracks
+        var whereStatement = [];
+        
+        // Field track ID
+        var whereString = "";
         trackIdFrom = "";
-    };
-    if ( ($('#dispFilTrk_trackIdTo').val()) != "" ) {                           
-        trackIdTo = $('#dispFilTrk_trackIdTo').val();
-    } else {
         trackIdTo = "";
-    };
+        if ( ($('#dispFilTrk_trackIdFrom').val()) != "" ) {                           
+            trackIdFrom = $('#dispFilTrk_trackIdFrom').val();
+        } else {
+            trackIdFrom = "";
+        };
+        if ( ($('#dispFilTrk_trackIdTo').val()) != "" ) {                           
+            trackIdTo = $('#dispFilTrk_trackIdTo').val();
+        } else {
+            trackIdTo = "";
+        };
 
-    if ( trackIdFrom != "" && trackIdTo != "" ) {
-        whereString = "trkID >= " + trackIdFrom + " AND trkId <= " + trackIdTo;   // complete WHERE BETWEEN statement
-    } else if ( trackIdFrom != "" ) {
-        whereString = "trkID >= " + trackIdFrom;                                  // complete WHERE BETWEEN statement
-    } else if ( trackIdTo != "" ) {
-        whereString = "trkId <= " + trackIdTo;                                    // complete WHERE BETWEEN statement
-    }
-    
-    if ( whereString.length > 0 ) {
-        whereStatement.push( whereString );                                       // Add to where Statement array
-    }
-
-    // Field track name
-    var whereString = "";
-    if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
-        whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
-        whereStatement.push( whereString );
-    };
-
-    // Field route
-    var whereString = "";
-    if ( ($('#dispFilTrk_route').val()) != "" ) {
-        whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
-        whereStatement.push( whereString );
-    };
-
-    // Field date begin (date finished not used)
-    var whereString = "";                                                       // clear where string
-    fromDateArt = "1968-01-01";                                                 // Set from date in case no date is entered
-    var today = new Date();                                                     // Set to date to today in case no date is entered
-    month = today.getMonth()+1;                                                 // Extract month (January = 0)
-    toDateArt = today.getFullYear() + '-' + month + '-' + today.getDate();      // Set to date to today (format yyyy-mm-dd)
-    
-    if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
-        fromDate = ($('#dispFilTrk_dateFrom').val());
-    } else {
-        fromDate = "";
-    }
-
-    if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
-        toDate = ($('#dispFilTrk_dateTo').val())                                // Add to where Statement array
-    } else {
-        toDate = "";
-    }
-
-    if ( fromDate != "" && toDate != "" ) {
-        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
-    } else if ( fromDate != "" ) {
-        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDateArt + "'";                      // complete WHERE BETWEEN statement
-    } else if ( toDate != "" ) {
-        whereString = "trkDateBegin BETWEEN '" + fromDateArt + "' AND '" + toDate + "'";                      // complete WHERE BETWEEN statement
-    }
-    if ( whereString.length > 0 ) {
-        whereStatement.push( whereString );                                         // Add to where Statement array
-    }
-
-    // Field type
-    var whereString = "";
-    $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
-    });
-    if ( whereString.length > 0 ) {
-        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
-        whereStatement.push( whereString );                                     // Add to where Statement array
-    };
-
-    // Field subtype
-    var whereString = "";                                                       
-    $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(19) + "',";              // Substring tyye from id
-    });
-    if ( whereString.length > 0 ) {
-        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkSubType in (" + whereString + ")";                     // complete SELECT IN statement
-        whereStatement.push( whereString );                                     // Add to where Statement array
-    }           
-
-    // Field participants
-    var whereString = "";
-    if ( ($('#dispFilTrk_participants').val()) != "" ) {
-        whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
-        whereStatement.push( whereString );
-    };
-
-    // Field country
-    var whereString = "";
-    if ( ($('#dispFilTrk_country').val()) != "" ) {
-        whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
-        whereStatement.push( whereString );
-    };
-    
-    // ************************************
-    // Put all where statements together
-
-    if ( whereStatement.length > 0 ) {
-        var sqlWhereTracks = "WHERE ";
-
-        for (var i=0; i < whereStatement.length; i++) {
-            sqlWhereTracks += whereStatement[i];
-            sqlWhereTracks += " AND ";
+        if ( trackIdFrom != "" && trackIdTo != "" ) {
+            whereString = "trkID >= " + trackIdFrom + " AND trkId <= " + trackIdTo;   // complete WHERE BETWEEN statement
+        } else if ( trackIdFrom != "" ) {
+            whereString = "trkID >= " + trackIdFrom;                                  // complete WHERE BETWEEN statement
+        } else if ( trackIdTo != "" ) {
+            whereString = "trkId <= " + trackIdTo;                                    // complete WHERE BETWEEN statement
         }
-        sqlWhereTracks = sqlWhereTracks + " trkLoginName ='" + $loginName + "'";
-        //sqlWhereTracks = sqlWhereTracks.slice(0,sqlWhereTracks.length-5);
-    } else {
-        sqlWhereTracks = "WHERE trkLoginName ='" + $loginName + "'";
+        
+        if ( whereString.length > 0 ) {
+            whereStatement.push( whereString );                                       // Add to where Statement array
+        }
+
+        // Field track name
+        var whereString = "";
+        if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
+            whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
+            whereStatement.push( whereString );
+        };
+
+        // Field route
+        var whereString = "";
+        if ( ($('#dispFilTrk_route').val()) != "" ) {
+            whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
+            whereStatement.push( whereString );
+        };
+
+        // Field date begin (date finished not used)
+        var whereString = "";                                                       // clear where string
+        fromDateArt = "1968-01-01";                                                 // Set from date in case no date is entered
+        var today = new Date();                                                     // Set to date to today in case no date is entered
+        month = today.getMonth()+1;                                                 // Extract month (January = 0)
+        toDateArt = today.getFullYear() + '-' + month + '-' + today.getDate();      // Set to date to today (format yyyy-mm-dd)
+        
+        if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
+            fromDate = ($('#dispFilTrk_dateFrom').val());
+        } else {
+            fromDate = "";
+        }
+
+        if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
+            toDate = ($('#dispFilTrk_dateTo').val())                                // Add to where Statement array
+        } else {
+            toDate = "";
+        }
+
+        if ( fromDate != "" && toDate != "" ) {
+            whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";   // complete WHERE BETWEEN statement
+        } else if ( fromDate != "" ) {
+            whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDateArt + "'";                      // complete WHERE BETWEEN statement
+        } else if ( toDate != "" ) {
+            whereString = "trkDateBegin BETWEEN '" + fromDateArt + "' AND '" + toDate + "'";                      // complete WHERE BETWEEN statement
+        }
+        if ( whereString.length > 0 ) {
+            whereStatement.push( whereString );                                         // Add to where Statement array
+        }
+
+        // Field type
+        var whereString = "";
+        $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
+            var itemId = this.id                                                    // Extract id of selected item
+            whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
+        });
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = "trkType in (" + whereString + ")";                        // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        };
+
+        // Field subtype
+        var whereString = "";                                                       
+        $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
+            var itemId = this.id                                                    // Extract id of selected item
+            whereString = whereString + "'" + itemId.slice(19) + "',";              // Substring tyye from id
+        });
+        if ( whereString.length > 0 ) {
+            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+            whereString = "trkSubType in (" + whereString + ")";                     // complete SELECT IN statement
+            whereStatement.push( whereString );                                     // Add to where Statement array
+        }           
+
+        // Field participants
+        var whereString = "";
+        if ( ($('#dispFilTrk_participants').val()) != "" ) {
+            whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
+            whereStatement.push( whereString );
+        };
+
+        // Field country
+        var whereString = "";
+        if ( ($('#dispFilTrk_country').val()) != "" ) {
+            whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
+            whereStatement.push( whereString );
+        };
+        
+        // ************************************
+        // Put all where statements together
+
+        if ( whereStatement.length > 0 ) {
+            var sqlWhereTracks = "WHERE ";
+
+            for (var i=0; i < whereStatement.length; i++) {
+                sqlWhereTracks += whereStatement[i];
+                sqlWhereTracks += " AND ";
+            }
+            sqlWhereTracks = sqlWhereTracks + " trkLoginName ='" + $loginName + "'";
+            //sqlWhereTracks = sqlWhereTracks.slice(0,sqlWhereTracks.length-5);
+        } else {
+            sqlWhereTracks = "WHERE trkLoginName ='" + $loginName + "'";
+        }
     }
   
-    // ********************************************************************************************
-    // ****** Build SQL WHERE statement for segments *******
-    var whereStatement = [];
+    if ( $clickedButton == 'dispFilSeg_ResetButton' ) {
+        
+    }
 
-    // Field segment type selected
-    var whereString = "";
-    $('#dispFilSeg_segType .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "segType";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };          
-    });
+    if ( $clickedButton == 'dispFilSeg_AddObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) { 
+        // ********************************************************************************************
+        // ****** Build SQL WHERE statement for segments *******
+        var whereStatement = [];
 
-    // Field segment name
-    var whereString = "";
-    if ( ($('#dispFilSeg_segName').val()) != "" ) {
-        whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
-        whereStatement.push( whereString );
-    };
+        // Field segment type selected
+        var whereString = "";
+        $('#dispFilSeg_segType .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "segType";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };          
+        });
 
-    // Field Start Location (ID selected)
-    var whereString = "";
-    if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
-        whereString = "segStartLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
-        whereStatement.push( whereString );
-    };
-
-    // Field Altitude of start location 
-    /*
-    var whereString = "";
-    whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
-    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
-    whereStatement.push( whereString );     
-    */
-
-    // Field type of start location
-    var whereString = "";
-    $('#dispFilSeg_startLocType .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "startLocType";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };       
-    });
-
-    // Field target location (ID selected)
-    var whereString = "";
-    if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
-        whereString = "segTargetLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
-        whereStatement.push( whereString );
-    };
-
-    // Field target location altitude
-    /*
-    var whereString = "";
-    whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
-    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
-    whereStatement.push( whereString );            
-    */
-
-    // Field target location type
-    var whereString = "";
-    $('#dispFilSeg_targetLocType .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "targetLocType";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
+        // Field segment name
+        var whereString = "";
+        if ( ($('#dispFilSeg_segName').val()) != "" ) {
+            whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
+            whereStatement.push( whereString );
         };
-    });
 
-    // Field region
-    var whereString = "";
-    if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
-        whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
-        whereStatement.push( whereString );
-    };
-
-    // Field area
-    var whereString = "";
-    if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
-        whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
-        whereStatement.push( whereString );
-    };
-    
-    // Field grade
-    var whereString = "";
-    $('#dispFilSeg_grade .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "grade";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
+        // Field Start Location (ID selected)
+        var whereString = "";
+        if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
+            whereString = "segStartLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+            whereStatement.push( whereString );
         };
-    });
-    
-    // Field climbGrade
-    var whereString = "";
-    $('#dispFilSeg_climbGrade .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "climbGrade";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
+
+        // Field Altitude of start location 
+        /*
+        var whereString = "";
+        whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
+        whereStatement.push( whereString );     
+        */
+
+        // Field type of start location
+        var whereString = "";
+        $('#dispFilSeg_startLocType .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "startLocType";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };       
+        });
+
+        // Field target location (ID selected)
+        var whereString = "";
+        if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
+            whereString = "segTargetLocationFID = " + ($('#dispFilSeg_startLocID').val()); 
+            whereStatement.push( whereString );
         };
-    });
 
-    // Field Ernsthaftigkeit
-    var whereString = "";
-    $('#dispFilSeg_ehaft .ui-selected').each(function() {
-        var itemId = this.id;
-        var sqlName = "ehaft";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
+        // Field target location altitude
+        /*
+        var whereString = "";
+        whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+        whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
+        whereStatement.push( whereString );            
+        */
+
+        // Field target location type
+        var whereString = "";
+        $('#dispFilSeg_targetLocType .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "targetLocType";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
+        });
+
+        // Field region
+        var whereString = "";
+        if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
+            whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
+            whereStatement.push( whereString );
         };
-    });
 
-    // ************************************
-    // Put all where statements together
+        // Field area
+        var whereString = "";
+        if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
+            whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
+            whereStatement.push( whereString );
+        };
+        
+        // Field grade
+        var whereString = "";
+        $('#dispFilSeg_grade .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "grade";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
+        });
+        
+        // Field climbGrade
+        var whereString = "";
+        $('#dispFilSeg_climbGrade .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "climbGrade";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
+        });
 
-    if ( whereStatement.length > 0 ) {
-        var sqlWhereSegments = "WHERE ";
+        // Field Ernsthaftigkeit
+        var whereString = "";
+        $('#dispFilSeg_ehaft .ui-selected').each(function() {
+            var itemId = this.id;
+            var sqlName = "ehaft";
+            var lenCriteria = itemId.length;
+            var startCriteria = sqlName.length + 1;
+            whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
+            if ( whereString.length > 0 ) {
+                whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+                whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
+                whereStatement.push( whereString );                                     // Add to where Statement array
+            };
+        });
 
-        for (var i=0; i < whereStatement.length; i++) {
-            sqlWhereSegments += whereStatement[i];
-            sqlWhereSegments += " AND ";
+        // ************************************
+        // Put all where statements together
+
+        if ( whereStatement.length > 0 ) {
+            var sqlWhereSegments = "WHERE ";
+
+            for (var i=0; i < whereStatement.length; i++) {
+                sqlWhereSegments += whereStatement[i];
+                sqlWhereSegments += " AND ";
+            }
+            sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
+        } else {
+            sqlWhereSegments = "WHERE 1";
         }
-        sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
-    } else {
-        sqlWhereSegments = "WHERE 1";
     }
 
     // ****************************************************
@@ -604,8 +625,17 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
                 $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
 
+                    $displayingLayers = [];
+                    $displayingLayers = $map.getLayers();
+
+                    function removeAddLayer() {
+                        if (KMLvectorTracks) {
+                            removeLayer(KMLvectorTracks);
+                        }
+                    }
+
                 // Create the KML Layer for segments
-                var KMLvector = new ol.layer.Vector({
+                var KMLvectorTracks = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         url: $trackFile,
                         format: new ol.format.KML({
@@ -613,7 +643,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                         })
                     })
                 });
-                $map.addLayer(KMLvector);
+                $map.addLayer(KMLvectorTracks);
 
                 $('.dispObjOpen').removeClass('visible');
                 $('.dispObjOpen').addClass('hidden');
@@ -626,7 +656,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
     }
 
-    if ( genTrackKml && genSegKml ) {
+    if ( genTrackKml || genSegKml ) {
         // send required parameters to gen_kml.php
         var jsonObject = {};
         phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file

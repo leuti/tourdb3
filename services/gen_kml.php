@@ -154,10 +154,6 @@ $kml[] = '</kml>';
 // Merge kml array into one variable
 $kmlOutput = join("\r\n", $kml);
 
-if ($debugLevel >= 3){
-    fputs($logFile, 'Line 145: kmlOutFileLocation: ' . $kmlOutFileLocation . "\r\n");
-};
-
 //$outFile = @fopen($kmlOutFileLocation,"a");               // Open KML file for writing
 
 fputs($outFile, "$kmlOutput");                                  // Write kml to file
