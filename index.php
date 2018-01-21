@@ -224,7 +224,7 @@
 								<!-- Button to reset filter -->
 								<!--
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_ResetButton" value="Reset Filter" />
+									<input type="submit" class="button filterResetButton" id="dispFilTrk_ResetButton" value="Reset Filter" />
 								</div>-->
 								
 							</fieldset>
@@ -272,15 +272,15 @@
 								<div id="dispFilSeg_startLocAlt_slider"></div>
 								-->
 
-								<!-- startLocType -->
+								<!-- segStartLocFID -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Right-click for multi-select)</label>
-									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
-										<li id="startLocType_1" class="ui-widget-content first">Bergstation</li>
-										<li id="startLocType_5" class="ui-widget-content">Gipfel</li>
-										<li id="startLocType_4" class="ui-widget-content">Hütte</li>
-										<li id="startLocType_2" class="ui-widget-content">Talort</li>
-										<li id="startLocType_3" class="ui-widget-content">Wegpunkt</li>
+									<label for="dispFilSeg_segStartLocFID" class="labelFirst">Start Type (CTRL+Right-click for multi-select)</label>
+									<ol id="dispFilSeg_segStartLocFID" class="selectable filterItems">
+										<li id="segStartLocFID_1" class="ui-widget-content first">Bergstation</li>
+										<li id="segStartLocFID_5" class="ui-widget-content">Gipfel</li>
+										<li id="segStartLocFID_4" class="ui-widget-content">Hütte</li>
+										<li id="segStartLocFID_2" class="ui-widget-content">Talort</li>
+										<li id="segStartLocFID_3" class="ui-widget-content">Wegpunkt</li>
 									</ol>
 								</div>
 								
@@ -299,15 +299,15 @@
 								<div id="dispFilSeg_targetLocAlt_slider"></div>
 								-->
 
-								<!-- targetLocType -->
+								<!-- segTargetLocFID -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Right-click for multi-select)</label>
-									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
-										<li id="targetLocType_1" class="ui-widget-content first">Bergstation</li>
-										<li id="targetLocType_5" class="ui-widget-content">Gipfel</li>
-										<li id="targetLocType_4" class="ui-widget-content">Hütte</li>
-										<li id="targetLocType_2" class="ui-widget-content">Talort</li>
-										<li id="targetLocType_3" class="ui-widget-content">Wegpunkt</li>
+									<label for="dispFilSeg_segTargetLocFID" class="labelFirst">Target Type (CTRL+Right-click for multi-select)</label>
+									<ol id="dispFilSeg_segTargetLocFID" class="selectable filterItems">
+										<li id="segTargetLocFID_1" class="ui-widget-content first">Bergstation</li>
+										<li id="segTargetLocFID_5" class="ui-widget-content">Gipfel</li>
+										<li id="segTargetLocFID_4" class="ui-widget-content">Hütte</li>
+										<li id="segTargetLocFID_2" class="ui-widget-content">Talort</li>
+										<li id="segTargetLocFID_3" class="ui-widget-content">Wegpunkt</li>
 									</ol>
 								</div>
 
@@ -386,7 +386,7 @@
 								<!-- Button to reset filter -->
 								<!--
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
+									<input type="submit" class="button filterResetButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
 								</div>-->
 
 							</fieldset>

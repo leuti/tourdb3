@@ -71,10 +71,6 @@ if ( $genTrackKml ) {
     $trackKmlFileURL = $kml_dir . 'tracks.kml';
     $trackOutFile = fopen($trackKmlFileURL, "w");                        // Open kml output file
 
-    if ($debugLevel >= 3){
-        fputs($logFile, 'Line 47: $trackKmlFileURL: ' . $trackKmlFileURL . "\r\n");
-    };
-
     // Write headern and style section of KML
     $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
     $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">';
@@ -149,14 +145,13 @@ if ( $genTrackKml ) {
     fputs($trackOutFile, "$kmlOutput");                                  // Write kml to file
 
 }
+fputs($logFile, "$countTracks Tracks processed\r\n");
+$countTracks = 0; 
 
 if ( $genSegKml ) {
     $segKmlFileURL = $kml_dir . 'segments.kml';
     $segOutFile = fopen($segKmlFileURL, "w");                        // Open kml output file
-
-    if ($debugLevel >= 3){
-        fputs($logFile, 'Line 47: $segKmlFileURL: ' . $segKmlFileURL . "\r\n");
-    };
+    $kml = [];
 
     // Write headern and style section of KML
     $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -167,8 +162,8 @@ if ( $genSegKml ) {
     // Create kml stylemaps
     $i=0;
     for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
-            $kml = createStyles($styleArray[$i], $kml);    
-        }
+        $kml = createStyles($styleArray[$i], $kml);    
+    }
 
     // Write main section - intro
     $kml[] = '    <Folder>';
@@ -178,14 +173,19 @@ if ( $genSegKml ) {
 
     // ----- HERE -----------------
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
-    $sql .= "FROM tbl_tracks ";
+    $sql =  "SELECT segId, segName, segSourceFID, segSourceRef, segGradeFID, ";
+    $sql .= "TIME_FORMAT(segTStartTarget, '%h:%i') AS timeUp FROM tbl_segments ";
     $sql .= $sqlWhereSegments;
 
     $records = mysqli_query($conn, $sql);
+    if ( $records ) { 
+        fputs($logFile, "Line 180: sql successfully executed\r\n");
+    } else {
+        fputs($logFile, "Line 182: sql error executing sql\r\n");
+    }
 
     if ($debugLevel >= 3){
-        fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
+        fputs($logFile, 'Line 182: sql: ' . $sql . "\r\n");
     };
 
     // Loop through each selected track and write main track data
@@ -195,7 +195,9 @@ if ( $genSegKml ) {
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
         $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
+        $kml[] = '      <description>' . $segment["sourceFID"] . '-' . $segment["sourceRef"] . ' ' .  $segment["segName"] . 
+        ' (' . $segment["grade"] . '/' . $segment["timeUp"] . ')</description>';
+ //       $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
         
         $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
         $i=0;
@@ -239,7 +241,7 @@ $returnObject['errmessage'] = '';                               // add empty err
 echo json_encode($returnObject);                                // echo JSON object to client
 
 fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
-fputs($logFile, "$countTracks Tracks processed\r\n");
+fputs($logFile, "$countTracks Segments processed\r\n");
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                               // close log file
