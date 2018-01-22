@@ -1,31 +1,32 @@
 <?php
 // ---------------------------------------------------------------------------------------------
 // This script generates kml files (and potentially also gpx)
+// for tracks and segments
 // It should be by all functions expecting a kml and gpx output
 //
 // Created: 30.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
 //
-// * Ability to select default colours for track type or one specific color (to differenciate from segments)
+// Tasks
+// *
 
 // -----------------------------------
 // Set variables and parameters    
 date_default_timezone_set('Europe/Zurich');
-include("config.inc.php");  // Include config file
+include("config.inc.php");                                                  // Include config file
 
 // Set debug level
-$debugLevel = 6; // 0 = off, 1 = min, 3 = a lot, 5 = all 
-$countTracks = 0;                                       // Internal counter for tracks processed
+$debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
+$countTracks = 0;                                                           // Internal counter for tracks processed
 
 // Open log file
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";          // Assign file location
+    $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
 };
 
-// --------------------------------------------------
 // Array for the styling of the lines in the kml file
 $styleArray = array(
     array("Wanderung","FF01EDFF",3,"FF01EDFF",5),                           // gelb
@@ -45,15 +46,15 @@ $styleArray = array(
     array("Others","#FFCC66FF",3,"#FFCC66FF",5)                             // rosa
 );
 
-// variables passed on by client (as formData object)
+// variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
-$sessionid = $receivedData["sessionid"];
-$sqlWhereTracks = $receivedData["sqlWhereTracks"];
-$genTrackKml = $receivedData["genTrackKml"];
-$sqlWhereSegments = $receivedData["sqlWhereSegments"];
-$genSegKml = $receivedData["genSegKml"];
+$sessionid = $receivedData["sessionid"];                                    
+$sqlWhereTracks = $receivedData["sqlWhereTracks"];                          // where statement to select tracks to be displayed
+$genTrackKml = $receivedData["genTrackKml"];                                // true when tracks kml file should be generated
+$sqlWhereSegments = $receivedData["sqlWhereSegments"];                      // where statement to select tracks to be displayed
+$genSegKml = $receivedData["genSegKml"];                                    // true when tracks kml file should be generated
 
-if ($debugLevel >= 3){
+if ($debugLevel >= 2){
     fputs($logFile, 'Line 56: sessionid: ' . $sessionid . "\r\n");
     fputs($logFile, 'Line 57: sqlWhereTracks: ' . $sqlWhereTracks . "\r\n");
     fputs($logFile, 'Line 58: sqlWhereSegments: ' . $sqlWhereSegments . "\r\n");
@@ -62,14 +63,19 @@ if ($debugLevel >= 3){
 };
 
 // create upload dir / file name
-$kml_dir = '../tmp/kml_disp/' . $sessionid . '/';       // Session id used to create unique directory
-if (!is_dir ( $kml_dir )) {                                   // Create directory with name = session id
+$kml_dir = '../tmp/kml_disp/' . $sessionid . '/';                           // Session id used to create unique directory
+if (!is_dir ( $kml_dir )) {                                                 // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
 
+// ==================================================================
+// If flag is set to generate tracks KML
+//
 if ( $genTrackKml ) {
+
+    // open file to store track kml file
     $trackKmlFileURL = $kml_dir . 'tracks.kml';
-    $trackOutFile = fopen($trackKmlFileURL, "w");                        // Open kml output file
+    $trackOutFile = fopen($trackKmlFileURL, "w");                           // Open kml output file
 
     // Write headern and style section of KML
     $kml[] = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -79,9 +85,9 @@ if ( $genTrackKml ) {
 
     // Create kml stylemaps
     $i=0;
-    for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
-            $kml = createStyles($styleArray[$i], $kml);    
-        }
+    for ($i; $i<11; $i++) {                                                 // 10 is the number of existing subtypes in array (lines)
+        $kml = createStyles($styleArray[$i], $kml);    
+    }
 
     // Write main section - intro
     $kml[] = '    <Folder>';
@@ -103,15 +109,16 @@ if ( $genTrackKml ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
-        $countTracks++;                                                             // Counter for the number of tracks produced
+        $countTracks++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
         $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
         $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
-        
+
+        // set default stylmap and then loop through style maps
         $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
         $i=0;
-        for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
+        for ($i; $i<11; $i++) {                                             // 10 is the number of existing subtypes in array (lines)
             if ($styleArray[$i][0] == $singleRecord["trkSubType"])
             {
                 $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';
@@ -140,17 +147,22 @@ if ( $genTrackKml ) {
     // Merge kml array into one variable
     $kmlOutput = join("\r\n", $kml);
 
-    //$trackOutFile = @fopen($kmltrackOutFileLocation,"a");               // Open KML file for writing
-
-    fputs($trackOutFile, "$kmlOutput");                                  // Write kml to file
-
+    // Write kml into file
+    fputs($trackOutFile, "$kmlOutput");                                     // Write kml to file
 }
 fputs($logFile, "$countTracks Tracks processed\r\n");
 $countTracks = 0; 
 
+// ==================================================================
+// If flag is set to generate segments KML
+//
 if ( $genSegKml ) {
+    
+    // open file to store segment kml file
     $segKmlFileURL = $kml_dir . 'segments.kml';
-    $segOutFile = fopen($segKmlFileURL, "w");                        // Open kml output file
+    $segOutFile = fopen($segKmlFileURL, "w");                               // Open kml output file
+    
+    // re-initialise kml variable
     $kml = [];
 
     // Write headern and style section of KML
@@ -161,7 +173,7 @@ if ( $genSegKml ) {
 
     // Create kml stylemaps
     $i=0;
-    for ($i; $i<11; $i++) {                                 // 10 is the number of existing subtypes in array (lines)
+    for ($i; $i<11; $i++) {                                                 // 10 is the number of existing subtypes in array (lines)
         $kml = createStyles($styleArray[$i], $kml);    
     }
 
@@ -171,22 +183,16 @@ if ( $genSegKml ) {
     $kml[] = '        <visibility>0</visibility>';
     $kml[] = '        <open>1</open>';
 
-    // ----- HERE -----------------
     // Select tracks meeting given WHERE clause
-
     $sql =  "SELECT vw_segments.Id, vw_segments.segName, vw_segments.sourceFID, ";
     $sql .= "vw_segments.sourceRef, vw_segments.grade, vw_segments.coordinates, ";
     $sql .= "TIME_FORMAT(tStartTarget, '%h:%i') AS timeUp FROM vw_segments ";
     $sql .= "INNER JOIN tbl_waypoints ON vw_segments.segTargetLocFID = tbl_waypoints.waypID ";
     $sql .= $sqlWhereSegments;
 
+    // execute sql query and store results in variable $records
     $records = mysqli_query($conn, $sql);
-    if ( $records ) { 
-        fputs($logFile, "Line 180: sql successfully executed\r\n");
-    } else {
-        fputs($logFile, "Line 182: sql error executing sql\r\n");
-    }
-
+    
     if ($debugLevel >= 3){
         fputs($logFile, 'Line 182: sql: ' . $sql . "\r\n");
     };
@@ -194,14 +200,14 @@ if ( $genSegKml ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
-        $countTracks++;                                                             // Counter for the number of tracks produced
+        $countTracks++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
         $kml[] = '      <description>' . $singleRecord["sourceFID"] . '-' . $singleRecord["sourceRef"] . ' ' .
                 $singleRecord["segName"] . ' (' . $singleRecord["grade"] . '/' . $singleRecord["timeUp"] . 
                 ')</description>';
-        $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
+        $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';         // Set styleUrl to Others in case nothing in found
         $kml[] = '          <ExtendedData>';
         $kml[] = '            <Data name="type">';
         $kml[] = '              <value>linepolygon</value>';
@@ -222,34 +228,31 @@ if ( $genSegKml ) {
     // Merge kml array into one variable
     $kmlOutput = join("\r\n", $kml);
 
-    //$segOutFile = @fopen($kmlsegOutFileLocation,"a");               // Open KML file for writing
-
-    fputs($segOutFile, "$kmlOutput");                                  // Write kml to file
+    // write kml output to file
+    fputs($segOutFile, "$kmlOutput");                                       // Write kml to file
 
 }
 
-$returnObject['status'] = 'OK';                                 // add status field (OK) to trackobj
-$returnObject['errmessage'] = '';                               // add empty error message to trackobj
-echo json_encode($returnObject);                                // echo JSON object to client
+// Create return object
+$returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
+$returnObject['errmessage'] = '';                                           // add empty error message to trackobj
+echo json_encode($returnObject);                                            // echo JSON object to client
 
 fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 fputs($logFile, "$countTracks Segments processed\r\n");
 
 // Close all files and connections
-if ( $debugLevel >= 1 ) fclose($logFile);                                               // close log file
-mysql_close($conn);                                             // close SQL connection 
-fclose($trackOutFile);                                               // close kml file
+if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
+mysql_close($conn);                                                         // close SQL connection 
+fclose($trackOutFile);                                                      // close kml file
+fclose($segOutFile);
 
 exit;
 
-//DEBUG
-if ($debugLevel >= 1){
-    fclose($logFile);
-};
-
+// function to create styles in KML file
 function createStyles ($styleArray,$kml) {
     
-    // Generates style map and style for each subtype                          //// variable aus $styleArray lesen und einsetzen
+    // Generates style map and style for each subtype                       // variable aus $styleArray lesen und einsetzen
     $styleMapId = "stylemap_" . $styleArray[0];
     $styleUrlNorm = "style_" . $styleArray[0] . "_norm";
     $styleUrlHl = "style_" . $styleArray[0] . "_hl";

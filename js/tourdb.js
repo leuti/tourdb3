@@ -429,19 +429,24 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var whereStatement = [];
 
     // Field segment type selected
+    var selected = [];
+    var sqlName;
     var whereString = "";
     $('#dispFilSeg_segType .ui-selected').each(function() {
         var itemId = this.id;
-        var sqlName = "segType";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + "'" + itemId.slice(startCriteria,lenCriteria) + "',";
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = "segType in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };          
+        sqlName = "segType";
+        var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
+        selected.push( criteria );
     });
+    if ( selected.length > 0 ) {
+        whereString = sqlName + " in (";
+        var i;
+        for (i=0; i<selected.length; ++i) {
+            whereString += "'" + selected[i] + "',";
+        }
+    whereString = whereString.slice(0,whereString.length-1) + ")"; 
+    whereStatement.push( whereString );                                     // Add to where Statement array
+    }
 
     // Field segment name
     var whereString = "";
@@ -506,7 +511,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var whereString = "";
     $('#dispFilSeg_targetLocType .ui-selected').each(function() {
         var itemId = this.id;
-        sqlName = itemId.slice(0,itemId.length-2);
+        sqlName = "targetLocType";
         var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
         selected.push( criteria );
     });
@@ -536,34 +541,44 @@ $(document).on('click', '.applyFilterButton', function (e) {
     };
     
     // Field grade
-    var whereString = "";
+    var selected = [];
+    var sqlName;
+    var whereString = "";    
     $('#dispFilSeg_grade .ui-selected').each(function() {
         var itemId = this.id;
-        var sqlName = "grade";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };
+        sqlName = "grade";
+        var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
+        selected.push( criteria );
     });
+    if ( selected.length > 0 ) {
+        whereString = sqlName + " in (";
+        var i;
+        for (i=0; i<selected.length; ++i) {
+            whereString += "'" + selected[i] + "',";
+        }
+    whereString = whereString.slice(0,whereString.length-1) + ")"; 
+    whereStatement.push( whereString );                                     // Add to where Statement array
+    }
     
     // Field climbGrade
-    var whereString = "";
+    var selected = [];
+    var sqlName;
+    var whereString = "";    
     $('#dispFilSeg_climbGrade .ui-selected').each(function() {
         var itemId = this.id;
-        var sqlName = "climbGrade";
-        var lenCriteria = itemId.length;
-        var startCriteria = sqlName.length + 1;
-        whereString = whereString + itemId.slice(startCriteria,lenCriteria) + "',";  
-        if ( whereString.length > 0 ) {
-            whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-            whereString = sqlName + " in (" + whereString + ")";                       // complete SELECT IN statement
-            whereStatement.push( whereString );                                     // Add to where Statement array
-        };
+        sqlName = "climbGrade";
+        var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
+        selected.push( criteria );
     });
+    if ( selected.length > 0 ) {
+        whereString = sqlName + " in (";
+        var i;
+        for (i=0; i<selected.length; ++i) {
+            whereString += "'" + selected[i] + "',";
+        }
+    whereString = whereString.slice(0,whereString.length-1) + ")"; 
+    whereStatement.push( whereString );                                     // Add to where Statement array
+    }
 
     // Field Ernsthaftigkeit
     var whereString = "";
@@ -582,7 +597,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
     // *******************************************
     // ========= Put all where statements together
-
+    //
     if ( whereStatement.length > 0 ) {
         var sqlWhereSegments = "WHERE ";
 
@@ -592,7 +607,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
         sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
     } else {
-        sqlWhereSegments = "WHERE 1";
+        sqlWhereSegments = "WHERE 1=2";
     }
 
     // ****************************************************
