@@ -220,8 +220,8 @@ $( function() {
     $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
     "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
     
-    // segStartLocFID
-    $( "#dispFilSeg_segStartLocFID" ).selectable({});
+    // startLocType
+    $( "#dispFilSeg_startLocType" ).selectable({});
 
     // targetLocName
     $( "#dispFilSeg_targetLocName" ).autocomplete({
@@ -251,8 +251,8 @@ $( function() {
     $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
     "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
 
-    // segTargetLocFID
-    $( "#dispFilSeg_segTargetLocFID" ).selectable({});
+    // targetLocType
+    $( "#dispFilSeg_targetLocType" ).selectable({});
 
     // Region
     $( "#dispFilSeg_segRegion" ).autocomplete({
@@ -420,7 +420,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWhereTracks = sqlWhereTracks + " trkLoginName ='" + $loginName + "'";
         //sqlWhereTracks = sqlWhereTracks.slice(0,sqlWhereTracks.length-5);
     } else {
-        sqlWhereTracks = "WHERE trkLoginName ='" + $loginName + "'";
+        //sqlWhereTracks = "WHERE trkLoginName ='" + $loginName + "'";
+        sqlWhereTracks = "WHERE 1=2";
     }
   
     // ********************************************************************************************
@@ -452,7 +453,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Field Start Location (ID selected)
     var whereString = "";
     if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
-        whereString = "segStartLocFID = " + ($('#dispFilSeg_startLocID').val()); 
+        whereString = "startLocType = " + ($('#dispFilSeg_startLocID').val()); 
         whereStatement.push( whereString );
     };
 
@@ -468,7 +469,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var selected = [];
     var sqlName;
     var whereString = "";    
-    $('#dispFilSeg_segStartLocFID .ui-selected').each(function() {
+    $('#dispFilSeg_startLocType .ui-selected').each(function() {
         var itemId = this.id;
         sqlName = itemId.slice(0,itemId.length-2);
         var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
@@ -480,14 +481,14 @@ $(document).on('click', '.applyFilterButton', function (e) {
         for (i=0; i<selected.length; ++i) {
             whereString += "'" + selected[i] + "',";
         }
-    }
     whereString = whereString.slice(0,whereString.length-1) + ")"; 
     whereStatement.push( whereString );                                     // Add to where Statement array
+    }
     
     // Field target location (ID selected)
     var whereString = "";
     if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
-        whereString = "segTargetLocFID = " + ($('#dispFilSeg_startLocID').val()); 
+        whereString = "targetLocType = " + ($('#dispFilSeg_startLocID').val()); 
         whereStatement.push( whereString );
     };
 
@@ -503,7 +504,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var selected = [];
     var sqlName;
     var whereString = "";
-    $('#dispFilSeg_segTargetLocFID .ui-selected').each(function() {
+    $('#dispFilSeg_targetLocType .ui-selected').each(function() {
         var itemId = this.id;
         sqlName = itemId.slice(0,itemId.length-2);
         var criteria = itemId.slice(sqlName.length+1,itemId.length);                // +1 to remove _
@@ -515,9 +516,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
         for (i=0; i<selected.length; ++i) {
             whereString += "'" + selected[i] + "',";
         }
-    }
     whereString = whereString.slice(0,whereString.length-1) + ")"; 
     whereStatement.push( whereString );                                     // Add to where Statement array
+    }
+
 
     // Field region
     var whereString = "";

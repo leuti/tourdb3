@@ -56,3 +56,52 @@ ALTER TABLE `tbl_tracks`
 ALTER TABLE `tbl_tracks`
   MODIFY `trkId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=0;
 
+
+
+-- 
+-- Create View vw_segments
+-- 
+DROP TABLE IF EXISTS `vw_segments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER VIEW `vw_segments` 
+AS select `seg`.`segId` AS `Id`
+    ,`seg`.`segTypeFID` AS `segType`
+    ,`seg`.`segSourceFID` AS `sourceFID`    
+    ,`seg`.`segSourceRef` AS `sourceRef`
+    ,`seg`.`segName` AS `segName`
+    ,`seg`.`segRouteName` AS `routeName`
+    ,`seg`.`segStartLocationFID` AS `segStartLocFID`
+    ,`waypst`.`waypNameShort` AS `startLocName`
+    ,`waypst`.`waypAltitude` AS `startLocAlt`
+    ,`waypst`.`waypTypeFID` AS `startLocType`
+    ,`wtyp_start`.`wtypCode` AS `startWtypCode`
+    ,`seg`.`segTargetLocationFID` AS `segTargetLocFID`
+    ,`waypta`.`waypNameShort` AS `targetLocName`
+    ,`waypta`.`waypAltitude` AS `targetLocAlt`
+    ,`waypta`.`waypTypeFID` AS `targetLocType`
+    ,`wtyp_target`.`wtypCode` AS `targetWtypCode`
+    ,`areas`.`areaID` AS `areaId`
+    ,`areas`.`areaNameShort` AS `area`
+    ,`regions`.`regID` AS `regionId`
+    ,`regions`.`regNameShort` AS `region`
+    ,`seg`.`segCountry` AS `country`
+    ,`seg`.`segGradeFID` AS `grade`
+    ,ifnull(`seg`.`segClimbGradeFID`,'na') AS `climbGrade`
+    ,`grades`.`grdGroup` AS `grdTracksGroup`
+    ,`seg`.`segFirn` AS `firn`
+    ,`seg`.`segEhaft` AS `eHaft`
+    ,`seg`.`segExpo` AS `expo`
+    ,date_format(`seg`.`segTStartTarget`,'%H:%i') AS `tStartTarget`    
+    ,`seg`.`segMUStartTarget` AS `mUStartTarget`
+    ,`seg`.`segCoordinates` AS `coordinates`
+    ,if((isnull(`seg`.`segCoordinates`) or (`seg`.`segCoordinates` = '')),'0','1') AS `hasCoordinates` 
+from ((((((
+    (`tbl_segments` `seg` join `tbl_waypoints` `waypst` on ((`waypst`.`waypID` = `seg`.`segStartLocationFID`))) 
+    join `tbl_waypoints` `waypta` on((`waypta`.`waypID` = `seg`.`segTargetLocationFID`))) 
+    join `tbl_areas` `areas` on((`areas`.`areaID` = `seg`.`segAreaFID`))) 
+    join `tbl_regions` `regions` on((`regions`.`regID` = `areas`.`areaRegionFID`))) 
+    join `tbl_grades` `grades` on((`grades`.`grdCodeID` = `seg`.`segGradeFID`))) 
+    join `tbl_waypointtypes` `wtyp_start` on((`wtyp_start`.`wtypID` = `waypst`.`waypTypeFID`))) 
+    join `tbl_waypointtypes` `wtyp_target` on((`wtyp_target`.`wtypID` = `waypta`.`waypTypeFID`)));
+

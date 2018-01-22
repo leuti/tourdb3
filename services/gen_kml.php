@@ -173,8 +173,11 @@ if ( $genSegKml ) {
 
     // ----- HERE -----------------
     // Select tracks meeting given WHERE clause
-    $sql =  "SELECT segId, segName, segSourceFID, segSourceRef, segGradeFID, ";
-    $sql .= "TIME_FORMAT(segTStartTarget, '%h:%i') AS timeUp FROM tbl_segments ";
+
+    $sql =  "SELECT vw_segments.Id, vw_segments.segName, vw_segments.sourceFID, ";
+    $sql .= "vw_segments.sourceRef, vw_segments.grade, vw_segments.coordinates, ";
+    $sql .= "TIME_FORMAT(tStartTarget, '%h:%i') AS timeUp FROM vw_segments ";
+    $sql .= "INNER JOIN tbl_waypoints ON vw_segments.segTargetLocFID = tbl_waypoints.waypID ";
     $sql .= $sqlWhereSegments;
 
     $records = mysqli_query($conn, $sql);
@@ -192,31 +195,20 @@ if ( $genSegKml ) {
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
         $countTracks++;                                                             // Counter for the number of tracks produced
-        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
-        $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
+        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
+        $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '      <description>' . $segment["sourceFID"] . '-' . $segment["sourceRef"] . ' ' .  $segment["segName"] . 
-        ' (' . $segment["grade"] . '/' . $segment["timeUp"] . ')</description>';
- //       $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
-        
-        $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
-        $i=0;
-        for ($i; $i<11; $i++) {                                                     // 10 is the number of existing subtypes in array (lines)
-            if ($styleArray[$i][0] == $singleRecord["trkSubType"])
-            {
-                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';
-                break;
-            }
-        }
-        $kml[] = $styleMapDefault;
-        
+        $kml[] = '      <description>' . $singleRecord["sourceFID"] . '-' . $singleRecord["sourceRef"] . ' ' .
+                $singleRecord["segName"] . ' (' . $singleRecord["grade"] . '/' . $singleRecord["timeUp"] . 
+                ')</description>';
+        $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
         $kml[] = '          <ExtendedData>';
         $kml[] = '            <Data name="type">';
         $kml[] = '              <value>linepolygon</value>';
         $kml[] = '            </Data>';
         $kml[] = '          </ExtendedData>';
         $kml[] = '          <LineString>';
-        $kml[] = '            <coordinates>' . $singleRecord["trkCoordinates"];
+        $kml[] = '            <coordinates>' . $singleRecord["coordinates"];
         $kml[] = '            </coordinates>';
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
