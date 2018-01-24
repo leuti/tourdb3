@@ -31,7 +31,6 @@ sqlWhereSegmentsPrev = "";                                          // the gen_k
 var KMLlayer;
 var mapSTlayer_grau;
 
-
 // ======================================================
 // ====== Perform these actions when page is ready ======
 // ======================================================
@@ -293,7 +292,9 @@ $( function() {
 // Executes code below when user clicks the 'Apply' filter button for tracks
 $(document).on('click', '.applyFilterButton', function (e) {
     e.preventDefault();
-    
+    sqlWhereTracks = "";
+    sqlWhereSegments = "";
+  
     $clickedButton = this.id;
 
     // *****************************************************
@@ -418,11 +419,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             sqlWhereTracks += " AND ";
         }
         sqlWhereTracks = sqlWhereTracks + " trkLoginName ='" + $loginName + "'";
-        //sqlWhereTracks = sqlWhereTracks.slice(0,sqlWhereTracks.length-5);
-    } else {
-        //sqlWhereTracks = "WHERE trkLoginName ='" + $loginName + "'";
-        sqlWhereTracks = "WHERE 1=2";
-    }
+    } 
   
     // ********************************************************************************************
     // ****** Build SQL WHERE statement for segments *******
@@ -525,7 +522,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     whereStatement.push( whereString );                                     // Add to where Statement array
     }
 
-
     // Field region
     var whereString = "";
     if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
@@ -606,21 +602,19 @@ $(document).on('click', '.applyFilterButton', function (e) {
             sqlWhereSegments += " AND ";
         }
         sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
-    } else {
-        sqlWhereSegments = "WHERE 1=2";
     }
 
     // ****************************************************
     // Generate KML for tracks and segments  
 
     // evaluate if sqlWhereTracks and sqlWhereSegments have changed
-    if ( sqlWhereTracks == sqlWhereTracksPrev ) {
+    if ( sqlWhereTracks == "" || sqlWhereTracks == sqlWhereTracksPrev ) {
         genTrackKml = false;
     } else {
         genTrackKml = true;
     }
 
-    if ( sqlWhereSegments == sqlWhereSegmentsPrev ) {
+    if ( sqlWhereSegments == "" || sqlWhereSegments == sqlWhereSegmentsPrev ) {
         genSegKml = false;
     } else {
         genSegKml = true;
@@ -633,15 +627,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
             if ( responseObject["status"] == "OK") {
 
-                    if ( KMLlayer && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
-                        $clickedButton == 'dispFilSeg_NewLoadButton' )) { 
-                        $map.getLayers().forEach(function(el) {
-                            $map.removeLayer(el);
-                        })
-                        mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                        //mapSTlayer_grau.set('name', 'mapSTlayer_grau');
-                        $map.addLayer(mapSTlayer_grau);
-                    }
+                if ( KMLlayer && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
+                    $clickedButton == 'dispFilSeg_NewLoadButton' )) { 
+                    $map.getLayers().forEach(function(el) {
+                        $map.removeLayer(el);
+                    })
+                    mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                    //mapSTlayer_grau.set('name', 'mapSTlayer_grau');
+                    $map.addLayer(mapSTlayer_grau);
+                }
 
                 if ( genTrackKml ) {
                     $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
@@ -697,6 +691,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
         xhr.setRequestHeader( "Content-Type", "application/json" );
         jsn = JSON.stringify(jsonObject);
         xhr.send( jsn );                                           // send formData object to service using xhr   
+    } else {
+        $('#statusMessage').text('No selection criteria defined');
+        $("#statusMessage").show().delay(5000).fadeOut();
+        document.getElementById("inputFile").value = "";
     }
 });
 

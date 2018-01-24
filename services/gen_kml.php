@@ -2,13 +2,23 @@
 // ---------------------------------------------------------------------------------------------
 // This script generates kml files (and potentially also gpx)
 // for tracks and segments
-// It should be by all functions expecting a kml and gpx output
+// It should be called by all functions expecting a kml and gpx output
 //
+// INPUT
+// It is expecting a JSON object with following content: 
+// ["sessionid"], ["sqlWhereTracks"], ["genTrackKml"],["sqlWhereSegments"]["genSegKml"]
+//
+// OUTPUT
+// The script returns a JSON object with following content:
+// ['errmessage'] - only filled with an error message in case of an error
+// ['status']     - 'OK' if no error has occured, 'ERR' in case of an error
+
 // Created: 30.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
 //
 // Tasks
-// *
+// * Error handling to be improved
+// * Ability to generate GPX files
 
 // -----------------------------------
 // Set variables and parameters    
