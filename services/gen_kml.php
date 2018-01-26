@@ -182,10 +182,40 @@ if ( $genSegKml ) {
     $kml[] = '    <name>tourdb - segments</name>';
 
     // Create kml stylemaps
-    $i=0;
-    for ($i; $i<11; $i++) {                                                 // 10 is the number of existing subtypes in array (lines)
-        $kml = createStyles($styleArray[$i], $kml);    
-    }
+    $kml[] = '    <StyleMap id="stylemap_Others">';
+    
+    // StyleMap
+    $kml[] = '      <Pair>';
+    $kml[] = '        <key>normal</key>';
+    $kml[] = '        <styleUrl>#style_Others_norm</styleUrl>';
+    $kml[] = '      </Pair>';
+    $kml[] = '      <Pair>';
+    $kml[] = '        <key>highlight</key>';
+    $kml[] = '        <styleUrl>#style_Others_hl</styleUrl>';
+    $kml[] = '      </Pair>';
+    $kml[] = '    </StyleMap>';
+
+    // Style
+    $kml[] = '    <Style id="style_Others_norm">';
+    $kml[] = '      <LineStyle>';
+    $kml[] = '        <color>#FFCC66FF</color>';
+    $kml[] = '        <width>3</width>';
+    $kml[] = '      </LineStyle>';
+    $kml[] = '      <PolyStyle>';
+    $kml[] = '        <color>#FFCC66FF</color>';
+    $kml[] = '        <width>3</width>';
+    $kml[] = '      </PolyStyle>';
+    $kml[] = '    </Style>';
+    $kml[] = '    <Style id="style_Others_hl">';
+    $kml[] = '      <LineStyle>';
+    $kml[] = '        <color>#FFCC66FF</color>';
+    $kml[] = '        <width>5</width>';
+    $kml[] = '      </LineStyle>';
+    $kml[] = '      <PolyStyle>';
+    $kml[] = '        <color>#FFCC66FF</color>';
+    $kml[] = '        <width>5</width>';
+    $kml[] = '      </PolyStyle>';
+    $kml[] = '    </Style>';
 
     // Write main section - intro
     $kml[] = '    <Folder>';
@@ -214,7 +244,7 @@ if ( $genSegKml ) {
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '      <description>' . $singleRecord["sourceFID"] . '-' . $singleRecord["sourceRef"] . ' ' .
+        $kml[] = '          <description>' . $singleRecord["sourceFID"] . '-' . $singleRecord["sourceRef"] . ' ' .
                 $singleRecord["segName"] . ' (' . $singleRecord["grade"] . '/' . $singleRecord["timeUp"] . 
                 ')</description>';
         $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';         // Set styleUrl to Others in case nothing in found

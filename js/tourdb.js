@@ -28,7 +28,8 @@ segmentFileNameURL = document.URL + "tmp/kml_disp/" + segmentFileName;
 sqlWhereTracksPrev = "";                                            // variable to store previous sql where statement
 sqlWhereSegmentsPrev = "";                                          // the gen_kml.php is only called if statement has changed
 
-var KMLlayer;
+var trackKMLlayer;
+var segKMLlayer;
 var mapSTlayer_grau;
 
 // ======================================================
@@ -602,6 +603,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             sqlWhereSegments += " AND ";
         }
         sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
+        sqlWhereSegments = sqlWhereSegments + " AND coordinates is not null"
     }
 
     // ****************************************************
@@ -627,7 +629,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
             if ( responseObject["status"] == "OK") {
 
-                if ( KMLlayer && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
+                if ( ( trackKMLlayer || segKMLlayer )
+                    && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
                     $clickedButton == 'dispFilSeg_NewLoadButton' )) { 
                     $map.getLayers().forEach(function(el) {
                         $map.removeLayer(el);
@@ -639,8 +642,9 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
                 if ( genTrackKml ) {
                     $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+                    //$trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
                     // Create the KML Layer for tracks
-                    KMLlayer = new ol.layer.Vector({
+                    trackKMLlayer = new ol.layer.Vector({
                         source: new ol.source.Vector({
                             url: $trackFile,
                             format: new ol.format.KML({
@@ -648,13 +652,14 @@ $(document).on('click', '.applyFilterButton', function (e) {
                             })
                         })
                     });
-                    $map.addLayer(KMLlayer);
+                    $map.addLayer(trackKMLlayer);
                 }
 
                 if ( genSegKml ) {
+                    //$segFile = document.URL + "tmp/kml_disp/" + sessionid + "/test.kml";
                     $segFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
                     // Create the KML Layer for segments
-                    KMLlayer = new ol.layer.Vector({
+                    segKMLlayer = new ol.layer.Vector({
                         source: new ol.source.Vector({
                             url: $segFile,
                             format: new ol.format.KML({
@@ -662,7 +667,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                             })
                         })
                     });
-                    $map.addLayer(KMLlayer);
+                    $map.addLayer(segKMLlayer);
                 }
 
                 $('.dispObjOpen').removeClass('visible');
