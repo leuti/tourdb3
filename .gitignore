@@ -1,9 +1,12 @@
 kml/
 work/
 jqw/
-log/
+log/*.log
 import/
 out (move to log)/
 tmp/
 test/
 tmpout/
+snipet/
+tmp/gps_uploads/*.*
+tmp/kml_disp/*.*
