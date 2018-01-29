@@ -84,7 +84,6 @@
 		<!-- ========================================================================== -->
 		<div id="panelLogin" class="tourdbPanel active">
 			<div id=loginForm class="formCenter">
-
 				<fieldset>
         		
 					<!-- Import Tracks -->
@@ -442,6 +441,18 @@
 			</div>
 
 			<div id="pImpUpdateTrack" class="formCenter pImpDiv">
+				<ul class="updTrkButtons">
+					<li id="btnUpdTrk_main" class="updTrkButtonsLi active" style="display:none;">
+						<a id="btnUpdTrk_main_a" class="mainButtonsA" href="#btnUpdTrk_main"><h2>Main</h2></a>
+					</li>
+					<li id="btnUpdTrk_peakPart" class="updTrkButtonsLi">
+						<a id="btnUpdTrk_peakPart_a" class="mainButtonsA" href="#btnUpdTrk_peakPart"><h2>Peak and Participants</h2></a>
+					</li>
+					<li id="btnUpdTrk_others" class="updTrkButtonsLi">
+						<a id="btnUpdTrk_others_a" class="mainButtonsA" href="#btnUpdTrk_others"><h2>Others</h2></a> 
+					</li>
+				</ul>
+	
 				<fieldset>
         		
 					<!-- Import Tracks -->
