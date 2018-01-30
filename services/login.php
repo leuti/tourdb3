@@ -17,7 +17,7 @@ date_default_timezone_set('Europe/Zurich');                         // must be s
 $debugLevel = 3;                                                    // 0 = off, 6 = all
 
 // Open file for import log
-$importGpxLog = dirname(__FILE__) . "\..\log\login.log";        // Assign file location
+$importGpxLog = dirname(__FILE__) . "/../log/login.log";        // Assign file location
 $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
 fputs($logFile, "\r\n============================================================\r\n");    
 fputs($logFile, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
@@ -27,7 +27,7 @@ $receivedData = json_decode ( file_get_contents('php://input'), true );
 $loginName = $receivedData["loginName"];
 $loginPasswd = $receivedData["loginPasswd"];
 
-fputs($logFile, "Line 52: Request (JSON): $loginName & $loginPasswd\r\n");    
+if( $debugLevel > 1) fputs($logFile, "Line 30: Request (JSON): $loginName & $loginPasswd\r\n");    
 
 // Start or restart session 
 session_start();
@@ -39,7 +39,7 @@ session_start();
             $loginName == "admin" && $loginPasswd == "admin" )
         {
             $_SESSION["login"] = $loginName;
-            fputs($logFile, "Line 44: $loginName\r\n");   
+            if( $debugLevel > 3) fputs($logFile, "Line 42: $loginName\r\n");   
         }
     }
 
@@ -54,5 +54,7 @@ session_start();
         $returnObject['loginstatus'] = "ERROR";
     }
     echo json_encode($returnObject); 
-    fputs($logFile, "Line 58: sessionid: " . $returnObject['sessionid'] . " || " . $returnObject['loginstatus'] . "\r\n");        
+    if( $debugLevel > 3) {
+        fputs($logFile, "Line 58: sessionid: " . $returnObject['sessionid'] . " || " . $returnObject['loginstatus'] . "\r\n");
+    }
 ?>
