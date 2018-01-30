@@ -51,7 +51,7 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 4;                                                    // 0 = off, 6 = all
+$debugLevel = 3;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
@@ -352,7 +352,7 @@ function insertTrackPoints($conn,$trackid,$filename)
     $distance = (float) 0;
 
     // prepare insert statement
-    $sqlBase = "INSERT INTO `tbl_trackPoints`";                     // create first part of insert statement 
+    $sqlBase = "INSERT INTO `tbl_trackpoints`";                     // create first part of insert statement 
     $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
     $sqlBase .= "  `tptEle`, `tptTime`) VALUES "; 
     
@@ -423,7 +423,7 @@ function insertTrackPoints($conn,$trackid,$filename)
             }
         }
         
-        if ($GLOBALS['debugLevel']>2) {
+        if ($GLOBALS['debugLevel']>4) {
             fputs($GLOBALS['logFile'],"Line 421>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
         }
         
