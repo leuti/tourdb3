@@ -55,7 +55,7 @@ $debugLevel = 3;                                                    // 0 = off, 
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
-$importGpxLog = dirname(__FILE__) . "\..\log\importGpx.log";        // Assign file location
+$importGpxLog = dirname(__FILE__) . "/../log/importGpx.log";        // Assign file location
 $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
 fputs($logFile, "\r\n============================================================\r\n");    
 fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
