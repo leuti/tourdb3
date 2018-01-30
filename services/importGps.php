@@ -464,7 +464,9 @@ function insertTrackPoints($conn,$trackid,$filename)
         $tptNumber++;                                               // increase track point counter by 1
     }
 
-    fputs($GLOBALS['logFile'],"Line 421>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
+    if ($GLOBALS['debugLevel']>2) {
+        fputs($GLOBALS['logFile'],"Line 421>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
+    }
 
     // set elevation and time for last point
     $trkFinishEle = $ele;
