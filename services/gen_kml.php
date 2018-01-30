@@ -31,7 +31,7 @@ $countTracks = 0;                                                           // I
 
 // Open log file
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "\..\log\gen_kml.log";                // Assign file location
+    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
