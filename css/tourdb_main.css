@@ -84,7 +84,10 @@ table {
     /*border-bottom: 3px solid #cce6ff;*/
 }
 
-.tourdbPanel.active { 
+.tourdbPanel, .updTrk {
+    display: none;}
+
+.tourdbPanel.active, .updTrk.active { 
         display: block;}  
 
 /********** PANELS **********/
@@ -92,9 +95,6 @@ table {
 #formInputFile {
     height: 20px;
 }
-
-.tourdbPanel {
-    display: none;}
 
 .button {
     float: right;

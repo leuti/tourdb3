@@ -443,17 +443,17 @@
 			<div id="pImpUpdateTrack" class="formCenter pImpDiv">
 				<ul class="updTrkButtons">
 					<li id="btnUpdTrk_main" class="updTrkButtonsLi active">
-						<a id="btnUpdTrk_main_a" class="updTrkButtonsA" href="#btnUpdTrk_main"><h2>Main</h2></a>
+						<a id="btnUpdTrk_main_a" class="updTrkButtonsA" href="#btnUpdTrk_main_div"><h2>Main</h2></a>
 					</li>
 					<li id="btnUpdTrk_wayp" class="updTrkButtonsLi">
-						<a id="btnUpdTrk_wayp_a" class="updTrkButtonsA" href="#btnUpdTrk_wayp"><h2>Waypoints</h2></a>
+						<a id="btnUpdTrk_wayp_a" class="updTrkButtonsA" href="#btnUpdTrk_wayp_div"><h2>Waypoints</h2></a>
 					</li>
 					<li id="btnUpdTrk_others" class="updTrkButtonsLi">
-						<a id="btnUpdTrk_others_a" class="updTrkButtonsA" href="#btnUpdTrk_others"><h2>Others</h2></a> 
+						<a id="btnUpdTrk_others_a" class="updTrkButtonsA" href="#btnUpdTrk_oth_div"><h2>Others</h2></a> 
 					</li>
 				</ul>
 
-				<div id=btnUpdTrk_main_div>
+				<div id="btnUpdTrk_main_div" class="updTrk active">
 					<fieldset>
 					
 						<!-- Import Tracks -->
@@ -596,14 +596,16 @@
 						<input type="submit" class="button" id="impUpdTrk_cancel" value="Cancel import" />
 					</fieldset>
 				</div>
-				<div id=btnUpdTrk_wayp>
+				
+				<div id="btnUpdTrk_wayp_div" class="updTrk">
 					<fieldset>
-						<p>Fugus ich bin das div btnUpdTrk_wayp</div>
+						<p>Fugus ich bin das div btnUpdTrk_wayp</p>
 					</fieldset>
 				</div>
-				<div id=btnUpdTrk_others>
+
+				<div id="btnUpdTrk_oth_div" class="updTrk">
 					<fieldset>
-						<p>Fugus ich bin das div btnUpdTrk_others</div>
+						<p>Fugus ich bin das div btnUpdTrk_others</p>
 					</fieldset>
 				</div>
 			</div>

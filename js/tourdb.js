@@ -45,6 +45,14 @@ $(document).ready(function() {
         $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
     });
 
+    // Evaluate which button/panel is active
+    $('.updTrkButtons').each(function() {
+        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.UpdTrkButtons
+        $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');                 // Find and store current active li element
+        var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');                       // Get link <a> from active li element 
+        $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));                      // Get active panel      
+    });
+
     // Change to selected panel
     $(this).on('click', '.mainButtonsA', function(e) {                  
         e.preventDefault();                                             // Prevent link behaviour
@@ -706,6 +714,23 @@ $(document).on('click', '.applyFilterButton', function (e) {
 // ==========================================================================
 // ========================== panelImport ===================================
 // ==========================================================================
+
+// Change to selected panel
+$(document).on('click', '.updTrkButtonsA', function(e) {                  
+    e.preventDefault();                                             // Prevent link behaviour
+    
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    // Run following block if selected topic is currently not active
+    if (buttonId && !$activeButtonA.is('.active')) {
+        $actUpdTrkTab.removeClass('active');                         // Make current panel inactive
+        $actUpdTrkBtn.removeClass('active');                        // Make current tab inactive
+        
+        $actUpdTrkTab = $(buttonId).addClass('active');              // Make new panel active
+        $actUpdTrkBtn = $activeButtonA.parent().addClass('active'); // Make new tab active
+    }
+}); 
 
 // Upon click on the 'Upload File' button --> call importGps.php in temp mode
 $(document).on('click', '#buttonUploadFile', function (e) {
