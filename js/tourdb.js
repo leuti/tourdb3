@@ -38,23 +38,23 @@ var mapSTlayer_grau;
 $(document).ready(function() {
 
     // Evaluate which button/panel is active
-    $('.topicButtons').each(function() {
-        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
+    $('.navBtns').each(function() {
+        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.navBtns
         $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
         var $activeButtonA = $activeButton.find('a');                       // Get link <a> from active li element 
         $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
     });
 
     // Evaluate which button/panel is active
-    $('.updTrkButtons').each(function() {
-        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.UpdTrkButtons
+    $('.uiAdmTrk_Btns').each(function() {
+        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.uiAdmTrk_Btns
         $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');                 // Find and store current active li element
         var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');                       // Get link <a> from active li element 
         $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));                      // Get active panel      
     });
 
     // Change to selected panel
-    $(this).on('click', '.mainButtonsA', function(e) {                  
+    $(this).on('click', '.navBtns', function(e) {                  
         e.preventDefault();                                             // Prevent link behaviour
         var $activeButtonA = $(this)                                    // Store the current link <a> element
         var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
@@ -716,7 +716,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
 // ==========================================================================
 
 // Change to selected panel
-$(document).on('click', '.updTrkButtonsA', function(e) {                  
+$(document).on('click', '.uiAdmTrk_Btns_A', function(e) {                  
     e.preventDefault();                                             // Prevent link behaviour
     
     var $activeButtonA = $(this)                                    // Store the current link <a> element
@@ -743,28 +743,28 @@ $(document).on('click', '#buttonUploadFile', function (e) {
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
                 trackobj = responseObject.trackObj;
-                $('#impUpdTrk_trkId').val(trackobj.trkId); 
-                $('#impUpdTrk_trkTrackName').val(trackobj.trkTrackName);                    // assign values of JSON to input fields
-                $('#impUpdTrk_trkRoute').val(trackobj.trkRoute);
-                $('#impUpdTrk_trkDateBegin').val(trackobj.trkDateBegin);
-                $('#impUpdTrk_trkDateFinish').val(trackobj.trkDateFinish);
-                $('#impUpdTrk_trkSaison').val(trackobj.trkSaison);
-                $('#impUpdTrk_trkType').val(trackobj.trkType);
-                $('#impUpdTrk_trkSubType').val(trackobj.trkSubType);
-                $('#impUpdTrk_trkOrg').val(trackobj.trkOrg);
-                $('#impUpdTrk_trkOvernightLoc').val(trackobj.trkOvernightLoc);
-                $('#impUpdTrk_trkParticipants').val(trackobj.trkParticipants);
-                $('#impUpdTrk_trkEvent').val(trackobj.trkEvent);
-                $('#impUpdTrk_trkRemarks').val(trackobj.trkRemarks);
-                $('#impUpdTrk_trkDistance').val(trackobj.trkDistance);
-                $('#impUpdTrk_trkTimeOverall').val(trackobj.trkTimeOverall);
-                $('#impUpdTrk_trkTimeToPeak').val(trackobj.trkTimeToPeak);
-                $('#impUpdTrk_trkTimeToFinish').val(trackobj.trkTimeToFinish);
-                $('#impUpdTrk_trkGrade').val(trackobj.trkGrade);
-                $('#impUpdTrk_trkMeterUp').val(trackobj.trkMeterUp);
-                $('#impUpdTrk_trkMeterDown').val(trackobj.trkMeterDown);
-                $('#impUpdTrk_trkCountry').val(trackobj.trkCountry);
-                $('#impUpdTrk_trkCoordinates').val(trackobj.trkCoordinates);
+                $('#uiAdmTrk_fld_trkId').val(trackobj.trkId); 
+                $('#uiAdmTrk_fld_trkTrackName').val(trackobj.trkTrackName);                    // assign values of JSON to input fields
+                $('#uiAdmTrk_fld_trkRoute').val(trackobj.trkRoute);
+                $('#uiAdmTrk_fld_trkDateBegin').val(trackobj.trkDateBegin);
+                $('#uiAdmTrk_fld_trkDateFinish').val(trackobj.trkDateFinish);
+                $('#uiAdmTrk_fld_trkSaison').val(trackobj.trkSaison);
+                $('#uiAdmTrk_fld_trkType').val(trackobj.trkType);
+                $('#uiAdmTrk_fld_trkSubType').val(trackobj.trkSubType);
+                $('#uiAdmTrk_fld_trkOrg').val(trackobj.trkOrg);
+                $('#uiAdmTrk_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
+                $('#uiAdmTrk_fld_trkParticipants').val(trackobj.trkParticipants);
+                $('#uiAdmTrk_fld_trkEvent').val(trackobj.trkEvent);
+                $('#uiAdmTrk_fld_trkRemarks').val(trackobj.trkRemarks);
+                $('#uiAdmTrk_fld_trkDistance').val(trackobj.trkDistance);
+                $('#uiAdmTrk_fld_trkTimeOverall').val(trackobj.trkTimeOverall);
+                $('#uiAdmTrk_fld_trkTimeToPeak').val(trackobj.trkTimeToPeak);
+                $('#uiAdmTrk_fld_trkTimeToFinish').val(trackobj.trkTimeToFinish);
+                $('#uiAdmTrk_fld_trkGrade').val(trackobj.trkGrade);
+                $('#uiAdmTrk_fld_trkMeterUp').val(trackobj.trkMeterUp);
+                $('#uiAdmTrk_fld_trkMeterDown').val(trackobj.trkMeterDown);
+                $('#uiAdmTrk_fld_trkCountry').val(trackobj.trkCountry);
+                $('#uiAdmTrk_fld_trkCoordinates').val(trackobj.trkCoordinates);
                 
                 // not displayed fields
                 $trkStartEle = trackobj.trkStartEle;                        // new db field
@@ -805,7 +805,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode
-$(document).on('click', '#impUpdTrk_save', function (e) {
+$(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
     
     var xhr = new XMLHttpRequest();                                 // create new xhr object
@@ -840,28 +840,28 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
 
     var trackobj = {};
     var jsonObject = {};
-    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
-    trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
-    trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
-    trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
-    trackobj["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
-    trackobj["trkSaison"] = $('#impUpdTrk_trkSaison').val();
-    trackobj["trkType"] = $('#impUpdTrk_trkType').val();
-    trackobj["trkSubType"] = $('#impUpdTrk_trkSubType').val();
-    trackobj["trkOrg"] = $('#impUpdTrk_trkOrg').val();
-    trackobj["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
-    trackobj["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
-    trackobj["trkEvent"] = $('#impUpdTrk_trkEvent').val();
-    trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
-    trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
-    trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
-    trackobj["trkTimeToPeak"] = $('#impUpdTrk_trkTimeToPeak').val();
-    trackobj["trkTimeToFinish"] = $('#impUpdTrk_trkTimeToFinish').val();
-    trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
-    trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
-    trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
-    trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-    trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
+    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
+    trackobj["trkTrackName"] = $('#uiAdmTrk_fld_trkTrackName').val();
+    trackobj["trkRoute"] = $('#uiAdmTrk_fld_trkRoute').val();
+    trackobj["trkDateBegin"] = $('#uiAdmTrk_fld_trkDateBegin').val();     
+    trackobj["trkDateFinish"] = $('#uiAdmTrk_fld_trkDateFinish').val();
+    trackobj["trkSaison"] = $('#uiAdmTrk_fld_trkSaison').val();
+    trackobj["trkType"] = $('#uiAdmTrk_fld_trkType').val();
+    trackobj["trkSubType"] = $('#uiAdmTrk_fld_trkSubType').val();
+    trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();
+    trackobj["trkOvernightLoc"] = $('#uiAdmTrk_fld_trkOvernightLoc').val();
+    trackobj["trkParticipants"] = $('#uiAdmTrk_fld_trkParticipants').val();
+    trackobj["trkEvent"] = $('#uiAdmTrk_fld_trkEvent').val();
+    trackobj["trkRemarks"] = $('#uiAdmTrk_fld_trkRemarks').val();
+    trackobj["trkDistance"] = $('#uiAdmTrk_fld_trkDistance').val();
+    trackobj["trkTimeOverall"] = $('#uiAdmTrk_fld_trkTimeOverall').val();
+    trackobj["trkTimeToPeak"] = $('#uiAdmTrk_fld_trkTimeToPeak').val();
+    trackobj["trkTimeToFinish"] = $('#uiAdmTrk_fld_trkTimeToFinish').val();
+    trackobj["trkGrade"] = $('#uiAdmTrk_fld_trkGrade').val();
+    trackobj["trkMeterUp"] = $('#uiAdmTrk_fld_trkMeterUp').val();
+    trackobj["trkMeterDown"] = $('#uiAdmTrk_fld_trkMeterDown').val();
+    trackobj["trkCountry"] = $('#uiAdmTrk_fld_trkCountry').val();      
+    trackobj["trkCoordinates"] = $('#uiAdmTrk_fld_trkCoordinates').val();  
     //trackobj["trkLoginName"] = $loginName;    
 
     // not displayed fields
@@ -887,7 +887,7 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
 });
 
 // On click on the 'cancel' button --> cancel update & delete temp track
-$(document).on('click', '#impUpdTrk_cancel', function (e) {
+$(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     e.preventDefault();
     
     var xhr = new XMLHttpRequest();                                 // create new xhr object
@@ -905,7 +905,7 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
 
     var trackobj = {};
     var jsonObject = {};
-    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
+    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
     
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     //var formData = new FormData();                                  // create new formData object
