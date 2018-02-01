@@ -102,14 +102,15 @@ table {
 }
 
 .formCenter, .uiDiv.active {
-    margin-top: 40px;
-    padding: 0.5em 0.5em;
+    /*margin-top: 40px;
+    padding: 0.5em 0.5em;*/
     margin: auto;
-    margin-top: 200px;
+    /*margin-top: 200px;*/
     display: block;
     background-color: #cce6ff;
     width: 600px;
     color: #333333;
+    overflow: hidden;
 }
 
 /********** FILTER STYLES *********/
@@ -289,11 +290,11 @@ table {
 }
 
 .updTrackLabelFirst{
-    display: inline-block;
+    /*display: inline-block;*/
     float: left;
-    clear: left;
-    width: 250px;
-    text-align: right;
+    /*clear: left;*/
+    width: 150px;
+    /*text-align: right;*/
 }
 
 #inputFile {

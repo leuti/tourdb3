@@ -440,7 +440,7 @@
 				</fieldset>
 			</div>
 			
-			<div id="uiAdmTrk" class="formCenter">
+			<div id="uiAdmTrk" class="formCenter uiDiv">
 				<ul>
 					<li><a href="#uiAdmTrk_tabMain">Main</a></li>
 					<li><a href="#uiAdmTrk_tabWayp">Waypoints</a></li>
@@ -455,133 +455,133 @@
 						<!-- Track Name -->
 						<div>
 							<label for="uiAdmTrk_fld_trkId" class="updTrackLabelFirst">Track ID</label>
-							<input type="text" name="uiAdmTrk_fld_trkId" id="uiAdmTrk_fld_trkId" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkId" id="uiAdmTrk_fld_trkId" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Track Name -->
 						<div>
 							<label for="uiAdmTrk_fld_trkTrackName" class="updTrackLabelFirst">Track Name</label>
-							<input type="text" name="uiAdmTrk_fld_trkTrackName" id="uiAdmTrk_fld_trkTrackName" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkTrackName" id="uiAdmTrk_fld_trkTrackName" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 							
 						<!-- Route -->
 						<div>
 							<label for="uiAdmTrk_fld_trkRoute" class="updTrackLabelFirst">Route</label>
-							<input type="text" name="uiAdmTrk_fld_trkRoute" id="uiAdmTrk_fld_trkRoute" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkRoute" id="uiAdmTrk_fld_trkRoute" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Date Begin -->
 						<div>
 							<label for="uiAdmTrk_fld_trkDateBegin" class="updTrackLabelFirst">Date Begin</label>
-							<input type="text" name="uiAdmTrk_fld_trkDateBegin" id="uiAdmTrk_fld_trkDateBegin" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkDateBegin" id="uiAdmTrk_fld_trkDateBegin" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Date Finish -->
 						<div>
 							<label for="uiAdmTrk_fld_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
-							<input type="text" name="uiAdmTrk_fld_trkDateFinish" id="uiAdmTrk_fld_trkDateFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkDateFinish" id="uiAdmTrk_fld_trkDateFinish" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Saison -->
 						<div>
 							<label for="uiAdmTrk_fld_trkSaison" class="updTrackLabelFirst">Saison</label>
-							<input type="text" name="uiAdmTrk_fld_trkSaison" id="uiAdmTrk_fld_trkSaison" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkSaison" id="uiAdmTrk_fld_trkSaison" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Type -->
 						<div>
 							<label for="uiAdmTrk_fld_trkType" class="updTrackLabelFirst">Type</label>
-							<input type="text" name="uiAdmTrk_fld_trkType" id="uiAdmTrk_fld_trkType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkType" id="uiAdmTrk_fld_trkType" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- SubType -->
 						<div>
 							<label for="uiAdmTrk_fld_trkSubType" class="updTrackLabelFirst">SubType</label>
-							<input type="text" name="uiAdmTrk_fld_trkSubType" id="uiAdmTrk_fld_trkSubType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkSubType" id="uiAdmTrk_fld_trkSubType" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Org -->
 						<div>
 							<label for="uiAdmTrk_fld_trkOrg" class="updTrackLabelFirst">Organisation</label>
-							<input type="text" name="uiAdmTrk_fld_trkOrg" id="uiAdmTrk_fld_trkOrg" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkOrg" id="uiAdmTrk_fld_trkOrg" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Overnight Location -->
 						<div>
 							<label for="uiAdmTrk_fld_trkOvernightLoc" class="updTrackLabelFirst">Location</label>
-							<input type="text" name="uiAdmTrk_fld_trkOvernightLoc" id="uiAdmTrk_fld_trkOvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkOvernightLoc" id="uiAdmTrk_fld_trkOvernightLoc" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Participants -->
 						<div>
 							<label for="uiAdmTrk_fld_trkParticipants" class="updTrackLabelFirst">Participants</label>
-							<input type="text" name="uiAdmTrk_fld_trkParticipants" id="uiAdmTrk_fld_trkParticipants" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkParticipants" id="uiAdmTrk_fld_trkParticipants" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Event -->
 						<div>
 							<label for="uiAdmTrk_fld_trkEvent" class="updTrackLabelFirst">Event</label>
-							<input type="text" name="uiAdmTrk_fld_trkEvent" id="uiAdmTrk_fld_trkEvent" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkEvent" id="uiAdmTrk_fld_trkEvent" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Remarks -->
 						<div>
 							<label for="uiAdmTrk_fld_trkRemarks" class="updTrackLabelFirst">Remarks</label>
-							<input type="text" name="uiAdmTrk_fld_trkRemarks" id="uiAdmTrk_fld_trkRemarks" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkRemarks" id="uiAdmTrk_fld_trkRemarks" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Distance -->
 						<div>
 							<label for="uiAdmTrk_fld_trkDistance" class="updTrackLabelFirst">Distance</label>
-							<input type="text" name="uiAdmTrk_fld_trkDistance" id="uiAdmTrk_fld_trkDistance" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkDistance" id="uiAdmTrk_fld_trkDistance" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Time Overall -->
 						<div>
 							<label for="uiAdmTrk_fld_trkTimeOverall" class="updTrackLabelFirst">Overall Time</label>
-							<input type="text" name="uiAdmTrk_fld_trkTimeOverall" id="uiAdmTrk_fld_trkTimeOverall" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkTimeOverall" id="uiAdmTrk_fld_trkTimeOverall" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- TimeToPeak -->
 						<div>
 							<label for="uiAdmTrk_fld_trkTimeToPeak" class="updTrackLabelFirst">Time to Peak</label>
-							<input type="text" name="uiAdmTrk_fld_trkTimeToPeak" id="uiAdmTrk_fld_trkTimeToPeak" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkTimeToPeak" id="uiAdmTrk_fld_trkTimeToPeak" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- TimeToFinish -->
 						<div>
 							<label for="uiAdmTrk_fld_trkTimeToFinish" class="updTrackLabelFirst">Time To Finish</label>
-							<input type="text" name="uiAdmTrk_fld_trkTimeToFinish" id="uiAdmTrk_fld_trkTimeToFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkTimeToFinish" id="uiAdmTrk_fld_trkTimeToFinish" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Grade -->
 						<div>
 							<label for="uiAdmTrk_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
-							<input type="text" name="uiAdmTrk_fld_trkGrade" id="uiAdmTrk_fld_trkGrade" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkGrade" id="uiAdmTrk_fld_trkGrade" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- MeterUp -->
 						<div>
 							<label for="uiAdmTrk_fld_trkMeterUp" class="updTrackLabelFirst">Meter Up</label>
-							<input type="text" name="uiAdmTrk_fld_trkMeterUp" id="uiAdmTrk_fld_trkMeterUp" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkMeterUp" id="uiAdmTrk_fld_trkMeterUp" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- MeterDown -->
 						<div>
 							<label for="uiAdmTrk_fld_trkMeterDown" class="updTrackLabelFirst">Meter Down</label>
-							<input type="text" name="uiAdmTrk_fld_trkMeterDown" id="uiAdmTrk_fld_trkMeterDown" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkMeterDown" id="uiAdmTrk_fld_trkMeterDown" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Country -->
 						<div>
 							<label for="uiAdmTrk_fld_trkCountry" class="updTrackLabelFirst">Country</label>
-							<input type="text" name="uiAdmTrk_fld_trkCountry" id="uiAdmTrk_fld_trkCountry" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkCountry" id="uiAdmTrk_fld_trkCountry" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Coordinates -->
 						<div>
 							<label for="uiAdmTrk_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
-							<input type="text" name="uiAdmTrk_fld_trkCoordinates" id="uiAdmTrk_fld_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
+							<input type="text" name="uiAdmTrk_fld_trkCoordinates" id="uiAdmTrk_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 					</fieldset>
@@ -596,7 +596,7 @@
 						<p>Fugus ich bin das div uiAdmTrk_btn_others</p>
 					</fieldset>
 				</div>
-				<div  id="updTrk_btn">
+				<div id="updTrk_btn" class="formCenter">
 					<input type="submit" class="button" id="uiAdmTrk_fld_save" value="Save Track" />
 					<input type="submit" class="button" id="uiAdmTrk_fld_cancel" value="Cancel import" />
 				</div>
