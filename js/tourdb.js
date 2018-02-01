@@ -776,8 +776,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkFinishTime = trackobj.trkFinishTime;
                 
                 // Close upload file div and open form to update track data
-                $('#pImpFileUpload').removeClass('active');
-                $('#pImpUpdateTrack').addClass('active');
+                $('#uiUplFileGps').removeClass('active');
+                $('#uiAdmTrk').addClass('active');
                 document.getElementById("inputFile").value = "";
             } else {
                 $('#statusMessage').text('Invalid file extension');
@@ -830,8 +830,8 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
                 $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                 
                 // Close upload file div and open form to update track data
-                $('#pImpFileUpload').addClass('active');
-                $('#pImpUpdateTrack').removeClass('active');
+                $('#uiUplFileGps').addClass('active');
+                $('#uiAdmTrk').removeClass('active');
                 var trackobj = {};
                 var jsonObject = {};
             }
@@ -895,8 +895,8 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
             if ( responseObject.status == 'OK') {
-                $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
-                $('#pImpUpdateTrack').removeClass('active');                   // hide update form
+                $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
+                $('#uiAdmTrk').removeClass('active');                   // hide update form
                 $('#statusMessage').text('Import cancelled');
                 $("#statusMessage").show().delay(5000).fadeOut();
             }

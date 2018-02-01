@@ -425,7 +425,7 @@
 		<!-- ========================================================================== -->		
 		<div id="panelImport" class="tourdbPanel">
 			
-			<div id="pImpFileUpload" class="formCenter pImpDiv active">
+			<div id="uiUplFileGps" class="pImpDiv active">
 				<fieldset>
 					<legend class="filterHeader">Select File to upload</legend>
 					<p>Select a single file to upload to the tourdb</p>
@@ -440,173 +440,175 @@
 				</fieldset>
 			</div>
 
-			<div id="pImpUpdateTrack" class="formCenter pImpDiv">
+			<div id="uiAdmTrk" class="pImpDiv">
 				<ul class="updTrkButtons">
 					<li id="btnUpdTrk_main" class="updTrkButtonsLi active">
-						<a id="btnUpdTrk_main_a" class="updTrkButtonsA" href="#btnUpdTrk_main_div"><h2>Main</h2></a>
+						<a id="btnUpdTrk_main_a" class="updTrkButtonsA" href="#uiAdmTrk_tabMain"><h2>Main</h2></a>
 					</li>
 					<li id="btnUpdTrk_wayp" class="updTrkButtonsLi">
-						<a id="btnUpdTrk_wayp_a" class="updTrkButtonsA" href="#btnUpdTrk_wayp_div"><h2>Waypoints</h2></a>
+						<a id="btnUpdTrk_wayp_a" class="updTrkButtonsA" href="#uiAdmTrk_tabWayp"><h2>Waypoints</h2></a>
 					</li>
 					<li id="btnUpdTrk_others" class="updTrkButtonsLi">
-						<a id="btnUpdTrk_others_a" class="updTrkButtonsA" href="#btnUpdTrk_oth_div"><h2>Others</h2></a> 
+						<a id="btnUpdTrk_others_a" class="updTrkButtonsA" href="#uiAdmTrk_tabOth"><h2>Others</h2></a> 
 					</li>
 				</ul>
 
-				<div id="btnUpdTrk_main_div" class="updTrk active">
+				<div id="uiAdmTrk_tabMain" class="updTrk active">
 					<fieldset>
 					
 						<!-- Import Tracks -->
 						<legend class="filterHeader">Import Track</legend>
 
 						<!-- Track Name -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkId" class="updTrackLabelFirst">Track ID</label>
 							<input type="text" name="impUpdTrk_trkId" id="impUpdTrk_trkId" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Track Name -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkTrackName" class="updTrackLabelFirst">Track Name</label>
 							<input type="text" name="impUpdTrk_trkTrackName" id="impUpdTrk_trkTrackName" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 							
 						<!-- Route -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkRoute" class="updTrackLabelFirst">Route</label>
 							<input type="text" name="impUpdTrk_trkRoute" id="impUpdTrk_trkRoute" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Date Begin -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkDateBegin" class="updTrackLabelFirst">Date Begin</label>
 							<input type="text" name="impUpdTrk_trkDateBegin" id="impUpdTrk_trkDateBegin" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Date Finish -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
 							<input type="text" name="impUpdTrk_trkDateFinish" id="impUpdTrk_trkDateFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Saison -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkSaison" class="updTrackLabelFirst">Saison</label>
 							<input type="text" name="impUpdTrk_trkSaison" id="impUpdTrk_trkSaison" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Type -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkType" class="updTrackLabelFirst">Type</label>
 							<input type="text" name="impUpdTrk_trkType" id="impUpdTrk_trkType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- SubType -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkSubType" class="updTrackLabelFirst">SubType</label>
 							<input type="text" name="impUpdTrk_trkSubType" id="impUpdTrk_trkSubType" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Org -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkOrg" class="updTrackLabelFirst">Organisation</label>
 							<input type="text" name="impUpdTrk_trkOrg" id="impUpdTrk_trkOrg" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Overnight Location -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkOvernightLoc" class="updTrackLabelFirst">Location</label>
 							<input type="text" name="impUpdTrk_trkOvernightLoc" id="impUpdTrk_trkOvernightLoc" size="40" class="text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Participants -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkParticipants" class="updTrackLabelFirst">Participants</label>
 							<input type="text" name="impUpdTrk_trkParticipants" id="impUpdTrk_trkParticipants" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Event -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkEvent" class="updTrackLabelFirst">Event</label>
 							<input type="text" name="impUpdTrk_trkEvent" id="impUpdTrk_trkEvent" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Remarks -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkRemarks" class="updTrackLabelFirst">Remarks</label>
 							<input type="text" name="impUpdTrk_trkRemarks" id="impUpdTrk_trkRemarks" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Distance -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkDistance" class="updTrackLabelFirst">Distance</label>
 							<input type="text" name="impUpdTrk_trkDistance" id="impUpdTrk_trkDistance" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Time Overall -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkTimeOverall" class="updTrackLabelFirst">Overall Time</label>
 							<input type="text" name="impUpdTrk_trkTimeOverall" id="impUpdTrk_trkTimeOverall" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- TimeToPeak -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkTimeToPeak" class="updTrackLabelFirst">Time to Peak</label>
 							<input type="text" name="impUpdTrk_trkTimeToPeak" id="impUpdTrk_trkTimeToPeak" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- TimeToFinish -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkTimeToFinish" class="updTrackLabelFirst">Time To Finish</label>
 							<input type="text" name="impUpdTrk_trkTimeToFinish" id="impUpdTrk_trkTimeToFinish" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Grade -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkGrade" class="updTrackLabelFirst">Grade</label>
 							<input type="text" name="impUpdTrk_trkGrade" id="impUpdTrk_trkGrade" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- MeterUp -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkMeterUp" class="updTrackLabelFirst">Meter Up</label>
 							<input type="text" name="impUpdTrk_trkMeterUp" id="impUpdTrk_trkMeterUp" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- MeterDown -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkMeterDown" class="updTrackLabelFirst">Meter Down</label>
 							<input type="text" name="impUpdTrk_trkMeterDown" id="impUpdTrk_trkMeterDown" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Country -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkCountry" class="updTrackLabelFirst">Country</label>
 							<input type="text" name="impUpdTrk_trkCountry" id="impUpdTrk_trkCountry" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
 						<!-- Coordinates -->
-						<div class="impUpdateCriteria">
+						<div>
 							<label for="impUpdTrk_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
 							<input type="text" name="impUpdTrk_trkCoordinates" id="impUpdTrk_trkCoordinates" size="40" class="updTrackInput text ui-widget-content ui-corner-all">
 						</div>
 
-						<br><br>
-						<input type="submit" class="button" id="impUpdTrk_save" value="Save Track" />
-						<input type="submit" class="button" id="impUpdTrk_cancel" value="Cancel import" />
 					</fieldset>
 				</div>
 				
-				<div id="btnUpdTrk_wayp_div" class="updTrk">
+				<div id="uiAdmTrk_tabWayp" class="updTrk">
 					<fieldset>
 						<p>Fugus ich bin das div btnUpdTrk_wayp</p>
 					</fieldset>
 				</div>
 
-				<div id="btnUpdTrk_oth_div" class="updTrk">
+				<div id="uiAdmTrk_tabOth" class="updTrk">
 					<fieldset>
 						<p>Fugus ich bin das div btnUpdTrk_others</p>
 					</fieldset>
+				</div>
+
+				<div  id="updTrk_btn">
+					<input type="submit" class="button" id="impUpdTrk_save" value="Save Track" />
+					<input type="submit" class="button" id="impUpdTrk_cancel" value="Cancel import" />
 				</div>
 			</div>
 		</div> <!-- End div panelImport -->
