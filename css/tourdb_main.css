@@ -45,7 +45,7 @@ table {
     color: #ccccff;}
 
 /********** TOPIC BUTTONS **********/
-.navBtns_li.loginReq {
+.navBtns_btn_li.loginReq {
     display: none;
 }
 
@@ -54,7 +54,7 @@ table {
     padding: 0;
     padding-top: 36px;}
 
-.navBtns_li, .uiAdmTrk_Btns_li {
+.navBtns_btn_li, .uiAdmTrk_Btns_li {
     display: inline-block;
     /*list-style-type: none;*/
     background-color: #cce6ff;
@@ -65,19 +65,19 @@ table {
     /*border-bottom: 3px solid #cce6ff;*/
 }
 
-.navBtns_li.active {
+.navBtns_btn_li.active {
     background-color: #4da9ff;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.navBtns_li:hover {
+.navBtns_btn_li:hover {
     background-color: #b16af8;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.navBtns, .uiAdmTrk_Btns_A {
+.navBtns_btns_a, .uiAdmTrk_Btns_A {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;
