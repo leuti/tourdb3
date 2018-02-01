@@ -38,23 +38,23 @@ var mapSTlayer_grau;
 $(document).ready(function() {
 
     // Evaluate which button/panel is active
-    $('.navBtns').each(function() {
-        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.navBtns
+    $('.navBtns_btns').each(function() {
+        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.navBtns_btns
         $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
         var $activeButtonA = $activeButton.find('a');                       // Get link <a> from active li element 
         $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
     });
 
     // Evaluate which button/panel is active
-    $('.uiAdmTrk_Btns').each(function() {
-        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.uiAdmTrk_Btns
+    $('.uiAdmTrk_btns').each(function() {
+        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.uiAdmTrk_btns
         $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');                 // Find and store current active li element
         var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');                       // Get link <a> from active li element 
         $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));                      // Get active panel      
     });
 
     // Change to selected panel
-    $(this).on('click', '.navBtns', function(e) {                  
+    $(this).on('click', '.navBtns_btns_a', function(e) {                  
         e.preventDefault();                                             // Prevent link behaviour
         var $activeButtonA = $(this)                                    // Store the current link <a> element
         var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
     // ............................................................................
     // Executes code below when user clicks the 'Login' button
-    $(document).on('click', '#buttonLogin', function (e) {
+    $(document).on('click', '#navBtns_btn_login', function (e) {
         e.preventDefault();                                                                                 
         var xhr = new XMLHttpRequest();                                                                     // create new xhr object
         
@@ -92,7 +92,7 @@ $(document).ready(function() {
                     $('#statusMessage').show().delay(5000).fadeOut();
                 } else {
                     // Open Panel Display
-                    var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                    var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
                     //$topicButton = $($activeButtonA.attr('href'));
                     buttonId = $activeButtonA.attr('href'); 
                     
@@ -102,7 +102,7 @@ $(document).ready(function() {
                     $topicButton = $(buttonId).addClass('active');              // Make new panel active
                     $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                     $('.loginReq').removeClass('loginReq');
-                    $('#buttonLogin').addClass('loginReq');
+                    $('#navBtns_btn_login').addClass('loginReq');
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut(); 
                     $map = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
@@ -689,8 +689,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
     }
 
-    if ( ( $clickedButton == 'dispFilTrk_AddObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
-        $clickedButton == 'dispFilSeg_AddObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) && 
+    if ( ( $clickedButton == 'dispFilTrk_addObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
+        $clickedButton == 'dispFilSeg_addObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) && 
         genTrackKml || genSegKml ) {
         // send required parameters to gen_kml.php
         var jsonObject = {};
@@ -716,7 +716,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
 // ==========================================================================
 
 // Change to selected panel
-$(document).on('click', '.uiAdmTrk_Btns_A', function(e) {                  
+$(document).on('click', '.uiAdmTrk_btns_a', function(e) {                  
     e.preventDefault();                                             // Prevent link behaviour
     
     var $activeButtonA = $(this)                                    // Store the current link <a> element
@@ -820,7 +820,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 //$('.updTrackInput').value = "";
 
                 // Open Panel Display
-                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
                 buttonId = $activeButtonA.attr('href'); 
                 
                 // Run following block if selected topic is currently not active

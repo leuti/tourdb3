@@ -51,26 +51,26 @@
 		</div>
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
-		<ul class="navBtns">
-			<li id="buttonLogin" class="navBtns_li active" style="display:none;">
-				<a id="a_panelLogin" class="navBtnsA" href="#panelLogin"><h2>Login</h2></a>
+		<ul class="navBtns_btns">
+			<li id="navBtns_btn_login" class="navBtns_btn_li active" style="display:none;">
+				<a id="navBtns_btn_login_a" class="navBtns_btns_a" href="#panelLogin"><h2>Login</h2></a>
 			</li>
-			<li id="buttonDisplay" class="navBtns_li loginReq">
-				<a id="a_panelDisplay" class="navBtnsA" href="#panelDisplay"><h2>Display</h2></a>
+			<li id="navBtns_btn_diplay" class="navBtns_btn_li loginReq">
+				<a id="navBtns_btn_diplay_a" class="navBtns_btns_a" href="#panelDisplay"><h2>Display</h2></a>
 			</li>
-			<li id="buttonImport" class="navBtns_li loginReq">
-				<a id="a_panelImport" class="navBtnsA" href="#panelImport"><h2>Import</h2></a> 
+			<li id="navBtns_btn_import" class="navBtns_btn_li loginReq">
+				<a id="navBtns_btn_import_a" class="navBtns_btns_a" href="#panelImport"><h2>Import</h2></a> 
 			</li>
 			<!--
-			<li id="buttonExport" class="navBtns_li loginReq">
-				<a id="a_panelExport" class="navBtnsA" href="#panelExport"><h2>Export</h2></a> 
+			<li id="buttonExport" class="navBtns_btn_li loginReq">
+				<a id="a_panelExport" class="navBtns_btns_a" href="#panelExport"><h2>Export</h2></a> 
 			</li>
 
-			<li id="buttonMaintain" class="navBtns_li loginReq">
-				<a id="a_panelMaintain" class="navBtnsA" href="#panelMaintain"><h2>Maintain</h2></a> 
+			<li id="buttonMaintain" class="navBtns_btn_li loginReq">
+				<a id="a_panelMaintain" class="navBtns_btns_a" href="#panelMaintain"><h2>Maintain</h2></a> 
 			</li>			
-			<li id="buttonAdmin" class="navBtns_li loginReq">
-				<a id="" class="navBtnsA" href="#panelAdmin"><h2>Admin</h2></a>
+			<li id="buttonAdmin" class="navBtns_btn_li loginReq">
+				<a id="" class="navBtns_btns_a" href="#panelAdmin"><h2>Admin</h2></a>
 			</li>
 			-->
 		</ul>
@@ -98,8 +98,8 @@
 						<input id="loginPasswd" class="loginFields" type="password" size="50">
 					</div>
 
-					<div class="buttonLogin">
-						<input type="submit" class="button" id="buttonLogin" value="Login" />
+					<div class="navBtns_btn_login">
+						<input type="submit" class="button" id="navBtns_btn_login" value="Login" />
 					</div>
 					
 					<div id="loginStatus" class="statusMessage">	
@@ -184,8 +184,8 @@
 								<div class="dispObjCriteria">
 									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilTrk_subtype" class="selectable filterItems">
-										<li id="dispFilTrk_subtype_Alpinklettern" class="ui-widget-content">Alpinklettern</li>
-										<li id="dispFilTrk_subtype_Alpintour" class="ui-widget-content">Alpintour</li>
+										<li id="dispFilTrk_subtype_alpinklettern" class="ui-widget-content">Alpinklettern</li>
+										<li id="dispFilTrk_subtype_alpintour" class="ui-widget-content">Alpintour</li>
 										<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
 										<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
 										<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
@@ -218,7 +218,7 @@
 								</div>
 								<!-- Button to add selection to existing objects -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_AddObjButton" value="Add Tracks" />
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_addObjButton" value="Add Tracks" />
 								</div>
 								<!-- Button to reset filter -->
 								<!--
@@ -242,7 +242,7 @@
 									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Right-click for multi-select)</label>
 									<ol id="dispFilSeg_segType" class="selectable filterItems">
 										<li id="segType_WA" class="ui-widget-content first">Wanderung</li>
-										<li id="segType_AW" class="ui-widget-content">Alpinwanderung</li>
+										<li id="segType_aW" class="ui-widget-content">Alpinwanderung</li>
 										<li id="segType_HT" class="ui-widget-content">Hochtour</li>
 										<li id="segType_ST" class="ui-widget-content">Skitour</li>
 										<li id="segType_SS" class="ui-widget-content">Schneeschuhtour</li>
@@ -339,7 +339,7 @@
 										<li id="grade_ZS" class="ui-widget-content">ZS</li>
 										<li id="grade_S" class="ui-widget-content">S</li>
 										<li id="grade_SS" class="ui-widget-content">SS</li>
-										<li id="grade_AS" class="ui-widget-content">AS</li>
+										<li id="grade_aS" class="ui-widget-content">AS</li>
 										<li id="grade_EX" class="ui-widget-content">EX</li>
 									</ol>
 								</div>
@@ -380,7 +380,7 @@
 								</div>
 								<!-- Button to add selection to existing objects -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilSeg_AddObjButton" value="Add Segments" />
+									<input type="submit" class="button applyFilterButton" id="dispFilSeg_addObjButton" value="Add Segments" />
 								</div>
 								<!-- Button to reset filter -->
 								<!--
@@ -442,15 +442,15 @@
 
 			<div id="uiAdmTrk" class="uiDiv">
 
-				<ul class="uiAdmTrk_Btns">
-					<li id="uiAdmTrk_Btn_main" class="uiAdmTrk_Btns_li active">
-						<a id="uiAdmTrk_Btn_main_a" class="uiAdmTrk_Btns_A" href="#uiAdmTrk_tabMain"><h2>Main</h2></a>
+				<ul class="uiAdmTrk_btns">
+					<li id="uiAdmTrk_btn_main" class="uiAdmTrk_btns_li active">
+						<a id="uiAdmTrk_btn_main_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabMain"><h2>Main</h2></a>
 					</li>
-					<li id="uiAdmTrk_Btn_wayp" class="uiAdmTrk_Btns_li">
-						<a id="uiAdmTrk_Btn_wayp_a" class="uiAdmTrk_Btns_A" href="#uiAdmTrk_tabWayp"><h2>Waypoints</h2></a>
+					<li id="uiAdmTrk_btn_wayp" class="uiAdmTrk_btns_li">
+						<a id="uiAdmTrk_btn_wayp_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabWayp"><h2>Waypoints</h2></a>
 					</li>
-					<li id="uiAdmTrk_Btn_others" class="uiAdmTrk_Btns_li">
-						<a id="uiAdmTrk_Btn_others_a" class="uiAdmTrk_Btns_A" href="#uiAdmTrk_tabOth"><h2>Others</h2></a> 
+					<li id="uiAdmTrk_btn_others" class="uiAdmTrk_btns_li">
+						<a id="uiAdmTrk_btn_others_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabOth"><h2>Others</h2></a> 
 					</li>
 				</ul>
 
@@ -597,13 +597,13 @@
 				
 				<div id="uiAdmTrk_tabWayp" class="updTrk">
 					<fieldset>
-						<p>Fugus ich bin das div uiAdmTrk_Btn_wayp</p>
+						<p>Fugus ich bin das div uiAdmTrk_btn_wayp</p>
 					</fieldset>
 				</div>
 
 				<div id="uiAdmTrk_tabOth" class="updTrk">
 					<fieldset>
-						<p>Fugus ich bin das div uiAdmTrk_Btn_others</p>
+						<p>Fugus ich bin das div uiAdmTrk_btn_others</p>
 					</fieldset>
 				</div>
 
