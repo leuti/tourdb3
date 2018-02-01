@@ -37,6 +37,163 @@ var mapSTlayer_grau;
 // ======================================================
 $(document).ready(function() {
 
+    // Initialse all jquery functional fields for the mask display objects
+    $( function() {  
+        // ================================================
+        // Initialise filter area as JQUERY Accordion                                                       
+        $( "#dispObjAccordion" ).accordion({
+            heightStyle: "content",                                            // hight of section dependent on content of section
+            autoHeight: false,
+            collapsible: true
+        });
+
+        $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+        
+        $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
+
+        $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
+
+        // For object filter segments
+        // --------------------------
+
+        // mapUF_sourceName
+        $( "#dispFilSeg_sourceName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=segSourceFID",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
+                        $( "#dispFilSeg_sourceFID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+
+        // mapUF_segType
+        $( "#dispFilSeg_segType" ).selectable({});
+        
+        // startLocName
+        $( "#dispFilSeg_startLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_startLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
+        
+        // startLocAlt 
+        $( "#dispFilSeg_startLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
+        
+        // startLocType
+        $( "#dispFilSeg_startLocType" ).selectable({});
+
+        // targetLocName
+        $( "#dispFilSeg_targetLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_targetLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
+
+        // targetLocAlt
+        $( "#dispFilSeg_targetLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
+
+        // targetLocType
+        $( "#dispFilSeg_targetLocType" ).selectable({});
+
+        // Region
+        $( "#dispFilSeg_segRegion" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=regionID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
+                        $( "#dispFilSeg_segRegionID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+
+        // Area
+        $( "#dispFilSeg_segArea" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=areaID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
+                        $( "#dispFilSeg_segAreaID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
+
+        $( "#dispFilSeg_grade" ).selectable({});
+        $( "#dispFilSeg_climbGrade" ).selectable({});
+        $( "#dispFilSeg_ehaft" ).selectable({});   
+
+        // =====================================
+        // ====== UI to Admin Tracks
+        $( "#uiAdmTrk" ).tabs();
+
+    } );
+
     // Evaluate which button/panel is active
     $('.navBtns_btns').each(function() {
         var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.navBtns_btns
@@ -146,157 +303,7 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
     $('.dispObjOpen').addClass('visible');
 })
 
-// Initialse all jquery functional fields for the mask display objects
-$( function() {  
-    // Initialise filter area as JQUERY Accordion                                                       
-    $( "#dispObjAccordion" ).accordion({
-        heightStyle: "content",                                            // hight of section dependent on content of section
-        autoHeight: false,
-        collapsible: true
-    });
 
-    $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd', 
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-    
-    $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-
-    $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
-
-    $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
-
-    // For object filter segments
-    // --------------------------
-
-    // mapUF_sourceName
-    $( "#dispFilSeg_sourceName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=segSourceFID",
-        minLength: 2,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
-                    $( "#dispFilSeg_sourceFID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-
-    // mapUF_segType
-    $( "#dispFilSeg_segType" ).selectable({});
-    
-    // startLocName
-    $( "#dispFilSeg_startLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_startLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-    
-    // startLocAlt 
-    $( "#dispFilSeg_startLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    
-    // startLocType
-    $( "#dispFilSeg_startLocType" ).selectable({});
-
-    // targetLocName
-    $( "#dispFilSeg_targetLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_targetLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
-
-    // targetLocAlt
-    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-
-    // targetLocType
-    $( "#dispFilSeg_targetLocType" ).selectable({});
-
-    // Region
-    $( "#dispFilSeg_segRegion" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=regionID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
-                    $( "#dispFilSeg_segRegionID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
-
-    // Area
-    $( "#dispFilSeg_segArea" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=areaID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
-                    $( "#dispFilSeg_segAreaID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-
-    $( "#dispFilSeg_grade" ).selectable({});
-    $( "#dispFilSeg_climbGrade" ).selectable({});
-    $( "#dispFilSeg_ehaft" ).selectable({});   
-
-} );
 
 // Executes code below when user clicks the 'Apply' filter button for tracks
 $(document).on('click', '.applyFilterButton', function (e) {

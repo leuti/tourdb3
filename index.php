@@ -439,22 +439,14 @@
 					</div>
 				</fieldset>
 			</div>
-
-			<div id="uiAdmTrk" class="uiDiv">
-
-				<ul class="uiAdmTrk_btns">
-					<li id="uiAdmTrk_btn_main" class="uiAdmTrk_btns_li active">
-						<a id="uiAdmTrk_btn_main_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabMain"><h2>Main</h2></a>
-					</li>
-					<li id="uiAdmTrk_btn_wayp" class="uiAdmTrk_btns_li">
-						<a id="uiAdmTrk_btn_wayp_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabWayp"><h2>Waypoints</h2></a>
-					</li>
-					<li id="uiAdmTrk_btn_others" class="uiAdmTrk_btns_li">
-						<a id="uiAdmTrk_btn_others_a" class="uiAdmTrk_btns_a" href="#uiAdmTrk_tabOth"><h2>Others</h2></a> 
-					</li>
+			
+			<div id="uiAdmTrk" class="formCenter">
+				<ul>
+					<li><a href="#uiAdmTrk_tabMain">Main</a></li>
+					<li><a href="#uiAdmTrk_tabWayp">Waypoints</a></li>
+					<li><a href="#uiAdmTrk_tabOth">Others</a></li>
 				</ul>
-
-				<div id="uiAdmTrk_tabMain" class="updTrk active">
+				<div id="uiAdmTrk_tabMain">
 					<fieldset>
 					
 						<!-- Import Tracks -->
@@ -594,19 +586,16 @@
 
 					</fieldset>
 				</div>
-				
-				<div id="uiAdmTrk_tabWayp" class="updTrk">
+				<div id="uiAdmTrk_tabWayp">
 					<fieldset>
 						<p>Fugus ich bin das div uiAdmTrk_btn_wayp</p>
 					</fieldset>
 				</div>
-
-				<div id="uiAdmTrk_tabOth" class="updTrk">
+				<div id="uiAdmTrk_tabOth">
 					<fieldset>
 						<p>Fugus ich bin das div uiAdmTrk_btn_others</p>
 					</fieldset>
 				</div>
-
 				<div  id="updTrk_btn">
 					<input type="submit" class="button" id="uiAdmTrk_fld_save" value="Save Track" />
 					<input type="submit" class="button" id="uiAdmTrk_fld_cancel" value="Cancel import" />
