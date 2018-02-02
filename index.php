@@ -588,7 +588,15 @@
 				</div>
 				<div id="uiAdmTrk_tabWayp">
 					<fieldset>
-						<p>Fugus ich bin das div uiAdmTrk_btn_wayp</p>
+						<div class="ui-widget">
+							<label for="birds">Peaks</label>
+							<input id="birds">
+						</div>
+							
+						<div id="div" class="ui-widget" style="margin-top:2em; font-family:Arial">
+							Result:
+							<div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+						</div>
 					</fieldset>
 				</div>
 				<div id="uiAdmTrk_tabOth">

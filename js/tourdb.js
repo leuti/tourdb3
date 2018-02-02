@@ -192,6 +192,41 @@ $(document).ready(function() {
         // ====== UI to Admin Tracks
         $( "#uiAdmTrk" ).tabs();
 
+        function log( message ) {
+            $( "#div" ).text( message ).prependTo( "#log" );
+            $( "#log" ).scrollTop( 0 );
+        }
+    
+        $( "#birds" ).autocomplete({
+            source: "services/autoComplete.php?field=wayp",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "" ).val( ui.item.id);
+            },
+            change: function( event, ui ) {
+
+            }
+        });
+
+
+        /*$( "#birds" ).autocomplete({
+            source: function( request, response ) {
+            $.ajax( {
+                url: "services/autoComplete.php?field=wayp",
+                dataType: "jsonp",
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            }
+        } );*/
     } );
 
     // Evaluate which button/panel is active
