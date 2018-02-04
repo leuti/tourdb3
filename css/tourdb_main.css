@@ -45,16 +45,16 @@ table {
     color: #ccccff;}
 
 /********** TOPIC BUTTONS **********/
-.topicButtonsLi.loginReq {
+.navBtns_btn_li.loginReq {
     display: none;
 }
 
-.topicButtons {
+.navBtns, .uiAdmTrk_btns {
     margin: 0;
     padding: 0;
     padding-top: 36px;}
 
-.topicButtonsLi {
+.navBtns_btn_li, .uiAdmTrk_btns_li {
     display: inline-block;
     /*list-style-type: none;*/
     background-color: #cce6ff;
@@ -65,26 +65,29 @@ table {
     /*border-bottom: 3px solid #cce6ff;*/
 }
 
-.topicButtonsLi.active {
+.navBtns_btn_li.active {
     background-color: #4da9ff;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.topicButtonsLi:hover {
+.navBtns_btn_li:hover {
     background-color: #b16af8;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.mainButtonsA {
+.navBtns_btns_a, .uiAdmTrk_btns_a {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;
     /*border-bottom: 3px solid #cce6ff;*/
 }
 
-.tourdbPanel.active { 
+.tourdbPanel, .updTrk {
+    display: none;}
+
+.tourdbPanel.active, .updTrk.active { 
         display: block;}  
 
 /********** PANELS **********/
@@ -93,23 +96,21 @@ table {
     height: 20px;
 }
 
-.tourdbPanel {
-    display: none;}
-
 .button {
     float: right;
     margin: 10px;
 }
 
-.formCenter, .pImpDiv.active {
-    margin-top: 40px;
-    padding: 0.5em 0.5em;
+.formCenter, .uiDiv.active {
+    /*margin-top: 40px;
+    padding: 0.5em 0.5em;*/
     margin: auto;
-    margin-top: 200px;
+    /*margin-top: 200px;*/
     display: block;
     background-color: #cce6ff;
     width: 600px;
     color: #333333;
+    overflow: hidden;
 }
 
 /********** FILTER STYLES *********/
@@ -195,8 +196,8 @@ table {
 }
 
 .updTrackInput{
-    display: inline-block;
-    float: left;
+    /*display: inline-block;
+    float: left;*/
     padding: 2px;
 }
 
@@ -268,11 +269,11 @@ table {
 /********** panelImport **********/
 /*********************************/
 
-.pImpDiv {
+.uiDiv {
     display: none;
 }
 
-/*.pImpDiv.active {
+/*.uiDiv.active {
     margin: auto;
     margin-top: 200px;
     display: block;
@@ -289,11 +290,11 @@ table {
 }
 
 .updTrackLabelFirst{
-    display: inline-block;
+    /*display: inline-block;*/
     float: left;
-    clear: left;
-    width: 250px;
-    text-align: right;
+    /*clear: left;*/
+    width: 150px;
+    /*text-align: right;*/
 }
 
 #inputFile {
@@ -302,7 +303,7 @@ table {
     font-family: Candara, Verdana, Arial, sans-serif;
 }
 
-#pImpUpdateTrack{
+#uiAdmTrk{
     margin-top: 40px;
     padding: 0.5em 0.5em;
 }
@@ -333,432 +334,3 @@ table {
     height: 80%;
     margin: 30px;
 }
-/* Not used stylesheets */
-
-/*
-.segFilterTabs, .waypFilterTabs, .mapFilterTabs, .mapOptionTabs, tourenFilterTabs {
-    float: left;
-    margin: 0;
-    padding: 0;
-    padding-top: 12px; 
-    padding-bottom: 12px;}
-
-.mapOptionTabs {
-    float:right;
-    padding-right: 40px;}
-.segFilterTabs li, .waypFilterTabs li, .mapFilterTabs li, .mapOptionTabs li, .tourenFilterTabs li {
-  display: inline-block;
-  list-style-type: none;
-  background-color: #cce6ff;
-  border-bottom: 3px solid #cce6ff;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-left: 20px;}
-.segFilterTabs li a, .waypFilterTabs li a, .mapFilterTabs li a, .mapOptionTabs li a, .segFilterTabs li a, .tourenFilterTabs li a {
-  color: #001a33;
-  font-weight: bold;
-  display: block;
-  padding: 3px 30px 3px 30px;}
-*/
-
-/* hover states */
-/*
-.segFilterTabs li.active, .segFilterTabs li:hover,
-.waypFilterTabs li.active, .waypFilterTabs li:hover,
-.mapFilterTabs li.active, .mapFilterTabs li:hover,
-.mapOptionTabs li.active, .mapOptionTabs li:hover,
-.tourenFilterTabs li.active, .tourenFilterTabs li:hover {
-  background-color: #4da9ff;
-  color: #9933ff;
-  border-bottom: 3px solid #4da9ff;}
-.segFilterTabs li.active a, .segFilterTabs li a:hover, 
-.waypFilterTabs li.active a, .waypFilterTabs li a:hover,
-.mapFilterTabs li.active a, .mapFilterTabs li a:hover,
-.mapOptionTabs li.active a, .mapOptionTabs li a:hover
-.tourenFilterTabs li.active a, .tourenFilterTabs li a:hover {
-  color: #9933ff;
-  background-color: #4da9ff;}
-*/
-
-/********** VIEW TABS **********/
-/*
-.segViewTabs, .waypViewTabs, .mapViewTabs {
-    float: right;
-    margin: 0;
-    margin-right: 20px;   
-    padding: 0;
-    padding-top: 12px;}   
-.segViewTabs li, .waypViewTabs li, .mapViewTabs li {
-  display: inline-block;
-  list-style-type: none;
-  background-color: #cce6ff;
-  border-bottom: 3px solid #cce6ff;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;}
-.segViewTabs li a, .waypViewTabs li a, .mapViewTabs li a {
-  color: #001a33;
-  display: block;
-  padding: 3px 10px 3px 10px;}
-*/
-
-/* hover states */
-/*
-.segViewTabs li.active, .segViewTabs li:hover, 
-.waypViewTabs li.active, .waypViewTabs li:hover,
-.mapViewTabs li.active, .mapViewTabs li:hover {
-  background-color: #4da9ff;
-  color: #9933ff;
-  border-bottom: 3px solid #4da9ff;}
-.segViewTabs li.active a, .segViewTabs li a:hover, 
-.waypViewTabs li.active a, .waypViewTabs li a:hover,
-.mapViewTabs li.active a, .mapViewTabs li a:hover  {
-  color: #9933ff;
-  background-color: #4da9ff;}
-*/
-
-
-/********** PANEL HOME **********/
-/*
-div#panelHome.active { /* Formatting if active */
-/*  display: block;}
-*/
-/********** PANEL MAP **********/
-/* panelMap */
-/*
-div#panelMap.active {
-    display: block;}
-*/
-/********** PANEL SEGMENTS **********/
-/*div#panelSegments.active, div#panelWaypoints.active, div#panelMap.active { 
-    display: block;}  
-div#segPanelFilter, div#waypPanelFilter, div#mapPanelFilter, div#tourenPanelFilter {
-    display: none;}
-div#segPanelFilter.visible, div#waypPanelFilter.visible, div#mapPanelFilter.visible, div#tourenPanelFilter.visible {
-    clear: both;
-    background-color: #cce6ff;
-    color: #001a33;
-    margin-left: 20px;
-    display: block;}
-div#segPanelFilter.visible {
-    width: 90%;}
-div#waypPanelFilter.visible {
-    width: 40%;
-    padding: 20px}    
-div#mapPanelFilter.visible {
-    width: 35%;
-    padding: 20px;}    
-#mapOptDialog {
-    display: none;
-    background-color: #cce6ff;
-    color: #001a33;
-    margin-left: 20px;}
-.filterHeader, .optLegend {
-    border-color: black;
-    border-width: thick;
-    font-size: 1.5em;
-    padding-bottom: 10px;}
-#segPanelFilterLeft, #waypPanelFilterLeft, #mapPanelFilterLeft {
-    float: left;
-    width: 45%;
-    padding: 20px;}
-br.clear {
-    clear: both;}
-#segPanelFilterRight, #waypPanelFilterRight, #mapPanelFilterRight {
-    float: right;
-    margin-left: 30px;
-    width: 45%;
-    padding: 20px;}
-#segUF_startLocAlt_slider, #segUF_targetLocAlt_slider {
-    margin-left: 8px;
-    margin-top: 4px;
-    margin-bottom: 15px}
-.sliderValue {
-    border: 0; 
-    background-color: #cce6ff;
-    margin-bottom: 5px;}
-div#segPanelFilterSql, div#waypPanelFilterSql, div#mapPanelFilterSql {
-    display: none;}
-div#segPanelFilterSql.visible, div#waypPanelFilterSql.visible, div#mapPanelFilterSql.visible{
-    clear: both;
-    background-color: #cce6ff;
-    color: #001a33;
-    margin-left: 204px;
-    width: 65%;
-    display: block;}
-#segFormFilterSql, #waypFormFilterSql, #mapFormFilterSql {
-    padding-top: 3px;
-    margin-left: 15px;
-    padding-bottom: 3px;}
-.sqlIntro {
-    font-size: 80%;
-    font-style: italic;}
-#segPanel_List, #waypPanel_List, #mapPanel_List {
-    display: none;}
-#segPanel_List.visible, #waypPanel_List.visible, #mapPanel_List.visible {
-    display: block;
-    clear: both;}   
-#segPanel_ListMap, #waypPanel_ListMap, #mapPanel_ListMap {
-    display: none;}
-#segPanel_ListMap.visible, #waypPanel_ListMap.visible, #mapPanel_ListMap.visible {
-    display: block;
-    clear: both;}    
-#segPanel_Map, #waypPanel_Map, #mapPanel_Map {
-    display: none;}
-#segPanel_Map.visible, #waypPanel_Map.visible, #mapPanel_Map.visible {
-    display: block;
-    clear: both;}     
-.map {
-    height: 770px;
-    width: 1200px;}
-.button {
-    padding: 5px 5px 5px 5px;}
-#results {
-    float: left;}
-*/
-/************* MODAL WINDOW (to review) ************************/
-/*
-fieldset { padding:0; border:0; margin-top:25px; }
-div#users-contain { width: 350px; margin: 20px 0; }
-div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
-div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
-.ui-dialog .ui-state-error { padding: .3em; }
-.validateTips { border: 1px solid transparent; padding: 0.3em; }
-*/
-
-/********** PANEL WAYPOINTS **********/
-/*
-div#panelWaypoints.active { 
-  display: block;}
-*/
-
-/********** PANEL ROUTES **********/
-/* panelAdmin */
-/*
-div#panelAdmin.active, div#panelTour.active {
-    display: block;
-    height: 100%;}
-
-#tourPanelInfo {
-    display: none;}
-
-#tourPanelInfo.visible {
-    display: block;
-    width: 350px;
-    margin: 10px;
-    padding: 10px;
-    font-size: 120%;
-    font-weight: bold;
-    text-align: center;
-    background-color: #f9f5c0;
-    color: black;
-    z-index: 1;}
-*/
-
-/******* FOOTER *******/
-/*
-footer { 
-    position: fixed;
-    bottom: 15px;
-    left: 20px;}
-*/
-/*li {
-    display: inline;
-    padding: 0.5em;}*/
-
-/******** TABLE FORMATTING ********/
-/*
-tr.header>th {
-    padding: 3px 5px 3px 5px;
-    color: #e6e6ff;
-    border-top: 3px solid #4da9ff;
-    border-bottom: 0.2px solid #4da9ff;}
-tr.sqlName>th {
-    padding: 3px 5px 3px 5px;
-    color: #e6e6ff;
-    border-bottom: 3px solid #4da9ff;
-    font-size: 8pt;
-    font-weight: normal;}
-td {
-    padding: 1px 5px 1px 5px;
-    text-align: left;
-    font-size: 90%;
-    border-bottom: 0.5px solid #4d4dff;}
-tr.coord{
-    color: #ccffe6;}
-.contents{
-	margin: 20px;
-	padding: 20px;
-	list-style: none;
-	background: #F9F9F9;
-	border: 1px solid #ddd;
-	border-radius: 5px;}
-.contents li{
-    margin-bottom: 10px;}
-.loading-div{
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.56);
-	z-index: 999;
-	display:none;}
-.loading-div img {
-	margin-top: 20%;
-	margin-left: 50%;}
-*/
-/******** Pagination style ********/
-/*
-.pagination{
-    padding: 30px;
-    margin: auto;}
-.pagination li{
-	display: inline;
-	border: 1px solid #ddd;
-    font: 15px/20px Arial, Helvetica, sans-serif;
-	background: #FFFFFF;
-	box-shadow: inset 1px 1px 5px #F4F4F4;
-    padding: 7px; }
-.pagination li a{
-    text-decoration:none;
-    color: rgb(89, 141, 235);}
-.pagination li.first {
-    border-radius: 5px 0px 0px 5px;}
-.pagination li.last {
-    border-radius: 0px 5px 5px 0px;}
-.pagination li:hover{
-	background: #9933ff;
-    color: #e6e6ff;}
-.pagination li a:hover{
-    color: #e6e6ff;}
-.pagination li.active{
-	background: #4da9ff;
-	color: #333;}
-*/
-/**********************************************/
-/******** OTHER ELEMENTS **********************/
-
-/*
-p.filterElement {
-    clear: both;}
-.labelFirst, .labelNext, .waypFilterLabelFirst {
-    display: inline-block;
-    font-size: 0.8em;
-    font-weight: bold;
-    margin: 3px; 
-    padding: 0.4em; 
-    height: 14px;
-    color: #001a33;}
-.labelFirst {
-    width: 90px;
-    float: left;}
-.waypFilterLabelFirst {
-    width: 40px;
-    float: left;}
-.segFilterCriteria, .waypFilterCriteria, .dispObjCriteria {
-    clear: both;}
-.selectable .ui-selecting { 
-    background: #FECA40; }
-.selectable .ui-selected { 
-    background: #F39814; color: white; }
-.selectable {
-    list-style-type: none; 
-    margin: 0; 
-    padding: 0;}
-.selectable li {
-    display: inline-block;
-    font-size: 0.8em;
-    margin: 3px; 
-    padding: 0.4em;  
-    height: 14px;
-    color: #001a33;}
-.ui-widget-content {
-    border: 1px solid white;}
-.ui-slider-horizontal {
-    height: .4em;}
-.ui-slider .ui-slider-handle {
-	position: absolute;
-	z-index: 2;
-	width: 0.4em;
-	height: 0.8em;
-	cursor: default;
-	-ms-touch-action: none;
-	touch-action: none;}
-.ui-widget.ui-widget-content {
-	border: 1px solid #0066ff;
-    background-color: #cce6ff;}
-
-input.text, select.text { 
-    margin-bottom:12px; 
-*/
-    /*width:80%;*/ 
-/*    padding: .2em;}
-.segValidateTips, .waypValidateTips {
-    color: #ff0000;}
-.ui-autocomplete {
-    color: #001a33;
-    font-size: 0.8em;
-    max-height: 100px;
-    overflow-y: auto;
-*/
-    /* prevent horizontal scrollbar */
-/*    overflow-x: hidden;
-    position: absolute;
-	top: 0;
-	left: 0;
-	cursor: default;}
-.ui-autocomplete-loading {
-    background: white url("../images/ajax-loader.gif") right center no-repeat;}
-ul.ui-autocomplete.ui-menu {
-  z-index: 9999;
-  font-size: 0.8em;}
-.popover-content{
-    background-color: #f2f2f2;
-    color:  #00004d;
-    padding: 5px;
-    border: #cccccc;
-    border-style: solid;}
-.popover-title{
-    display: none;}
-
-#panelTourSeg {
-    overflow: auto;}
-#panelTourTouren {
-    overflow: auto;}
-
-#panelTourTour-sortable {
-    width: 90%;
-    min-height: 20px;
-    list-style-type: none;
-    margin: 0;
-    padding: 5px 0 0 5px;
-    float: left;
-    margin-right: 10px;
-    font-size: 90%;
-    background: #f6f6f6;
-    color: #ccccff;
-    background-color: #000033;
-*/
-    /*overflow-y: auto;*/}
-/*
-#panelTourTour-sortable li {
-    margin: 0 5px 5px 5px;
-    padding: 5px;
-    font-size: 1.2em;
-    width: 100%;
-    font-size: 90%;
-    background: #f6f6f6;
-    color: #ccccff;
-    background-color: #000033;}
-.delImage{
-    margin-right: 10px;
-    float: left;}
-*/
-/* Overwrite jqw CSS styles */
-/*
-.jqx-widget-content {
-    background-color: #000033;}
-
-.jqx-fill-state-normal {
-    background-color: #4da9ff}
-
-.jqx-splitter-splitbar-vertical, .jqx-splitter-splitbar-horizontal {
-    border: none;}    
-*/

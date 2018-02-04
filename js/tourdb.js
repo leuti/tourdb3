@@ -37,16 +37,291 @@ var mapSTlayer_grau;
 // ======================================================
 $(document).ready(function() {
 
+    // Initialse all jquery functional fields for the mask display objects
+    $( function() {  
+        // ================================================
+        // Initialise filter area as JQUERY Accordion                                                       
+        $( "#dispObjAccordion" ).accordion({
+            heightStyle: "content",                                            // hight of section dependent on content of section
+            autoHeight: false,
+            collapsible: true
+        });
+
+        $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+        
+        $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
+
+        $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
+
+        // For object filter segments
+        // --------------------------
+
+        // mapUF_sourceName
+        $( "#dispFilSeg_sourceName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=segSourceFID",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
+                        $( "#dispFilSeg_sourceFID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+
+        // mapUF_segType
+        $( "#dispFilSeg_segType" ).selectable({});
+        
+        // startLocName
+        $( "#dispFilSeg_startLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_startLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
+        
+        // startLocAlt 
+        $( "#dispFilSeg_startLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
+        
+        // startLocType
+        $( "#dispFilSeg_startLocType" ).selectable({});
+
+        // targetLocName
+        $( "#dispFilSeg_targetLocName" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=getWaypLong",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
+                        $( "#dispFilSeg_targetLocID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
+
+        // targetLocAlt
+        $( "#dispFilSeg_targetLocAlt_slider" ).slider({
+            range: true,
+            min: 0,
+            max: 5000,
+            values: [ 400, 5000 ],
+            slide: function( event, ui ) {
+                $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
+            }
+        });
+        $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
+        "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
+
+        // targetLocType
+        $( "#dispFilSeg_targetLocType" ).selectable({});
+
+        // Region
+        $( "#dispFilSeg_segRegion" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=regionID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
+                        $( "#dispFilSeg_segRegionID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+
+        // Area
+        $( "#dispFilSeg_segArea" ).autocomplete({
+            source: "services/get_auto_complete_values.php?field=areaID",
+            minLength: 1,
+            select: function( event, ui ) {
+                $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+            },
+            change: function( event, ui ) {
+                if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
+                        $( "#dispFilSeg_segAreaID" ).val( '' );
+                }
+            }
+        });
+        var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
+
+        $( "#dispFilSeg_grade" ).selectable({});
+        $( "#dispFilSeg_climbGrade" ).selectable({});
+        $( "#dispFilSeg_ehaft" ).selectable({});   
+
+        // =====================================
+        // ====== UI to Admin Tracks
+        $( "#uiAdmTrk" ).tabs();
+
+
+        valComments = $( "#validateComments" );
+
+        $( "#uiAdmTrk_fld_trkDateBegin" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#uiAdmTrk_fld_trkDateFinish" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#uiAdmTrk_fld_trkSaison" ).selectmenu();
+        $( "#uiAdmTrk_fld_trkType" ).selectmenu();
+        $( "#uiAdmTrk_fld_trkSubType" ).selectmenu();
+
+        $( function() {
+            function split( val ) {
+              return val.split( /,\s*/ );
+            }
+            function extractLast( term ) {
+              return split( term ).pop();
+            }
+         
+            $( "#birds" )
+              // don't navigate away from the field on tab when selecting an item
+              .on( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB &&
+                    $( this ).autocomplete( "instance" ).menu.active ) {
+                  event.preventDefault();
+                }
+              })
+              .autocomplete({
+                source: function( request, response ) {
+                  $.getJSON( "services/autoComplete.php?field=wayp", {
+                    term: extractLast( request.term )
+                  }, response );
+                },
+                search: function() {
+                  // custom minLength
+                  var term = extractLast( this.value );
+                  if ( term.length < 2 ) {
+                    return false;
+                  }
+                },
+                focus: function() {
+                  // prevent value inserted on focus
+                  return false;
+                },
+                select: function( event, ui ) {
+                  var terms = split( this.value );
+                  // remove the current input
+                  terms.pop();
+                  // add the selected item
+                  terms.push( ui.item.value );
+                  // add placeholder to get the comma-and-space at the end
+                  terms.push( "" );
+                  this.value = terms.join( ", " );
+                  return false;
+                }
+              });
+          } );
+
+        /*
+        function log( message ) {
+            $( "#div" ).text( message ).prependTo( "#log" );
+            $( "#log" ).scrollTop( 0 );
+        }
+    
+        $( "#birds" ).autocomplete({
+            source: "services/autoComplete.php?field=wayp",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "" ).val( ui.item.id);
+            },
+            change: function( event, ui ) {
+
+            }
+        });
+        */
+
+        /*$( "#birds" ).autocomplete({
+            source: function( request, response ) {
+            $.ajax( {
+                url: "services/autoComplete.php?field=wayp",
+                dataType: "jsonp",
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            }
+        } );*/
+    } );
+
     // Evaluate which button/panel is active
-    $('.topicButtons').each(function() {
-        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.topicButtons
+    $('.navBtns_btns').each(function() {
+        var $thisTopicButton = $(this);                                     // $thisTopicButton becomes ul.navBtns_btns
         $activeButton = $thisTopicButton.find('li.active');                 // Find and store current active li element
         var $activeButtonA = $activeButton.find('a');                       // Get link <a> from active li element 
         $topicButton = $($activeButtonA.attr('href'));                      // Get active panel      
     });
 
+    // Evaluate which button/panel is active
+    $('.uiAdmTrk_btns').each(function() {
+        var $clickedUpdTrkBtn = $(this);                                     // $clickedUpdTrkBtn becomes ul.uiAdmTrk_btns
+        $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');                 // Find and store current active li element
+        var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');                       // Get link <a> from active li element 
+        $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));                      // Get active panel      
+    });
+
     // Change to selected panel
-    $(this).on('click', '.mainButtonsA', function(e) {                  
+    $(this).on('click', '.navBtns_btns_a', function(e) {                  
         e.preventDefault();                                             // Prevent link behaviour
         var $activeButtonA = $(this)                                    // Store the current link <a> element
         var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
@@ -67,7 +342,7 @@ $(document).ready(function() {
 
     // ............................................................................
     // Executes code below when user clicks the 'Login' button
-    $(document).on('click', '#buttonLogin', function (e) {
+    $(document).on('click', '#navBtns_btn_login', function (e) {
         e.preventDefault();                                                                                 
         var xhr = new XMLHttpRequest();                                                                     // create new xhr object
         
@@ -84,7 +359,7 @@ $(document).ready(function() {
                     $('#statusMessage').show().delay(5000).fadeOut();
                 } else {
                     // Open Panel Display
-                    var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                    var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
                     //$topicButton = $($activeButtonA.attr('href'));
                     buttonId = $activeButtonA.attr('href'); 
                     
@@ -94,7 +369,7 @@ $(document).ready(function() {
                     $topicButton = $(buttonId).addClass('active');              // Make new panel active
                     $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                     $('.loginReq').removeClass('loginReq');
-                    $('#buttonLogin').addClass('loginReq');
+                    $('#navBtns_btn_login').addClass('loginReq');
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut(); 
                     $map = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
@@ -138,157 +413,7 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
     $('.dispObjOpen').addClass('visible');
 })
 
-// Initialse all jquery functional fields for the mask display objects
-$( function() {  
-    // Initialise filter area as JQUERY Accordion                                                       
-    $( "#dispObjAccordion" ).accordion({
-        heightStyle: "content",                                            // hight of section dependent on content of section
-        autoHeight: false,
-        collapsible: true
-    });
 
-    $( "#dispFilTrk_dateFrom" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd', 
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-    
-    $( "#dispFilTrk_dateTo" ).datepicker({                                  // Initalise field to select to date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-
-    $( "#dispFilTrk_type" ).selectable({});                                 // Initialse field 'type' as JQUERY selectable
-
-    $( "#dispFilTrk_subtype" ).selectable({});                              // Initialse field 'subtype' as JQUERY selectable
-
-    // For object filter segments
-    // --------------------------
-
-    // mapUF_sourceName
-    $( "#dispFilSeg_sourceName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=segSourceFID",
-        minLength: 2,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
-                    $( "#dispFilSeg_sourceFID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-
-    // mapUF_segType
-    $( "#dispFilSeg_segType" ).selectable({});
-    
-    // startLocName
-    $( "#dispFilSeg_startLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_startLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-    
-    // startLocAlt 
-    $( "#dispFilSeg_startLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    
-    // startLocType
-    $( "#dispFilSeg_startLocType" ).selectable({});
-
-    // targetLocName
-    $( "#dispFilSeg_targetLocName" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=getWaypLong",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_targetLocID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
-
-    // targetLocAlt
-    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
-    });
-    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-
-    // targetLocType
-    $( "#dispFilSeg_targetLocType" ).selectable({});
-
-    // Region
-    $( "#dispFilSeg_segRegion" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=regionID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
-                    $( "#dispFilSeg_segRegionID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
-
-    // Area
-    $( "#dispFilSeg_segArea" ).autocomplete({
-        source: "services/get_auto_complete_values.php?field=areaID",
-        minLength: 1,
-        select: function( event, ui ) {
-            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
-        },
-        change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
-                    $( "#dispFilSeg_segAreaID" ).val( '' );
-            }
-        }
-    });
-    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-
-    $( "#dispFilSeg_grade" ).selectable({});
-    $( "#dispFilSeg_climbGrade" ).selectable({});
-    $( "#dispFilSeg_ehaft" ).selectable({});   
-
-} );
 
 // Executes code below when user clicks the 'Apply' filter button for tracks
 $(document).on('click', '.applyFilterButton', function (e) {
@@ -681,8 +806,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
     }
 
-    if ( ( $clickedButton == 'dispFilTrk_AddObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
-        $clickedButton == 'dispFilSeg_AddObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) && 
+    if ( ( $clickedButton == 'dispFilTrk_addObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
+        $clickedButton == 'dispFilSeg_addObjButton' || $clickedButton == 'dispFilSeg_NewLoadButton' ) && 
         genTrackKml || genSegKml ) {
         // send required parameters to gen_kml.php
         var jsonObject = {};
@@ -707,6 +832,23 @@ $(document).on('click', '.applyFilterButton', function (e) {
 // ========================== panelImport ===================================
 // ==========================================================================
 
+// Change to selected panel
+$(document).on('click', '.uiAdmTrk_btns_a', function(e) {                  
+    e.preventDefault();                                             // Prevent link behaviour
+    
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    // Run following block if selected topic is currently not active
+    if (buttonId && !$activeButtonA.is('.active')) {
+        $actUpdTrkTab.removeClass('active');                         // Make current panel inactive
+        $actUpdTrkBtn.removeClass('active');                        // Make current tab inactive
+        
+        $actUpdTrkTab = $(buttonId).addClass('active');              // Make new panel active
+        $actUpdTrkBtn = $activeButtonA.parent().addClass('active'); // Make new tab active
+    }
+}); 
+
 // Upon click on the 'Upload File' button --> call importGps.php in temp mode
 $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
@@ -718,28 +860,28 @@ $(document).on('click', '#buttonUploadFile', function (e) {
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
                 trackobj = responseObject.trackObj;
-                $('#impUpdTrk_trkId').val(trackobj.trkId); 
-                $('#impUpdTrk_trkTrackName').val(trackobj.trkTrackName);                    // assign values of JSON to input fields
-                $('#impUpdTrk_trkRoute').val(trackobj.trkRoute);
-                $('#impUpdTrk_trkDateBegin').val(trackobj.trkDateBegin);
-                $('#impUpdTrk_trkDateFinish').val(trackobj.trkDateFinish);
-                $('#impUpdTrk_trkSaison').val(trackobj.trkSaison);
-                $('#impUpdTrk_trkType').val(trackobj.trkType);
-                $('#impUpdTrk_trkSubType').val(trackobj.trkSubType);
-                $('#impUpdTrk_trkOrg').val(trackobj.trkOrg);
-                $('#impUpdTrk_trkOvernightLoc').val(trackobj.trkOvernightLoc);
-                $('#impUpdTrk_trkParticipants').val(trackobj.trkParticipants);
-                $('#impUpdTrk_trkEvent').val(trackobj.trkEvent);
-                $('#impUpdTrk_trkRemarks').val(trackobj.trkRemarks);
-                $('#impUpdTrk_trkDistance').val(trackobj.trkDistance);
-                $('#impUpdTrk_trkTimeOverall').val(trackobj.trkTimeOverall);
-                $('#impUpdTrk_trkTimeToPeak').val(trackobj.trkTimeToPeak);
-                $('#impUpdTrk_trkTimeToFinish').val(trackobj.trkTimeToFinish);
-                $('#impUpdTrk_trkGrade').val(trackobj.trkGrade);
-                $('#impUpdTrk_trkMeterUp').val(trackobj.trkMeterUp);
-                $('#impUpdTrk_trkMeterDown').val(trackobj.trkMeterDown);
-                $('#impUpdTrk_trkCountry').val(trackobj.trkCountry);
-                $('#impUpdTrk_trkCoordinates').val(trackobj.trkCoordinates);
+                $('#uiAdmTrk_fld_trkId').val(trackobj.trkId); 
+                $('#uiAdmTrk_fld_trkTrackName').val(trackobj.trkTrackName);                    // assign values of JSON to input fields
+                $('#uiAdmTrk_fld_trkRoute').val(trackobj.trkRoute);
+                $('#uiAdmTrk_fld_trkDateBegin').val(trackobj.trkDateBegin);
+                $('#uiAdmTrk_fld_trkDateFinish').val(trackobj.trkDateFinish);
+                $('#uiAdmTrk_fld_trkSaison').val(trackobj.trkSaison);
+                $('#uiAdmTrk_fld_trkType').val(trackobj.trkType);
+                $('#uiAdmTrk_fld_trkSubType').val(trackobj.trkSubType);
+                $('#uiAdmTrk_fld_trkOrg').val(trackobj.trkOrg);
+                $('#uiAdmTrk_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
+                $('#uiAdmTrk_fld_trkParticipants').val(trackobj.trkParticipants);
+                $('#uiAdmTrk_fld_trkEvent').val(trackobj.trkEvent);
+                $('#uiAdmTrk_fld_trkRemarks').val(trackobj.trkRemarks);
+                $('#uiAdmTrk_fld_trkDistance').val(trackobj.trkDistance);
+                $('#uiAdmTrk_fld_trkTimeOverall').val(trackobj.trkTimeOverall);
+                $('#uiAdmTrk_fld_trkTimeToPeak').val(trackobj.trkTimeToPeak);
+                $('#uiAdmTrk_fld_trkTimeToFinish').val(trackobj.trkTimeToFinish);
+                $('#uiAdmTrk_fld_trkGrade').val(trackobj.trkGrade);
+                $('#uiAdmTrk_fld_trkMeterUp').val(trackobj.trkMeterUp);
+                $('#uiAdmTrk_fld_trkMeterDown').val(trackobj.trkMeterDown);
+                $('#uiAdmTrk_fld_trkCountry').val(trackobj.trkCountry);
+                $('#uiAdmTrk_fld_trkCoordinates').val(trackobj.trkCoordinates);
                 
                 // not displayed fields
                 $trkStartEle = trackobj.trkStartEle;                        // new db field
@@ -751,8 +893,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkFinishTime = trackobj.trkFinishTime;
                 
                 // Close upload file div and open form to update track data
-                $('#pImpFileUpload').removeClass('active');
-                $('#pImpUpdateTrack').addClass('active');
+                $('#uiUplFileGps').removeClass('active');
+                $('#uiAdmTrk').addClass('active');
                 document.getElementById("inputFile").value = "";
             } else {
                 $('#statusMessage').text('Invalid file extension');
@@ -780,10 +922,10 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode
-$(document).on('click', '#impUpdTrk_save', function (e) {
+$(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
-    
-    var xhr = new XMLHttpRequest();                                 // create new xhr object
+    var valid = true;                                                                 // true when field check are passed
+    var xhr = new XMLHttpRequest();                                                   // create new xhr object
     // Execute following code JSON object is received from importGpsTmp.php SAVE service
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
@@ -795,7 +937,7 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
                 //$('.updTrackInput').value = "";
 
                 // Open Panel Display
-                var $activeButtonA = $('#a_panelDisplay');                                    // Store the current link <a> element
+                var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
                 buttonId = $activeButtonA.attr('href'); 
                 
                 // Run following block if selected topic is currently not active
@@ -805,38 +947,72 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
                 $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                 
                 // Close upload file div and open form to update track data
-                $('#pImpFileUpload').addClass('active');
-                $('#pImpUpdateTrack').removeClass('active');
+                $('#uiUplFileGps').addClass('active');
+                $('#uiAdmTrk').removeClass('active');
                 var trackobj = {};
                 var jsonObject = {};
             }
         }
     }
 
+    //var field2Chk = $('#uiAdmTrk_fld_trkId').val()
+    //  valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Seg Type" );
+    //valid = valid && checkExistance ( segDialogSegType, "Seg Type" );
+
     var trackobj = {};
     var jsonObject = {};
-    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
-    trackobj["trkTrackName"] = $('#impUpdTrk_trkTrackName').val();
-    trackobj["trkRoute"] = $('#impUpdTrk_trkRoute').val();
-    trackobj["trkDateBegin"] = $('#impUpdTrk_trkDateBegin').val();     
-    trackobj["trkDateFinish"] = $('#impUpdTrk_trkDateFinish').val();
-    trackobj["trkSaison"] = $('#impUpdTrk_trkSaison').val();
-    trackobj["trkType"] = $('#impUpdTrk_trkType').val();
-    trackobj["trkSubType"] = $('#impUpdTrk_trkSubType').val();
-    trackobj["trkOrg"] = $('#impUpdTrk_trkOrg').val();
-    trackobj["trkOvernightLoc"] = $('#impUpdTrk_trkOvernightLoc').val();
-    trackobj["trkParticipants"] = $('#impUpdTrk_trkParticipants').val();
-    trackobj["trkEvent"] = $('#impUpdTrk_trkEvent').val();
-    trackobj["trkRemarks"] = $('#impUpdTrk_trkRemarks').val();
-    trackobj["trkDistance"] = $('#impUpdTrk_trkDistance').val();
-    trackobj["trkTimeOverall"] = $('#impUpdTrk_trkTimeOverall').val();
-    trackobj["trkTimeToPeak"] = $('#impUpdTrk_trkTimeToPeak').val();
-    trackobj["trkTimeToFinish"] = $('#impUpdTrk_trkTimeToFinish').val();
-    trackobj["trkGrade"] = $('#impUpdTrk_trkGrade').val();
-    trackobj["trkMeterUp"] = $('#impUpdTrk_trkMeterUp').val();
-    trackobj["trkMeterDown"] = $('#impUpdTrk_trkMeterDown').val();
-    trackobj["trkCountry"] = $('#impUpdTrk_trkCountry').val();      
-    trackobj["trkCoordinates"] = $('#impUpdTrk_trkCoordinates').val();  
+
+    $('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );
+    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
+
+    $('#uiAdmTrk_fld_trkTrackName').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkTrackName'), "Track Name" );
+    trackobj["trkTrackName"] = $('#uiAdmTrk_fld_trkTrackName').val();
+    
+    $('#uiAdmTrk_fld_trkRoute').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkRoute'), "Route" );
+    trackobj["trkRoute"] = $('#uiAdmTrk_fld_trkRoute').val();
+    
+    $('#uiAdmTrk_fld_trkDateBegin').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateBegin'), "Date Begin" );
+    trackobj["trkDateBegin"] = $('#uiAdmTrk_fld_trkDateBegin').val();     
+
+    $('#uiAdmTrk_fld_trkDateFinish').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateFinish'), "Date Finish" );
+    trackobj["trkDateFinish"] = $('#uiAdmTrk_fld_trkDateFinish').val();
+    
+    trackobj["trkSaison"] = $('#uiAdmTrk_fld_trkSaison').val();
+    trackobj["trkType"] = $('#uiAdmTrk_fld_trkType').val();
+    trackobj["trkSubType"] = $('#uiAdmTrk_fld_trkSubType').val();
+    
+    trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();
+    
+    trackobj["trkOvernightLoc"] = $('#uiAdmTrk_fld_trkOvernightLoc').val();
+    
+    trackobj["trkParticipants"] = $('#uiAdmTrk_fld_trkParticipants').val();
+    
+    trackobj["trkEvent"] = $('#uiAdmTrk_fld_trkEvent').val();
+    
+    trackobj["trkRemarks"] = $('#uiAdmTrk_fld_trkRemarks').val();
+    
+    trackobj["trkDistance"] = $('#uiAdmTrk_fld_trkDistance').val();
+    
+    trackobj["trkTimeOverall"] = $('#uiAdmTrk_fld_trkTimeOverall').val();
+    
+    trackobj["trkTimeToPeak"] = $('#uiAdmTrk_fld_trkTimeToPeak').val();
+    
+    trackobj["trkTimeToFinish"] = $('#uiAdmTrk_fld_trkTimeToFinish').val();
+    
+    trackobj["trkGrade"] = $('#uiAdmTrk_fld_trkGrade').val();
+    
+    trackobj["trkMeterUp"] = $('#uiAdmTrk_fld_trkMeterUp').val();
+    
+    trackobj["trkMeterDown"] = $('#uiAdmTrk_fld_trkMeterDown').val();
+    
+    trackobj["trkCountry"] = $('#uiAdmTrk_fld_trkCountry').val();      
+    
+    trackobj["trkCoordinates"] = $('#uiAdmTrk_fld_trkCoordinates').val();  
     //trackobj["trkLoginName"] = $loginName;    
 
     // not displayed fields
@@ -848,21 +1024,23 @@ $(document).on('click', '#impUpdTrk_save', function (e) {
     trackobj["trkFinishEle"] = $trkFinishEle;                      // new db field
     trackobj["trkFinishTime"] = $trkFinishTime;                    // new db field
 
-    phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
-    jsonObject["request"] = 'save';                              // temp request to create track temporarily
-    jsonObject["loginname"] = $loginName; 
-    jsonObject["trackobj"] = trackobj;                              // send track object
-    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-    console.info(jsonObject);
-    xhr.setRequestHeader( "Content-Type", "application/json" );
-    jsn = JSON.stringify(jsonObject);
-    xhr.send( jsn );                                           // send formData object to service using xhr
+    if ( valid ) { 
+        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+        jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+        jsonObject["request"] = 'save';                              // temp request to create track temporarily
+        jsonObject["loginname"] = $loginName; 
+        jsonObject["trackobj"] = trackobj;                              // send track object
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        console.info(jsonObject);
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        jsn = JSON.stringify(jsonObject);
+        xhr.send( jsn );
+    }                                           // send formData object to service using xhr
     
 });
 
 // On click on the 'cancel' button --> cancel update & delete temp track
-$(document).on('click', '#impUpdTrk_cancel', function (e) {
+$(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     e.preventDefault();
     
     var xhr = new XMLHttpRequest();                                 // create new xhr object
@@ -870,8 +1048,8 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
             if ( responseObject.status == 'OK') {
-                $('#pImpFileUpload').addClass('active');                 // Make File upload div visible
-                $('#pImpUpdateTrack').removeClass('active');                   // hide update form
+                $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
+                $('#uiAdmTrk').removeClass('active');                   // hide update form
                 $('#statusMessage').text('Import cancelled');
                 $("#statusMessage").show().delay(5000).fadeOut();
             }
@@ -880,7 +1058,7 @@ $(document).on('click', '#impUpdTrk_cancel', function (e) {
 
     var trackobj = {};
     var jsonObject = {};
-    trackobj["trkId"] = $('#impUpdTrk_trkId').val();
+    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
     
     phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
     //var formData = new FormData();                                  // create new formData object
@@ -1142,3 +1320,27 @@ function callGenSegKml(sqlWhere) {
     xhr.send(encodeURI(xhrParams));
         
 };
+
+// =================================================================================================================================
+// ============================ Functions to validate fields at insert & update ====================================================
+//
+// Function updating Validation Comments    
+function updateValComments( text ) {
+    valComments
+        .text( text )
+        .addClass( "ui-state-highlight" );
+    setTimeout(function() {
+        valComments.removeClass( "ui-state-highlight", 1500 );
+    }, 500 );
+}
+
+// Funtion checking existance of file content in ADD dialog
+function checkExistance( origin, name ) {
+    if ( origin.val().length == 0 ) {
+        origin.addClass( "ui-state-error" );
+        updateValComments( "Field " + name + " must be entered" );
+        return false;
+    } else {
+        return true;
+    }
+}
