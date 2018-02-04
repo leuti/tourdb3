@@ -192,6 +192,81 @@ $(document).ready(function() {
         // ====== UI to Admin Tracks
         $( "#uiAdmTrk" ).tabs();
 
+
+        valComments = $( "#validateComments" );
+
+        $( "#uiAdmTrk_fld_trkDateBegin" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#uiAdmTrk_fld_trkDateFinish" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
+            dateFormat: 'yy-mm-dd', 
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: "css/images/calendar.gif",
+            buttonImageOnly: true,
+            buttonText: "Select date"
+        });
+
+        $( "#uiAdmTrk_fld_trkSaison" ).selectmenu();
+        $( "#uiAdmTrk_fld_trkType" ).selectmenu();
+        $( "#uiAdmTrk_fld_trkSubType" ).selectmenu();
+
+        $( function() {
+            function split( val ) {
+              return val.split( /,\s*/ );
+            }
+            function extractLast( term ) {
+              return split( term ).pop();
+            }
+         
+            $( "#birds" )
+              // don't navigate away from the field on tab when selecting an item
+              .on( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB &&
+                    $( this ).autocomplete( "instance" ).menu.active ) {
+                  event.preventDefault();
+                }
+              })
+              .autocomplete({
+                source: function( request, response ) {
+                  $.getJSON( "services/autoComplete.php?field=wayp", {
+                    term: extractLast( request.term )
+                  }, response );
+                },
+                search: function() {
+                  // custom minLength
+                  var term = extractLast( this.value );
+                  if ( term.length < 2 ) {
+                    return false;
+                  }
+                },
+                focus: function() {
+                  // prevent value inserted on focus
+                  return false;
+                },
+                select: function( event, ui ) {
+                  var terms = split( this.value );
+                  // remove the current input
+                  terms.pop();
+                  // add the selected item
+                  terms.push( ui.item.value );
+                  // add placeholder to get the comma-and-space at the end
+                  terms.push( "" );
+                  this.value = terms.join( ", " );
+                  return false;
+                }
+              });
+          } );
+
+        /*
         function log( message ) {
             $( "#div" ).text( message ).prependTo( "#log" );
             $( "#log" ).scrollTop( 0 );
@@ -207,7 +282,7 @@ $(document).ready(function() {
 
             }
         });
-
+        */
 
         /*$( "#birds" ).autocomplete({
             source: function( request, response ) {
@@ -849,8 +924,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 // Upon click on the 'Save' button --> call importGps.php in save mode
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
-    
-    var xhr = new XMLHttpRequest();                                 // create new xhr object
+    var valid = true;                                                                 // true when field check are passed
+    var xhr = new XMLHttpRequest();                                                   // create new xhr object
     // Execute following code JSON object is received from importGpsTmp.php SAVE service
     xhr.onload = function() {
         if (xhr.status === 200) {                                   // when all OK
@@ -880,29 +955,63 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         }
     }
 
+    //var field2Chk = $('#uiAdmTrk_fld_trkId').val()
+    //  valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Seg Type" );
+    //valid = valid && checkExistance ( segDialogSegType, "Seg Type" );
+
     var trackobj = {};
     var jsonObject = {};
+
+    $('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );
     trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
+
+    $('#uiAdmTrk_fld_trkTrackName').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkTrackName'), "Track Name" );
     trackobj["trkTrackName"] = $('#uiAdmTrk_fld_trkTrackName').val();
+    
+    $('#uiAdmTrk_fld_trkRoute').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkRoute'), "Route" );
     trackobj["trkRoute"] = $('#uiAdmTrk_fld_trkRoute').val();
+    
+    $('#uiAdmTrk_fld_trkDateBegin').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateBegin'), "Date Begin" );
     trackobj["trkDateBegin"] = $('#uiAdmTrk_fld_trkDateBegin').val();     
+
+    $('#uiAdmTrk_fld_trkDateFinish').removeClass( "ui-state-error" );
+    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateFinish'), "Date Finish" );
     trackobj["trkDateFinish"] = $('#uiAdmTrk_fld_trkDateFinish').val();
+    
     trackobj["trkSaison"] = $('#uiAdmTrk_fld_trkSaison').val();
     trackobj["trkType"] = $('#uiAdmTrk_fld_trkType').val();
     trackobj["trkSubType"] = $('#uiAdmTrk_fld_trkSubType').val();
+    
     trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();
+    
     trackobj["trkOvernightLoc"] = $('#uiAdmTrk_fld_trkOvernightLoc').val();
+    
     trackobj["trkParticipants"] = $('#uiAdmTrk_fld_trkParticipants').val();
+    
     trackobj["trkEvent"] = $('#uiAdmTrk_fld_trkEvent').val();
+    
     trackobj["trkRemarks"] = $('#uiAdmTrk_fld_trkRemarks').val();
+    
     trackobj["trkDistance"] = $('#uiAdmTrk_fld_trkDistance').val();
+    
     trackobj["trkTimeOverall"] = $('#uiAdmTrk_fld_trkTimeOverall').val();
+    
     trackobj["trkTimeToPeak"] = $('#uiAdmTrk_fld_trkTimeToPeak').val();
+    
     trackobj["trkTimeToFinish"] = $('#uiAdmTrk_fld_trkTimeToFinish').val();
+    
     trackobj["trkGrade"] = $('#uiAdmTrk_fld_trkGrade').val();
+    
     trackobj["trkMeterUp"] = $('#uiAdmTrk_fld_trkMeterUp').val();
+    
     trackobj["trkMeterDown"] = $('#uiAdmTrk_fld_trkMeterDown').val();
+    
     trackobj["trkCountry"] = $('#uiAdmTrk_fld_trkCountry').val();      
+    
     trackobj["trkCoordinates"] = $('#uiAdmTrk_fld_trkCoordinates').val();  
     //trackobj["trkLoginName"] = $loginName;    
 
@@ -915,16 +1024,18 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj["trkFinishEle"] = $trkFinishEle;                      // new db field
     trackobj["trkFinishTime"] = $trkFinishTime;                    // new db field
 
-    phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
-    jsonObject["request"] = 'save';                              // temp request to create track temporarily
-    jsonObject["loginname"] = $loginName; 
-    jsonObject["trackobj"] = trackobj;                              // send track object
-    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-    console.info(jsonObject);
-    xhr.setRequestHeader( "Content-Type", "application/json" );
-    jsn = JSON.stringify(jsonObject);
-    xhr.send( jsn );                                           // send formData object to service using xhr
+    if ( valid ) { 
+        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+        jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+        jsonObject["request"] = 'save';                              // temp request to create track temporarily
+        jsonObject["loginname"] = $loginName; 
+        jsonObject["trackobj"] = trackobj;                              // send track object
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        console.info(jsonObject);
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        jsn = JSON.stringify(jsonObject);
+        xhr.send( jsn );
+    }                                           // send formData object to service using xhr
     
 });
 
@@ -1209,3 +1320,27 @@ function callGenSegKml(sqlWhere) {
     xhr.send(encodeURI(xhrParams));
         
 };
+
+// =================================================================================================================================
+// ============================ Functions to validate fields at insert & update ====================================================
+//
+// Function updating Validation Comments    
+function updateValComments( text ) {
+    valComments
+        .text( text )
+        .addClass( "ui-state-highlight" );
+    setTimeout(function() {
+        valComments.removeClass( "ui-state-highlight", 1500 );
+    }, 500 );
+}
+
+// Funtion checking existance of file content in ADD dialog
+function checkExistance( origin, name ) {
+    if ( origin.val().length == 0 ) {
+        origin.addClass( "ui-state-error" );
+        updateValComments( "Field " + name + " must be entered" );
+        return false;
+    } else {
+        return true;
+    }
+}
