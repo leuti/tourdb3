@@ -32,6 +32,9 @@ var trackKMLlayer;
 var segKMLlayer;
 var mapSTlayer_grau;
 
+var peaksArray = new Array();
+var peakNr = 0;
+
 // ======================================================
 // ====== Perform these actions when page is ready ======
 // ======================================================
@@ -219,89 +222,27 @@ $(document).ready(function() {
         $( "#uiAdmTrk_fld_trkType" ).selectmenu();
         $( "#uiAdmTrk_fld_trkSubType" ).selectmenu();
 
-        $( function() {
-            function split( val ) {
-              return val.split( /,\s*/ );
-            }
-            function extractLast( term ) {
-              return split( term ).pop();
-            }
-         
-            $( "#birds" )
-              // don't navigate away from the field on tab when selecting an item
-              .on( "keydown", function( event ) {
-                if ( event.keyCode === $.ui.keyCode.TAB &&
-                    $( this ).autocomplete( "instance" ).menu.active ) {
-                  event.preventDefault();
-                }
-              })
-              .autocomplete({
-                source: function( request, response ) {
-                  $.getJSON( "services/autoComplete.php?field=wayp", {
-                    term: extractLast( request.term )
-                  }, response );
-                },
-                search: function() {
-                  // custom minLength
-                  var term = extractLast( this.value );
-                  if ( term.length < 2 ) {
-                    return false;
-                  }
-                },
-                focus: function() {
-                  // prevent value inserted on focus
-                  return false;
-                },
-                select: function( event, ui ) {
-                  var terms = split( this.value );
-                  // remove the current input
-                  terms.pop();
-                  // add the selected item
-                  terms.push( ui.item.value );
-                  // add placeholder to get the comma-and-space at the end
-                  terms.push( "" );
-                  this.value = terms.join( ", " );
-                  return false;
-                }
-              });
-          } );
-
-        /*
-        function log( message ) {
-            $( "#div" ).text( message ).prependTo( "#log" );
-            $( "#log" ).scrollTop( 0 );
-        }
-    
-        $( "#birds" ).autocomplete({
+        $( "#uiAdmTrk_peakSrch" ).autocomplete({
             source: "services/autoComplete.php?field=wayp",
             minLength: 2,
             select: function( event, ui ) {
-                $( "" ).val( ui.item.id);
-            },
+                $( "" ).val( ui.item.id );
+                id = ui.item.id;
+                value = ui.item.value;
+                
+                console.info("Line 228: select event on autocomplete bird detected: " + value + " - " + id);
+            }/*,
             change: function( event, ui ) {
-
-            }
-        });
-        */
-
-        /*$( "#birds" ).autocomplete({
-            source: function( request, response ) {
-            $.ajax( {
-                url: "services/autoComplete.php?field=wayp",
-                dataType: "jsonp",
-                data: {
-                    term: request.term
-                },
-                success: function( data ) {
-                    response( data );
+                if ( $( "#uiAdmTrk_peakSrch" ).val() == '' ) {
+                    $( "#uiAdmTrk_peakSrch" ).val( '' );
+                    $( "" ).val( ui.item.id );
                 }
-            } );
-            },
-            minLength: 2,
-            select: function( event, ui ) {
-                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
-            }
-        } );*/
+                    value = ui.item.id;
+                    id = ui.item.value;
+                    
+                    console.info("Line 240: select event on autocomplete bird detected: " + value + " - " + id);
+            }*/
+        });
     } );
 
     // Evaluate which button/panel is active
@@ -412,8 +353,6 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
     $('.dispObjOpen').removeClass('hidden');
     $('.dispObjOpen').addClass('visible');
 })
-
-
 
 // Executes code below when user clicks the 'Apply' filter button for tracks
 $(document).on('click', '.applyFilterButton', function (e) {
@@ -921,6 +860,56 @@ $(document).on('click', '#buttonUploadFile', function (e) {
     }
 });
 
+$(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
+    console.info("Line 861: Peak Add Button hit: " + value + " - " + id);
+    
+    // Initialise peakList array
+    var peaksList = new Array();
+
+    // Add new peak to array
+    peaksList["id"] = peakNr;
+    peaksList["waypId"] = id;
+    peaksList["waypName"] = value;
+    peaksList["waypType"] = 5;
+    peaksList["disp_f"] = true;
+
+    peaksArray.push(peaksList);
+
+    // If array.length = 1
+    // create new html table with value returned by autocomplete
+    var peakTable = '';
+        peakTable += '<table>';
+        peakTable += '<tr class="header">';
+        peakTable += '<th>Name</th>';                           // 2
+        peakTable += '<th>Del</th>';                           // 3
+        peakTable += '</tr>';
+
+    for (var i = 0; i < peaksArray.length; i++) {
+        peakTable += '<tr>';  
+        peakTable += '<td>' + peaksArray[i]["waypName"] + '</td>';               // 1    
+        peakTable += '<td><input type="checkbox" id="waypId_' + peaksArray[i]["waypId"] + '" class="tourSel"></td>'; 
+        peakTable += '</tr>';
+                            
+    }
+    peakTable += '</table>';   
+
+    document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
+    peakNr++;
+
+    // Field 1 = Name, field 2 = bin-graph, field 3 = waypId (hidden)
+
+    // Else
+    // add new record to table
+
+    // Reset peak array on click on save or cancel
+
+});
+
+$(document).on('click', '#uiAdmTrk_btnPeakDel', function (e) {
+    console.info("clicked on del")
+});
+
+
 // Upon click on the 'Save' button --> call importGps.php in save mode
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
@@ -1030,6 +1019,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject["request"] = 'save';                              // temp request to create track temporarily
         jsonObject["loginname"] = $loginName; 
         jsonObject["trackobj"] = trackobj;                              // send track object
+        jsonObject["peaksArray"] = $peaksArray;                     // Array containing selected peaks
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         console.info(jsonObject);
         xhr.setRequestHeader( "Content-Type", "application/json" );

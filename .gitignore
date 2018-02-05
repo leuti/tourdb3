@@ -4,7 +4,6 @@ jqw/
 log/*.log
 import/
 out (move to log)/
-tmp/
 test/
 tmpout/
 snipet/

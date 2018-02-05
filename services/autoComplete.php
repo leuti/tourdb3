@@ -63,8 +63,8 @@ $results->bind_result($ID, $Short); //bind variables to prepared statement
 $json = array();
 while($results->fetch()) {
     $res = array(
-        'value' => $Short,
         'id' => $ID,
+        'value' => $Short,
     );
     array_push($json, $res);
 }

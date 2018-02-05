@@ -13,7 +13,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="-1">
-	<title>Tour DB</title>
+	<title>Tour DB 3.0 - PROTOTYPE></title>
 	<!-- from https://www.jqwidgets.com/ -->
     <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
 
@@ -617,9 +617,16 @@
 				<div id="uiAdmTrk_tabWayp">
 					<fieldset>
 						<div class="ui-widget">
-							<label for="birds">Birds: </label>
-							<input id="birds" size="50">
+							<label for="uiAdmTrk_peakSrch">Enter Search Criteria </label>
+							<input id="uiAdmTrk_peakSrch" size="50">
 				  		</div>
+						    <ul>
+								<li id="uiAdmTrk_btnPeakAdd"><a href="#btnPeakAdd">+</a></li>
+							</ul>
+						<div>
+						</div>
+						<div id="uiAdmTrk_peakList">
+						</div>
 				   
 					</fieldset>
 				</div>
