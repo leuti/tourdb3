@@ -867,7 +867,7 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
     var peaksList = new Array();
 
     // Add new peak to array
-    peaksList["id"] = peakNr;
+    peaksList["id"] ="#peakDel_" + id;
     peaksList["waypId"] = id;
     peaksList["waypName"] = value;
     peaksList["waypType"] = 5;
@@ -875,26 +875,8 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
 
     peaksArray.push(peaksList);
 
-    // If array.length = 1
-    // create new html table with value returned by autocomplete
-    var peakTable = '';
-        peakTable += '<table>';
-        peakTable += '<tr class="header">';
-        peakTable += '<th>Name</th>';                           // 2
-        peakTable += '<th>Del</th>';                           // 3
-        peakTable += '</tr>';
+    drawPeakTable ( peaksArray ); 
 
-    for (var i = 0; i < peaksArray.length; i++) {
-        peakTable += '<tr>';  
-        peakTable += '<td>' + peaksArray[i]["waypName"] + '</td>';               // 1    
-        peakTable += '<td><ul><li><a class="peakDel"' 
-                  + ' href="#PeakDel_' + peaksArray[i]["waypId"] + '">Del</a></li></ul></tr>';
-        peakTable += '</tr>';
-                            
-    }
-    peakTable += '</table>';   
-
-    document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
     peakNr++;
 
     // Reset peak array on click on save or cancel
@@ -904,8 +886,16 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
 $(document).on('click', '.peakDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
-    var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    // var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var peakDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    for (var i = 0; i < peaksArray.length; i++) {
+        if ( peaksArray[i]["id"] == peakDelId ) {
+            peaksArray[i]["disp_f"] = false;
+        }    
+    }
+    drawPeakTable ( peaksArray );
+
     
     // Run following block if selected topic is currently not active
     if (buttonId && !$activeButtonA.is('.active')) {
@@ -1341,4 +1331,30 @@ function checkExistance( origin, name ) {
     } else {
         return true;
     }
+}
+
+// Draws the table that list the selected waypoints
+function drawPeakTable ( peaksArray ) {
+    // If array.length = 1
+    // create new html table with value returned by autocomplete
+    var peakTable = '';
+        peakTable += '<table cellspacing="0" cellpadding="0">';
+        /*peakTable += '<tr class="tblWayp">';
+        peakTable += '<th>Name</th>';                           // 2
+        peakTable += '<th></th>';                           // 3
+        peakTable += '</tr>';*/
+
+    for (var i = 0; i < peaksArray.length; i++) {
+        if ( peaksArray[i]["disp_f"] == true ) {
+            peakTable += '<tr class="tblWayp">';  
+            peakTable += '<td>' + peaksArray[i]["waypName"] + '</td>';               // 1    
+            peakTable += '<td><ul class="tblWayp"><li class="button_Li"><a class="peakDel button_A"' 
+                    + ' href="#peakDel_' + peaksArray[i]["waypId"] + '">'
+                    + '<img id="btnPeakDelImg" src="css/images/delete.png"></a></li></ul></tr>';
+            peakTable += '</tr>';
+        }               
+    }
+    peakTable += '</table>';   
+
+    document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
 }

@@ -616,18 +616,25 @@
 				</div>
 				<div id="uiAdmTrk_tabWayp">
 					<fieldset>
-						<div class="ui-widget">
-							<label for="uiAdmTrk_peakSrch">Enter Search Criteria </label>
-							<input id="uiAdmTrk_peakSrch" size="50">
+						<legend class="filterHeader">Add Peaks</legend>
+						<div class="ui-widget" style="float:left;">
+							<label for="uiAdmTrk_peakSrch">Peak</label>
+							<input id="uiAdmTrk_peakSrch" size="25">
 				  		</div>
-						    <ul>
-								<li id="uiAdmTrk_btnPeakAdd"><a href="#btnPeakAdd">+</a></li>
-							</ul>
+						<ul id="btnPeakAdd_Ul">
+							<li id="uiAdmTrk_btnPeakAdd" class="button_Li">
+								<a id="uiAdmTrk_btnPeakAdd_A" class="button_A" href="#btnPeakAdd">
+									<img id="btnPeakAddImg" src="css/images/add.png">	
+								</a></li>
+						</ul>
 						<div>
 						</div>
-						<div id="uiAdmTrk_peakList">
+						<div id="uiAdmTrk_peakList" style="float:left;">
 						</div>
-				   
+					</fieldset>
+
+					<fieldset>
+						<legend class="filterHeader">Add Waypoints</legend>
 					</fieldset>
 				</div>
 				<div id="uiAdmTrk_tabOth">

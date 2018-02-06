@@ -101,6 +101,48 @@ table {
     margin: 10px;
 }
 
+#btnPeakAdd_Ul {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    top: -8px;
+}
+
+.button_Li {
+    list-style: none;
+}
+
+.button_A {
+    text-decoration: none;
+}
+
+.tblWayp {
+    padding: 0px;
+    margin: 0px;
+    color: #040442;
+    background: #ffffff;
+    border: none;
+}
+
+/*tr.tblWayp>th {
+    padding: 3px 5px 3px 5px;
+    color: #040442;
+    border-bottom: 0.2px solid #01101f;
+    /*border-top: 3px solid #01101f;
+    border-bottom: 0.5px solid #4d4dff;
+    background: #cacaca;
+}*/
+
+tr.tblWayp>td {
+    padding: 3px 5px 3px 5px;
+    color: #040442;
+    border-top: 0.2px solid #01101f;
+    /*border-top: 3px solid #01101f;
+    border-bottom: 0.2px solid #01101f;
+    background: #cacaca;*/
+}
+
 .formCenter, .uiDiv.active {
     /*margin-top: 40px;
     padding: 0.5em 0.5em;*/
