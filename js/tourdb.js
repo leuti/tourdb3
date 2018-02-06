@@ -887,7 +887,8 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
     for (var i = 0; i < peaksArray.length; i++) {
         peakTable += '<tr>';  
         peakTable += '<td>' + peaksArray[i]["waypName"] + '</td>';               // 1    
-        peakTable += '<td><input type="checkbox" id="waypId_' + peaksArray[i]["waypId"] + '" class="tourSel"></td>'; 
+        peakTable += '<td><ul><li><a class="peakDel"' 
+                  + ' href="#PeakDel_' + peaksArray[i]["waypId"] + '">Del</a></li></ul></tr>';
         peakTable += '</tr>';
                             
     }
@@ -896,19 +897,26 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
     document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
     peakNr++;
 
-    // Field 1 = Name, field 2 = bin-graph, field 3 = waypId (hidden)
-
-    // Else
-    // add new record to table
-
     // Reset peak array on click on save or cancel
 
 });
 
-$(document).on('click', '#uiAdmTrk_btnPeakDel', function (e) {
+$(document).on('click', '.peakDel', function (e) {
     console.info("clicked on del")
-});
+    e.preventDefault();                                             // Prevent link behaviour
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    // Run following block if selected topic is currently not active
+    if (buttonId && !$activeButtonA.is('.active')) {
+        $topicButton.removeClass('active');                         // Make current panel inactive
+        $activeButton.removeClass('active');                        // Make current tab inactive
 
+        $topicButton = $(buttonId).addClass('active');              // Make new panel active
+        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+    }
+
+});
 
 // Upon click on the 'Save' button --> call importGps.php in save mode
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
