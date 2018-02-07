@@ -972,33 +972,19 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj["trkSaison"] = $('#uiAdmTrk_fld_trkSaison').val();
     trackobj["trkType"] = $('#uiAdmTrk_fld_trkType').val();
     trackobj["trkSubType"] = $('#uiAdmTrk_fld_trkSubType').val();
-    
-    trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();
-    
+    trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();    
     trackobj["trkOvernightLoc"] = $('#uiAdmTrk_fld_trkOvernightLoc').val();
-    
     trackobj["trkParticipants"] = $('#uiAdmTrk_fld_trkParticipants').val();
-    
     trackobj["trkEvent"] = $('#uiAdmTrk_fld_trkEvent').val();
-    
     trackobj["trkRemarks"] = $('#uiAdmTrk_fld_trkRemarks').val();
-    
     trackobj["trkDistance"] = $('#uiAdmTrk_fld_trkDistance').val();
-    
     trackobj["trkTimeOverall"] = $('#uiAdmTrk_fld_trkTimeOverall').val();
-    
     trackobj["trkTimeToPeak"] = $('#uiAdmTrk_fld_trkTimeToPeak').val();
-    
     trackobj["trkTimeToFinish"] = $('#uiAdmTrk_fld_trkTimeToFinish').val();
-    
     trackobj["trkGrade"] = $('#uiAdmTrk_fld_trkGrade').val();
-    
     trackobj["trkMeterUp"] = $('#uiAdmTrk_fld_trkMeterUp').val();
-    
     trackobj["trkMeterDown"] = $('#uiAdmTrk_fld_trkMeterDown').val();
-    
     trackobj["trkCountry"] = $('#uiAdmTrk_fld_trkCountry').val();      
-    
     trackobj["trkCoordinates"] = $('#uiAdmTrk_fld_trkCoordinates').val();  
     //trackobj["trkLoginName"] = $loginName;    
 
@@ -1017,7 +1003,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject["request"] = 'save';                              // temp request to create track temporarily
         jsonObject["loginname"] = $loginName; 
         jsonObject["trackobj"] = trackobj;                              // send track object
-        jsonObject["peaksArray"] = $peaksArray;                     // Array containing selected peaks
+        //jsonObject["peaksArray"] = peaksArray;                     // Array containing selected peaks
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         console.info(jsonObject);
         xhr.setRequestHeader( "Content-Type", "application/json" );
@@ -1311,7 +1297,7 @@ function callGenSegKml(sqlWhere) {
 
 // =================================================================================================================================
 // ============================ Functions to validate fields at insert & update ====================================================
-//
+
 // Function updating Validation Comments    
 function updateValComments( text ) {
     valComments

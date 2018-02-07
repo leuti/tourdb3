@@ -26,32 +26,13 @@
 // Return object
 // status
 // errmessage
-// trackObj - trkCoordinates
-// trackObj - trkDateBegin
-// trackObj - trkDateFinish
-// trackObj - trkDistance
-// trackObj - trkGPSStartTime
-// trackObj - trkId
-// trackObj - trkLowEle
-// trackObj - trkLowTime
-// trackObj - trkMeterDown
-// trackObj - trkMeterUp
-// trackObj - trkPeakEle
-// trackObj - trkPeakTime
-// trackObj - trkSourceFileName
-// trackObj - trkStartEle
-// trackObj - trkStartTime
-// trackObj - trkTimeOverall
-// trackObj - trkTimeToFinish
-// trackObj - trkTimeToPeak
-// trackObj - trkTrackName
-
+// trackObj
 
 // Set variables and parameters
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 3;                                                    // 0 = off, 6 = all
+$debugLevel = 5;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
@@ -164,13 +145,16 @@ if ($request == "temp") {
     // request type is "SAVE" meaning that track records are updated and finalised
     // ---------------------------------------------------------------------------------
 
+    // Part 1: Update temporarily created track record
+    // ----------------------------------------------------
     // read received INPUT object
     $trackObjIn = array();                                          // array storing track data in array
     $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
     $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     $loginname = $receivedData["loginname"];
     $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
-
+    $peakArray = $receivedData["peaksArray"];                        // Array of peaks selected
+    
     if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
     // Create SQL statement to update temporary track 
@@ -185,7 +169,7 @@ if ($request == "temp") {
     $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
     
     if ($debugLevel>3) fputs($logFile, "Line 164 - sql: $sql\r\n");
-    
+
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {
@@ -194,6 +178,24 @@ if ($request == "temp") {
         fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
         return -1;
     } 
+    
+    // Part 2: Insert records to tbl_track_wayp
+    // ---------------------------------------------
+
+    // Read input object
+    
+    $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType) VALUES ";
+
+    $i=0;
+    for ($i; $trackObjIn.length; $i++) {                                                 // 10 is the number of existing subtypes in array (lines)
+        if ( $trackObjIn["disp_f"] == true ) {
+            $sql .= "(" . $trackObjIn["trkId"] . $trackObjIn["waypId"] . ", " . $trackObjIn["waypType"] . "), ";  
+        }
+    }
+
+    if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
+    // create SQL statement
+
 
     // Prepare JSON out object
     $outObject = array (
@@ -260,12 +262,11 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
             
     // create SQL insert statement
     $sql = "INSERT INTO `tbl_tracks`";                              // Insert Source file name, gps start time and toReview flag
-    $sql .= " (`trkSourceFileName`, `trkRoute`, `trkTrackName`, `trkGPSStartTime`, ";
+    $sql .= " (`trkSourceFileName`, `trkTrackName`, `trkGPSStartTime`, ";
     $sql .= " `trkDateBegin`, `trkDateFinish`, `trkLoginName`) VALUES "; 
 
     // create value section
     $sql .= "('" . $filename . "', ";                               // create value bracket statement
-    $sql .= "'" . $trkRoute . "', ";
     $sql .= "'" . $trackName . "', ";
     $sql .= "'" . $GpsStartTime . "', ";
     $sql .= "'" . $DateBegin . "', ";
@@ -423,8 +424,8 @@ function insertTrackPoints($conn,$trackid,$filename)
             }
         }
         
-        if ($GLOBALS['debugLevel']>4) {
-            fputs($GLOBALS['logFile'],"Line 421>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
+        if ($GLOBALS['debugLevel']>8) {
+            fputs($GLOBALS['logFile'],"Line 428>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
         }
         
         $previousEle = $ele;
@@ -464,7 +465,7 @@ function insertTrackPoints($conn,$trackid,$filename)
         $tptNumber++;                                               // increase track point counter by 1
     }
 
-    if ($GLOBALS['debugLevel']>2) {
+    if ($GLOBALS['debugLevel']>8) {
         fputs($GLOBALS['logFile'],"Line 421>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
     }
 

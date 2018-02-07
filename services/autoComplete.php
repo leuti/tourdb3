@@ -1,7 +1,8 @@
 <?php
 
 // ---------------------------------------------------------------------------------------------
-// blabla
+// This php script is called to search and return the values when the user types letters
+// into the autocomplete fields
 //
 // Parameters:
 // blabla
