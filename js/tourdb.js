@@ -911,35 +911,6 @@ $(document).on('click', '.peakDel', function (e) {
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                                 // true when field check are passed
-    var xhr = new XMLHttpRequest();                                                   // create new xhr object
-    // Execute following code JSON object is received from importGpsTmp.php SAVE service
-    xhr.onload = function() {
-        if (xhr.status === 200) {                                   // when all OK
-            if ( responseObject.status == 'OK') {
-                // Make panelImport disappear and panelDisplay appear
-                $('#statusMessage').text('Track successfully saved');
-                $('#statusMessage').show().delay(5000).fadeOut();
-
-                //$('.updTrackInput').value = "";
-
-                // Open Panel Display
-                var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
-                buttonId = $activeButtonA.attr('href'); 
-                
-                // Run following block if selected topic is currently not active
-                $topicButton.removeClass('active');                         // Make current panel inactive
-                $activeButton.removeClass('active');                        // Make current tab inactive
-                $topicButton = $(buttonId).addClass('active');              // Make new panel active
-                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-                
-                // Close upload file div and open form to update track data
-                $('#uiUplFileGps').addClass('active');
-                $('#uiAdmTrk').removeClass('active');
-                var trackobj = {};
-                var jsonObject = {};
-            }
-        }
-    }
 
     //var field2Chk = $('#uiAdmTrk_fld_trkId').val()
     //  valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Seg Type" );
@@ -984,7 +955,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkMeterUp = $('#uiAdmTrk_fld_trkMeterUp').val();
     trackobj.trkMeterDown = $('#uiAdmTrk_fld_trkMeterDown').val();
     trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();      
-    //trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
+    trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
     //trackobj.trkLoginName = $loginName;    
 
     // not displayed fields
@@ -997,52 +968,43 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkFinishTime = $trkFinishTime;                    // new db field
 
     if ( valid ) { 
-        phpLocation = document.URL + "services/importGps2.php";          // Variable to store location of php file
+        //phpLocation = document.URL + "services/importGps2.php";          // Variable to store location of php file
+        phpLocation = "services/importGps.php";          // Variable to store location of php file
         jsonObject.sessionid = sessionid;                             // append parameter session ID
         jsonObject.request = 'save';                              // temp request to create track temporarily
         jsonObject.loginname = $loginName; 
         trackobj.peaksArray = peaksArray;                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                              // send track object
-        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-        console.info(jsonObject);
-        xhr.setRequestHeader( "Content-Type", "application/json" );
-        jsn = encodeURIComponent(JSON.stringify(jsonObject));
-        //jsn = JSON.stringify(jsonObject);
-        //xhr.send( jsn );
 
         $.ajax({
-            url: "services/importGps.php",
+            url: phpLocation,
             type: "POST",
             data: jsonObject
-          })
-            .done(function ( data ) {
-                if ( responseObject.status == 'OK') {
-                    // Make panelImport disappear and panelDisplay appear
-                    $('#statusMessage').text('Track successfully saved');
-                    $('#statusMessage').show().delay(5000).fadeOut();
-    
-                    //$('.updTrackInput').value = "";
-    
-                    // Open Panel Display
-                    var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
-                    buttonId = $activeButtonA.attr('href'); 
-                    
-                    // Run following block if selected topic is currently not active
-                    $topicButton.removeClass('active');                         // Make current panel inactive
-                    $activeButton.removeClass('active');                        // Make current tab inactive
-                    $topicButton = $(buttonId).addClass('active');              // Make new panel active
-                    $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-                    
-                    // Close upload file div and open form to update track data
-                    $('#uiUplFileGps').addClass('active');
-                    $('#uiAdmTrk').removeClass('active');
-                    var trackobj = {};
-                    var jsonObject = {};
-                }
-            });
+        })
+        .done(function ( data ) {
+            if ( responseObject.status == 'OK') {
+                // Make panelImport disappear and panelDisplay appear
+                $('#statusMessage').text('Track successfully saved');
+                $('#statusMessage').show().delay(5000).fadeOut();
 
+                //$('.updTrackInput').value = "";
+
+                // Open Panel Display
+                var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
+                buttonId = $activeButtonA.attr('href'); 
+                
+                // Run following block if selected topic is currently not active
+                $topicButton.removeClass('active');                         // Make current panel inactive
+                $activeButton.removeClass('active');                        // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                
+                // Close upload file div and open form to update track data
+                $('#uiUplFileGps').addClass('active');
+                $('#uiAdmTrk').removeClass('active');
+            }
+        });
     }                                           // send formData object to service using xhr
-    
 });
 
 // On click on the 'cancel' button --> cancel update & delete temp track
