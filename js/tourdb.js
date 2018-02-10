@@ -1008,7 +1008,39 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         xhr.setRequestHeader( "Content-Type", "application/json" );
         jsn = encodeURIComponent(JSON.stringify(jsonObject));
         //jsn = JSON.stringify(jsonObject);
-        xhr.send( jsn );
+        //xhr.send( jsn );
+
+        $.ajax({
+            url: "services/importGps.php",
+            type: "POST",
+            data: jsonObject
+          })
+            .done(function ( data ) {
+                if ( responseObject.status == 'OK') {
+                    // Make panelImport disappear and panelDisplay appear
+                    $('#statusMessage').text('Track successfully saved');
+                    $('#statusMessage').show().delay(5000).fadeOut();
+    
+                    //$('.updTrackInput').value = "";
+    
+                    // Open Panel Display
+                    var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
+                    buttonId = $activeButtonA.attr('href'); 
+                    
+                    // Run following block if selected topic is currently not active
+                    $topicButton.removeClass('active');                         // Make current panel inactive
+                    $activeButton.removeClass('active');                        // Make current tab inactive
+                    $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                    $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                    
+                    // Close upload file div and open form to update track data
+                    $('#uiUplFileGps').addClass('active');
+                    $('#uiAdmTrk').removeClass('active');
+                    var trackobj = {};
+                    var jsonObject = {};
+                }
+            });
+
     }                                           // send formData object to service using xhr
     
 });
