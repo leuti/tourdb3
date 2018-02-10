@@ -140,7 +140,8 @@ if ($request == "temp") {
         exit;                                                       // exit from php
     }
 } else if ( $request == "save") {
-
+    if ( $debugLevel > 2) fputs($logFile, "Line 143: fjkldjlköfjadsjfklöj\r\n");  
+    
     // ---------------------------------------------------------------------------------
     // request type is "SAVE" meaning that track records are updated and finalised
     // ---------------------------------------------------------------------------------
@@ -153,7 +154,7 @@ if ($request == "temp") {
     $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     $loginname = $receivedData["loginname"];
     $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
-    $peakArray = $receivedData["peaksArray"];                        // Array of peaks selected
+//    $peaksArray = $trackObjIn["peaksArray"];                        // Array of peaks selected
     
     if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
@@ -168,7 +169,7 @@ if ($request == "temp") {
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
     $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
     
-    if ($debugLevel>3) fputs($logFile, "Line 164 - sql: $sql\r\n");
+    if ($debugLevel>5) fputs($logFile, "Line 164 - sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                // run sql against DB
@@ -178,24 +179,32 @@ if ($request == "temp") {
         fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
         return -1;
     } 
-    
+ /*  
     // Part 2: Insert records to tbl_track_wayp
     // ---------------------------------------------
+
+    if ( $debugLevel > 3) fputs($logFile, "Line 185 - Part II entered\r\n");
+    
 
     // Read input object
     
     $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType) VALUES ";
-
+    $peaksArray = $trackObjIn["peaksArray"];
+    //$check = sizeof($peaksArray);
+    //if ( $debugLevel > 3) fputs($logFile, "Line 191 - check: $check\r\n");
+    /*
     $i=0;
-    for ($i; $trackObjIn.length; $i++) {                                                 // 10 is the number of existing subtypes in array (lines)
-        if ( $trackObjIn["disp_f"] == true ) {
-            $sql .= "(" . $trackObjIn["trkId"] . $trackObjIn["waypId"] . ", " . $trackObjIn["waypType"] . "), ";  
+    for ( $i; $i < sizeof($peaksArray); $i++ ) {                   // 10 is the number of existing subtypes in array (lines)
+        if ( $peaksArray["disp_f"] == true ) {
+            $sql .= "(" . $peaksArray["trkId"] . $peaksArray["waypId"] . ", " . $peaksArray["waypType"] . "), ";  
         }
     }
+    
+    */
 
-    if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
+    //if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
     // create SQL statement
-
+    /*
 
     // Prepare JSON out object
     $outObject = array (
@@ -204,6 +213,7 @@ if ($request == "temp") {
     );
     echo json_encode($outObject);    
     
+    */
 } else if ( $request == "cancel") {
 
     // ---------------------------------------------------------------------------------

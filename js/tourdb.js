@@ -861,17 +861,16 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 });
 
 $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
-    console.info("Line 861: Peak Add Button hit: " + value + " - " + id);
     
     // Initialise peakList array
-    var peaksList = new Array();
+    var peaksList =  new Object();
 
     // Add new peak to array
-    peaksList["id"] ="#peakDel_" + id;
-    peaksList["waypId"] = id;
-    peaksList["waypName"] = value;
-    peaksList["waypType"] = 5;
-    peaksList["disp_f"] = true;
+    peaksList.id = "#peakDel_" + id;                 // 0
+    peaksList.waypId = id;                               // 1
+    peaksList.waypName = value;                            // 2
+    peaksList.waypType = 5;                                // 3
+    peaksList.disp_f = true;                             // 4
 
     peaksArray.push(peaksList);
 
@@ -890,8 +889,8 @@ $(document).on('click', '.peakDel', function (e) {
     var peakDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
     
     for (var i = 0; i < peaksArray.length; i++) {
-        if ( peaksArray[i]["id"] == peakDelId ) {
-            peaksArray[i]["disp_f"] = false;
+        if ( peaksArray[i][0] == peakDelId ) {
+            peaksArray[i][4] = false;
         }    
     }
     drawPeakTable ( peaksArray );
@@ -951,63 +950,64 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
 
     $('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );
-    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
+    trackobj.trkId = $('#uiAdmTrk_fld_trkId').val();
 
     $('#uiAdmTrk_fld_trkTrackName').removeClass( "ui-state-error" );
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkTrackName'), "Track Name" );
-    trackobj["trkTrackName"] = $('#uiAdmTrk_fld_trkTrackName').val();
+    trackobj.trkTrackName = $('#uiAdmTrk_fld_trkTrackName').val();
     
     $('#uiAdmTrk_fld_trkRoute').removeClass( "ui-state-error" );
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkRoute'), "Route" );
-    trackobj["trkRoute"] = $('#uiAdmTrk_fld_trkRoute').val();
+    trackobj.trkRoute = $('#uiAdmTrk_fld_trkRoute').val();
     
     $('#uiAdmTrk_fld_trkDateBegin').removeClass( "ui-state-error" );
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateBegin'), "Date Begin" );
-    trackobj["trkDateBegin"] = $('#uiAdmTrk_fld_trkDateBegin').val();     
+    trackobj.trkDateBegin = $('#uiAdmTrk_fld_trkDateBegin').val();     
 
     $('#uiAdmTrk_fld_trkDateFinish').removeClass( "ui-state-error" );
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkDateFinish'), "Date Finish" );
-    trackobj["trkDateFinish"] = $('#uiAdmTrk_fld_trkDateFinish').val();
+    trackobj.trkDateFinish = $('#uiAdmTrk_fld_trkDateFinish').val();
     
-    trackobj["trkSaison"] = $('#uiAdmTrk_fld_trkSaison').val();
-    trackobj["trkType"] = $('#uiAdmTrk_fld_trkType').val();
-    trackobj["trkSubType"] = $('#uiAdmTrk_fld_trkSubType').val();
-    trackobj["trkOrg"] = $('#uiAdmTrk_fld_trkOrg').val();    
-    trackobj["trkOvernightLoc"] = $('#uiAdmTrk_fld_trkOvernightLoc').val();
-    trackobj["trkParticipants"] = $('#uiAdmTrk_fld_trkParticipants').val();
-    trackobj["trkEvent"] = $('#uiAdmTrk_fld_trkEvent').val();
-    trackobj["trkRemarks"] = $('#uiAdmTrk_fld_trkRemarks').val();
-    trackobj["trkDistance"] = $('#uiAdmTrk_fld_trkDistance').val();
-    trackobj["trkTimeOverall"] = $('#uiAdmTrk_fld_trkTimeOverall').val();
-    trackobj["trkTimeToPeak"] = $('#uiAdmTrk_fld_trkTimeToPeak').val();
-    trackobj["trkTimeToFinish"] = $('#uiAdmTrk_fld_trkTimeToFinish').val();
-    trackobj["trkGrade"] = $('#uiAdmTrk_fld_trkGrade').val();
-    trackobj["trkMeterUp"] = $('#uiAdmTrk_fld_trkMeterUp').val();
-    trackobj["trkMeterDown"] = $('#uiAdmTrk_fld_trkMeterDown').val();
-    trackobj["trkCountry"] = $('#uiAdmTrk_fld_trkCountry').val();      
-    trackobj["trkCoordinates"] = $('#uiAdmTrk_fld_trkCoordinates').val();  
-    //trackobj["trkLoginName"] = $loginName;    
+    trackobj.trkSaison = $('#uiAdmTrk_fld_trkSaison').val();
+    trackobj.trkType = $('#uiAdmTrk_fld_trkType').val();
+    trackobj.trkSubType = $('#uiAdmTrk_fld_trkSubType').val();
+    trackobj.trkOrg = $('#uiAdmTrk_fld_trkOrg').val();    
+    trackobj.trkOvernightLoc = $('#uiAdmTrk_fld_trkOvernightLoc').val();
+    trackobj.trkParticipants = $('#uiAdmTrk_fld_trkParticipants').val();
+    trackobj.trkEvent = $('#uiAdmTrk_fld_trkEvent').val();
+    trackobj.trkRemarks = $('#uiAdmTrk_fld_trkRemarks').val();
+    trackobj.trkDistance = $('#uiAdmTrk_fld_trkDistance').val();
+    trackobj.trkTimeOverall = $('#uiAdmTrk_fld_trkTimeOverall').val();
+    trackobj.trkTimeToPeak = $('#uiAdmTrk_fld_trkTimeToPeak').val();
+    trackobj.trkTimeToFinish = $('#uiAdmTrk_fld_trkTimeToFinish').val();
+    trackobj.trkGrade = $('#uiAdmTrk_fld_trkGrade').val();
+    trackobj.trkMeterUp = $('#uiAdmTrk_fld_trkMeterUp').val();
+    trackobj.trkMeterDown = $('#uiAdmTrk_fld_trkMeterDown').val();
+    trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();      
+    //trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
+    //trackobj.trkLoginName = $loginName;    
 
     // not displayed fields
-    trackobj["trkStartEle"] = $trkStartEle;                        // new db field
-    trackobj["trkPeakEle"] = $trkPeakEle;                          // new db field
-    trackobj["trkPeakTime"] = $trkPeakTime;                        // new db field
-    trackobj["trkLowEle"] = $trkLowEle;                            // new db field
-    trackobj["trkLowTime"] = $trkLowTime;                          // new db field
-    trackobj["trkFinishEle"] = $trkFinishEle;                      // new db field
-    trackobj["trkFinishTime"] = $trkFinishTime;                    // new db field
+    trackobj.trkStartEle = $trkStartEle;                        // new db field
+    trackobj.trkPeakEle = $trkPeakEle;                          // new db field
+    trackobj.trkPeakTime = $trkPeakTime;                        // new db field
+    trackobj.trkLowEle = $trkLowEle;                            // new db field
+    trackobj.trkLowTime = $trkLowTime;                          // new db field
+    trackobj.trkFinishEle = $trkFinishEle;                      // new db field
+    trackobj.trkFinishTime = $trkFinishTime;                    // new db field
 
     if ( valid ) { 
-        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-        jsonObject["sessionid"] = sessionid;                             // append parameter session ID
-        jsonObject["request"] = 'save';                              // temp request to create track temporarily
-        jsonObject["loginname"] = $loginName; 
-        jsonObject["trackobj"] = trackobj;                              // send track object
-        //jsonObject["peaksArray"] = peaksArray;                     // Array containing selected peaks
+        phpLocation = document.URL + "services/importGps2.php";          // Variable to store location of php file
+        jsonObject.sessionid = sessionid;                             // append parameter session ID
+        jsonObject.request = 'save';                              // temp request to create track temporarily
+        jsonObject.loginname = $loginName; 
+        trackobj.peaksArray = peaksArray;                     // Array containing selected peaks
+        jsonObject.trackobj = trackobj;                              // send track object
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
         console.info(jsonObject);
         xhr.setRequestHeader( "Content-Type", "application/json" );
-        jsn = JSON.stringify(jsonObject);
+        jsn = encodeURIComponent(JSON.stringify(jsonObject));
+        //jsn = JSON.stringify(jsonObject);
         xhr.send( jsn );
     }                                           // send formData object to service using xhr
     
