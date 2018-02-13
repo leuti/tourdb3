@@ -25,7 +25,7 @@
 // 
 // Return object
 // status
-// errmessage
+// errMessage
 // trackObj
 
 // Set variables and parameters
@@ -48,7 +48,31 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call t
     if ($debugLevel > 2) fputs($logFile, "Line 38: Request (_REQUEST): $request\r\n");    
 } else {
     // variables passed on by client (as formData object)
-    $receivedData = json_decode ( file_get_contents('php://input'), true );
+
+    //Make sure that it is a POST request.
+    if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){
+        throw new Exception('Request method must be POST!');
+    }
+    
+    if ($debugLevel > 2) fputs($logFile, 'Line 57: contentType:' . $_SERVER["CONTENT_TYPE"] . '\r\n');
+    //Make sure that the content type of the POST request has been set to application/json
+    $contentType = isset($_SERVER["CONTENT_TYPE"]) ? substr($_SERVER["CONTENT_TYPE"],0,16) : '';
+    if ($debugLevel > 2) fputs($logFile, "Line 59: contentType: <$contentType>\r\n");
+    if(strcasecmp($contentType, 'application/json') != 0){
+        throw new Exception('Content type must be: application/json');
+    }
+    
+    //Receive the RAW post data.
+    $content = trim(file_get_contents("php://input"));
+    
+    //Attempt to decode the incoming RAW post data from JSON.
+    $receivedData = json_decode($content, true);
+    
+    //If json_decode failed, the JSON is invalid.
+    //if(!is_array($decoded)){
+    //    throw new Exception('Received content contained invalid JSON!');
+    //}
+
     $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     if ($debugLevel > 2) fputs($logFile, "Line 43: Request (JSON): $request\r\n");    
 }
@@ -134,14 +158,13 @@ if ($request == "temp") {
         // prepare JSON return object
         $outObject = array (
             'status'=>'ERR',                                        // add err status to return object
-            'errmessage'=>'Wrong file extension',                   // add error message to return object
+            'errMessage'=>'Wrong file extension',                   // add error message to return object
         );
         echo json_encode($outObject);                               // echo track object to client
         exit;                                                       // exit from php
     }
 } else if ( $request == "save") {
-    if ( $debugLevel > 2) fputs($logFile, "Line 143: fjkldjlköfjadsjfklöj\r\n");  
-    
+   
     // ---------------------------------------------------------------------------------
     // request type is "SAVE" meaning that track records are updated and finalised
     // ---------------------------------------------------------------------------------
@@ -151,10 +174,9 @@ if ($request == "temp") {
     // read received INPUT object
     $trackObjIn = array();                                          // array storing track data in array
     $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
-    $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
     $loginname = $receivedData["loginname"];
     $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
-//    $peaksArray = $trackObjIn["peaksArray"];                        // Array of peaks selected
+    $peaksArray = $receivedData["peaksArray"];                        // Array of peaks selected
     
     if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
@@ -169,7 +191,7 @@ if ($request == "temp") {
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
     $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
     
-    if ($debugLevel>5) fputs($logFile, "Line 164 - sql: $sql\r\n");
+    if ($debugLevel>2) fputs($logFile, "Line 164 - sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                // run sql against DB
@@ -179,41 +201,51 @@ if ($request == "temp") {
         fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
         return -1;
     } 
- /*  
+   
     // Part 2: Insert records to tbl_track_wayp
     // ---------------------------------------------
 
     if ( $debugLevel > 3) fputs($logFile, "Line 185 - Part II entered\r\n");
-    
-
+ 
     // Read input object
     
-    $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType) VALUES ";
-    $peaksArray = $trackObjIn["peaksArray"];
+    $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType, trwpReached_f) VALUES ";
     //$check = sizeof($peaksArray);
     //if ( $debugLevel > 3) fputs($logFile, "Line 191 - check: $check\r\n");
-    /*
+    
+    if ( $debugLevel > 3) fputs($logFile, "array: " . print_r($peaksArray, true) . "\r\n");
+
     $i=0;
     for ( $i; $i < sizeof($peaksArray); $i++ ) {                   // 10 is the number of existing subtypes in array (lines)
-        if ( $peaksArray["disp_f"] == true ) {
-            $sql .= "(" . $peaksArray["trkId"] . $peaksArray["waypId"] . ", " . $peaksArray["waypType"] . "), ";  
+        if ( $peaksArray[$i]["disp_f"] == true ) {
+            $sql .= "(" . $trackObjIn["trkId"] . "," . $peaksArray[$i]["waypId"] . "," . $peaksArray[$i]["waypType"] . ",1),";  
         }
     }
-    
-    */
 
-    //if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
-    // create SQL statement
-    /*
+    if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
+    //create SQL statement
+    
+    // run SQL and handle error
+    $sql = substr( $sql, 0, strlen($sql)-1 );
+    if ($conn->query($sql) === TRUE)                                // run sql against DB
+    {
+        if ( $debugLevel > 3) fputs($logFile, "Line 163 - New track inserted successfully\r\n");
+    } else {
+        fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
+        $outObject = array (
+            'status'=>'NOK',                                             // add err status to return object
+            'errMessage'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
+        );                                         // add error message to return object
+        return -1;
+    } 
 
     // Prepare JSON out object
     $outObject = array (
-        'status'=>'OK',                                             // add err status to return object
-        'errmessage'=>'',                                           // add error message to return object
+        'status'=>'OK-nochnicht',                                             // add err status to return object
+        'errMessage'=>'',                                           // add error message to return object
     );
     echo json_encode($outObject);    
     
-    */
 } else if ( $request == "cancel") {
 
     // ---------------------------------------------------------------------------------
@@ -237,11 +269,15 @@ if ($request == "temp") {
         if ( $debugLevel > 3) fputs($logFile, "Line 163 - New track inserted successfully\r\n");
     } else {
         fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
+        $outObject = array (
+            'status'=>'NOK',                                             // add err status to return object
+            'errMessage'=>'Error inserting trkPt: ' . $conn->error,  
+        );                                         // add error message to return object
         return -1;
     } 
     $outObject = array (
         'status'=>'OK',                                             // add err status to return object
-        'errmessage'=>'',                                           // add error message to return object
+        'errMessage'=>'',                                           // add error message to return object
     );
     echo json_encode($outObject);    
 } 
@@ -293,7 +329,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 165 - Error inserting trkPt: $conn->error\r\n");
         $returnObject = array (
             "status"=>"ERR",
-            "errmessage"=>"Error inserting new track"
+            "errMessage"=>"Error inserting new track"
         );
         return $returnObject;
     } 
@@ -325,7 +361,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         // Create function return object
         $returnObject = array (
             "status"=>"OK",
-            "erressage"=>"",
+            "errMessage"=>"",
             "trackObj"=>$trackObj
         );
 
@@ -336,7 +372,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 196 - sql: $stmt\r\n");
         $returnObject = array (
             "status"=>"ERR",
-            "errmessage"=>"Error finding trackId"
+            "errMessage"=>"Error finding trackId"
         );
         return $returnObject;
     } 
@@ -525,7 +561,7 @@ function insertTrackPoints($conn,$trackid,$filename)
 
     $returnObject = array (
         "status"=>"OK",
-        "errmessage"=>"",
+        "errMessage"=>"",
         "trackObj"=>$trackObj
     );
 

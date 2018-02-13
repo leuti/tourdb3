@@ -955,8 +955,8 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkMeterUp = $('#uiAdmTrk_fld_trkMeterUp').val();
     trackobj.trkMeterDown = $('#uiAdmTrk_fld_trkMeterDown').val();
     trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();      
-    trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
-    //trackobj.trkLoginName = $loginName;    
+    //trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
+    trackobj.trkLoginName = $loginName;    
 
     // not displayed fields
     trackobj.trkStartEle = $trkStartEle;                        // new db field
@@ -973,16 +973,19 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.sessionid = sessionid;                             // append parameter session ID
         jsonObject.request = 'save';                              // temp request to create track temporarily
         jsonObject.loginname = $loginName; 
-        trackobj.peaksArray = peaksArray;                     // Array containing selected peaks
+        jsonObject.peaksArray = peaksArray;                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                              // send track object
+        jsn = JSON.stringify ( jsonObject );
 
         $.ajax({
             url: phpLocation,
             type: "POST",
-            data: jsonObject
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: jsn
         })
         .done(function ( data ) {
-            if ( responseObject.status == 'OK') {
+            if ( data.status == 'OK') {
                 // Make panelImport disappear and panelDisplay appear
                 $('#statusMessage').text('Track successfully saved');
                 $('#statusMessage').show().delay(5000).fadeOut();
