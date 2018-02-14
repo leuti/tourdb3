@@ -229,8 +229,6 @@ $(document).ready(function() {
                 $( "" ).val( ui.item.id );
                 id = ui.item.id;
                 value = ui.item.value;
-                
-                console.info("Line 228: select event on autocomplete bird detected: " + value + " - " + id);
             }/*,
             change: function( event, ui ) {
                 if ( $( "#uiAdmTrk_peakSrch" ).val() == '' ) {
@@ -320,7 +318,7 @@ $(document).ready(function() {
 
         var jsonObject = {};
         $loginName = ($('#loginName').val());
-        phpLocation = document.URL + "services/login.php";          // Variable to store location of php file
+        phpLocation = "services/login.php";          // Variable to store location of php file
         jsonObject["loginName"] = $loginName;                             // append parameter session ID
         jsonObject["loginPasswd"] = ($('#loginPasswd').val());                              // temp request to create track temporarily
         xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
@@ -750,7 +748,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         genTrackKml || genSegKml ) {
         // send required parameters to gen_kml.php
         var jsonObject = {};
-        phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
+        phpLocation = "services/gen_kml.php";          // Variable to store location of php file
         jsonObject["sessionid"] = sessionid;                             // send session ID
         jsonObject["sqlWhereTracks"] = sqlWhereTracks;                             // append parameter session ID
         jsonObject["genTrackKml"] = genTrackKml;                             //  
@@ -836,7 +834,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiAdmTrk').addClass('active');
                 document.getElementById("inputFile").value = "";
             } else {
-                $('#statusMessage').text('Invalid file extension');
+                $('#statusMessage').text(responseObject.errMessage);
                 $("#statusMessage").show().delay(5000).fadeOut();
                 document.getElementById("inputFile").value = "";
             } 
@@ -846,7 +844,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 
     var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
     if ( fileName ) {
-        phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+        phpLocation = "services/importGps.php";          // Variable to store location of php file
         var formData = new FormData();                                  // create new formData object
         formData.append('sessionid', sessionid);                           // append parameter session ID
         formData.append('request', 'temp')                              // temp request to create track temporarily
@@ -1031,8 +1029,8 @@ $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     var jsonObject = {};
     trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
     
-    phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-    //var formData = new FormData();                                  // create new formData object
+    //phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
+    phpLocation = "services/importGps.php";          // Variable to store location of php file
     jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'cancel';                              // temp request to create track temporarily
     jsonObject["trackobj"] = trackobj;                              // send track object
@@ -1263,7 +1261,7 @@ function callGenKml(outFileName, kmlType, sqlWhere) {
         if (xhr.status === 200) {  
         }
     }
-    phpLocation = document.URL + "services/gen_kml.php";          // Variable to store location of php file
+    phpLocation = "services/gen_kml.php";          // Variable to store location of php file
     xhrParams =  "outFileName=" + outFileName;
     xhrParams += "&kmlType=" + kmlType;   // Variable for POST parameters
     xhrParams += "&sqlWhere=" + sqlWhere ;
@@ -1283,7 +1281,7 @@ function callGenSegKml(sqlWhere) {
         if (xhr.status === 200) {  
         }
     }
-    phpLocation = document.URL + "services/seg_gen_kml.php";             // Variable to store location of php file
+    phpLocation = "services/seg_gen_kml.php";             // Variable to store location of php file
     xhrParams = "sqlFilterString=" + sqlWhere;                  // Variable for POST parameters
     xhrParams += "&segmentFileName=" + segmentFileName ;
     xhr.open ('POST', phpLocation, false);                      // Make XMLHttpRequest - in asynchronous mode to avoid wrong data display in map (map displayed before KML file is updated)

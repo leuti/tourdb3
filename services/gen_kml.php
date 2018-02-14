@@ -128,7 +128,7 @@ if ( $genTrackKml ) {
         // set default stylmap and then loop through style maps
         $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
         $i=0;
-        for ($i; $i<11; $i++) {                                             // 10 is the number of existing subtypes in array (lines)
+        for ($i; $i<sizeof($styleArray); $i++) {                                             // 10 is the number of existing subtypes in array (lines)
             if ($styleArray[$i][0] == $singleRecord["trkSubType"])
             {
                 $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';

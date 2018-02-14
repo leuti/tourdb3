@@ -137,7 +137,7 @@ if ($request == "temp") {
             // prepare return JSON object
             $outObject = array (
                 "status"=>"OK",
-                "erressage"=>"",
+                "errMessage"=>"",
                 "trackObj"=>$trackObjOut
             );
             echo json_encode($outObject);                           // echo JSON object to client
@@ -176,7 +176,6 @@ if ($request == "temp") {
     $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
     $loginname = $receivedData["loginname"];
     $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
-    $peaksArray = $receivedData["peaksArray"];                        // Array of peaks selected
     
     if ( $debugLevel > 2) fputs($logFile, "Line 169: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
@@ -199,51 +198,56 @@ if ($request == "temp") {
         if ( $debugLevel > 3) fputs($logFile, "Line 163 - New track inserted successfully\r\n");
     } else {
         fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
+        $outObject = array (
+            'status'=>'NOK',                                             // add err status to return object
+            'errMessage'=>'Error inserting trkPt: ' . $conn->error,  
+        );
         return -1;
     } 
    
     // Part 2: Insert records to tbl_track_wayp
     // ---------------------------------------------
 
+    $peaksArray = $receivedData["peaksArray"];                        // Array of peaks selected
+    
     if ( $debugLevel > 3) fputs($logFile, "Line 185 - Part II entered\r\n");
  
-    // Read input object
-    
-    $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType, trwpReached_f) VALUES ";
-    //$check = sizeof($peaksArray);
-    //if ( $debugLevel > 3) fputs($logFile, "Line 191 - check: $check\r\n");
-    
-    if ( $debugLevel > 3) fputs($logFile, "array: " . print_r($peaksArray, true) . "\r\n");
+    if ( sizeof($peaksArray) > 0 ) {
 
-    $i=0;
-    for ( $i; $i < sizeof($peaksArray); $i++ ) {                   // 10 is the number of existing subtypes in array (lines)
-        if ( $peaksArray[$i]["disp_f"] == true ) {
-            $sql .= "(" . $trackObjIn["trkId"] . "," . $peaksArray[$i]["waypId"] . "," . $peaksArray[$i]["waypType"] . ",1),";  
+        //create SQL statement  
+        $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpWaypType, trwpReached_f) VALUES ";
+        
+        $i=0;
+        for ( $i; $i < sizeof($peaksArray); $i++ ) {                   // loop through records in array
+            if ( $peaksArray[$i]["disp_f"] == true ) {                 // disp_f = true when user has not deleted peak on UI
+                $sql .= "(" . $trackObjIn["trkId"] . "," . $peaksArray[$i]["waypId"] . "," . $peaksArray[$i]["waypType"] . ",1),";  
+            }
         }
+        
+        // run SQL and handle error
+        $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
+        if ($conn->query($sql) === TRUE)                                // run sql against DB
+        {
+            if ( $debugLevel > 3) fputs($logFile, "Line 163 - New track inserted successfully\r\n");
+        } else {
+            fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
+            fputs($logFile, "Line 196 - sql: $sql\r\n");
+            // write output array
+            $outObject = array (
+                'status'=>'NOK',                                             // add err status to return object
+                'errMessage'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
+            );                                         // add error message to return object
+            return -1;
+        } 
     }
 
-    if ( $debugLevel > 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
-    //create SQL statement
-    
-    // run SQL and handle error
-    $sql = substr( $sql, 0, strlen($sql)-1 );
-    if ($conn->query($sql) === TRUE)                                // run sql against DB
-    {
-        if ( $debugLevel > 3) fputs($logFile, "Line 163 - New track inserted successfully\r\n");
-    } else {
-        fputs($logFile, "Line 165 - Error inserting trkPt: $conn->error\r\n");
-        $outObject = array (
-            'status'=>'NOK',                                             // add err status to return object
-            'errMessage'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
-        );                                         // add error message to return object
-        return -1;
-    } 
-
-    // Prepare JSON out object
+    // write output array
     $outObject = array (
-        'status'=>'OK-nochnicht',                                             // add err status to return object
+        'status'=>'OK',                                             // add err status to return object
         'errMessage'=>'',                                           // add error message to return object
     );
+
+    // Echo output array to client
     echo json_encode($outObject);    
     
 } else if ( $request == "cancel") {
@@ -295,14 +299,13 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
     if ( $gpx->metadata->time != "") 
     {
         $newTrackTime = $gpx->metadata->time;                       // Assign track time from gpx file to variable
-        $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-        $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));// convert track time 
-        $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime)); // convert track time 
     } else {
-        $GpsStartTime = "";                                         // convert track time 
-        $DateBegin = "";                                            // convert track time 
-        $DateFinish = "";                                           // convert track time 
+        $newTrackTime = $gpx->trk->trkseg->trkpt->time;
     }
+
+    $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
+    $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));// convert track time 
+    $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime)); // convert track time 
     
     $trackName = $gpx->trk->name;                                   // Track name
             
@@ -352,6 +355,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
                 "trkId"=>$trackid,
                 "trkSourceFileName"=>"$filename",
                 "trkTrackName"=>"$trackName",
+                "trkRoute"=>"$trackName",
                 "trkDateBegin"=>"$DateBegin",
                 "trkDateFinish"=>"$DateFinish",
                 "trkGPSStartTime"=>"$GpsStartTime"
