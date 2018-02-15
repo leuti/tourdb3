@@ -17,15 +17,6 @@ header('content-type: application/json; charset=utf-8');
 include("config.inc.php");  //include config file
 date_default_timezone_set('Europe/Zurich');
 
-$sqlStmts = array (
-    "wayp"  => array("table" => "tbl_waypoints", "id" => "waypID", "name" => "waypNameShort"),
-    "trk"  => array("table" => "tbl_tracks", "id" => "trkId", "name" => "trkTrackName"),
-    "segTypeFID"  => array("table" => "tbl_segmenttypes", "id" => "stypCode", "name" => "stypName")
-);
-
-$sqlStmts["field1"] = "SELECT id, name FROM tbl_segmenttypes WHERE var1 LIKE '%" . $_GET["term"] . "%'";  
-
-//DEBUG
 $debugLevel = 5; // 0 = off, 1 = min, 3 = a lot, 5 = all 
 
 if ($debugLevel >= 1){
@@ -41,19 +32,27 @@ if ($debugLevel >= 3){
 
 $searchObject = $_GET["field"];
 $term = $_GET["term"];
-$idField = $sqlStmts[$searchObject]["id"];
-$nameField = $sqlStmts[$searchObject]["name"];
-$tableField = $sqlStmts[$searchObject]["table"];
-
+//$idField = $sqlStmts[$searchObject]["id"];
+//$nameField = $sqlStmts[$searchObject]["name"];
+//$tableField = $sqlStmts[$searchObject]["table"];
 
 // ================= Generic
 
-fputs($fp, 'Line 41: array: ' . $idField . "-" . $nameField . "-" . $tableField . "-" . $term ."\r\n");
+//fputs($fp, 'Line 41: array: ' . $idField . "-" . $nameField . "-" . $tableField . "-" . $term ."\r\n");
 
-
-$whereClause = 
-$sql = "SELECT $idField, $nameField FROM $tableField";
-$sql .= " WHERE $nameField LIKE '%" . $_GET["term"] . "%'";
+if ( $searchObject == "peak") {
+    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID = 5 ORDER BY waypNameShort";
+} else if ( $searchObject == "wayp") {
+    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID in (1,2,3) ORDER BY waypNameShort";
+} else if ( $searchObject == "loc") {
+    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID = 4 ORDER BY waypNameShort";
+} 
 
 fputs($fp, "Line 54: sql: $sql\r\n");
 

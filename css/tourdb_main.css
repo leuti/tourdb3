@@ -101,7 +101,7 @@ table {
     margin: 10px;
 }
 
-#btnPeakAdd_Ul {
+#btnPeakAdd_Ul, #btnWaypAdd_Ul, #btnLocAdd_Ul {
     float: left;
     padding-left: 20px;
     padding-right: 20px;
@@ -117,7 +117,7 @@ table {
     text-decoration: none;
 }
 
-.tblWayp {
+.tblpeak, .tblwayp, .tblloc {
     padding: 0px;
     margin: 0px;
     color: #040442;
@@ -125,7 +125,7 @@ table {
     border: none;
 }
 
-/*tr.tblWayp>th {
+/*tr.tblpeak>th {
     padding: 3px 5px 3px 5px;
     color: #040442;
     border-bottom: 0.2px solid #01101f;
@@ -134,7 +134,7 @@ table {
     background: #cacaca;
 }*/
 
-tr.tblWayp>td {
+tr.tblpeak>td, tr.tblwayp>td {
     padding: 3px 5px 3px 5px;
     color: #040442;
     border-top: 0.2px solid #01101f;
@@ -269,8 +269,10 @@ tr.tblWayp>td {
 .filterHeader {
     border-color: black;
     border-width: thick;
-    font-size: 1.5em;
+    font-size: 1em;
     padding-bottom: 10px;
+    padding-top: 10px;
+    font-weight: bold;
 }
 
 /* Form Label - first on line */
@@ -338,6 +340,12 @@ tr.tblWayp>td {
     width: 150px;
     /*text-align: right;*/
 }
+
+.updTrackLabelWayp{
+    float: left;
+    width: 100px;
+}
+
 
 #inputFile {
     margin: 20px;

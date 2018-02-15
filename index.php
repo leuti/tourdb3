@@ -588,7 +588,7 @@
 					<fieldset>
 						<legend class="filterHeader">Add Peaks</legend>
 						<div class="ui-widget" style="float:left;">
-							<label for="uiAdmTrk_peakSrch">Peak</label>
+							<label for="uiAdmTrk_peakSrch" class="updTrackLabelWayp">Peak</label>
 							<input id="uiAdmTrk_peakSrch" size="25">
 				  		</div>
 						<ul id="btnPeakAdd_Ul">
@@ -598,8 +598,6 @@
 								</a>
 							</li>
 						</ul>
-						<div>
-						</div>
 						<div id="uiAdmTrk_peakList" style="float:left;">
 						</div>
 					</fieldset>
@@ -607,7 +605,7 @@
 					<fieldset>
 						<legend class="filterHeader">Add Waypoints</legend>
 						<div class="ui-widget" style="float:left;">
-							<label for="uiAdmTrk_waypSrch">Waypoint</label>
+							<label for="uiAdmTrk_waypSrch" class="updTrackLabelWayp">Waypoint</label>
 							<input id="uiAdmTrk_waypSrch" size="25">
 				  		</div>
 						<ul id="btnWaypAdd_Ul">
@@ -617,20 +615,26 @@
 								</a>
 							</li>
 						</ul>
-						<div>
-						</div>
 						<div id="uiAdmTrk_waypList" style="float:left;">
 						</div>
 					</fieldset>
 
 					<fieldset>
-						<legend class="filterHeader">Add Overnight Location</legend>
-					
+						<legend class="filterHeader">Add Overnight Location</legend>		
 						<!-- Overnight Location -->
-						<div>
-							<label for="uiAdmTrk_fld_trkOvernightLoc" class="updTrackLabelFirst">Overnight Loc.</label>
-							<input type="text" name="uiAdmTrk_fld_trkOvernightLoc" id="uiAdmTrk_fld_trkOvernightLoc" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>					
+						<div class="ui-widget" style="float:left;">
+							<label for="uiAdmTrk_locSrch" class="updTrackLabelWayp">Overnight Loc.</label>
+							<input id="uiAdmTrk_locSrch" size="25">
+				  		</div>
+						<ul id="btnLocAdd_Ul">
+							<li id="uiAdmTrk_btnLocAdd" class="button_Li">
+								<a id="uiAdmTrk_btnLocAdd_A" class="button_A" href="#btnLocAdd">
+									<img id="btnLocAddImg" src="css/images/add.png">	
+								</a>
+							</li>
+						</ul>
+						<div id="uiAdmTrk_locList" style="float:left;">
+						</div>				
 					</fieldset>
 
 				</div>

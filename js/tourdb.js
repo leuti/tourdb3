@@ -32,10 +32,12 @@ var trackKMLlayer;
 var segKMLlayer;
 var mapSTlayer_grau;
 
-var peaksArray = new Array();
+var peakArray = new Array();
 var waypArray = new Array();
+var locArray = new Array();
 var peakNr = 0;
 var waypNr = 0;
+var locNr = 0;
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -225,7 +227,7 @@ $(document).ready(function() {
         $( "#uiAdmTrk_fld_trkSubType" ).selectmenu();
 
         $( "#uiAdmTrk_peakSrch" ).autocomplete({
-            source: "services/autoComplete.php?field=wayp",
+            source: "services/autoComplete.php?field=peak",
             minLength: 2,
             select: function( event, ui ) {
                 $( "" ).val( ui.item.id );
@@ -246,6 +248,16 @@ $(document).ready(function() {
 
         $( "#uiAdmTrk_waypSrch" ).autocomplete({
             source: "services/autoComplete.php?field=wayp",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "" ).val( ui.item.id );
+                id = ui.item.id;
+                value = ui.item.value;
+            }
+        });
+
+        $( "#uiAdmTrk_locSrch" ).autocomplete({
+            source: "services/autoComplete.php?field=loc",
             minLength: 2,
             select: function( event, ui ) {
                 $( "" ).val( ui.item.id );
@@ -877,14 +889,14 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
 
     // Add new peak to array
     peaksList.id = "#peakDel_" + id;                 // 0
-    peaksList.waypId = id;                               // 1
-    peaksList.waypName = value;                            // 2
-    peaksList.waypType = 5;                                // 3
+    peaksList.itemId = id;                               // 1
+    peaksList.itemName = value;                            // 2
+    peaksList.itemType = 5;                                // 3
     peaksList.disp_f = true;                             // 4
 
-    peaksArray.push(peaksList);
+    peakArray.push(peaksList);
 
-    drawPeakTable ( peaksArray ); 
+    drawTrackTable ( peakArray, "peak" ); 
 
     peakNr++;
 
@@ -899,14 +911,14 @@ $(document).on('click', '#uiAdmTrk_btnWaypAdd', function (e) {
 
     // Add new wayp to array
     waypList.id = "#waypDel_" + id;                 // 0
-    waypsList.waypId = id;                               // 1
-    waypsList.waypName = value;                            // 2
-    waypsList.waypType = 5;                                // 3
-    waypsList.disp_f = true;                             // 4
+    waypList.itemId = id;                               // 1
+    waypList.itemName = value;                            // 2
+    waypList.itemType = 3;                                // 3
+    waypList.disp_f = true;                             // 4
 
-    waypArray.push(waypsList);
+    waypArray.push(waypList);
 
-    drawWaypTable ( waypsArray ); 
+    drawTrackTable ( waypArray, "wayp" ); 
 
     waypNr++;
 
@@ -914,64 +926,104 @@ $(document).on('click', '#uiAdmTrk_btnWaypAdd', function (e) {
 
 });
 
+$(document).on('click', '#uiAdmTrk_btnLocAdd', function (e) {
+    
+    // Initialise locList array
+    var locList =  new Object();
+
+    // Add new loc to array
+    locList.id = "#locDel_" + id;                 // 0
+    locList.itemId = id;                               // 1
+    locList.itemName = value;                            // 2
+    locList.itemType = 4;                                // 3
+    locList.disp_f = true;                             // 4
+
+    locArray.push(locList);
+
+    drawTrackTable ( locArray, "loc" ); 
+
+    locNr++;
+
+    // Reset loc array on click on save or cancel
+
+});
+
 $(document).on('click', '.peakDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
-    // var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
     var peakDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
     
-    for (var i = 0; i < peaksArray.length; i++) {
-        if ( peaksArray[i][0] == peakDelId ) {
-            peaksArray[i][4] = false;
+    for (var i = 0; i < peakArray.length; i++) {
+        if ( peakArray[i]["id"] == peakDelId ) {
+            peakArray[i]["disp_f"] = false;
         }    
     }
-    drawPeakTable ( peaksArray );
+    drawTrackTable ( peakArray, "peak" );
     
     // Run following block if selected topic is currently not active
-    if (buttonId && !$activeButtonA.is('.active')) {
+    /*if (buttonId && !$activeButtonA.is('.active')) {
         $topicButton.removeClass('active');                         // Make current panel inactive
         $activeButton.removeClass('active');                        // Make current tab inactive
 
         $topicButton = $(buttonId).addClass('active');              // Make new panel active
         $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-    }
+    }*/
 
 });
 
 $(document).on('click', '.waypDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
-    // var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
     var waypDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
     
-    for (var i = 0; i < waypsArray.length; i++) {
-        if ( waypsArray[i][0] == waypDelId ) {
-            waypsArray[i][4] = false;
+    for (var i = 0; i < waypArray.length; i++) {
+        if ( waypArray[i]["id"] == waypDelId ) {
+            waypArray[i]["disp_f"] = false;
         }    
     }
-    drawWaypTable ( waypsArray );
+    drawTrackTable ( waypArray, "wayp" );
     
     // Run following block if selected topic is currently not active
-    if (buttonId && !$activeButtonA.is('.active')) {
+    /*if (buttonId && !$activeButtonA.is('.active')) {
         $topicButton.removeClass('active');                         // Make current panel inactive
         $activeButton.removeClass('active');                        // Make current tab inactive
 
         $topicButton = $(buttonId).addClass('active');              // Make new panel active
         $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-    }
+    }*/
 
 });
 
+$(document).on('click', '.locDel', function (e) {
+    console.info("clicked on del")
+    e.preventDefault();                                             // Prevent link behaviour
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var locDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    for (var i = 0; i < locArray.length; i++) {
+        if ( locArray[i]["id"] == locDelId ) {
+            locArray[i]["disp_f"] = false;
+        }    
+    }
+    drawTrackTable ( locArray, "loc" );
+    
+    // Run following block if selected topic is currently not active
+    /*if (buttonId && !$activeButtonA.is('.active')) {
+        $topicButton.removeClass('active');                         // Make current panel inactive
+        $activeButton.removeClass('active');                        // Make current tab inactive
+
+        $topicButton = $(buttonId).addClass('active');              // Make new panel active
+        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+    }*/
+
+});
 
 // Upon click on the 'Save' button --> call importGps.php in save mode
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                                 // true when field check are passed
-
-    //var field2Chk = $('#uiAdmTrk_fld_trkId').val()
-    //  valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Seg Type" );
-    //valid = valid && checkExistance ( segDialogSegType, "Seg Type" );
-
     var trackobj = {};
     var jsonObject = {};
 
@@ -1011,7 +1063,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkMeterUp = $('#uiAdmTrk_fld_trkMeterUp').val();
     trackobj.trkMeterDown = $('#uiAdmTrk_fld_trkMeterDown').val();
     trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();      
-    //trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
+    trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
     trackobj.trkLoginName = $loginName;    
 
     // not displayed fields
@@ -1029,7 +1081,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.sessionid = sessionid;                             // append parameter session ID
         jsonObject.request = 'save';                              // temp request to create track temporarily
         jsonObject.loginname = $loginName; 
-        jsonObject.peaksArray = peaksArray;                     // Array containing selected peaks
+        jsonObject.peakArray = peakArray;                     // Array containing selected peaks
         jsonObject.waypArray = waypArray;                       // Array containing selected waypointsf
         jsonObject.trackobj = trackobj;                              // send track object
         jsn = JSON.stringify ( jsonObject );
@@ -1374,53 +1426,29 @@ function checkExistance( origin, name ) {
 }
 
 // Draws the table that list the selected waypoints
-function drawPeakTable ( peaksArray ) {
-    // If array.length = 1
+function drawTrackTable ( itemsArray, itemType ) {
+    // Assign var
+    var itemClass = "tbl" + itemType;
+    var itemDelClass = itemType + "Del";
+    var itemDelImg = "btn" + itemType + "DelImg";
+    var elementId = "uiAdmTrk_" + itemType + "List";
     // create new html table with value returned by autocomplete
-    var peakTable = '';
-        peakTable += '<table cellspacing="0" cellpadding="0">';
-        /*peakTable += '<tr class="tblWayp">';
-        peakTable += '<th>Name</th>';                           // 2
-        peakTable += '<th></th>';                           // 3
-        peakTable += '</tr>';*/
 
-    for (var i = 0; i < peaksArray.length; i++) {
-        if ( peaksArray[i]["disp_f"] == true ) {
-            peakTable += '<tr class="tblWayp">';  
-            peakTable += '<td>' + peaksArray[i]["waypName"] + '</td>';               // 1    
-            peakTable += '<td><ul class="tblWayp"><li class="button_Li"><a class="peakDel button_A"' 
-                    + ' href="#peakDel_' + peaksArray[i]["waypId"] + '">'
-                    + '<img id="btnPeakDelImg" src="css/images/delete.png"></a></li></ul></tr>';
-            peakTable += '</tr>';
+    var itemsTable = '';
+        itemsTable += '<table cellspacing="0" cellpadding="0">';
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["disp_f"] == true ) {
+            itemsTable += '<tr class="' + itemClass + '">';  
+            itemsTable += '<td>' + itemsArray[i]["itemName"] + '</td>';               // 1    
+            itemsTable += '<td><ul class="' + itemClass + '">';
+            itemsTable += '<li class="button_Li"><a class="' + itemDelClass + ' button_A"' 
+                    + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
+                    + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></tr>';
+            itemsTable += '</tr>';
         }               
     }
-    peakTable += '</table>';   
+    itemsTable += '</table>';   
 
-    document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
-}
-
-// Draws the table that list the selected waypoints
-function drawPeakTable ( waypsArray ) {
-    // If array.length = 1
-    // create new html table with value returned by autocomplete
-    var waypTable = '';
-        waypTable += '<table cellspacing="0" cellpadding="0">';
-        /*waypTable += '<tr class="tblWayp">';
-        waypTable += '<th>Name</th>';                           // 2
-        waypTable += '<th></th>';                           // 3
-        waypTable += '</tr>';*/
-
-    for (var i = 0; i < waypsArray.length; i++) {
-        if ( waypsArray[i]["disp_f"] == true ) {
-            waypTable += '<tr class="tblWayp">';  
-            waypTable += '<td>' + waypsArray[i]["waypName"] + '</td>';               // 1    
-            waypTable += '<td><ul class="tblWayp"><li class="button_Li"><a class="waypDel button_A"' 
-                    + ' href="#waypDel_' + waypsArray[i]["waypId"] + '">'
-                    + '<img id="btnWaypDelImg" src="css/images/delete.png"></a></li></ul></tr>';
-            waypTable += '</tr>';
-        }               
-    }
-    waypTable += '</table>';   
-
-    document.getElementById('uiAdmTrk_waypList').innerHTML = waypTable;
+    document.getElementById(elementId).innerHTML = itemsTable;
 }
