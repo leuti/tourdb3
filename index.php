@@ -528,36 +528,6 @@
 							</select>
 						</div>
 
-						<!-- Org -->
-						<div>
-							<label for="uiAdmTrk_fld_trkOrg" class="updTrackLabelFirst">Organisation</label>
-							<input type="text" name="uiAdmTrk_fld_trkOrg" id="uiAdmTrk_fld_trkOrg" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Overnight Location -->
-						<div>
-							<label for="uiAdmTrk_fld_trkOvernightLoc" class="updTrackLabelFirst">Location</label>
-							<input type="text" name="uiAdmTrk_fld_trkOvernightLoc" id="uiAdmTrk_fld_trkOvernightLoc" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Participants -->
-						<div>
-							<label for="uiAdmTrk_fld_trkParticipants" class="updTrackLabelFirst">Participants</label>
-							<input type="text" name="uiAdmTrk_fld_trkParticipants" id="uiAdmTrk_fld_trkParticipants" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Event -->
-						<div>
-							<label for="uiAdmTrk_fld_trkEvent" class="updTrackLabelFirst">Event</label>
-							<input type="text" name="uiAdmTrk_fld_trkEvent" id="uiAdmTrk_fld_trkEvent" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Remarks -->
-						<div>
-							<label for="uiAdmTrk_fld_trkRemarks" class="updTrackLabelFirst">Remarks</label>
-							<input type="text" name="uiAdmTrk_fld_trkRemarks" id="uiAdmTrk_fld_trkRemarks" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
 						<!-- Distance -->
 						<div>
 							<label for="uiAdmTrk_fld_trkDistance" class="updTrackLabelFirst">Distance</label>
@@ -625,7 +595,8 @@
 							<li id="uiAdmTrk_btnPeakAdd" class="button_Li">
 								<a id="uiAdmTrk_btnPeakAdd_A" class="button_A" href="#btnPeakAdd">
 									<img id="btnPeakAddImg" src="css/images/add.png">	
-								</a></li>
+								</a>
+							</li>
 						</ul>
 						<div>
 						</div>
@@ -635,11 +606,61 @@
 
 					<fieldset>
 						<legend class="filterHeader">Add Waypoints</legend>
+						<div class="ui-widget" style="float:left;">
+							<label for="uiAdmTrk_waypSrch">Waypoint</label>
+							<input id="uiAdmTrk_waypSrch" size="25">
+				  		</div>
+						<ul id="btnWaypAdd_Ul">
+							<li id="uiAdmTrk_btnWaypAdd" class="button_Li">
+								<a id="uiAdmTrk_btnWaypAdd_A" class="button_A" href="#btnWaypAdd">
+									<img id="btnWaypAddImg" src="css/images/add.png">	
+								</a>
+							</li>
+						</ul>
+						<div>
+						</div>
+						<div id="uiAdmTrk_waypList" style="float:left;">
+						</div>
 					</fieldset>
+
+					<fieldset>
+						<legend class="filterHeader">Add Overnight Location</legend>
+					
+						<!-- Overnight Location -->
+						<div>
+							<label for="uiAdmTrk_fld_trkOvernightLoc" class="updTrackLabelFirst">Overnight Loc.</label>
+							<input type="text" name="uiAdmTrk_fld_trkOvernightLoc" id="uiAdmTrk_fld_trkOvernightLoc" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
+						</div>					
+					</fieldset>
+
 				</div>
 				<div id="uiAdmTrk_tabOth">
 					<fieldset>
-						<p>Fugus ich bin das div uiAdmTrk_btn_others</p>
+						<legend class="filterHeader">Other Information</legend>
+						
+						<!-- Org -->
+						<div>
+							<label for="uiAdmTrk_fld_trkOrg" class="updTrackLabelFirst">Organisation</label>
+							<input type="text" name="uiAdmTrk_fld_trkOrg" id="uiAdmTrk_fld_trkOrg" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
+						</div>
+
+						<!-- Participants -->
+						<div>
+							<label for="uiAdmTrk_fld_trkParticipants" class="updTrackLabelFirst">Participants</label>
+							<input type="text" name="uiAdmTrk_fld_trkParticipants" id="uiAdmTrk_fld_trkParticipants" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
+						</div>
+
+						<!-- Event -->
+						<div>
+							<label for="uiAdmTrk_fld_trkEvent" class="updTrackLabelFirst">Event</label>
+							<input type="text" name="uiAdmTrk_fld_trkEvent" id="uiAdmTrk_fld_trkEvent" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
+						</div>
+
+						<!-- Remarks -->
+						<div>
+							<label for="uiAdmTrk_fld_trkRemarks" class="updTrackLabelFirst">Remarks</label>
+							<input type="text" name="uiAdmTrk_fld_trkRemarks" id="uiAdmTrk_fld_trkRemarks" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
+						</div>
 					</fieldset>
 				</div>
 				<div id="updTrk_btn" class="formCenter">

@@ -33,7 +33,9 @@ var segKMLlayer;
 var mapSTlayer_grau;
 
 var peaksArray = new Array();
+var waypArray = new Array();
 var peakNr = 0;
+var waypNr = 0;
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -240,6 +242,16 @@ $(document).ready(function() {
                     
                     console.info("Line 240: select event on autocomplete bird detected: " + value + " - " + id);
             }*/
+        });
+
+        $( "#uiAdmTrk_waypSrch" ).autocomplete({
+            source: "services/autoComplete.php?field=wayp",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "" ).val( ui.item.id );
+                id = ui.item.id;
+                value = ui.item.value;
+            }
         });
     } );
 
@@ -880,6 +892,28 @@ $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
 
 });
 
+$(document).on('click', '#uiAdmTrk_btnWaypAdd', function (e) {
+    
+    // Initialise waypList array
+    var waypList =  new Object();
+
+    // Add new wayp to array
+    waypList.id = "#waypDel_" + id;                 // 0
+    waypsList.waypId = id;                               // 1
+    waypsList.waypName = value;                            // 2
+    waypsList.waypType = 5;                                // 3
+    waypsList.disp_f = true;                             // 4
+
+    waypArray.push(waypsList);
+
+    drawWaypTable ( waypsArray ); 
+
+    waypNr++;
+
+    // Reset wayp array on click on save or cancel
+
+});
+
 $(document).on('click', '.peakDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
@@ -892,7 +926,6 @@ $(document).on('click', '.peakDel', function (e) {
         }    
     }
     drawPeakTable ( peaksArray );
-
     
     // Run following block if selected topic is currently not active
     if (buttonId && !$activeButtonA.is('.active')) {
@@ -904,6 +937,31 @@ $(document).on('click', '.peakDel', function (e) {
     }
 
 });
+
+$(document).on('click', '.waypDel', function (e) {
+    console.info("clicked on del")
+    e.preventDefault();                                             // Prevent link behaviour
+    // var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var waypDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    for (var i = 0; i < waypsArray.length; i++) {
+        if ( waypsArray[i][0] == waypDelId ) {
+            waypsArray[i][4] = false;
+        }    
+    }
+    drawWaypTable ( waypsArray );
+    
+    // Run following block if selected topic is currently not active
+    if (buttonId && !$activeButtonA.is('.active')) {
+        $topicButton.removeClass('active');                         // Make current panel inactive
+        $activeButton.removeClass('active');                        // Make current tab inactive
+
+        $topicButton = $(buttonId).addClass('active');              // Make new panel active
+        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+    }
+
+});
+
 
 // Upon click on the 'Save' button --> call importGps.php in save mode
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
@@ -972,6 +1030,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.request = 'save';                              // temp request to create track temporarily
         jsonObject.loginname = $loginName; 
         jsonObject.peaksArray = peaksArray;                     // Array containing selected peaks
+        jsonObject.waypArray = waypArray;                       // Array containing selected waypointsf
         jsonObject.trackobj = trackobj;                              // send track object
         jsn = JSON.stringify ( jsonObject );
 
@@ -1338,4 +1397,30 @@ function drawPeakTable ( peaksArray ) {
     peakTable += '</table>';   
 
     document.getElementById('uiAdmTrk_peakList').innerHTML = peakTable;
+}
+
+// Draws the table that list the selected waypoints
+function drawPeakTable ( waypsArray ) {
+    // If array.length = 1
+    // create new html table with value returned by autocomplete
+    var waypTable = '';
+        waypTable += '<table cellspacing="0" cellpadding="0">';
+        /*waypTable += '<tr class="tblWayp">';
+        waypTable += '<th>Name</th>';                           // 2
+        waypTable += '<th></th>';                           // 3
+        waypTable += '</tr>';*/
+
+    for (var i = 0; i < waypsArray.length; i++) {
+        if ( waypsArray[i]["disp_f"] == true ) {
+            waypTable += '<tr class="tblWayp">';  
+            waypTable += '<td>' + waypsArray[i]["waypName"] + '</td>';               // 1    
+            waypTable += '<td><ul class="tblWayp"><li class="button_Li"><a class="waypDel button_A"' 
+                    + ' href="#waypDel_' + waypsArray[i]["waypId"] + '">'
+                    + '<img id="btnWaypDelImg" src="css/images/delete.png"></a></li></ul></tr>';
+            waypTable += '</tr>';
+        }               
+    }
+    waypTable += '</table>';   
+
+    document.getElementById('uiAdmTrk_waypList').innerHTML = waypTable;
 }
