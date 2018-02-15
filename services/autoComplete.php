@@ -52,6 +52,10 @@ if ( $searchObject == "peak") {
     $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
     $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
     $sql .= "AND waypTypeFID = 4 ORDER BY waypNameShort";
+} else if ( $searchObject == "part") {
+    $sql = "SELECT prtId, CONCAT(prtFirstName, ' ', prtLastName) AS participant FROM tbl_part ";
+    $sql .= "WHERE prtLastName LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "OR prtFirstName LIKE '%" . $_GET["term"] . "%' ";   
 } 
 
 fputs($fp, "Line 54: sql: $sql\r\n");

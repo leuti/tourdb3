@@ -35,9 +35,11 @@ var mapSTlayer_grau;
 var peakArray = new Array();
 var waypArray = new Array();
 var locArray = new Array();
+var partArray = new Array();
 var peakNr = 0;
 var waypNr = 0;
 var locNr = 0;
+var partNr = 0;
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -258,6 +260,16 @@ $(document).ready(function() {
 
         $( "#uiAdmTrk_locSrch" ).autocomplete({
             source: "services/autoComplete.php?field=loc",
+            minLength: 2,
+            select: function( event, ui ) {
+                $( "" ).val( ui.item.id );
+                id = ui.item.id;
+                value = ui.item.value;
+            }
+        });
+
+        $( "#uiAdmTrk_partSrch" ).autocomplete({
+            source: "services/autoComplete.php?field=part",
             minLength: 2,
             select: function( event, ui ) {
                 $( "" ).val( ui.item.id );
@@ -948,6 +960,28 @@ $(document).on('click', '#uiAdmTrk_btnLocAdd', function (e) {
 
 });
 
+$(document).on('click', '#uiAdmTrk_btnpartAdd', function (e) {
+    
+    // Initialise partList array
+    var partList =  new Object();
+
+    // Add new part to array
+    partList.id = "#partDel_" + id;                 // 0
+    partList.itemId = id;                               // 1
+    partList.itemName = value;                            // 2
+    partList.itemType = 4;                                // 3
+    partList.disp_f = true;                             // 4
+
+    partArray.push(partList);
+
+    drawTrackTable ( partArray, "part" ); 
+
+    partNr++;
+
+    // Reset part array on click on save or cancel
+
+});
+
 $(document).on('click', '.peakDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
@@ -1018,6 +1052,20 @@ $(document).on('click', '.locDel', function (e) {
         $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
     }*/
 
+});
+
+$(document).on('click', '.partDel', function (e) {
+    console.info("clicked on del")
+    e.preventDefault();                                             // Prevent link behaviour
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var partDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    
+    for (var i = 0; i < partArray.length; i++) {
+        if ( partArray[i]["id"] == partDelId ) {
+            partArray[i]["disp_f"] = false;
+        }    
+    }
+    drawTrackTable ( partArray, "part" );
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode

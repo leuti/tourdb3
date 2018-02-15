@@ -101,7 +101,7 @@ table {
     margin: 10px;
 }
 
-#btnPeakAdd_Ul, #btnWaypAdd_Ul, #btnLocAdd_Ul {
+#btnPeakAdd_Ul, #btnWaypAdd_Ul, #btnLocAdd_Ul, #btnPartAdd_Ul {
     float: left;
     padding-left: 20px;
     padding-right: 20px;
@@ -109,7 +109,7 @@ table {
     top: -8px;
 }
 
-.button_Li {
+.button_Li {    
     list-style: none;
 }
 
@@ -117,7 +117,7 @@ table {
     text-decoration: none;
 }
 
-.tblpeak, .tblwayp, .tblloc {
+.tblpeak, .tblwayp, .tblloc, .tblpart {
     padding: 0px;
     margin: 0px;
     color: #040442;
@@ -345,7 +345,6 @@ tr.tblpeak>td, tr.tblwayp>td {
     float: left;
     width: 100px;
 }
-
 
 #inputFile {
     margin: 20px;
