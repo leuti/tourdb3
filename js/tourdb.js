@@ -1131,6 +1131,8 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.loginname = $loginName; 
         jsonObject.peakArray = peakArray;                     // Array containing selected peaks
         jsonObject.waypArray = waypArray;                       // Array containing selected waypointsf
+        jsonObject.locArray = locArray;                       // Array containing selected waypointsf
+        jsonObject.partArray = partArray;                       // Array containing selected waypointsf
         jsonObject.trackobj = trackobj;                              // send track object
         jsn = JSON.stringify ( jsonObject );
 
