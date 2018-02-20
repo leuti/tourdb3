@@ -427,7 +427,7 @@
 			
 			<div id="uiUplFileGps" class="uiDiv active">
 				<fieldset>
-					<legend class="filterHeader">Select File to upload</legend>
+					<legend class="filterHeader">Select GPX file to upload</legend>
 					<p>Select a single file to upload to the tourdb</p>
 					<form id="formInputFile" enctype="multipart/form-data">
 						<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
@@ -435,7 +435,20 @@
 					</form>
 
 					<div class="buttonUpload">
-						<input type="submit" class="button" id="buttonUploadFile" value="Upload File" />
+						<input type="submit" class="button" id="buttonUploadFile" value="Upload GPX File" />
+					</div>
+				</fieldset>
+
+				<fieldset>
+					<legend class="filterHeader">Select JSON file to upload</legend>
+					<p>Select a JSON file to upload to the tourdb</p>
+					<form id="formInputFileJSON" enctype="multipart/form-data">
+						<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+						<input id="inputFileJSON" class="buttonSelectFile" name="userfileJSON" type="file" />
+					</form>
+
+					<div class="buttonUpload">
+						<input type="submit" class="button" id="buttonUploadFileJSON" value="Upload JSON File" />
 					</div>
 				</fieldset>
 			</div>

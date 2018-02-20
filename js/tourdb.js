@@ -822,7 +822,7 @@ $(document).on('click', '.uiAdmTrk_btns_a', function(e) {
     }
 }); 
 
-// Upon click on the 'Upload File' button --> call importGps.php in temp mode
+// Upon click on the 'Upload GPX File' button --> call importGps.php in temp mode
 $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
     var xhr = new XMLHttpRequest();                                                                     // create new xhr object
@@ -877,21 +877,32 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 
         }
     }
-
     var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
-    if ( fileName ) {
-        phpLocation = "services/importGps.php";          // Variable to store location of php file
-        var formData = new FormData();                                  // create new formData object
-        formData.append('sessionid', sessionid);                           // append parameter session ID
-        formData.append('request', 'temp')                              // temp request to create track temporarily
-        formData.append('filename', fileName);                          // append parameter filename
-        formData.append('loginname', $loginName);                             // append parameter file type
-        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-        xhr.send(formData);                                             // send formData object to service using xhr
-    } else {
-        $('#statusMessage').text('No file selected');
-        $("#statusMessage").show().delay(5000).fadeOut();
-    }
+});
+
+$(document).on('click', '#buttonUploadFileJSON', function (e) {
+    e.preventDefault();
+    var xhr = new XMLHttpRequest();   
+    var jsonObject = {};
+        
+    // Execute following code JSON object is received from importGpsTmp.php - TEMP service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                                                       // when all OK
+            responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+            if ( responseObject.status == 'OK') {
+            }
+        }
+    } 
+    var fileName = $('#inputFileJSON').val();
+    phpLocation = "services/importGps.php";          // Variable to store location of php file
+    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+    jsonObject["request"] = 'json';                              // temp request to create track temporarily
+    jsonObject["filename"] = fileName;                              // send track object
+    jsonObject["loginname"] = $loginName;
+    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    jsn = JSON.stringify(jsonObject);
+    xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
 $(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
@@ -1068,7 +1079,7 @@ $(document).on('click', '.partDel', function (e) {
     drawTrackTable ( partArray, "part" );
 });
 
-// Upon click on the 'Save' button --> call importGps.php in save mode
+// Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
 $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                                 // true when field check are passed
@@ -1169,7 +1180,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     }                                           // send formData object to service using xhr
 });
 
-// On click on the 'cancel' button --> cancel update & delete temp track
+// On click on the 'cancel' button --> cancel update & delete temp track (call php with xhr in JSON mode)
 $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     e.preventDefault();
     

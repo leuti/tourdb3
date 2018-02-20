@@ -9,3 +9,4 @@ tmpout/
 snipet/
 tmp/gps_uploads/*.*
 tmp/kml_disp/*.*
+tmp/reimport/*.*
