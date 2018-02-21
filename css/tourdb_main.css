@@ -92,7 +92,7 @@ table {
 
 /********** PANELS **********/
 /****************************/
-#formInputFile {
+#formInputFile, #formInputFileJSON {
     height: 20px;
 }
 
@@ -346,7 +346,7 @@ tr.tblpeak>td, tr.tblwayp>td {
     width: 100px;
 }
 
-#inputFile {
+#inputFile, #inputFileJSON {
     margin: 20px;
     padding: 10px;
     font-family: Candara, Verdana, Arial, sans-serif;

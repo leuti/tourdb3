@@ -7,6 +7,7 @@ out (move to log)/
 test/
 tmpout/
 snipet/
-tmp/gps_uploads/*.*
-tmp/kml_disp/*.*
-tmp/reimport/*.*
+tmp/gps_uploads/
+tmp/kml_disp/
+tmp/reimport/
+tmp/export/

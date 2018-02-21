@@ -61,11 +61,12 @@
 			<li id="navBtns_btn_import" class="navBtns_btn_li loginReq">
 				<a id="navBtns_btn_import_a" class="navBtns_btns_a" href="#panelImport"><h2>Import</h2></a> 
 			</li>
-			<!--
+			
 			<li id="buttonExport" class="navBtns_btn_li loginReq">
 				<a id="a_panelExport" class="navBtns_btns_a" href="#panelExport"><h2>Export</h2></a> 
 			</li>
 
+			<!--
 			<li id="buttonMaintain" class="navBtns_btn_li loginReq">
 				<a id="a_panelMaintain" class="navBtns_btns_a" href="#panelMaintain"><h2>Maintain</h2></a> 
 			</li>			
@@ -706,7 +707,27 @@
 		<!-- ========================================================================== -->
 
 		<div id="panelExport" class="tourdbPanel">
-			<p>Ich bin das panel panelExport</p>		
+			<div id="uiExport" class="uiDiv active">
+				<fieldset>
+					<legend class="filterHeader">Export all Objects</legend>
+					<!--
+					<p>Select a single file to upload to the tourdb</p>
+					<form id="formInputFile" enctype="multipart/form-data">
+						<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+						<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
+					</form>
+					-->
+
+					<div class="buttonUpload">
+						<input type="submit" class="button" id="buttonExportTracks01JSON" value="Export Tracks as JSON" />
+					</div>
+					<div class="buttonUpload">
+						<input type="submit" class="button" id="buttonExportTracks01CSV" value="Export Tracks as CSV" />
+					</div>
+
+				</fieldset>
+			</div>		
+
 		</div> <!-- End div panelExport -->
 
 		<!-- ========================================================================== -->

@@ -1212,6 +1212,60 @@ $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
+// ==========================================================================
+// ========================== panelExport ===================================
+// ==========================================================================
+
+// Export Tracks JSON Button clicked
+$(document).on('click', '#buttonExportTracks01JSON', function (e) {
+    e.preventDefault();
+    var xhr = new XMLHttpRequest();   
+    var jsonObject = {};
+        
+    // Execute following code JSON object is received from importGpsTmp.php - TEMP service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                                                       // when all OK
+            responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+            if ( responseObject.status == 'OK') {
+            }
+        }
+    } 
+
+    phpLocation = "services/exportData.php";          // Variable to store location of php file
+    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+    jsonObject["request"] = 'tracks01_JSON';                              // temp request to create track temporarily
+    jsonObject["loginname"] = $loginName;
+    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    jsn = JSON.stringify(jsonObject);
+    xhr.send( jsn );                                           // send formData object to service using xhr  
+});
+
+// Export Tracks CSV Button clicked
+$(document).on('click', '#buttonExportTracks01CSV', function (e) {
+    e.preventDefault();
+    var xhr = new XMLHttpRequest();   
+    var jsonObject = {};
+        
+    // Execute following code JSON object is received from importGpsTmp.php - TEMP service
+    xhr.onload = function() {
+        if (xhr.status === 200) {                                                                       // when all OK
+            responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+            if ( responseObject.status == 'OK') {
+            }
+        }
+    } 
+
+    phpLocation = "services/exportData.php";          // Variable to store location of php file
+    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
+    jsonObject["request"] = 'tracks01_CSV';                              // temp request to create track temporarily
+    jsonObject["loginname"] = $loginName;
+    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    jsn = JSON.stringify(jsonObject);
+    xhr.send( jsn );                                           // send formData object to service using xhr  
+});
+
 // =============================================
 // ============ F U N C T I O N S ==============
 // =============================================
