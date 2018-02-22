@@ -1,13 +1,13 @@
-kml/
-work/
-jqw/
-log/*.log
+export/
 import/
+jqw/
+kml/
+log/*.log
 out (move to log)/
+snipet/
 test/
 tmpout/
-snipet/
 tmp/gps_uploads/
 tmp/kml_disp/
 tmp/reimport/
-tmp/export/
+work/

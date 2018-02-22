@@ -478,9 +478,8 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
             "errMessage"=>"",
             "trackObj"=>$trackObj
         );
-
-        return $returnObject;                                       // return tmp trackId, track name and coordinate array in array
         mysqli_stmt_close($stmt);                                   // Close statement
+        return $returnObject;                                       // return tmp trackId, track name and coordinate array in array
     } else {
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 195 - Error selecting max(trkId): $conn->error\r\n");
         if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 196 - sql: $stmt\r\n");

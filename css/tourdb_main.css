@@ -376,7 +376,8 @@ tr.tblpeak>td, tr.tblwayp>td {
     position: fixed;
     right: 20px;
     color: red;
-    font-size: 1.5em;
+    font-size: 1.0em;
+    background-color: white;
 }
 
 #displayMap-ResMap {

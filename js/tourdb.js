@@ -1226,13 +1226,12 @@ $(document).on('click', '#buttonExportTracks01JSON', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
-            if ( responseObject.status == 'OK') {
-            }
+            $('#statusMessage').text(responseObject.errMessage);
+            $("#statusMessage").show().delay(5000).fadeOut();
         }
     } 
 
     phpLocation = "services/exportData.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'tracks01_JSON';                              // temp request to create track temporarily
     jsonObject["loginname"] = $loginName;
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
@@ -1251,13 +1250,12 @@ $(document).on('click', '#buttonExportTracks01CSV', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
-            if ( responseObject.status == 'OK') {
-            }
+            $('#statusMessage').text(responseObject.errMessage);
+            $("#statusMessage").show().delay(5000).fadeOut();
         }
     } 
 
     phpLocation = "services/exportData.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
     jsonObject["request"] = 'tracks01_CSV';                              // temp request to create track temporarily
     jsonObject["loginname"] = $loginName;
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
