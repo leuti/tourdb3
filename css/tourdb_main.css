@@ -310,6 +310,17 @@ tr.tblpeak>td, tr.tblwayp>td {
     background-color: #cce6ff;
 }    
 
+/* Popover display details of kml elements */
+.popover-content{
+    background-color: #f2f2f2;
+    color:  #00004d;
+    padding: 5px;
+    border: #cccccc;
+    border-style: solid;}
+.popover-title{
+    display: none;}
+
+
 /********** panelImport **********/
 /*********************************/
 

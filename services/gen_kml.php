@@ -283,7 +283,7 @@ fputs($logFile, "$countTracks Segments processed\r\n");
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
-mysql_close($conn);                                                         // close SQL connection 
+mysqli_close($conn);                                                         // close SQL connection 
 fclose($trackOutFile);                                                      // close kml file
 fclose($segOutFile);
 

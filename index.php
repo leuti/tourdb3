@@ -29,12 +29,13 @@
 	<!-- load swissmap sources -->
 	<!-- <script src="//api3.geo.admin.ch/loader.js"></script> --> <!-- Swissmap javascript --> 
 	<script src="http://api3.geo.admin.ch/loader.js?lang=en" type="text/javascript"></script>
+	<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
 
 	<!-- from https://www.jqwidgets.com/ -->
     <!-- <script type="text/javascript" src="jqw/jqwidgets/jqxcore.js"></script>-->
     <!--<script type="text/javascript" src="jqw/jqwidgets/jqxsplitter.js"></script>-->
    
-	<!--<script type="text/javascript" src="js/bootstrap.min.js"></script>--> <!-- local -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- local -->
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
 
 	<!--<script src="//code.jquery.com/jquery-2.2.0.min.js"></script> -->  <!-- CDN -->
@@ -170,7 +171,7 @@
 
 								<!-- Type as select items (selectable) -->
 								<div class="dispObjCriteria">
-									<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilTrk_type" class="selectable filterItems">
 										<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
 										<li id="dispFilTrk_type_Ski" class="ui-widget-content">Ski</li>
@@ -183,7 +184,7 @@
 
 								<!-- Subtype as select items (selectable) -->
 								<div class="dispObjCriteria">
-									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilTrk_subtype" class="selectable filterItems">
 										<li id="dispFilTrk_subtype_alpinklettern" class="ui-widget-content">Alpinklettern</li>
 										<li id="dispFilTrk_subtype_alpintour" class="ui-widget-content">Alpintour</li>
@@ -240,7 +241,7 @@
 
 								<!-- segType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_segType" class="selectable filterItems">
 										<li id="segType_WA" class="ui-widget-content first">Wanderung</li>
 										<li id="segType_aW" class="ui-widget-content">Alpinwanderung</li>
@@ -274,7 +275,7 @@
 
 								<!-- startLocType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
 										<li id="startLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="startLocType_5" class="ui-widget-content">Gipfel</li>
@@ -301,7 +302,7 @@
 
 								<!-- targetLocType -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
 										<li id="targetLocType_1" class="ui-widget-content first">Bergstation</li>
 										<li id="targetLocType_5" class="ui-widget-content">Gipfel</li>
@@ -327,7 +328,7 @@
 					
 								<!-- grade -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_grade" class="selectable filterItems">
 										<li id="grade_T1" class="ui-widget-content first">T1</li>
 										<li id="grade_T2" class="ui-widget-content">T2</li>
@@ -347,7 +348,7 @@
 								
 								<!-- climbGrade -->
 								<div class="dispObjCriteria">
-									<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Right-click for multi-select)</label>
+									<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
 										<li id="climbGrade_I" class="ui-widget-content first">I</li>
 										<li id="climbGrade_II" class="ui-widget-content">II</li>
