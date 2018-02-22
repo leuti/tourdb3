@@ -812,6 +812,9 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
                 sqlWhereTracksPrev = sqlWhereTracks;
                 sqlWhereSegmentsPrev = sqlWhereSegments;
+            } else {
+                $('#statusMessage').text(responseObject.errMessage);
+                $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
     }
@@ -940,6 +943,9 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
         if (xhr.status === 200) {                                                                       // when all OK
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
+            } else {
+                $('#statusMessage').text(responseObject.errMessage);
+                $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
     } 
@@ -1243,6 +1249,9 @@ $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
                 $('#uiAdmTrk').removeClass('active');                   // hide update form
                 $('#statusMessage').text('Import cancelled');
                 $("#statusMessage").show().delay(5000).fadeOut();
+            } else {
+                $('#statusMessage').text(responseObject.errMessage);
+                $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
     }
@@ -1278,7 +1287,7 @@ $(document).on('click', '#buttonExportTracks01JSON', function (e) {
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             $('#statusMessage').text(responseObject.errMessage);
             $("#statusMessage").show().delay(5000).fadeOut();
-        }
+        } 
     } 
 
     phpLocation = "services/exportData.php";          // Variable to store location of php file
