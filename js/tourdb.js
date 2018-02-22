@@ -915,6 +915,19 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         }
     }
     var fileName = document.getElementById('inputFile').files[0];   // assign selected file var
+    if ( fileName ) {
+        phpLocation = "services/importGps.php";          // Variable to store location of php file
+        var formData = new FormData();                                  // create new formData object
+        formData.append('sessionid', sessionid);                           // append parameter session ID
+        formData.append('request', 'temp')                              // temp request to create track temporarily
+        formData.append('filename', fileName);                          // append parameter filename
+        formData.append('loginname', $loginName);                             // append parameter file type
+        xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
+        xhr.send(formData);                                             // send formData object to service using xhr
+    } else {
+        $('#statusMessage').text('No file selected');
+        $("#statusMessage").show().delay(5000).fadeOut();
+    }
 });
 
 $(document).on('click', '#buttonUploadFileJSON', function (e) {
