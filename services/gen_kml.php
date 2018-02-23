@@ -121,7 +121,7 @@ if ( $genTrackKml ) {
     { 
         $countTracks++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
-        $kml[] = '          <name>' . $singleRecord["trkTrackName"] . '</name>';
+        $kml[] = '          <name>' . $singleRecord["trkId"] . ": " .  $singleRecord["trkTrackName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
         $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
 
