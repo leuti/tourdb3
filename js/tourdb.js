@@ -1370,10 +1370,11 @@ function checkExistance( origin, name ) {
 // Draws the table that list the selected waypoints
 function drawTrackTable ( itemsArray, itemType ) {
     // Assign var
-    var itemClass = "tbl" + itemType;
-    var itemDelClass = itemType + "Del";
-    var itemDelImg = "btn" + itemType + "DelImg";
-    var elementId = "uiAdmTrk_" + itemType + "List";
+    var itemClass = "tbl" + itemType;                                       // e.g. tblpeak
+    var itemDelClass = itemType + "Del";                                    // e.g. peakDel
+    var itemDelImg = "btn" + itemType + "DelImg";                           // e.g. btnpeakDelImg
+    var elementId = "uiAdmTrk_" + itemType + "List";                        // e.g. uiAdmTrk_peakList
+    var visitedCheck = "cbVisited_" + itemType;                             // e.g. cbVisited_peak
     // create new html table with value returned by autocomplete
 
     var itemsTable = '';
@@ -1383,11 +1384,14 @@ function drawTrackTable ( itemsArray, itemType ) {
         if ( itemsArray[i]["disp_f"] == true ) {
             itemsTable += '<tr class="' + itemClass + '">';  
             itemsTable += '<td>' + itemsArray[i]["itemName"] + '</td>';               // 1    
+            itemsTable += '<td><input type="checkbox" name="' + visitedCheck + itemsArray[i]["itemId"]
+                            + '" id="' + + visitedCheck + itemsArray[i]["itemId"]
+                            + '" class="cbVisited"></td>'; 
             itemsTable += '<td><ul class="' + itemClass + '">';
             itemsTable += '<li class="button_Li"><a class="' + itemDelClass + ' button_A"' 
-                    + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
-                    + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></tr>';
-            itemsTable += '</tr>';
+                            + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
+                            + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
+                            itemsTable += '</tr>';
         }               
     }
     itemsTable += '</table>';   
