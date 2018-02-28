@@ -606,14 +606,23 @@
 							<label for="uiAdmTrk_peakSrch" class="updTrackLabelWayp">Peak</label>
 							<input id="uiAdmTrk_peakSrch" size="25">
 				  		</div>
-						<ul id="btnPeakAdd_Ul">
+						<!--
+						<ul id="btnPeakAdd_Ul§">
 							<li id="uiAdmTrk_btnPeakAdd" class="button_Li">
 								<a id="uiAdmTrk_btnPeakAdd_A" class="button_A" href="#btnPeakAdd">
 									<img id="btnPeakAddImg" src="css/images/add.png">	
 								</a>
 							</li>
 						</ul>
+						-->
 						<div id="uiAdmTrk_peakList" style="float:left;">
+						<table cellspacing="0" cellpadding="0">
+            				<tr>
+            					<td>Peak</td>
+            					<td>Visited</td> 
+            					<td></td>
+							</tr>
+						</table>
 						</div>
 					</fieldset>
 
@@ -623,14 +632,13 @@
 							<label for="uiAdmTrk_waypSrch" class="updTrackLabelWayp">Waypoint</label>
 							<input id="uiAdmTrk_waypSrch" size="25">
 				  		</div>
-						<ul id="btnWaypAdd_Ul">
-							<li id="uiAdmTrk_btnWaypAdd" class="button_Li">
-								<a id="uiAdmTrk_btnWaypAdd_A" class="button_A" href="#btnWaypAdd">
-									<img id="btnWaypAddImg" src="css/images/add.png">	
-								</a>
-							</li>
-						</ul>
 						<div id="uiAdmTrk_waypList" style="float:left;">
+						<table cellspacing="0" cellpadding="0">
+							<tr>
+								<td>Waypoint</td>
+								<td></td>
+							</tr>
+						</table>
 						</div>
 					</fieldset>
 
@@ -638,17 +646,16 @@
 						<legend class="filterHeader">Add Overnight Location</legend>		
 						<!-- Overnight Location -->
 						<div class="ui-widget" style="float:left;">
-							<label for="uiAdmTrk_locSrch" class="updTrackLabelWayp">Overnight Loc.</label>
-							<input id="uiAdmTrk_locSrch" size="25">
+							<label for="uiAdmTrk_locaSrch" class="updTrackLabelWayp">Overnight Loc.</label>
+							<input id="uiAdmTrk_locaSrch" size="25">
 				  		</div>
-						<ul id="btnLocAdd_Ul">
-							<li id="uiAdmTrk_btnLocAdd" class="button_Li">
-								<a id="uiAdmTrk_btnLocAdd_A" class="button_A" href="#btnLocAdd">
-									<img id="btnLocAddImg" src="css/images/add.png">	
-								</a>
-							</li>
-						</ul>
-						<div id="uiAdmTrk_locList" style="float:left;">
+						<div id="uiAdmTrk_locaList" style="float:left;">
+						<table cellspacing="0" cellpadding="0">
+							<tr>
+            					<td>Location</td>
+            					<td></td>
+							</tr>
+						</table>
 						</div>				
 					</fieldset>
 
@@ -662,15 +669,14 @@
 							<label for="uiAdmTrk_partSrch" class="updTrackLabelWayp">Participants</label>
 							<input id="uiAdmTrk_partSrch" size="25">
 				  		</div>
-						<ul id="btnPartAdd_Ul">
-							<li id="uiAdmTrk_btnpartAdd" class="button_Li">
-								<a id="uiAdmTrk_btnpartAdd_A" class="button_A" href="#btnpartAdd">
-									<img id="btnpartAddImg" src="css/images/add.png">	
-								</a>
-							</li>
-						</ul>
 						<div id="uiAdmTrk_partList" style="float:left;">
-						</div>		
+						<table cellspacing="0" cellpadding="0">
+							<tr>
+            					<td>Participant</td>
+            					<td></td>
+                            </tr>
+						</div>	
+					</table>	
 					</fieldset>
 
 					<fieldset>

@@ -32,14 +32,14 @@ var trackKMLlayer;
 var segKMLlayer;
 var mapSTlayer_grau;
 
-var peakArray = new Array();
-var waypArray = new Array();
-var locArray = new Array();
-var partArray = new Array();
-var peakNr = 0;
-var waypNr = 0;
-var locNr = 0;
-var partNr = 0;
+var itemsArray = new Array();
+//var waypArray = new Array();
+//ar locArray = new Array();
+//var partArray = new Array();
+//var peakNr = 0;
+//var waypNr = 0;
+//var locNr = 0;
+//var partNr = 0;
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -201,7 +201,6 @@ $(document).ready(function() {
         // ====== UI to Admin Tracks
         $( "#uiAdmTrk" ).tabs();
 
-
         valComments = $( "#validateComments" );
 
         $( "#uiAdmTrk_fld_trkDateBegin" ).datepicker({                                // Initalise field to select start date as JQUERY datepicker
@@ -235,17 +234,26 @@ $(document).ready(function() {
                 $( "" ).val( ui.item.id );
                 id = ui.item.id;
                 value = ui.item.value;
-            }/*,
-            change: function( event, ui ) {
-                if ( $( "#uiAdmTrk_peakSrch" ).val() == '' ) {
-                    $( "#uiAdmTrk_peakSrch" ).val( '' );
-                    $( "" ).val( ui.item.id );
-                }
-                    value = ui.item.id;
-                    id = ui.item.value;
-                    
-                    console.info("Line 240: select event on autocomplete bird detected: " + value + " - " + id);
-            }*/
+
+                // Initialise peakList array
+                var itemsList =  new Object();
+
+                // Add new peak to array
+                itemsList.itemId = id;                               // 1
+                itemsList.itemName = value;                            // 2
+                itemsList.itemType = "peak";                                // 3
+                itemsList.disp_f = true;                             // 4
+                itemsList.visited_f = true;
+
+                itemsArray.push(itemsList);
+
+                drawTrackTable ( itemsArray, "peak" ); 
+
+                //peakNr++;
+
+                // Reset peak array on click on save or cancel
+
+            }
         });
 
         $( "#uiAdmTrk_waypSrch" ).autocomplete({
@@ -255,16 +263,47 @@ $(document).ready(function() {
                 $( "" ).val( ui.item.id );
                 id = ui.item.id;
                 value = ui.item.value;
+                // Initialise peakList array
+                var itemsList =  new Object();
+
+                // Add new wayp to array
+                itemsList.itemId = id;                               // 1
+                itemsList.itemName = value;                            // 2
+                itemsList.itemType = "wayp";                                // 3
+                itemsList.disp_f = true;                             // 4
+                itemsList.visited_f = true;
+
+                itemsArray.push(itemsList);
+
+                drawTrackTable ( itemsArray, "wayp" ); 
+
+                //peakNr++;
             }
         });
 
-        $( "#uiAdmTrk_locSrch" ).autocomplete({
-            source: "services/autoComplete.php?field=loc",
+        $( "#uiAdmTrk_locaSrch" ).autocomplete({
+            source: "services/autoComplete.php?field=loca",
             minLength: 2,
             select: function( event, ui ) {
                 $( "" ).val( ui.item.id );
                 id = ui.item.id;
                 value = ui.item.value;
+            
+                // Initialise peakList array
+                var itemsList =  new Object();
+
+                // Add new loc to array
+                itemsList.itemId = id;                               // 1
+                itemsList.itemName = value;                            // 2
+                itemsList.itemType = "loca";                                // 3
+                itemsList.disp_f = true;                             // 4
+                itemsList.visited_f = true;
+
+                itemsArray.push(itemsList);
+
+                drawTrackTable ( itemsArray, "loca" ); 
+
+                //peakNr++;
             }
         });
 
@@ -275,6 +314,22 @@ $(document).ready(function() {
                 $( "" ).val( ui.item.id );
                 id = ui.item.id;
                 value = ui.item.value;
+            
+                // Initialise peakList array
+                var itemsList =  new Object();
+
+                // Add new part to array
+                itemsList.itemId = id;                               // 1
+                itemsList.itemName = value;                            // 2
+                itemsList.itemType = "part";                                // 3
+                itemsList.disp_f = true;                             // 4
+                itemsList.visited_f = true;
+
+                itemsArray.push(itemsList);
+
+                drawTrackTable ( itemsArray, "part" ); 
+
+                //peakNr++;
             }
         });
     } );
@@ -961,178 +1016,37 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
     xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
-$(document).on('click', '#uiAdmTrk_btnPeakAdd', function (e) {
-    
-    // Initialise peakList array
-    var peaksList =  new Object();
-
-    // Add new peak to array
-    peaksList.id = "#peakDel_" + id;                 // 0
-    peaksList.itemId = id;                               // 1
-    peaksList.itemName = value;                            // 2
-    peaksList.itemType = 5;                                // 3
-    peaksList.disp_f = true;                             // 4
-
-    peakArray.push(peaksList);
-
-    drawTrackTable ( peakArray, "peak" ); 
-
-    peakNr++;
-
-    // Reset peak array on click on save or cancel
-
-});
-
-$(document).on('click', '#uiAdmTrk_btnWaypAdd', function (e) {
-    
-    // Initialise waypList array
-    var waypList =  new Object();
-
-    // Add new wayp to array
-    waypList.id = "#waypDel_" + id;                 // 0
-    waypList.itemId = id;                               // 1
-    waypList.itemName = value;                            // 2
-    waypList.itemType = 3;                                // 3
-    waypList.disp_f = true;                             // 4
-
-    waypArray.push(waypList);
-
-    drawTrackTable ( waypArray, "wayp" ); 
-
-    waypNr++;
-
-    // Reset wayp array on click on save or cancel
-
-});
-
-$(document).on('click', '#uiAdmTrk_btnLocAdd', function (e) {
-    
-    // Initialise locList array
-    var locList =  new Object();
-
-    // Add new loc to array
-    locList.id = "#locDel_" + id;                 // 0
-    locList.itemId = id;                               // 1
-    locList.itemName = value;                            // 2
-    locList.itemType = 4;                                // 3
-    locList.disp_f = true;                             // 4
-
-    locArray.push(locList);
-
-    drawTrackTable ( locArray, "loc" ); 
-
-    locNr++;
-
-    // Reset loc array on click on save or cancel
-
-});
-
-$(document).on('click', '#uiAdmTrk_btnpartAdd', function (e) {
-    
-    // Initialise partList array
-    var partList =  new Object();
-
-    // Add new part to array
-    partList.id = "#partDel_" + id;                 // 0
-    partList.itemId = id;                               // 1
-    partList.itemName = value;                            // 2
-    partList.itemType = 4;                                // 3
-    partList.disp_f = true;                             // 4
-
-    partArray.push(partList);
-
-    drawTrackTable ( partArray, "part" ); 
-
-    partNr++;
-
-    // Reset part array on click on save or cancel
-
-});
-
-$(document).on('click', '.peakDel', function (e) {
+$(document).on('click', '.itemDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                             // Prevent link behaviour
     var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var peakDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
-    
-    for (var i = 0; i < peakArray.length; i++) {
-        if ( peakArray[i]["id"] == peakDelId ) {
-            peakArray[i]["disp_f"] = false;
+    var itemDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    var itemType = itemDelId.substring(1,5);
+    var itemId = itemDelId.substring(9);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["itemId"] == itemId && itemsArray[i]["itemType"] == itemType ) {
+            itemsArray[i]["disp_f"] = false;
         }    
     }
-    drawTrackTable ( peakArray, "peak" );
-    
-    // Run following block if selected topic is currently not active
-    /*if (buttonId && !$activeButtonA.is('.active')) {
-        $topicButton.removeClass('active');                         // Make current panel inactive
-        $activeButton.removeClass('active');                        // Make current tab inactive
-
-        $topicButton = $(buttonId).addClass('active');              // Make new panel active
-        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-    }*/
-
+    drawTrackTable ( itemsArray, itemType );
 });
 
-$(document).on('click', '.waypDel', function (e) {
-    console.info("clicked on del")
+$(document).on('click', '.cbVisited', function (e) {
+    console.info("checkbox ticked")
     e.preventDefault();                                             // Prevent link behaviour
-    var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var waypDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
-    
-    for (var i = 0; i < waypArray.length; i++) {
-        if ( waypArray[i]["id"] == waypDelId ) {
-            waypArray[i]["disp_f"] = false;
+    var $activeCb = $(this)                                    // Store the current link <a> element
+    var itemChecked = $activeCb.is(":checked");
+    cbId = $activeCb.attr("id");
+    var itemType = cbId.substring(3,7);
+    var itemId = cbId.substring(7);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["itemId"] == itemId && itemsArray[i]["itemType"] == itemType ) {
+            itemsArray[i]["visited_f"] = itemChecked;
         }    
     }
-    drawTrackTable ( waypArray, "wayp" );
-    
-    // Run following block if selected topic is currently not active
-    /*if (buttonId && !$activeButtonA.is('.active')) {
-        $topicButton.removeClass('active');                         // Make current panel inactive
-        $activeButton.removeClass('active');                        // Make current tab inactive
-
-        $topicButton = $(buttonId).addClass('active');              // Make new panel active
-        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-    }*/
-
-});
-
-$(document).on('click', '.locDel', function (e) {
-    console.info("clicked on del")
-    e.preventDefault();                                             // Prevent link behaviour
-    var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var locDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
-    
-    for (var i = 0; i < locArray.length; i++) {
-        if ( locArray[i]["id"] == locDelId ) {
-            locArray[i]["disp_f"] = false;
-        }    
-    }
-    drawTrackTable ( locArray, "loc" );
-    
-    // Run following block if selected topic is currently not active
-    /*if (buttonId && !$activeButtonA.is('.active')) {
-        $topicButton.removeClass('active');                         // Make current panel inactive
-        $activeButton.removeClass('active');                        // Make current tab inactive
-
-        $topicButton = $(buttonId).addClass('active');              // Make new panel active
-        $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-    }*/
-
-});
-
-$(document).on('click', '.partDel', function (e) {
-    console.info("clicked on del")
-    e.preventDefault();                                             // Prevent link behaviour
-    var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var partDelId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
-    
-    for (var i = 0; i < partArray.length; i++) {
-        if ( partArray[i]["id"] == partDelId ) {
-            partArray[i]["disp_f"] = false;
-        }    
-    }
-    drawTrackTable ( partArray, "part" );
+    drawTrackTable ( itemsArray, "peak" ); 
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
@@ -1196,10 +1110,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.sessionid = sessionid;                             // append parameter session ID
         jsonObject.request = 'save';                              // temp request to create track temporarily
         jsonObject.loginname = $loginName; 
-        jsonObject.peakArray = peakArray;                     // Array containing selected peaks
-        jsonObject.waypArray = waypArray;                       // Array containing selected waypointsf
-        jsonObject.locArray = locArray;                       // Array containing selected waypointsf
-        jsonObject.partArray = partArray;                       // Array containing selected waypointsf
+        jsonObject.itemsArray = itemsArray;                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                              // send track object
         jsn = JSON.stringify ( jsonObject );
 
@@ -1369,26 +1280,60 @@ function checkExistance( origin, name ) {
 
 // Draws the table that list the selected waypoints
 function drawTrackTable ( itemsArray, itemType ) {
+
+    // NEW
+    /*
+    itemsList.itemId = id;                               // 1
+    itemsList.itemName = value;                            // 2
+    itemsList.itemType = "p";                                // 3
+    itemsList.disp_f = true;                             // 4
+    */
+
+    // Before
+    /*
+    itemsList.id = "#peakDel_" + id;                 // 0
+    itemsList.itemId = id;                               // 1
+    itemsList.itemName = value;                            // 2
+    itemsList.itemType = 5;                                // 3
+    itemsList.disp_f = true;                             // 4
+    */
+
     // Assign var
     var itemClass = "tbl" + itemType;                                       // e.g. tblpeak
-    var itemDelClass = itemType + "Del";                                    // e.g. peakDel
-    var itemDelImg = "btn" + itemType + "DelImg";                           // e.g. btnpeakDelImg
+    var itemDelClass = itemType + "Del";                                    // e.g. waypDel
+    var itemDelImg = "btn" + itemType + "DelImg";                           // e.g. btnwaypDelImg
     var elementId = "uiAdmTrk_" + itemType + "List";                        // e.g. uiAdmTrk_peakList
-    var visitedCheck = "cbVisited_" + itemType;                             // e.g. cbVisited_peak
+    var visitedCheck = "cb_" + itemType;                             // e.g. cbVisited_peak
     // create new html table with value returned by autocomplete
 
     var itemsTable = '';
-        itemsTable += '<table cellspacing="0" cellpadding="0">';
+    itemsTable += '<table cellspacing="0" cellpadding="0">';
+    if ( itemType == "peak" ) {
+        itemsTable += '<tr><td>Peak</td><td>Visited</td><td></td></tr>';
+    } else if ( itemType == "wayp" ) {
+        itemsTable += '<tr><td>Waypoint</td><td></td></tr>';
+    } else if ( itemType == "loca" ) {
+        itemsTable += '<tr><td>Location</td><td></td></tr>';
+    } else if ( itemType == "part" ) {
+        itemsTable += '<tr><td>Participant</td><td></td></tr>';
+    }
+
 
     for (var i = 0; i < itemsArray.length; i++) {
-        if ( itemsArray[i]["disp_f"] == true ) {
+        if ( itemsArray[i]["disp_f"] == true && itemsArray[i]["itemType"] == itemType ) {
             itemsTable += '<tr class="' + itemClass + '">';  
             itemsTable += '<td>' + itemsArray[i]["itemName"] + '</td>';               // 1    
-            itemsTable += '<td><input type="checkbox" name="' + visitedCheck + itemsArray[i]["itemId"]
-                            + '" id="' + + visitedCheck + itemsArray[i]["itemId"]
-                            + '" class="cbVisited"></td>'; 
+            if ( itemType == "peak" ) {
+                itemsTable += '<td><input type="checkbox" name="' + visitedCheck + itemsArray[i]["itemId"]
+                    + '" id="' + visitedCheck + itemsArray[i]["itemId"];
+                if ( itemsArray[i]["visited_f"] ) {
+                    itemsTable += '" class="cbVisited" checked></td>'; 
+                } else {
+                    itemsTable += '" class="cbVisited"></td>'; 
+                }
+            }
             itemsTable += '<td><ul class="' + itemClass + '">';
-            itemsTable += '<li class="button_Li"><a class="' + itemDelClass + ' button_A"' 
+            itemsTable += '<li class="button_Li"><a class="itemDel button_A"' 
                             + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
                             + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
                             itemsTable += '</tr>';
