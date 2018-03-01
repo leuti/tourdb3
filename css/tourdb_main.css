@@ -41,8 +41,8 @@ em { /* formatting for DB in logo*/
     color: #ffffff;}
 #main {          
     clear: both;} /* ensures that main content doesn't flow around top section */
-table {
-    color: #ccccff;}
+/*table {
+    color: #ccccff;}*/
 
 /********** TOPIC BUTTONS **********/
 .navBtns_btn_li.loginReq {
@@ -101,7 +101,7 @@ table {
     margin: 10px;
 }
 
-#btnPeakAdd_Ul, #btnWaypAdd_Ul, #btnLocAdd_Ul, #btnPartAdd_Ul {
+#btnPeakAdd_Ul, #btnWaypAdd_Ul, #btnLocaAdd_Ul, #btnPartAdd_Ul {
     float: left;
     padding-left: 20px;
     padding-right: 20px;
@@ -117,22 +117,13 @@ table {
     text-decoration: none;
 }
 
-.tblpeak, .tblwayp, .tblloc, .tblpart {
+.tblItems {
     padding: 0px;
     margin: 0px;
     color: #040442;
     background: #ffffff;
     border: none;
 }
-
-/*tr.tblpeak>th {
-    padding: 3px 5px 3px 5px;
-    color: #040442;
-    border-bottom: 0.2px solid #01101f;
-    /*border-top: 3px solid #01101f;
-    border-bottom: 0.5px solid #4d4dff;
-    background: #cacaca;
-}*/
 
 tr.tblpeak>td, tr.tblwayp>td {
     padding: 3px 5px 3px 5px;
@@ -370,6 +361,12 @@ tr.tblpeak>td, tr.tblwayp>td {
 
 #pImpSaveSuccess {
     display: none;
+}
+
+.itemsTable {
+    position: relative;
+    top: -20px;
+    left: 20px; 
 }
 
 #footer { 

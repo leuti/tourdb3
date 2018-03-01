@@ -28,18 +28,11 @@ segmentFileNameURL = document.URL + "tmp/kml_disp/" + segmentFileName;
 sqlWhereTracksPrev = "";                                            // variable to store previous sql where statement
 sqlWhereSegmentsPrev = "";                                          // the gen_kml.php is only called if statement has changed
 
-var trackKMLlayer;
-var segKMLlayer;
-var mapSTlayer_grau;
+var trackKMLlayer;                                                  // map layer object containing all tracks
+var segKMLlayer;                                                    // map layer object containing all segments
+var mapSTlayer_grau;                                                // map layer object containing the b/w swiss map
 
-var itemsArray = new Array();
-//var waypArray = new Array();
-//ar locArray = new Array();
-//var partArray = new Array();
-//var peakNr = 0;
-//var waypNr = 0;
-//var locNr = 0;
-//var partNr = 0;
+itemsArray = new Array();                                           // array to store selected peaks, waypoints, locations and participants
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -239,20 +232,15 @@ $(document).ready(function() {
                 var itemsList =  new Object();
 
                 // Add new peak to array
-                itemsList.itemId = id;                               // 1
-                itemsList.itemName = value;                            // 2
-                itemsList.itemType = "peak";                                // 3
-                itemsList.disp_f = true;                             // 4
-                itemsList.visited_f = true;
+                itemsList.itemId = id;                                   // id of item selected
+                itemsList.itemName = value;                              // Name of item selected
+                itemsList.itemType = "peak";                             // Type of item (must be 4 char)
+                itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+                itemsList.visited_f = true;                              // Set visited flag to true as default
 
                 itemsArray.push(itemsList);
 
-                drawTrackTable ( itemsArray, "peak" ); 
-
-                //peakNr++;
-
-                // Reset peak array on click on save or cancel
-
+                drawItemsTables ( itemsArray, "peak" ); 
             }
         });
 
@@ -267,17 +255,15 @@ $(document).ready(function() {
                 var itemsList =  new Object();
 
                 // Add new wayp to array
-                itemsList.itemId = id;                               // 1
-                itemsList.itemName = value;                            // 2
-                itemsList.itemType = "wayp";                                // 3
-                itemsList.disp_f = true;                             // 4
-                itemsList.visited_f = true;
+                itemsList.itemId = id;                                   // id of item selected
+                itemsList.itemName = value;                              // Name of item selected
+                itemsList.itemType = "wayp";                             // Type of item (must be 4 char)
+                itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+                itemsList.visited_f = true;                              // Set visited flag to true as default
 
                 itemsArray.push(itemsList);
 
-                drawTrackTable ( itemsArray, "wayp" ); 
-
-                //peakNr++;
+                drawItemsTables ( itemsArray, "wayp" ); 
             }
         });
 
@@ -293,17 +279,15 @@ $(document).ready(function() {
                 var itemsList =  new Object();
 
                 // Add new loc to array
-                itemsList.itemId = id;                               // 1
-                itemsList.itemName = value;                            // 2
-                itemsList.itemType = "loca";                                // 3
-                itemsList.disp_f = true;                             // 4
-                itemsList.visited_f = true;
+                itemsList.itemId = id;                                   // id of item selected
+                itemsList.itemName = value;                              // Name of item selected
+                itemsList.itemType = "loca";                             // Type of item (must be 4 char)
+                itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+                itemsList.visited_f = true;                              // Set visited flag to true as default --> not stored
 
                 itemsArray.push(itemsList);
 
-                drawTrackTable ( itemsArray, "loca" ); 
-
-                //peakNr++;
+                drawItemsTables ( itemsArray, "loca" ); 
             }
         });
 
@@ -319,17 +303,15 @@ $(document).ready(function() {
                 var itemsList =  new Object();
 
                 // Add new part to array
-                itemsList.itemId = id;                               // 1
-                itemsList.itemName = value;                            // 2
-                itemsList.itemType = "part";                                // 3
-                itemsList.disp_f = true;                             // 4
-                itemsList.visited_f = true;
+                itemsList.itemId = id;                                   // id of item selected
+                itemsList.itemName = value;                              // Name of item selected
+                itemsList.itemType = "part";                             // Type of item (must be 4 char)
+                itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+                itemsList.visited_f = true;                              // Set visited flag to true as default --> not stored
 
-                itemsArray.push(itemsList);
+                itemsArray.push(itemsList);                              // Add selected item to array
 
-                drawTrackTable ( itemsArray, "part" ); 
-
-                //peakNr++;
+                drawItemsTables ( itemsArray, "part" ); 
             }
         });
     } );
@@ -920,12 +902,13 @@ $(document).on('click', '.uiAdmTrk_btns_a', function(e) {
 // Upon click on the 'Upload GPX File' button --> call importGps.php in temp mode
 $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
-    var xhr = new XMLHttpRequest();                                                                     // create new xhr object
-    
+    var xhr = new XMLHttpRequest();                                                            // create new xhr object
+    var itemsArray = new Array();                                       // array to store selected peaks, waypoints, locations and participants
+
     // Execute following code JSON object is received from importGpsTmp.php - TEMP service
     xhr.onload = function() {
-        if (xhr.status === 200) {                                                                       // when all OK
-            responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
+        if (xhr.status === 200) {                                                              // when all OK
+            responseObject = JSON.parse(xhr.responseText);                                     // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
                 trackobj = responseObject.trackObj;
                 $('#uiAdmTrk_fld_trkId').val(trackobj.trkId); 
@@ -1029,7 +1012,7 @@ $(document).on('click', '.itemDel', function (e) {
             itemsArray[i]["disp_f"] = false;
         }    
     }
-    drawTrackTable ( itemsArray, itemType );
+    drawItemsTables ( itemsArray, itemType );
 });
 
 $(document).on('click', '.cbVisited', function (e) {
@@ -1046,7 +1029,7 @@ $(document).on('click', '.cbVisited', function (e) {
             itemsArray[i]["visited_f"] = itemChecked;
         }    
     }
-    drawTrackTable ( itemsArray, "peak" ); 
+    drawItemsTables ( itemsArray, "peak" ); 
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
@@ -1126,8 +1109,19 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 // Make panelImport disappear and panelDisplay appear
                 $('#statusMessage').text('Track successfully saved');
                 $('#statusMessage').show().delay(5000).fadeOut();
+      
+                itemsArray = new Array();
+                
+                // Delete items tables
+                drawItemsTables ( itemsArray, "peak" ); 
+                drawItemsTables ( itemsArray, "wayp" ); 
+                drawItemsTables ( itemsArray, "loca" ); 
+                drawItemsTables ( itemsArray, "part" ); 
 
-                //$('.updTrackInput').value = "";
+                $( "#uiAdmTrk_peakSrch" ).val("");
+                $( "#uiAdmTrk_waypSrch" ).val("");
+                $( "#uiAdmTrk_locaSrch" ).val("");
+                $( "#uiAdmTrk_partSrch" ).val("");
 
                 // Open Panel Display
                 var $activeButtonA = $('#navBtns_btn_diplay_a');                                    // Store the current link <a> element
@@ -1142,6 +1136,15 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').addClass('active');
                 $('#uiAdmTrk').removeClass('active');
+
+                // Change active tab to main tab
+                $( "#uiAdmTrk" ).tabs({
+                    active: 0
+                  });
+            } else {
+                // Make panelImport disappear and panelDisplay appear
+                $('#statusMessage').text('Error saving track');
+                $('#statusMessage').show().delay(5000).fadeOut();
             }
         });
     }                                           // send formData object to service using xhr
@@ -1243,13 +1246,11 @@ function drawMapEmpty(targetDiv) {
     
     var map = new ga.Map({
         target: targetDiv,
-        view: new ol.View({resolution: 100, center: [670000, 160000]})
+        view: new ol.View({resolution: 500, center: [660000, 190000]})
     });
 
     // Create a background layer
-    //var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-farbe');
     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-    //mapSTlayer_grau.set('name', 'mapSTlayer_grau');
     map.addLayer(mapSTlayer_grau);
     return map;
 }
@@ -1279,27 +1280,10 @@ function checkExistance( origin, name ) {
 }
 
 // Draws the table that list the selected waypoints
-function drawTrackTable ( itemsArray, itemType ) {
-
-    // NEW
-    /*
-    itemsList.itemId = id;                               // 1
-    itemsList.itemName = value;                            // 2
-    itemsList.itemType = "p";                                // 3
-    itemsList.disp_f = true;                             // 4
-    */
-
-    // Before
-    /*
-    itemsList.id = "#peakDel_" + id;                 // 0
-    itemsList.itemId = id;                               // 1
-    itemsList.itemName = value;                            // 2
-    itemsList.itemType = 5;                                // 3
-    itemsList.disp_f = true;                             // 4
-    */
+function drawItemsTables ( itemsArray, itemType ) {
 
     // Assign var
-    var itemClass = "tbl" + itemType;                                       // e.g. tblpeak
+    var itemClass = "tblItems";                                       // e.g. tblpeak
     var itemDelClass = itemType + "Del";                                    // e.g. waypDel
     var itemDelImg = "btn" + itemType + "DelImg";                           // e.g. btnwaypDelImg
     var elementId = "uiAdmTrk_" + itemType + "List";                        // e.g. uiAdmTrk_peakList
@@ -1307,9 +1291,9 @@ function drawTrackTable ( itemsArray, itemType ) {
     // create new html table with value returned by autocomplete
 
     var itemsTable = '';
-    itemsTable += '<table cellspacing="0" cellpadding="0">';
+    itemsTable += '<table class="itemsTable" cellspacing="0" cellpadding="0">';
     if ( itemType == "peak" ) {
-        itemsTable += '<tr><td>Peak</td><td>Visited</td><td></td></tr>';
+        itemsTable += '<tr><td>Peak</td><td>   Visited</td><td></td></tr>';
     } else if ( itemType == "wayp" ) {
         itemsTable += '<tr><td>Waypoint</td><td></td></tr>';
     } else if ( itemType == "loca" ) {
@@ -1317,8 +1301,6 @@ function drawTrackTable ( itemsArray, itemType ) {
     } else if ( itemType == "part" ) {
         itemsTable += '<tr><td>Participant</td><td></td></tr>';
     }
-
-
     for (var i = 0; i < itemsArray.length; i++) {
         if ( itemsArray[i]["disp_f"] == true && itemsArray[i]["itemType"] == itemType ) {
             itemsTable += '<tr class="' + itemClass + '">';  
@@ -1340,6 +1322,5 @@ function drawTrackTable ( itemsArray, itemType ) {
         }               
     }
     itemsTable += '</table>';   
-
     document.getElementById(elementId).innerHTML = itemsTable;
 }

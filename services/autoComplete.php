@@ -48,7 +48,7 @@ if ( $searchObject == "peak") {
     $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
     $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
     $sql .= "AND waypTypeFID in (1,2,3) ORDER BY waypNameShort";
-} else if ( $searchObject == "loc") {
+} else if ( $searchObject == "loca") {
     $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
     $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
     $sql .= "AND waypTypeFID = 4 ORDER BY waypNameShort";

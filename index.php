@@ -606,20 +606,11 @@
 							<label for="uiAdmTrk_peakSrch" class="updTrackLabelWayp">Peak</label>
 							<input id="uiAdmTrk_peakSrch" size="25">
 				  		</div>
-						<!--
-						<ul id="btnPeakAdd_Ul§">
-							<li id="uiAdmTrk_btnPeakAdd" class="button_Li">
-								<a id="uiAdmTrk_btnPeakAdd_A" class="button_A" href="#btnPeakAdd">
-									<img id="btnPeakAddImg" src="css/images/add.png">	
-								</a>
-							</li>
-						</ul>
-						-->
 						<div id="uiAdmTrk_peakList" style="float:left;">
-						<table cellspacing="0" cellpadding="0">
+						<table class="itemsTable" cellspacing="0" cellpadding="0">
             				<tr>
             					<td>Peak</td>
-            					<td>Visited</td> 
+            					<td></td> 
             					<td></td>
 							</tr>
 						</table>
@@ -633,7 +624,7 @@
 							<input id="uiAdmTrk_waypSrch" size="25">
 				  		</div>
 						<div id="uiAdmTrk_waypList" style="float:left;">
-						<table cellspacing="0" cellpadding="0">
+						<table class="itemsTable" cellspacing="0" cellpadding="0">
 							<tr>
 								<td>Waypoint</td>
 								<td></td>
@@ -650,7 +641,7 @@
 							<input id="uiAdmTrk_locaSrch" size="25">
 				  		</div>
 						<div id="uiAdmTrk_locaList" style="float:left;">
-						<table cellspacing="0" cellpadding="0">
+						<table class="itemsTable" cellspacing="0" cellpadding="0">
 							<tr>
             					<td>Location</td>
             					<td></td>
@@ -670,7 +661,7 @@
 							<input id="uiAdmTrk_partSrch" size="25">
 				  		</div>
 						<div id="uiAdmTrk_partList" style="float:left;">
-						<table cellspacing="0" cellpadding="0">
+						<table class="itemsTable" cellspacing="0" cellpadding="0">
 							<tr>
             					<td>Participant</td>
             					<td></td>
