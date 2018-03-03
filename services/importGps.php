@@ -44,7 +44,7 @@ fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");
 if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call to this service was done with dataForm (temp)
 {
     $request = $_REQUEST["request"];                                // evaluate type of request
-    if ($debugLevel > 2) fputs($logFile, "Line 48: Request (_REQUEST): $request\r\n");    
+    if ( $debugLevel >= 3 ) fputs($logFile, "Line 48: Request (_REQUEST): $request\r\n");    
 } else {
     // variables passed on by client (as formData object)
 
@@ -53,10 +53,10 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call t
         throw new Exception('Request method must be POST!');
     }
     
-    if ($debugLevel > 2) fputs($logFile, 'Line 57: contentType:' . $_SERVER["CONTENT_TYPE"] . '\r\n');
+    if ( $debugLevel >= 3 ) fputs($logFile, 'Line 57: contentType:' . $_SERVER["CONTENT_TYPE"] . '\r\n');
     //Make sure that the content type of the POST request has been set to application/json
     $contentType = isset($_SERVER["CONTENT_TYPE"]) ? substr($_SERVER["CONTENT_TYPE"],0,16) : '';
-    if ($debugLevel > 2) fputs($logFile, "Line 59: contentType: <$contentType>\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line 59: contentType: <$contentType>\r\n");
     if(strcasecmp($contentType, 'application/json') != 0){
         throw new Exception('Content type must be: application/json');
     }
@@ -73,7 +73,7 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call t
     //}
 
     $request = $receivedData["request"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-    if ($debugLevel > 2) fputs($logFile, "Line 77: Request (JSON): $request\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line 77: Request (JSON): $request\r\n");    
 }
 
 if ($request == "temp") {
@@ -88,7 +88,7 @@ if ($request == "temp") {
     $loginname = $_REQUEST["loginname"];                            // Login name
     $fileinfo = pathinfo($filename);                                // evaluate file extension 
     $filetype = $fileinfo['extension'];
-    if ($debugLevel > 2) fputs($logFile, "Line 92: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line 92: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
 
     // if file type = gpx or kml --> create directory and copy file 
     if ( $filetype == "gpx" || $filetype == "kml" ) {
@@ -104,7 +104,7 @@ if ($request == "temp") {
 
         // move file to upload dir
         if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
-            if ( $debugLevel > 2) fputs($logFile, "Line 108 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
+            if ( $debugLevel >= 3) fputs($logFile, "Line 108 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
         } else {
             fputs($logFile, "Line 110 - error uploading file " . $_FILES['filename']['name'] . " to: $uploaddir\r\n"); 
         }  
@@ -117,7 +117,7 @@ if ($request == "temp") {
             $trackObj = $returnObject["trackObj"];
             $trackid = $trackObj["trkId"];                          // return id of newly created track                              // track object with all know track data derived from file
             
-            if ($debugLevel > 2) fputs($logFile, "Line 121 - trackid: $trackid\r\n");
+            if ($debugLevel >= 3) fputs($logFile, "Line 121 - trackid: $trackid\r\n");
         
             // write content of trackobj1 to log file
             foreach ($trackObj as $dbField => $value) {
@@ -179,7 +179,7 @@ if ($request == "temp") {
     $loginname = $receivedData["loginname"];
     $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
     
-    if ( $debugLevel > 2) fputs($logFile, "Line 183: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line 183: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
     // Create SQL statement to update temporary track 
     $sql = "UPDATE `tbl_tracks` SET ";                              // Insert Source file name, gps start time and toReview flag
@@ -187,23 +187,28 @@ if ($request == "temp") {
 
     // Loop through received track object and add to SQL statement
     foreach ($trackObjIn as $dbField => $content) {                 // Generate update statement
-        $sql .= "`$dbField`='$content',";
+        if ( $dbField != 'trkId' ) {
+            $sql .= "`$dbField`='$content',";
+        }
     }
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
     $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
     
-    if ($debugLevel>8) fputs($logFile, "Line 196 - sql: $sql\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {
-        if ( $debugLevel > 3) fputs($logFile, "Line 201 - New track inserted successfully\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line 201 - New track inserted successfully\r\n");
     } else {
         fputs($logFile, "Line 203 - Error inserting trkPt: $conn->error\r\n");
+        $errMessage = "Error inserting Track: $conn->error";
+
         $outObject = array (
             'status'=>'NOK',                                             // add err status to return object
-            'errMessage'=>'Error inserting trkPt: ' . $conn->error,  
+            'errMessage'=> $errMessage  
         );
+        echo json_encode($outObject); 
         return;
     } 
    
@@ -214,7 +219,7 @@ if ($request == "temp") {
     $waypRun = false;                                                 // True when at least one item to insert
     $partRun = false;                                                 // True when at least one item to insert
 
-    if ( $debugLevel > 3) fputs($logFile, "Line 216 - Part II entered\r\n");
+    if ( $debugLevel >= 3) fputs($logFile, "Line 216 - Part II entered\r\n");
  
     if ( sizeof($itemsArray) > 0 ) {
 
@@ -229,14 +234,14 @@ if ($request == "temp") {
                 $sql .= "(" . $trackObjIn["trkId"] . "," . $itemsArray[$i]["itemId"] . "," . $itemsArray[$i]["reached_f"] . "),";  
             }
         }
-        if ( $debugLevel > 3) fputs($logFile, "Line 229 - wayp sql: $sql\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line 229 - wayp sql: " . substr($sql,0,100) . "\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
         if ( $waypRun ) {
             if ( $conn->query($sql) === TRUE )                                // run sql against DB
             {
-                if ( $debugLevel > 3) fputs($logFile, "Line 234 - New record in tbl_track_wayp for peaks successfully inserted \r\n");
+                if ( $debugLevel >= 6) fputs($logFile, "Line 234 - New record in tbl_track_wayp for peaks successfully inserted \r\n");
             } else {
                 fputs($logFile, "Line 236 - Error inserting trkPt: $conn->error\r\n");
                 fputs($logFile, "Line 237 - sql: $sql\r\n");
@@ -248,7 +253,7 @@ if ($request == "temp") {
                 return;
             }
         } else {
-            if ( $debugLevel > 3) fputs($logFile, "Line 254 - Nothing to insert into tbl_tracks_wayp\r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line 254 - Nothing to insert into tbl_tracks_wayp\r\n");
         }
 
         // Insert items into tbl_track_part
@@ -263,14 +268,14 @@ if ($request == "temp") {
                 $partRun = true;
             }
         }
-        if ( $debugLevel > 3) fputs($logFile, "Line 256 - part sql: $sql\r\n");
+        if ( $debugLevel >= 6) fputs($logFile, "Line 256 - part sql: $sql\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql) - 1 );                       // trim last unnecessary ,
         if ( $partRun ) {
             if ( $conn->query($sql) === TRUE )                                // run sql against DB
             {
-                if ( $debugLevel > 3) fputs($logFile, "Line 343 - New record in tbl_track_part inserted successfully\r\n");
+                if ( $debugLevel >= 6) fputs($logFile, "Line 343 - New record in tbl_track_part inserted successfully\r\n");
             } else {
                 fputs($logFile, "Line 345 - Error inserting trkPt: $conn->error\r\n");
                 fputs($logFile, "Line 346 - sql: $sql\r\n");
@@ -282,7 +287,7 @@ if ($request == "temp") {
                 return;
             }
         } else {
-            if ( $debugLevel > 3) fputs($logFile, "Line 254 - Nothing to insert into tbl_tracks_wayp\r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line 254 - Nothing to insert into tbl_tracks_wayp\r\n");
         }
     }
 
@@ -315,7 +320,7 @@ if ($request == "temp") {
     // run SQL statement
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {
-        if ( $debugLevel > 3) fputs($logFile, "Line 385 - New track inserted successfully\r\n");
+        if ( $debugLevel >= 6) fputs($logFile, "Line 385 - New track inserted successfully\r\n");
     } else {
         fputs($logFile, "Line 387 - Error inserting trkPt: $conn->error\r\n");
         $outObject = array (
@@ -604,7 +609,10 @@ function insertTrackPoints($conn,$trackid,$filename)
         "trkMeterDown"=>$meterDown,
         "trkMeterUp"=>$meterUp,
         "trkDistance"=>round($overallDistance/1000, 2),
-        "trkCoordinates"=>$coordString
+        "trkCoordinates"=>$coordString,
+        "trkSaison"=>"2017/18 Wi",
+        "trkType"=>"Ski",
+        "trkSubType"=>"Skitour"
     );
 
     $returnObject = array (

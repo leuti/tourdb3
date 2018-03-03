@@ -441,6 +441,7 @@
 					</div>
 				</fieldset>
 
+				<!--
 				<fieldset>
 					<legend class="filterHeader">Select JSON file to upload</legend>
 					<p>Select a JSON file to upload to the tourdb</p>
@@ -453,6 +454,7 @@
 						<input type="submit" class="button" id="buttonUploadFileJSON" value="Upload JSON File" />
 					</div>
 				</fieldset>
+				-->
 			</div>
 			
 			<div id="uiAdmTrk" class="formCenter uiDiv">

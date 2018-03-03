@@ -730,7 +730,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             sqlWhereSegments += " AND ";
         }
         sqlWhereSegments = sqlWhereSegments.slice(0,sqlWhereSegments.length-5);
-        sqlWhereSegments = sqlWhereSegments + " AND coordinates is not null"
+        sqlWhereSegments = sqlWhereSegments; 
     }
 
     // ****************************************************
@@ -755,6 +755,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
             responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
             
             if ( responseObject["status"] == "OK") {
+
+                // display message
+                $('#statusMessage').text(responseObject.errMessage);
+                $("#statusMessage").show().delay(5000).fadeOut();
 
                 // Delete previously drawn layers 
                 if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
@@ -1039,16 +1043,18 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     var trackobj = {};
     var jsonObject = {};
 
-    $('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
-    valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );   // check validity of field
+    //$('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
+    //valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );   // check validity of field
     trackobj.trkId = $('#uiAdmTrk_fld_trkId').val();                            // assign field value to track object
 
     $('#uiAdmTrk_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkTrackName'), "Track Name" );
+    valid = valid && checkRegexpNot ( $('#uiAdmTrk_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
     trackobj.trkTrackName = $('#uiAdmTrk_fld_trkTrackName').val();
     
     $('#uiAdmTrk_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkRoute'), "Route" );
+    valid = valid && checkRegexpNot ( $('#uiAdmTrk_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
     trackobj.trkRoute = $('#uiAdmTrk_fld_trkRoute').val();
     
     $('#uiAdmTrk_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
@@ -1062,19 +1068,56 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkSaison = $('#uiAdmTrk_fld_trkSaison').val();
     trackobj.trkType = $('#uiAdmTrk_fld_trkType').val();
     trackobj.trkSubType = $('#uiAdmTrk_fld_trkSubType').val();
+
+    $('#uiAdmTrk_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
     trackobj.trkOrg = $('#uiAdmTrk_fld_trkOrg').val();    
-    trackobj.trkOvernightLoc = $('#uiAdmTrk_fld_trkOvernightLoc').val();
-    trackobj.trkParticipants = $('#uiAdmTrk_fld_trkParticipants').val();
+    valid = valid && checkRegexpNot ( $('#uiAdmTrk_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    
+    //trackobj.trkOvernightLoc = $('#uiAdmTrk_fld_trkOvernightLoc').val();
+    //trackobj.trkParticipants = $('#uiAdmTrk_fld_trkParticipants').val();
+    
+    $('#uiAdmTrk_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
     trackobj.trkEvent = $('#uiAdmTrk_fld_trkEvent').val();
+    valid = valid && checkRegexpNot ( $('#uiAdmTrk_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+
+    $('#uiAdmTrk_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
     trackobj.trkRemarks = $('#uiAdmTrk_fld_trkRemarks').val();
+    valid = valid && checkRegexpNot ( $('#uiAdmTrk_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+
+    $('#uiAdmTrk_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
     trackobj.trkDistance = $('#uiAdmTrk_fld_trkDistance').val();
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
+
+
+    $('#uiAdmTrk_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkTimeOverall = $('#uiAdmTrk_fld_trkTimeOverall').val();
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    
+    $('#uiAdmTrk_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkTimeToPeak = $('#uiAdmTrk_fld_trkTimeToPeak').val();
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+
+    $('#uiAdmTrk_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkTimeToFinish = $('#uiAdmTrk_fld_trkTimeToFinish').val();
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+
     trackobj.trkGrade = $('#uiAdmTrk_fld_trkGrade').val();
+
+    $('#uiAdmTrk_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkMeterUp = $('#uiAdmTrk_fld_trkMeterUp').val();
+    valid = valid && checkIfNum ( $('#uiAdmTrk_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
+
+    $('#uiAdmTrk_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkMeterDown = $('#uiAdmTrk_fld_trkMeterDown').val();
-    trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();      
+    valid = valid && checkIfNum ( $('#uiAdmTrk_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
+    
+    $('#uiAdmTrk_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();   
+    valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
+    //valid = valid && checkLength ( $('#uiAdmTrk_fld_trkCountry'), "Country", 2, 2 );
+    
     trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
     trackobj.trkLoginName = $loginName;    
 
@@ -1104,8 +1147,8 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
             dataType: "json",
             data: jsn
         })
-        .done(function ( data ) {
-            if ( data.status == 'OK') {
+        .done(function ( responseObject ) {
+            if ( responseObject.status == 'OK') {
                 $('#statusMessage').text('Track successfully saved');
                 $('#statusMessage').show().delay(5000).fadeOut();
       
@@ -1141,7 +1184,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                   });
             } else {
                 // Make panelImport disappear and panelDisplay appear
-                $('#statusMessage').text('Error saving track');
+                $('#statusMessage').text(responseObject.errMessage);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }
         });
@@ -1323,4 +1366,48 @@ function drawItemsTables ( itemsArray, itemType ) {
     }
     itemsTable += '</table>';   
     document.getElementById(elementId).innerHTML = itemsTable;
+}
+
+// function checking of field against REGEX - error when matching
+function checkRegexpNot( o, regexp, n ) {
+    if ( regexp.test( o.val() ) )  {
+        o.addClass( "ui-state-error" );
+        updateValComments( n );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// function checking of field against REGEX - error when NOT matching
+function checkRegexp( o, regexp, n ) {
+    if ( !( regexp.test( o.val() ) ) ) {
+        o.addClass( "ui-state-error" );
+        updateValComments( n );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// function checking if content of field is a number
+function checkIfNum( o, n ) {
+    if ( isNaN( o.val() ) ) {                                                   // isNaN returns false if value is a number --> 1234 = false
+        o.addClass( "ui-state-error" );
+        updateValComments( n );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// Function checking the min / max length of field content of ADD dialog 
+function checkLength( o, n, min, max ) {
+    if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateValComments( "Length of " + n + " must be between " + min + " and " + max + "." );
+        return false;
+    } else {
+        return true;
+    }
 }
