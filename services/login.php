@@ -36,9 +36,9 @@ if ( $debugLevel >= 3 ) fputs($logFile, "Line 33: User <$loginName> has logged i
 session_start();
 
 // in case this script is started from login page
-if( isset($loginName) )
+if ( isset($loginName) )
 {
-    if( $loginName == "leut" && $loginPasswd == "sugus" ||          // check if login in known --> these login must be moved to DB
+    if ( $loginName == "leut" && $loginPasswd == "sugus" ||          // check if login in known --> these login must be moved to DB
         $loginName == "admin" && $loginPasswd == "admin" )
     {
         $_SESSION["login"] = $loginName;                            // set session var
@@ -46,7 +46,7 @@ if( isset($loginName) )
 }
 
 // check if within session
-if( isset($_SESSION["login"]) )
+if ( isset($_SESSION["login"]) )
 {    
     $returnObject['sessionid'] = session_id();                      // add session id to return object
     $returnObject['loginstatus'] = "OK";                            // set login status to OK
@@ -55,8 +55,9 @@ if( isset($_SESSION["login"]) )
     $returnObject['loginstatus'] = "ERROR";                         // Return error
 }
 echo json_encode($returnObject);                                    // encode return object to JSON
-if( $debugLevel >= 1 ) {
-    fputs($logFile, "Line 59: Login script completed --> sessionid: " . $returnObject['sessionid'] . " | login: " 
+if ( $debugLevel >= 1 ) 
+{
+    fputs($logFile, "Line 60: Login script completed --> sessionid: " . $returnObject['sessionid'] . " | login: " 
     . $loginName . " | loginstatus: " . $returnObject['loginstatus'] . "\r\n");
 }
 ?>
