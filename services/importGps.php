@@ -226,7 +226,7 @@ if ($request == "temp") {
             if ( $itemsArray[$i]["disp_f"] == true && ( $itemsArray[$i]["itemType"] == "peak"  || 
             $itemsArray[$i]["itemType"] == "loca" || $itemsArray[$i]["itemType"] == "wayp" )) {                 // disp_f = true when user has not deleted peak on UI
                 $waypRun = true;
-                $sql .= "(" . $trackObjIn["trkId"] . "," . $itemsArray[$i]["itemId"] . ",1),";  
+                $sql .= "(" . $trackObjIn["trkId"] . "," . $itemsArray[$i]["itemId"] . "," . $itemsArray[$i]["reached_f"] . "),";  
             }
         }
         if ( $debugLevel > 3) fputs($logFile, "Line 229 - wayp sql: $sql\r\n");
