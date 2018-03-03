@@ -756,7 +756,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
             if ( responseObject["status"] == "OK") {
 
-                // Draw base map when status is OK
+                // Delete previously drawn layers 
                 if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
                     && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
                     $clickedButton == 'dispFilSeg_NewLoadButton' )) {           // User has clicked New Load button
@@ -770,7 +770,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 // Draw kml file for tracks 
                 if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
                     $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
-                    
+                    console.info("filename" + $trackFile);                    
                     // Create the KML Layer for tracks
                     trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
                         source: new ol.source.Vector({                          // Set source to kml file

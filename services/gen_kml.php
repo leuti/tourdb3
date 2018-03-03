@@ -29,14 +29,6 @@ include("config.inc.php");                                                  // I
 $debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                                           // Internal counter for tracks processed
 
-// Open log file
-if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
-    $logFile = @fopen($logFileLoc,"a");     
-    fputs($logFile, "=================================================================\r\n");
-    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
-};
-
 // Array for the styling of the lines in the kml file
 $styleArray = array(
     array("Wanderung","FF01EDFF",3,"FF01EDFF",5),                           // gelb
@@ -56,6 +48,15 @@ $styleArray = array(
     array("Others","#FFCC66FF",3,"#FFCC66FF",5)                             // rosa
 );
 
+// Open log file
+if ($debugLevel >= 1){
+    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
+    $logFile = @fopen($logFileLoc,"a");     
+    if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 24: gen_kml.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, "Line 57: debuglevel set to: $debugLevel\r\n");   
+};
+
 // variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];                                    
@@ -64,12 +65,13 @@ $genTrackKml = $receivedData["genTrackKml"];                                // t
 $sqlWhereSegments = $receivedData["sqlWhereSegments"];                      // where statement to select tracks to be displayed
 $genSegKml = $receivedData["genSegKml"];                                    // true when tracks kml file should be generated
 
-if ($debugLevel >= 2){
-    fputs($logFile, 'Line 56: sessionid: ' . $sessionid . "\r\n");
-    fputs($logFile, 'Line 57: sqlWhereTracks: ' . $sqlWhereTracks . "\r\n");
-    fputs($logFile, 'Line 58: sqlWhereSegments: ' . $sqlWhereSegments . "\r\n");
-    fputs($logFile, 'Line 57: genTrackKml: ' . $genTrackKml . "\r\n");
-    fputs($logFile, 'Line 58: genSegKml: ' . $genSegKml . "\r\n");
+if ($debugLevel >= 3){
+    fputs($logFile, 'Line 68: Received parameters:' . "\r\n");
+    fputs($logFile, 'sessionid:       ' . $sessionid . "\r\n");
+    fputs($logFile, 'sqlWhereTracks:  ' . $sqlWhereTracks . "\r\n");
+    fputs($logFile, 'sqlWhereSegments:' . $sqlWhereSegments . "\r\n");
+    fputs($logFile, 'genTrackKml:     ' . $genTrackKml . "\r\n");
+    fputs($logFile, 'genSegKml:       ' . $genSegKml . "\r\n");
 };
 
 // create upload dir / file name
@@ -109,12 +111,11 @@ if ( $genTrackKml ) {
     $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhereTracks;
+    $sql .= " AND trkCoordinates <> '' ";
 
     $records = mysqli_query($conn, $sql);
 
-    if ($debugLevel >= 3){
-        fputs($logFile, 'Line 76: sql: ' . $sql . "\r\n");
-    };
+    if ($debugLevel >= 3) fputs($logFile, 'Line 117: sql to select track: ' . $sql . "\r\n");
 
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
@@ -123,7 +124,7 @@ if ( $genTrackKml ) {
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
         $kml[] = '          <name>' . $singleRecord["trkId"] . ": " .  $singleRecord["trkTrackName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . ' (mit ' .  $singleRecord["trkParticipants"] . ')</description>';
+        $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . '</description>';
 
         // set default stylmap and then loop through style maps
         $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';       // Set styleUrl to Others in case nothing in found
@@ -143,7 +144,8 @@ if ( $genTrackKml ) {
         $kml[] = '            </Data>';
         $kml[] = '          </ExtendedData>';
         $kml[] = '          <LineString>';
-        $kml[] = '            <coordinates>' . $singleRecord["trkCoordinates"];
+        $kml[] = '            <coordinates>';
+        $kml[] = '               ' . $singleRecord["trkCoordinates"];
         $kml[] = '            </coordinates>';
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
@@ -160,7 +162,7 @@ if ( $genTrackKml ) {
     // Write kml into file
     fputs($trackOutFile, "$kmlOutput");                                     // Write kml to file
 }
-fputs($logFile, "$countTracks Tracks processed\r\n");
+if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
 $countTracks = 0; 
 
 // ==================================================================
@@ -278,8 +280,8 @@ $returnObject['status'] = 'OK';                                             // a
 $returnObject['errmessage'] = '';                                           // add empty error message to trackobj
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
-fputs($logFile, "$countTracks Segments processed\r\n");
+if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
