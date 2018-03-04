@@ -328,6 +328,11 @@ tr.tblpeak>td, tr.tblwayp>td {
     color: #333333;
 }
 */
+#validateComments {    
+    text-align: center;
+    margin-top: 10px;
+}
+
 #headerUploadFile {
     margin: 20px;
     padding: 10px;

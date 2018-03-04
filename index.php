@@ -463,8 +463,8 @@
 					<li><a href="#uiAdmTrk_tabWayp">Waypoints</a></li>
 					<li><a href="#uiAdmTrk_tabOth">Others</a></li>
 				</ul>
+				<p id="validateComments">Please fill / update fields.</p>
 				<div id="uiAdmTrk_tabMain">
-					<p id="validateComments">Please fill / update fields.</p>
 					<fieldset>
 					
 						<!-- Import Tracks -->

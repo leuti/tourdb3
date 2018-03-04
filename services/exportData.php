@@ -80,13 +80,13 @@ switch ( $request ) {
             fputs($JSONoutFile, json_encode($trackArray));                      // Encode content of trackArray into JSON and write to output file
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"OK",
-                "errMessage"=>"JSON file stored in $out"
+                "message"=>"JSON file stored in $out"
             );
         } else {
             fputs($logFile, "Line 87 - SQL failed\r\n");  
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"NOK",
-                "errMessage"=>"Failed to write JSON file to $out"
+                "message"=>"Failed to write JSON file to $out"
             );
         };
         fclose($JSONoutFile);                                                   // close JSON output file
@@ -136,7 +136,7 @@ switch ( $request ) {
         fputs($csvOutFile, "$header\n$data");                                   // Write header and data to CSV file handler
         $returnObject = array (                                                 // Fill return object with message
             "status"=>"OK",
-            "errMessage"=>"CSV file stored in $out"
+            "message"=>"CSV file stored in $out"
         );
         break;    
     }

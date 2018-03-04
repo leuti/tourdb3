@@ -24,7 +24,7 @@
 // 
 // Return object
 // status
-// errMessage
+// message
 // trackObj
 
 // Set variables and parameters
@@ -138,7 +138,7 @@ if ($request == "temp") {
             // prepare return JSON object
             $outObject = array (
                 "status"=>"OK",
-                "errMessage"=>"",
+                "message"=>"",
                 "trackObj"=>$trackObjOut
             );
             echo json_encode($outObject);                           // echo JSON object to client
@@ -159,7 +159,7 @@ if ($request == "temp") {
         // prepare JSON return object
         $outObject = array (
             'status'=>'ERR',                                        // add err status to return object
-            'errMessage'=>'Wrong file extension',                   // add error message to return object
+            'message'=>'Wrong file extension',                   // add error message to return object
         );
         echo json_encode($outObject);                               // echo track object to client
         exit;                                                       // exit from php
@@ -202,11 +202,11 @@ if ($request == "temp") {
         if ( $debugLevel >= 3) fputs($logFile, "Line 201 - New track inserted successfully\r\n");
     } else {
         fputs($logFile, "Line 203 - Error inserting trkPt: $conn->error\r\n");
-        $errMessage = "Error inserting Track: $conn->error";
+        $message = "Error inserting Track: $conn->error";
 
         $outObject = array (
             'status'=>'NOK',                                             // add err status to return object
-            'errMessage'=> $errMessage  
+            'message'=> $message  
         );
         echo json_encode($outObject); 
         return;
@@ -248,7 +248,7 @@ if ($request == "temp") {
                 // write output array
                 $outObject = array (
                     'status'=>'NOK',                                             // add err status to return object
-                    'errMessage'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+                    'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
                 );                                         // add error message to return object
                 return;
             }
@@ -282,7 +282,7 @@ if ($request == "temp") {
                 // write output array
                 $outObject = array (
                     'status'=>'NOK',                                             // add err status to return object
-                    'errMessage'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
+                    'message'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
                 );                                         // add error message to return object
                 return;
             }
@@ -294,7 +294,7 @@ if ($request == "temp") {
     // write output array
     $outObject = array (
         'status'=>'OK',                                             // add err status to return object
-        'errMessage'=>'',                                           // add error message to return object
+        'message'=>'',                                           // add error message to return object
     );
 
     // Echo output array to client
@@ -325,13 +325,13 @@ if ($request == "temp") {
         fputs($logFile, "Line 387 - Error inserting trkPt: $conn->error\r\n");
         $outObject = array (
             'status'=>'NOK',                                             // add err status to return object
-            'errMessage'=>'Error inserting trkPt: ' . $conn->error,  
+            'message'=>'Error inserting trkPt: ' . $conn->error,  
         );                                         // add error message to return object
         return;
     } 
     $outObject = array (
         'status'=>'OK',                                             // add err status to return object
-        'errMessage'=>'',                                           // add error message to return object
+        'message'=>'',                                           // add error message to return object
     );
     echo json_encode($outObject);    
 } 
@@ -382,7 +382,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 444 - Error inserting trkPt: $conn->error\r\n");
         $returnObject = array (
             "status"=>"ERR",
-            "errMessage"=>"Error inserting new track"
+            "message"=>"Error inserting new track"
         );
         return $returnObject;
     } 
@@ -415,7 +415,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         // Create function return object
         $returnObject = array (
             "status"=>"OK",
-            "errMessage"=>"",
+            "message"=>"",
             "trackObj"=>$trackObj
         );
         mysqli_stmt_close($stmt);                                   // Close statement
@@ -425,7 +425,7 @@ function insertTrack($conn,$filename,$uploadfile,$loginname)
         if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 487 - sql: $stmt\r\n");
         $returnObject = array (
             "status"=>"ERR",
-            "errMessage"=>"Error finding trackId"
+            "message"=>"Error finding trackId"
         );
         return $returnObject;
     } 
@@ -617,7 +617,7 @@ function insertTrackPoints($conn,$trackid,$filename)
 
     $returnObject = array (
         "status"=>"OK",
-        "errMessage"=>"",
+        "message"=>"",
         "trackObj"=>$trackObj
     );
 

@@ -10,7 +10,7 @@
 //
 // OUTPUT
 // The script returns a JSON object with following content:
-// ['errmessage'] - only filled with an error message in case of an error
+// ['message'] - only filled with an error message in case of an error
 // ['status']     - 'OK' if no error has occured, 'ERR' in case of an error
 
 // Created: 30.12.2017 - Daniel Leutwyler
@@ -28,6 +28,7 @@ include("config.inc.php");                                                  // I
 // Set debug level
 $debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                                           // Internal counter for tracks processed
+$countSegments = 0;                                                         // Internal counter for segments processed
 
 // Array for the styling of the lines in the kml file
 $styleArray = array(
@@ -111,7 +112,7 @@ if ( $genTrackKml ) {
     $kml[] = '        <open>1</open>';
 
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, trkParticipants, trkSubType, trkCoordinates ";
+    $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhereTracks;
     $sql .= " AND trkCoordinates <> '' ";
@@ -125,7 +126,7 @@ if ( $genTrackKml ) {
     { 
         $countTracks++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
-        $kml[] = '          <name>' . $singleRecord["trkId"] . ": " .  $singleRecord["trkTrackName"] . '</name>';
+        $kml[] = '          <name>' . $singleRecord["trkId"] . ": " .  $singleRecord["trkTrackName"] . " (" . $singleRecord["trkDateBegin"] . ")" . '</name>';
         $kml[] = '          <visibility>1</visibility>';
         $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . '</description>';
 
@@ -166,10 +167,8 @@ if ( $genTrackKml ) {
     fputs($trackOutFile, "$kmlOutput");                                     // Write kml to file
     fclose($trackOutFile);                                                      // close kml file
 }
-$returnMessage = "$countTracks Tracks and ";
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
-$countTracks = 0; 
 
 // ==================================================================
 // If flag is set to generate segments KML
@@ -249,7 +248,7 @@ if ( $genSegKml ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
-        $countTracks++;                                                     // Counter for the number of tracks produced
+        $countSegments++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
@@ -280,12 +279,19 @@ if ( $genSegKml ) {
     // write kml output to file
     fputs($segOutFile, "$kmlOutput");                                       // Write kml to file
     fclose($segOutFile);
-    $returnMessage .= "$countTracks Segments found";
+}
+
+if ( $countTracks && $countSegments ) {
+    $returnMessage = "$countTracks Tracks and $countSegments Segments found"; 
+} else if ( $countTracks ) {
+    $returnMessage = "$countTracks Tracks found"; 
+} else {
+    $returnMessage = "$countSegments Segments found";
 }
 
 // Create return object
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['errMessage'] = $returnMessage;                                           // add empty error message to trackobj
+$returnObject['message'] = $returnMessage;                                           // add empty error message to trackobj
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");

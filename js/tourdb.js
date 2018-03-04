@@ -757,7 +757,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             if ( responseObject["status"] == "OK") {
 
                 // display message
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
 
                 // Delete previously drawn layers 
@@ -845,7 +845,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 sqlWhereTracksPrev = sqlWhereTracks;                            // set to compare if next filter is same as this
                 sqlWhereSegmentsPrev = sqlWhereSegments;
             } else {
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
@@ -947,7 +947,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiAdmTrk').addClass('active');
                 document.getElementById("inputFile").value = "";
             } else {
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
                 document.getElementById("inputFile").value = "";
             } 
@@ -982,7 +982,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
             responseObject = JSON.parse(xhr.responseText);                                              // transfer JSON into response object array
             if ( responseObject.status == 'OK') {
             } else {
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
@@ -1114,10 +1114,10 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
     
     $('#uiAdmTrk_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkCountry = $('#uiAdmTrk_fld_trkCountry').val();   
+    country = $('#uiAdmTrk_fld_trkCountry').val();
+    trackobj.trkCountry = country.toUpperCase();
     valid = valid && checkRegexp ( $('#uiAdmTrk_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
-    //valid = valid && checkLength ( $('#uiAdmTrk_fld_trkCountry'), "Country", 2, 2 );
-    
+     
     trackobj.trkCoordinates = $('#uiAdmTrk_fld_trkCoordinates').val();  
     trackobj.trkLoginName = $loginName;    
 
@@ -1184,7 +1184,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                   });
             } else {
                 // Make panelImport disappear and panelDisplay appear
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }
         });
@@ -1205,7 +1205,7 @@ $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
                 $('#statusMessage').text('Import cancelled');
                 $("#statusMessage").show().delay(5000).fadeOut();
             } else {
-                $('#statusMessage').text(responseObject.errMessage);
+                $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
@@ -1240,7 +1240,7 @@ $(document).on('click', '#buttonExportTracks01JSON', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                               // when all OK
             responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
-            $('#statusMessage').text(responseObject.errMessage);
+            $('#statusMessage').text(responseObject.message);
             $("#statusMessage").show().delay(5000).fadeOut();
         } 
     } 
@@ -1264,7 +1264,7 @@ $(document).on('click', '#buttonExportTracks01CSV', function (e) {
     xhr.onload = function() {
         if (xhr.status === 200) {                                               // when all OK
             responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
-            $('#statusMessage').text(responseObject.errMessage);
+            $('#statusMessage').text(responseObject.message);
             $("#statusMessage").show().delay(5000).fadeOut();
         }
     } 
@@ -1304,9 +1304,9 @@ function updateValComments( text ) {
     valComments
         .text( text )
         .addClass( "ui-state-highlight" );
-    setTimeout(function() {
-        valComments.removeClass( "ui-state-highlight", 1500 );
-    }, 500 );
+    //setTimeout(function() {
+    //    valComments.removeClass( "ui-state-highlight", 1500 );
+    //}, 500 );
 }
 
 // Funtion checking existance of file content in ADD dialog
