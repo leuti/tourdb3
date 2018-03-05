@@ -910,7 +910,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
 
                 // assign returned track values to UI fields
                 trackobj = responseObject.trackObj;
-                $('#uiAdmTrk_fld_trkId').val(trackobj.trkId); 
+                //$('#uiAdmTrk_fld_trkId').val(trackobj.trkId); 
                 $('#uiAdmTrk_fld_trkTrackName').val(trackobj.trkTrackName);    
                 $('#uiAdmTrk_fld_trkRoute').val(trackobj.trkRoute);
                 $('#uiAdmTrk_fld_trkDateBegin').val(trackobj.trkDateBegin);
@@ -1045,7 +1045,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
 
     //$('#uiAdmTrk_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
     //valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkId'), "Track ID" );   // check validity of field
-    trackobj.trkId = $('#uiAdmTrk_fld_trkId').val();                            // assign field value to track object
+    //trackobj.trkId = $('#uiAdmTrk_fld_trkId').val();                            // assign field value to track object
 
     $('#uiAdmTrk_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
     valid = valid && checkExistance ( $('#uiAdmTrk_fld_trkTrackName'), "Track Name" );
@@ -1149,7 +1149,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         })
         .done(function ( responseObject ) {
             if ( responseObject.status == 'OK') {
-                $('#statusMessage').text('Track successfully saved');
+                $('#statusMessage').text(responseObject.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
       
                 // empty items array and redraw empty items array
@@ -1194,36 +1194,10 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
 // On click on the 'cancel' button --> cancel update & delete temp track (call php with xhr in JSON mode)
 $(document).on('click', '#uiAdmTrk_fld_cancel', function (e) {
     e.preventDefault();
-    
-    var xhr = new XMLHttpRequest();                                 // create new xhr object
-    // Execute following code JSON object is received from importGpsTmp.php service
-    xhr.onload = function() {
-        if (xhr.status === 200) {                                   // when all OK
-            if ( responseObject.status == 'OK') {
-                $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
-                $('#uiAdmTrk').removeClass('active');                   // hide update form
-                $('#statusMessage').text('Import cancelled');
-                $("#statusMessage").show().delay(5000).fadeOut();
-            } else {
-                $('#statusMessage').text(responseObject.message);
-                $("#statusMessage").show().delay(5000).fadeOut();
-            }
-        }
-    }
-
-    var trackobj = {};
-    var jsonObject = {};
-    trackobj["trkId"] = $('#uiAdmTrk_fld_trkId').val();
-    
-    //phpLocation = document.URL + "services/importGps.php";          // Variable to store location of php file
-    phpLocation = "services/importGps.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = sessionid;                             // append parameter session ID
-    jsonObject["request"] = 'cancel';                              // temp request to create track temporarily
-    jsonObject["trackobj"] = trackobj;                              // send track object
-    xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
-    xhr.setRequestHeader( "Content-Type", "application/json" );
-    jsn = JSON.stringify(jsonObject);
-    xhr.send( jsn );                                           // send formData object to service using xhr  
+    $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
+    $('#uiAdmTrk').removeClass('active');                   // hide update form
+    $('#statusMessage').text('Import cancelled');
+    $("#statusMessage").show().delay(5000).fadeOut();
 });
 
 // ==========================================================================

@@ -91,7 +91,7 @@ if ($request == "temp") {
     if ($debugLevel >= 3) fputs($logFile, "Line 92: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
 
     // if file type = gpx or kml --> create directory and copy file 
-    if ( $filetype == "gpx" || $filetype == "kml" ) {
+    if ( $filetype == "gpx" ) {
         
         // create upload dir / file name
         $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';      // Session id used to create unique directory
@@ -109,57 +109,191 @@ if ($request == "temp") {
             fputs($logFile, "Line 110 - error uploading file " . $_FILES['filename']['name'] . " to: $uploaddir\r\n"); 
         }  
 
-        // steps processed with gpx files
-        if ( $filetype == "gpx") {
+        // read gpx file structure & content
+        $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
+        $newTrackTime = $gpx->trk->trkseg->trkpt->time;
+        $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
+        $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));// convert track time 
+        $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime)); // convert track time 
+        $trackName = $gpx->trk->name;                                   // Track name  
+        //$trackName = $trackName[0];  
+ 
+        fputs($logFile, "Line 120 - trackName: $trackName\r\n"); 
 
-            // Call function to insert track data
-            $returnObject = insertTrack($conn,$filename,$uploadfile,$loginname);
-            $trackObj = $returnObject["trackObj"];
-            $trackid = $trackObj["trkId"];                          // return id of newly created track                              // track object with all know track data derived from file
-            
-            if ($debugLevel >= 3) fputs($logFile, "Line 121 - trackid: $trackid\r\n");
-        
-            // write content of trackobj1 to log file
-            foreach ($trackObj as $dbField => $value) {
-                $trackObjOut["$dbField"]=$value; 
+        // -------------------------------------------------
+        // Calculate times, meters up/down, distances
+
+        // define variables
+        $tptNumber = 1;                                                 // Set counter for tptNumber to 1
+        $loopCumul = $GLOBALS['loopSize'];                              // loopCumul is the sum of loop sizes processed
+        $coordArray = array();                                          // initialize array to store coordinates in kml style
+        $loop = 0;                                                      // set current loop to 0 (only required for debug purposes)
+        $firstInLoop = 1;                                               // flag first record within loop 
+        $firstTrackPoint = 1;                                           // flag first record within loop 
+        $eleFound = false;                                              // True when an ele <> 0 or "" has be read
+        $overallDistance = (float) 0;
+        $distance = (float) 0;
+
+        $totalTrkPts = count($gpx->trk->trkseg->trkpt);                 // total number of track points in file
+
+        // loop through each trkpt XML element in the gpx file
+        foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        
+        {               
+            // read content of file
+            $lat = $trkpt["lat"];
+            $lon = $trkpt["lon"];
+            if ( $trkpt->ele == "" || $trkpt->ele == 0 ) {
+                $ele = 0;
+            } else {
+                $ele = $trkpt->ele;
+                $eleFound = true;
+            }
+            $ele = $ele * 1;
+            $time = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
+
+            if ($firstInLoop == 1)  {                                   // if record is not first, a comma is written
+
+                // set sql string
+                $firstInLoop = 0;
+                
+                if ( $firstTrackPoint == 1 ) {
+                    // initialise variables
+                    $startTime = $time;
+                    $startEle = $ele;
+                    $peakTime = $time;
+                    $peakEle = $ele;
+                    $lowEle = $ele;
+                    $lowTime = $time;
+                    $meterUp = 0;
+                    $meterDown = 0;
+                    $distance = 0;
+                    $firstTrackPoint = 0;
+                }
+            } else {
+
+                // calc gain values
+                $eleGain = $ele - $previousEle;
+                $eleGainVsPeak = $ele - $peakEle;
+                
+                // calc distance to previous waypoint
+                $distance = haversineGreatCircleDistance(
+                    floatval($previousLat), floatval($previousLon), floatval($lat), floatval($lon), 6371000);
+                $overallDistance = $overallDistance + $distance;
+                
+                // calculate different variable
+                if ( $eleGain > 0 ) {                                   // elevation gained
+                    if ( $eleGainVsPeak > 0 ) {
+                        $peakTime = $time;
+                        $peakEle = $ele;
+                        $meterUp = $meterUp + $eleGain; 
+                    } else {
+                        $meterUp = $meterUp + $eleGain;
+                    }
+                } else {
+                    if ( $eleGainVsPeak < 0 ) {
+                        $lowTime = $time;
+                        $lowEle = $ele;
+                        $meterDown = $meterDown + $eleGain;
+                    } else {
+                        $meterDown = $meterDown + $eleGain;
+                    }
+                }
             }
             
-            // insert track points found in file into table trackpoints with given track id
-            $returnObject = insertTrackPoints($conn,$trackid,$uploadfile);  // Insert new track points; returns array
-
-            // extract track object from return variable and add to variable
-            $trackObj = $returnObject['trackObj'];                  // add status field (OK) to trackobj
-            
-            // write content of trackobj to log file
-            foreach ($trackObj as $dbField => $value) {
-                $trackObjOut["$dbField"]=$value; 
+            if ($GLOBALS['debugLevel']>8) {
+                fputs($GLOBALS['logFile'],"Line 589>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
             }
-
-            // prepare return JSON object
-            $outObject = array (
-                "status"=>"OK",
-                "message"=>"",
-                "trackObj"=>$trackObjOut
-            );
-            echo json_encode($outObject);                           // echo JSON object to client
             
-            // remove imported file & close connections
-            fclose($uploadfile);
-            if (file_exists) unlink ($uploadfile);                  // remove file if existing
-            rmdir($uploaddir, 0777);                                // remove upload directory          
+            $previousEle = $ele;
+            $previousLat = $lat;
+            $previousLon = $lon;
+            
+            // Create coordinate string
+            $coordPoint = "$lon,$lat,$ele ";
+            array_push( $coordArray, $coordPoint );                     // write Lon, Lat and Ele into coordArray array
 
-            $conn->close();                                         // Close DB connection
-
-        } else {
-            fputs($logFile, "Filetype $filetype not supported. Please import as gpx file.\r\n");    
+            $tptNumber++;                                               // increase track point counter by 1
         }
+
+        if ($GLOBALS['debugLevel']>8) {
+            fputs($GLOBALS['logFile'],"Line 630>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
+        }
+
+        // set elevation and time for last point
+        $trkFinishEle = $ele;
+        $trkFinishTime = $time;
+
+        // calculate times 
+        $datetime1 = new DateTime($peakTime);                           //start time
+        $datetime2 = new DateTime($startTime);                          //end time
+        $interval = $datetime1->diff($datetime2);
+        $timeToPeak = $interval->format('%H:%i:%s');
+
+        $datetime1 = new DateTime($time);                               //start time
+        $datetime2 = new DateTime($startTime);                          //end time
+        $interval = $datetime1->diff($datetime2);
+        $overallTime = $interval->format('%H:%i:%s');
+
+        $datetime1 = new DateTime($time);                               //start time
+        $datetime2 = new DateTime($peakTime);                           //end time
+        $interval = $datetime1->diff($datetime2);
+        $timeToFinish = $interval->format('%H:%i:%s');
+
+        // join array $coordArray into a string
+        $coordString = "";
+        foreach ( $coordArray as $coordPoint) {                         // Create string containing the coordinates
+            $coordString = $coordString . $coordPoint; 
+        };
+
+        // write var to track obj
+        $trackObj = array (
+            "trkSourceFileName"=>$filename,
+            "trkTrackName"=>"$trackName",
+            "trkRoute"=>"$trackName",
+            "trkDateBegin"=>$DateBegin,
+            "trkDateFinish"=>$DateFinish,
+            "trkGPSStartTime"=>$GpsStartTime,
+            "trkStartEle"=>$startEle,
+            "trkPeakEle"=>$peakEle,
+            "trkPeakTime"=>$peakTime,
+            "trkLowEle"=>$lowEle,
+            "trkLowTime"=>$lowTime,
+            "trkFinishEle"=>$trkFinishEle,
+            "trkFinishTime"=>$trkFinishTime,
+            "trkTimeToPeak"=>$timeToPeak,
+            "trkTimeToFinish"=>$timeToFinish,
+            "trkTimeOverall"=>$overallTime,
+            "trkMeterDown"=>$meterDown,
+            "trkMeterUp"=>$meterUp,
+            "trkDistance"=>round($overallDistance/1000, 2),
+            "trkCoordinates"=>$coordString,
+            "trkSaison"=>"2017/18 Wi",
+            "trkType"=>"Ski",
+            "trkSubType"=>"Skitour"
+        );
+
+        $returnObject = array (
+            "status"=>"OK",
+            "message"=>"",
+            "trackObj"=>$trackObj
+        );
+
+        // return 
+        echo json_encode($returnObject);                           // echo JSON object to client
+        
+        // remove imported file & close connections
+        fclose($uploadfile);
+        if (file_exists) unlink ($uploadfile);                  // remove file if existing
+        rmdir($uploaddir, 0777);                                // remove upload directory          
     } else {
-        fputs($logFile, "Line 158: extension is NOT kml or gpx: $filetype \r\n");  
+
+        // if filetype is not GPX
+        fputs($logFile, "Line 158: File type is $filetype - only GPX can be processed\r\n");  
 
         // prepare JSON return object
         $outObject = array (
             'status'=>'ERR',                                        // add err status to return object
-            'message'=>'Wrong file extension',                   // add error message to return object
+            'message'=>"File type is $filetype - only GPX can be processed",                   // add error message to return object
         );
         echo json_encode($outObject);                               // echo track object to client
         exit;                                                       // exit from php
@@ -181,25 +315,30 @@ if ($request == "temp") {
     
     if ( $debugLevel >= 3) fputs($logFile, "Line 183: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
-    // Create SQL statement to update temporary track 
-    $sql = "UPDATE `tbl_tracks` SET ";                              // Insert Source file name, gps start time and toReview flag
-    $sql .= "`trkLoginName`='$loginname',";
+    // Create SQL statement to insert track 
+    $sql = " INSERT INTO `tourdb2_prod`.`tbl_tracks` (";
 
     // Loop through received track object and add to SQL statement
     foreach ($trackObjIn as $dbField => $content) {                 // Generate update statement
-        if ( $dbField != 'trkId' ) {
-            $sql .= "`$dbField`='$content',";
-        }
+        $sql .= "`$dbField`,";
     }
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
-    $sql .= " WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"];      
+    $sql .= ") VALUES (";
     
+    // Loop through received track object and add to SQL statement
+    foreach ($trackObjIn as $dbField => $content) {                 // Generate update statement
+        $sql .= "'$content',";
+    }
+    $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
+    $sql .= ")";
+
     if ($debugLevel >= 3) fputs($logFile, "Line 196 - sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {
-        if ( $debugLevel >= 3) fputs($logFile, "Line 201 - New track inserted successfully\r\n");
+        $trkId = $conn->insert_id;
+        if ( $debugLevel >= 3) fputs($logFile, "Line 201 - New track inserted successfully: ID = $trkId\r\n");
     } else {
         fputs($logFile, "Line 203 - Error inserting trkPt: $conn->error\r\n");
         $message = "Error inserting Track: $conn->error";
@@ -225,16 +364,15 @@ if ($request == "temp") {
 
         //create SQL statement  
         $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpReached_f) VALUES ";
-        
         $i=0;
         for ( $i; $i < sizeof($itemsArray); $i++ ) {                   // loop through records in array
             if ( $itemsArray[$i]["disp_f"] == true && ( $itemsArray[$i]["itemType"] == "peak"  || 
             $itemsArray[$i]["itemType"] == "loca" || $itemsArray[$i]["itemType"] == "wayp" )) {                 // disp_f = true when user has not deleted peak on UI
                 $waypRun = true;
-                $sql .= "(" . $trackObjIn["trkId"] . "," . $itemsArray[$i]["itemId"] . "," . $itemsArray[$i]["reached_f"] . "),";  
+                $sql .= "(" . $trkId . "," . $itemsArray[$i]["itemId"] . "," . $itemsArray[$i]["reached_f"] . "),";  
             }
         }
-        if ( $debugLevel >= 3) fputs($logFile, "Line 229 - wayp sql: " . substr($sql,0,100) . "\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line 377 - wayp sql: " . $sql . "\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
@@ -250,6 +388,7 @@ if ($request == "temp") {
                     'status'=>'NOK',                                             // add err status to return object
                     'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
                 );                                         // add error message to return object
+                echo json_encode($outObject); 
                 return;
             }
         } else {
@@ -258,24 +397,24 @@ if ($request == "temp") {
 
         // Insert items into tbl_track_part
 
-        //create SQL statement  
+        // create SQL statement  
         $sql = "INSERT INTO tbl_track_part (trpaTrkId, trpaPartId) VALUES ";
 
         $i=0;
         for ( $i; $i < sizeof($itemsArray); $i++ ) {                   // loop through records in array
             if ( $itemsArray[$i]["disp_f"] == true && $itemsArray[$i]["itemType"] == "part" ) {                 // disp_f = true when user has not deleted part on UI
-                $sql .= "(" . $trackObjIn["trkId"] . "," . $itemsArray[$i]["itemId"] . "),";  
+                $sql .= "(" . $trkId . "," . $itemsArray[$i]["itemId"] . "),";  
                 $partRun = true;
             }
         }
-        if ( $debugLevel >= 6) fputs($logFile, "Line 256 - part sql: $sql\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line 256 - part sql: $sql\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql) - 1 );                       // trim last unnecessary ,
         if ( $partRun ) {
             if ( $conn->query($sql) === TRUE )                                // run sql against DB
             {
-                if ( $debugLevel >= 6) fputs($logFile, "Line 343 - New record in tbl_track_part inserted successfully\r\n");
+                if ( $debugLevel >= 3) fputs($logFile, "Line 343 - New record in tbl_track_part inserted successfully\r\n");
             } else {
                 fputs($logFile, "Line 345 - Error inserting trkPt: $conn->error\r\n");
                 fputs($logFile, "Line 346 - sql: $sql\r\n");
@@ -284,6 +423,7 @@ if ($request == "temp") {
                     'status'=>'NOK',                                             // add err status to return object
                     'message'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
                 );                                         // add error message to return object
+                echo json_encode($outObject); 
                 return;
             }
         } else {
@@ -294,335 +434,13 @@ if ($request == "temp") {
     // write output array
     $outObject = array (
         'status'=>'OK',                                             // add err status to return object
-        'message'=>'',                                           // add error message to return object
+        'message'=>"New track inserted successfully: ID = $trkId",                                           // add error message to return object
     );
 
     // Echo output array to client
-    echo json_encode($outObject);    
-    
-} else if ( $request == "cancel") {
-
-    // ---------------------------------------------------------------------------------
-    // request type is "CANCEL" meaning that track records are updated and finalised
-    // ---------------------------------------------------------------------------------
-
-    // read relevant INPUT parameters
-    $trackObjIn = array();                                          // array storing track data in array
-    $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
-    $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
-
-    // create SQL delete file
-    $sql = "DELETE FROM `tbl_tracks` ";                             // Insert Source file name, gps start time and toReview flag
-    $sql .= "WHERE `tbl_tracks`.`trkId` = " . $trackObjIn["trkId"]; 
-    
-    fputs($logFile, "Line 380 - sql: $sql\r\n");
-    
-    // run SQL statement
-    if ($conn->query($sql) === TRUE)                                // run sql against DB
-    {
-        if ( $debugLevel >= 6) fputs($logFile, "Line 385 - New track inserted successfully\r\n");
-    } else {
-        fputs($logFile, "Line 387 - Error inserting trkPt: $conn->error\r\n");
-        $outObject = array (
-            'status'=>'NOK',                                             // add err status to return object
-            'message'=>'Error inserting trkPt: ' . $conn->error,  
-        );                                         // add error message to return object
-        return;
-    } 
-    $outObject = array (
-        'status'=>'OK',                                             // add err status to return object
-        'message'=>'',                                           // add error message to return object
-    );
-    echo json_encode($outObject);    
+    echo json_encode($outObject);  
+    exit;      
 } 
-
-// =================================================
-// Function to insert tracks to DB
-function insertTrack($conn,$filename,$uploadfile,$loginname)
-{
-    if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 405 - Function insertTrack entered\r\n");
-
-    // read gpx file structure & content
-    $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
-
-    // convert and assign time if available
-    if ( $gpx->metadata->time != "") 
-    {
-        $newTrackTime = $gpx->metadata->time;                       // Assign track time from gpx file to variable
-    } else {
-        $newTrackTime = $gpx->trk->trkseg->trkpt->time;
-    }
-
-    $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-    $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));// convert track time 
-    $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime)); // convert track time 
-    
-    $trackName = $gpx->trk->name;                                   // Track name
-            
-    // create SQL insert statement
-    $sql = "INSERT INTO `tbl_tracks`";                              // Insert Source file name, gps start time and toReview flag
-    $sql .= " (`trkSourceFileName`, `trkTrackName`, `trkGPSStartTime`, ";
-    $sql .= " `trkDateBegin`, `trkDateFinish`, `trkLoginName`) VALUES "; 
-
-    // create value section
-    $sql .= "('" . $filename . "', ";                               // create value bracket statement
-    $sql .= "'" . $trackName . "', ";
-    $sql .= "'" . $GpsStartTime . "', ";
-    $sql .= "'" . $DateBegin . "', ";
-    $sql .= "'" . $DateFinish . "', ";
-    $sql .= "'" . $loginname . "') ";
-
-    if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 437 - sql: $sql\r\n");
-
-    // run insert statement
-    if ($conn->query($sql) === TRUE)                                // run sql against DB
-    {
-        if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 442 - New track inserted successfully\r\n");
-    } else {
-        if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 444 - Error inserting trkPt: $conn->error\r\n");
-        $returnObject = array (
-            "status"=>"ERR",
-            "message"=>"Error inserting new track"
-        );
-        return $returnObject;
-    } 
-
-    // select ID of currently inserted track
-    $sql = "SELECT max(`trkId`) FROM `tbl_tracks` ";                // Search for trkId of record just created
-    
-    // run select statement to return max track ID
-    if ($stmt = mysqli_prepare($conn, $sql)) 
-    {
-        mysqli_stmt_execute($stmt);                                 // execute select statement
-        mysqli_stmt_bind_result($stmt, $trackid);                   // bind result variables
-
-        // Only one line of result is expected
-        while (mysqli_stmt_fetch($stmt)) {                          // Fetch result of sql statement (one result expeced)
-            if ($GLOBALS['debugLevel']>3) fputs($GLOBALS['logFile'], "Line 463 - sql: $sql\r\n");
-            
-            // create JSON object with known gpx data
-            $trackObj = array (
-                "trkId"=>$trackid,
-                "trkSourceFileName"=>"$filename",
-                "trkTrackName"=>"$trackName",
-                "trkRoute"=>"$trackName",
-                "trkDateBegin"=>"$DateBegin",
-                "trkDateFinish"=>"$DateFinish",
-                "trkGPSStartTime"=>"$GpsStartTime"
-            );
-        }
-
-        // Create function return object
-        $returnObject = array (
-            "status"=>"OK",
-            "message"=>"",
-            "trackObj"=>$trackObj
-        );
-        mysqli_stmt_close($stmt);                                   // Close statement
-        return $returnObject;                                       // return tmp trackId, track name and coordinate array in array
-    } else {
-        if ($GLOBALS['debugLevel']>0) fputs($GLOBALS['logFile'], "Line 486 - Error selecting max(trkId): $conn->error\r\n");
-        if ($GLOBALS['debugLevel']>4) fputs($GLOBALS['logFile'], "Line 487 - sql: $stmt\r\n");
-        $returnObject = array (
-            "status"=>"ERR",
-            "message"=>"Error finding trackId"
-        );
-        return $returnObject;
-    } 
-}
-
-// ==========================================================
-// Insert track points into table
-
-function insertTrackPoints($conn,$trackid,$filename) 
-{
-    if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 501 - Function insertTrackPoints entered\r\n");
-    
-    // define variables
-    $tptNumber = 1;                                                 // Set counter for tptNumber to 1
-    $loopCumul = $GLOBALS['loopSize'];                              // loopCumul is the sum of loop sizes processed
-    $coordArray = array();                                          // initialize array to store coordinates in kml style
-    $loop = 0;                                                      // set current loop to 0 (only required for debug purposes)
-    $firstInLoop = 1;                                               // flag first record within loop 
-    $firstTrackPoint = 1;                                           // flag first record within loop 
-    $gpx = simplexml_load_file($filename);                          // Load XML structure
-    $trackName = $gpx->trk->name;  
-    $totalTrkPts = count($gpx->trk->trkseg->trkpt);                 // total number of track points in file
-    $overallDistance = (float) 0;
-    $distance = (float) 0;
-
-    // prepare insert statement
-    $sqlBase = "INSERT INTO `tbl_trackpoints`";                     // create first part of insert statement 
-    $sqlBase .= " (`tptNumber`, `tptTrackFID`, `tptLat`, `tptLon`, ";
-    $sqlBase .= "  `tptEle`, `tptTime`) VALUES "; 
-    
-    // loop through each trkpt XML element in the gpx file
-    foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        
-    {               
-        // read content of file
-        $lat = $trkpt["lat"];
-        $lon = $trkpt["lon"];
-        if ( $trkpt->ele == "" ) {
-            $ele = 0;
-        } else {
-            $ele = $trkpt->ele;
-        }
-        $ele = $ele * 1;
-        $time = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
-    
-        if ($firstInLoop == 1)  {                                   // if record is not first, a comma is written
-    
-            // set sql string
-            $sql = $sqlBase;                                        // Add first part of sql to variable $sql
-            $firstInLoop = 0;
-            
-            if ( $firstTrackPoint == 1 ) {
-                // initialise variables
-                $startTime = $time;
-                $startEle = $ele;
-                $peakTime = $time;
-                $peakEle = $ele;
-                $lowEle = $ele;
-                $lowTime = $time;
-                $meterUp = 0;
-                $meterDown = 0;
-                $distance = 0;
-                $firstTrackPoint = 0;
-            }
-        } else {
-    
-            // if not first record: set comma as separator
-            $sql .= ",";
-            
-            // calc gain values
-            $eleGain = $ele - $previousEle;
-            $eleGainVsPeak = $ele - $peakEle;
-            
-            // calc distance to previous waypoint
-            $distance = haversineGreatCircleDistance(
-                floatval($previousLat), floatval($previousLon), floatval($lat), floatval($lon), 6371000);
-            $overallDistance = $overallDistance + $distance;
-            
-            // calculate different variable
-            if ( $eleGain > 0 ) {                                   // elevation gained
-                if ( $eleGainVsPeak > 0 ) {
-                    $peakTime = $time;
-                    $peakEle = $ele;
-                    $meterUp = $meterUp + $eleGain; 
-                } else {
-                    $meterUp = $meterUp + $eleGain;
-                }
-            } else {
-                if ( $eleGainVsPeak < 0 ) {
-                    $lowTime = $time;
-                    $lowEle = $ele;
-                    $meterDown = $meterDown + $eleGain;
-                } else {
-                    $meterDown = $meterDown + $eleGain;
-                }
-            }
-        }
-        
-        if ($GLOBALS['debugLevel']>8) {
-            fputs($GLOBALS['logFile'],"Line 589>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
-        }
-        
-        $previousEle = $ele;
-        $previousLat = $lat;
-        $previousLon = $lon;
-
-        // generate sql statement
-        $sql .= "('" . $tptNumber . "', ";                          // write tptNumber - a continuous counter for the track points
-        $sql .= "'" . $trackid . "', ";                             // tptTrackFID - reference to the track         
-        $sql .= "'" . $lat . "', ";                                 // tptLat - latitude value 
-        $sql .= "'" . $lon . "', ";                                 // tptLon - longitude value
-        $sql .= "'" . $ele . "', ";                                 // tptEle - elevation of track point
-        $sql .= "'" . $time . "')";                                 // tptTime - time of track point
-        
-        // Create coordinate string
-        $coordPoint = "$lon,$lat,$ele ";
-        array_push( $coordArray, $coordPoint );                     // write Lon, Lat and Ele into coordArray array
-
-        // fire insert statement when no. recs have reached loop size
-        if($tptNumber == $loopCumul || $tptNumber == $totalTrkPts)  // If current loop size or last track is reached
-        {        
-            $loop++;
-            if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'], "Line 612 - loop: $loop\r\n");
-            
-            if ($conn->query($sql) === TRUE) {                      // execute query
-                if ($GLOBALS['debugLevel']>6) fputs($GLOBALS['logFile'],"Line 615 - Sql: " . $sql . "\r\n"); 
-                if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 616 - New track points inserted successfully\r\n");
-                $loopCumul = $loopCumul + $GLOBALS['loopSize'];     // Raise current loop size by overall loop size
-                $firstInLoop = 1;                                   // Next record will be 'first'
-                
-            } else {
-                if ($GLOBALS['debugLevel']>2) fputs($GLOBALS['logFile'],"Line 621 - Sql: " . $sql); 
-                if ($GLOBALS['debugLevel']>1) fputs($GLOBALS['logFile'],"Line 622 - Error inserting trkPt! Error Message: $conn->error\r\n");
-                return;
-            }
-        }       
-        $tptNumber++;                                               // increase track point counter by 1
-    }
-
-    if ($GLOBALS['debugLevel']>8) {
-        fputs($GLOBALS['logFile'],"Line 630>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
-    }
-
-    // set elevation and time for last point
-    $trkFinishEle = $ele;
-    $trkFinishTime = $time;
-
-    // calculate times 
-    $datetime1 = new DateTime($peakTime);                           //start time
-    $datetime2 = new DateTime($startTime);                          //end time
-    $interval = $datetime1->diff($datetime2);
-    $timeToPeak = $interval->format('%H:%i:%s');
-
-    $datetime1 = new DateTime($time);                               //start time
-    $datetime2 = new DateTime($startTime);                          //end time
-    $interval = $datetime1->diff($datetime2);
-    $overallTime = $interval->format('%H:%i:%s');
-    
-    $datetime1 = new DateTime($time);                               //start time
-    $datetime2 = new DateTime($peakTime);                           //end time
-    $interval = $datetime1->diff($datetime2);
-    $timeToFinish = $interval->format('%H:%i:%s');
-
-    // join array $coordArray into a string
-    $coordString = "";
-    foreach ( $coordArray as $coordPoint) {                         // Create string containing the coordinates
-        $coordString = $coordString . $coordPoint; 
-    };
-
-    // write var to track obj
-    $trackObj = array (
-        "trkStartEle"=>$startEle,
-        "trkPeakEle"=>$peakEle,
-        "trkPeakTime"=>$peakTime,
-        "trkLowEle"=>$lowEle,
-        "trkLowTime"=>$lowTime,
-        "trkFinishEle"=>$trkFinishEle,
-        "trkFinishTime"=>$trkFinishTime,
-        "trkTimeToPeak"=>$timeToPeak,
-        "trkTimeToFinish"=>$timeToFinish,
-        "trkTimeOverall"=>$overallTime,
-        "trkMeterDown"=>$meterDown,
-        "trkMeterUp"=>$meterUp,
-        "trkDistance"=>round($overallDistance/1000, 2),
-        "trkCoordinates"=>$coordString,
-        "trkSaison"=>"2017/18 Wi",
-        "trkType"=>"Ski",
-        "trkSubType"=>"Skitour"
-    );
-
-    $returnObject = array (
-        "status"=>"OK",
-        "message"=>"",
-        "trackObj"=>$trackObj
-    );
-
-    return $returnObject;                                           // return tmp trackId, track name and coordinate array in array
-}
 
 function haversineGreatCircleDistance(
 $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
