@@ -133,8 +133,18 @@ if ($request == "temp") {
         $eleFound = false;                                              // True when an ele <> 0 or "" has be read
         $overallDistance = (float) 0;
         $distance = (float) 0;
+        /*
+        $WGS_top_lat = 45;                                               // variables to define min/max lon/lat to diplay track in center of map, focused
+        $WGS_top_lon = 0;
+        $WGS_left_lat = 0;
+        $WGS_left_lon = 10.35;
+        $WGS_right_lat = 0;
+        $WGS_right_lon = 5.50 ;
+        $WGS_bottom_lat = 47.5;
+        $WGS_bottom_lon = 0;
+        */
 
-        $totalTrkPts = count($gpx->trk->trkseg->trkpt);                 // total number of track points in file
+        $totalTrkPts = count($gpx->trk->trkseg->trkpt);                     // total number of track points in file
 
         // loop through each trkpt XML element in the gpx file
         foreach ($gpx->trk->trkseg->trkpt as $trkpt)                        
@@ -142,6 +152,47 @@ if ($request == "temp") {
             // read content of file
             $lat = $trkpt["lat"];
             $lon = $trkpt["lon"];
+            settype($lat,"float");
+            settype($lon,"float");
+
+            if ( $firstTrackPoint == 1 ) {
+                $WGS_top_lat = $lat;
+                $WGS_top_lon = $lon;
+                $WGS_left_lat = $lat;
+                $WGS_left_lon = $lon;
+                $WGS_right_lat = $lat;
+                $WGS_right_lon = $lon;
+                $WGS_bottom_lat = $lat;
+                $WGS_bottom_lon = $lon;
+                fputs($logFile, "Line 170: First run\r\n");     
+            }
+
+            //$CH03_top_lat = WGStoCHy($lat, $lon);
+            //$CH03_top_lon = WGStoCHx($lat, $lon); 
+
+            fputs($logFile, "Line 156 - INPUT --> lat: $lat | lon: $lon \r\n"); 
+
+            if( $lat > $WGS_top_lat ) {                                     // This is the top most point
+                $WGS_top_lat = $lat;
+                $WGS_top_lon = $lon;
+            } else if ( $lat < $WGS_bottom_lat ) {                          // This is the bottom most point
+                $WGS_bottom_lat = $lat;
+                $WGS_bottom_lon = $lon;
+            }           
+            if( $lon > $WGS_right_lon ) {                                  // This is the right most point
+                $WGS_right_lat = $lat;                               
+                $WGS_right_lon = $lon;                               
+            } else if ( $lon < $WGS_left_lon ) {                          // This is the left most point
+                $WGS_left_lat = $lat;                               
+                $WGS_left_lon = $lon;                               
+            }
+
+            fputs($logFile, "Line 156 - WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+            fputs($logFile, "Line 156 - WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+            fputs($logFile, "Line 156 - WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+            fputs($logFile, "Line 156 - WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+            fputs($logFile, "====================================================================\r\n"); 
+
             if ( $trkpt->ele == "" || $trkpt->ele == 0 ) {
                 $ele = 0;
             } else {
@@ -215,8 +266,9 @@ if ($request == "temp") {
             $tptNumber++;                                               // increase track point counter by 1
         }
 
-        if ($GLOBALS['debugLevel']>8) {
-            fputs($GLOBALS['logFile'],"Line 630>ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown\r\n");
+        if ($GLOBALS['debugLevel']>=3) {
+            fputs($GLOBALS['logFile'],"Line 630>WGS_top_lat:$WGS_top_lat|WGS_top_lon:$WGS_top_lon\r\n");
+            //fputs($GLOBALS['logFile'],"Line 589>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
         }
 
         // set elevation and time for last point
@@ -238,7 +290,19 @@ if ($request == "temp") {
         $datetime2 = new DateTime($peakTime);                           //end time
         $interval = $datetime1->diff($datetime2);
         $timeToFinish = $interval->format('%H:%i:%s');
+     
+        $CH03_top_Y = WGStoCHy($WGS_top_lat, $WGS_top_lon);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
+        $CH03_top_X = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
+        $CH03_left_Y = WGStoCHy($WGS_left_lat, $WGS_left_lon);
+        $CH03_left_X = WGStoCHx($WGS_left_lat, $WGS_left_lon);
+        $CH03_right_Y = WGStoCHy($WGS_right_lat, $WGS_right_lon);
+        $CH03_right_X = WGStoCHx($WGS_right_lat, $WGS_right_lon);
+        $CH03_bottom_Y = WGStoCHy($WGS_bottom_lat, $WGS_bottom_lon);
+        $CH03_bottom_X = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
 
+        $coordCenterY = ( $CH03_top_Y + $CH03_bottom_Y ) / 2;
+        $coordCenterX = ( $CH03_right_X + $CH03_left_X ) / 2;
+        
         // join array $coordArray into a string
         $coordString = "";
         foreach ( $coordArray as $coordPoint) {                         // Create string containing the coordinates
@@ -269,14 +333,34 @@ if ($request == "temp") {
             "trkCoordinates"=>$coordString,
             "trkSaison"=>"2017/18 Wi",
             "trkType"=>"Ski",
-            "trkSubType"=>"Skitour"
+            "trkSubType"=>"Skitour",
+            "coordCenterX"=>round($coordCenterX,0),
+            "coordCenterY"=>round($coordCenterY,0)
+            /*
+            "CH03_top_Y"=>$CH03_top_Y,
+            "CH03_top_X"=>$CH03_top_X,
+            "WGS_top_lat"=>"$WGS_top_lat",
+            "WGS_top_lon"=>"$WGS_top_lon",
+            "CH03_right_Y"=>$CH03_right_Y,
+            "CH03_right_X"=>$CH03_right_X,
+            "WGS_right_lat"=>"$WGS_right_lat",
+            "WGS_right_lon"=>"$WGS_right_lon",
+            "CH03_bottom_Y"=>$CH03_bottom_Y,
+            "CH03_bottom_X"=>$CH03_bottom_X,
+            "WGS_bottom_lat"=>$WGS_bottom_lat,
+            "WGS_bottom_lon"=>$WGS_bottom_lon,
+            "CH03_left_Y"=>$CH03_left_Y,
+            "CH03_left_X"=>$CH03_left_X,
+            "WGS_left_lat"=>$WGS_left_lat,
+            "WGS_left_lon"=>$WGS_left_lon,
+            */
         );
 
         $returnObject = array (
             "status"=>"OK",
             "message"=>"",
             "trackObj"=>$trackObj
-        );
+            );
 
         // return 
         echo json_encode($returnObject);                           // echo JSON object to client
@@ -468,4 +552,63 @@ $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000
 
     return $angle * $earthRadius; 
 }
+
+function WGStoCHy($lat, $long) {
+
+    //fputs($GLOBALS['logFile'], "Line 534 - lat: $lat | long: $long \r\n"); 
+
+    // Converts decimal degrees sexagesimal seconds
+    $lat = DECtoSEX($lat);
+    $long = DECtoSEX($long);
+    
+    // Auxiliary values (% Bern)
+    $lat_aux = ($lat - 169028.66)/10000;
+    $long_aux = ($long - 26782.5)/10000;
+    
+    // Process Y
+    $y = 600072.37 
+       + 211455.93 * $long_aux 
+       -  10938.51 * $long_aux * $lat_aux
+       -      0.36 * $long_aux * pow($lat_aux,2)
+       -     44.54 * pow($long_aux,3);
+       
+    return $y;
+  }
+  
+  // Convert WGS lat/long (° dec) to CH x
+  function WGStoCHx($lat, $long) {
+
+    // fputs($GLOBALS['logFile'], "Line 557 - lat: $lat | long: $long \r\n"); 
+
+    // Converts decimal degrees sexagesimal seconds
+    $lat = DECtoSEX($lat);
+    $long = DECtoSEX($long);
+    // Auxiliary values (% Bern)
+    $lat_aux = ($lat - 169028.66)/10000;
+    $long_aux = ($long - 26782.5)/10000;
+    
+    // Process X
+    $x = 200147.07
+       + 308807.95 * $lat_aux 
+       +   3745.25 * pow($long_aux,2)
+       +     76.63 * pow($lat_aux,2)
+       -    194.56 * pow($long_aux,2) * $lat_aux
+       +    119.79 * pow($lat_aux,3);
+         
+    return $x;
+  }
+
+// Convert DEC angle to SEX DMS
+function DECtoSEX($angle) {
+    
+    // fputs($GLOBALS['logFile'], "Line 580 - angle: $angle \r\n"); 
+    
+    // Extract DMS
+    $deg = intval( $angle );
+    $min = intval( ($angle-$deg)*60 );
+    $sec =  ((($angle-$deg)*60)-$min)*60;   
+    // Result in sexagesimal seconds
+    return $sec + $min*60 + $deg*3600;
+  }
+
 ?>

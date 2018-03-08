@@ -941,11 +941,86 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkLowTime = trackobj.trkLowTime;                          
                 $trkFinishEle = trackobj.trkFinishEle;
                 $trkFinishTime = trackobj.trkFinishTime;
+                $coordCenterX = trackobj.coordCenterX;
+                $coordCenterY = trackobj.coordCenterY;
                 
+                // =================================
+                // Draw map & layer (can potentially be outsourced to function)
+
+                // Delete previously drawn layers 
+                map.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
+                    map.removeLayer(el);
+                })
+                
+                // draw new map with center returned by importGpx.php
+                var map = new ga.Map({
+                    target: targetDiv,
+                    view: new ol.View({resolution: 500, center: [coordCenterY, coordCenterx]})
+                });
+                // ----------------------
+            
+                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                map.addLayer(mapSTlayer_grau);                              // add map layer to map
+
+                // Create a background layer
+                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                map.addLayer(mapSTlayer_grau);
+                return map;
+
+                // Draw kml file for tracks 
+                $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+                console.info("filename" + $trackFile);                    
+                // Create the KML Layer for tracks
+                trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                    source: new ol.source.Vector({                          // Set source to kml file
+                        url: $trackFile,
+                        format: new ol.format.KML({
+                            projection: 'EPSG:21781'
+                        })
+                    })
+                });
+                map.addLayer(trackKMLlayer);                                // add track layer to map
+                
+                // Popup showing the position the user clicked
+                var popup = new ol.Overlay({                                    // popup to display track details
+                    element: $('<div title="KML"></div>')[0]
+                });
+                map.addOverlay(popup);
+
+                // On click we display the feature informations (code basis from map admin sample library)
+                map.on('singleclick', function(evt) {
+                    var pixel = evt.pixel;
+                    var coordinate = evt.coordinate;
+                    var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                        return feature;
+                    });
+                    var element = $(popup.getElement());
+                    element.popover('destroy');
+                    if (feature) {
+                    popup.setPosition(coordinate);
+                    element.popover({
+                        'placement': 'top',
+                        'animation': false,
+                        'html': true,
+                        'content': feature.get('name')
+                    });
+                    element.popover('show');
+                    }
+                });
+
+                // Change cursor style when cursor is hover over a feature
+                map.on('pointermove', function(evt) {
+                    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                        return feature;
+                    });
+                    map.getTargetElement().style.cursor = feature ? 'pointer' : '';
+                });
+
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
                 $('#uiAdmTrk').addClass('active');
-                document.getElementById("inputFile").value = "";
+                //document.getElementById("inputFile").value = "";
+
             } else {
                 $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
