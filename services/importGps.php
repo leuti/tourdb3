@@ -216,7 +216,7 @@ if ($request == "temp") {
                     $lowEle = $ele;
                     $lowTime = $time;
                     $meterUp = 0;
-                    $meterDown = 0;
+                    $meterDown = -0;
                     $distance = 0;
                     $firstTrackPoint = 0;
                 }

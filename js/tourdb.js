@@ -372,7 +372,8 @@ $(document).ready(function() {
 
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut(); 
-                    map = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                    tourdbMap = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                    //drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                 }
             }
         }
@@ -764,11 +765,11 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
                     && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
                     $clickedButton == 'dispFilSeg_NewLoadButton' )) {           // User has clicked New Load button
-                    map.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
-                        map.removeLayer(el);
+                    tourdbMap.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
+                        tourdbMap.removeLayer(el);
                     })
                     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                    map.addLayer(mapSTlayer_grau);                              // add map layer to map
+                    tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
                 }
 
                 // Draw kml file for tracks 
@@ -784,7 +785,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                             })
                         })
                     });
-                    map.addLayer(trackKMLlayer);                                // add track layer to map
+                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
                 }
 
                 if ( genSegKml ) {                                              // var is true when user has set filter on segments
@@ -799,20 +800,20 @@ $(document).on('click', '.applyFilterButton', function (e) {
                             })
                         })
                     });
-                    map.addLayer(segKMLlayer);                                  // add segment layer to map
+                    tourdbMap.addLayer(segKMLlayer);                                  // add segment layer to map
                 }
 
                 // Popup showing the position the user clicked
                 var popup = new ol.Overlay({                                    // popup to display track details
                     element: $('<div title="KML"></div>')[0]
                 });
-                map.addOverlay(popup);
+                tourdbMap.addOverlay(popup);
 
                 // On click we display the feature informations (code basis from map admin sample library)
-                map.on('singleclick', function(evt) {
+                tourdbMap.on('singleclick', function(evt) {
                     var pixel = evt.pixel;
                     var coordinate = evt.coordinate;
-                    var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                    var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
                         return feature;
                     });
                     var element = $(popup.getElement());
@@ -830,11 +831,11 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 });
 
                 // Change cursor style when cursor is hover over a feature
-                map.on('pointermove', function(evt) {
-                    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                tourdbMap.on('pointermove', function(evt) {
+                    var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
                         return feature;
                     });
-                    map.getTargetElement().style.cursor = feature ? 'pointer' : '';
+                    tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
                 });
 
                 $('.dispObjOpen').removeClass('visible');
@@ -944,78 +945,6 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $coordCenterX = trackobj.coordCenterX;
                 $coordCenterY = trackobj.coordCenterY;
                 
-                // =================================
-                // Draw map & layer (can potentially be outsourced to function)
-
-                // Delete previously drawn layers 
-                map.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
-                    map.removeLayer(el);
-                })
-                
-                // draw new map with center returned by importGpx.php
-                var map = new ga.Map({
-                    target: targetDiv,
-                    view: new ol.View({resolution: 500, center: [coordCenterY, coordCenterx]})
-                });
-                // ----------------------
-            
-                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                map.addLayer(mapSTlayer_grau);                              // add map layer to map
-
-                // Create a background layer
-                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                map.addLayer(mapSTlayer_grau);
-                return map;
-
-                // Draw kml file for tracks 
-                $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
-                console.info("filename" + $trackFile);                    
-                // Create the KML Layer for tracks
-                trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                    source: new ol.source.Vector({                          // Set source to kml file
-                        url: $trackFile,
-                        format: new ol.format.KML({
-                            projection: 'EPSG:21781'
-                        })
-                    })
-                });
-                map.addLayer(trackKMLlayer);                                // add track layer to map
-                
-                // Popup showing the position the user clicked
-                var popup = new ol.Overlay({                                    // popup to display track details
-                    element: $('<div title="KML"></div>')[0]
-                });
-                map.addOverlay(popup);
-
-                // On click we display the feature informations (code basis from map admin sample library)
-                map.on('singleclick', function(evt) {
-                    var pixel = evt.pixel;
-                    var coordinate = evt.coordinate;
-                    var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-                        return feature;
-                    });
-                    var element = $(popup.getElement());
-                    element.popover('destroy');
-                    if (feature) {
-                    popup.setPosition(coordinate);
-                    element.popover({
-                        'placement': 'top',
-                        'animation': false,
-                        'html': true,
-                        'content': feature.get('name')
-                    });
-                    element.popover('show');
-                    }
-                });
-
-                // Change cursor style when cursor is hover over a feature
-                map.on('pointermove', function(evt) {
-                    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                        return feature;
-                    });
-                    map.getTargetElement().style.cursor = feature ? 'pointer' : '';
-                });
-
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
                 $('#uiAdmTrk').addClass('active');
@@ -1203,7 +1132,9 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkLowEle = $trkLowEle;                            
     trackobj.trkLowTime = $trkLowTime;                          
     trackobj.trkFinishEle = $trkFinishEle;                      
-    trackobj.trkFinishTime = $trkFinishTime;                    
+    trackobj.trkFinishTime = $trkFinishTime;  
+    //trackobj.coordCenterX = $coordCenterX;
+    //trackobj.coordCenterY = $coordCenterY;                 
 
     if ( valid ) { 
         phpLocation = "services/importGps.php";                                 // Variable to store location of php file
@@ -1242,7 +1173,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 // Open Panel Display
                 var $activeButtonA = $('#navBtns_btn_diplay_a');                // Store the current link <a> element
                 buttonId = $activeButtonA.attr('href'); 
-                
+
                 // Run following block if selected topic is currently not active
                 $topicButton.removeClass('active');                             // Make current panel inactive
                 $activeButton.removeClass('active');                            // Make current tab inactive
@@ -1257,6 +1188,48 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 $( "#uiAdmTrk" ).tabs({
                     active: 0
                   });
+                
+                // Draw map & layer (can potentially be outsourced to function)
+                var kmlFiles = [];
+                //kmlFiles.push(document.URL + "tmp/kml_disp/" + sessionid + "</tracks.kml");
+                kmlFiles.push("../tmp/kml_disp/" + sessionid + "_tracks.kml");
+                $resolution = 500;
+                //tourdbMap = drawMap( tourdbMap, 'displayMap-ResMap', $resolution, $coordCenterX, $coordCenterY, kmlFiles );
+                //drawMap( tourdbMap, 'displayMap-ResMap', $resolution, $coordCenterX, $coordCenterY, kmlFiles );
+
+                // ---- Should be function
+                var element = document.getElementById('displayMap-ResMap');
+                var parent = element.parentNode
+                parent.removeChild(element);
+                parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+               
+                // Draw empty map & center to provided coordinate
+                var tourdbMap = new ga.Map({
+                    target: 'displayMap-ResMap',
+                    view: new ol.View({resolution: $resolution, center: [$coordCenterY, $coordCenterX]})
+                });
+                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+
+                // Draw kml file for each file delivered in kmlFiles array
+                for (var i = 0; i < kmlFiles.length; i++) {
+
+                    //kmlFile = kmlFiles[i];
+                    kmlFile = "tmp/kml_disp/" + sessionid + "_tracks.kml"; 
+
+                    // Create the KML Layer for tracks
+                    layer = new ol.layer.Vector({                       // create new vector layer for tracks
+                        source: new ol.source.Vector({                          // Set source to kml file
+                            url: kmlFile,
+                            format: new ol.format.KML({
+                                projection: 'EPSG:21781'
+                            })
+                        })
+                    });
+                    tourdbMap.addLayer(layer);                                // add track layer to map    
+                }
+                // --- Should be function 
+                
             } else {
                 // Make panelImport disappear and panelDisplay appear
                 $('#statusMessage').text(responseObject.message);
@@ -1334,15 +1307,96 @@ $(document).on('click', '#buttonExportTracks01CSV', function (e) {
 // Function drawing empty map -- for documentation see: https://api3.geo.admin.ch/
 function drawMapEmpty(targetDiv) {
     
-    var map = new ga.Map({
+    var tourdbMap = new ga.Map({
         target: targetDiv,
         view: new ol.View({resolution: 500, center: [660000, 190000]})
     });
 
     // Create a background layer
     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-    map.addLayer(mapSTlayer_grau);
-    return map;
+    tourdbMap.addLayer(mapSTlayer_grau);
+    return tourdbMap;
+}
+
+function drawMap( targetDiv, resolution, coordCenterX, coordCenterY, kmlFiles ) {
+
+    // parameters:
+    // targetDiv: ID of target div
+    // resolution: map resolution 
+    // coordCenterX / Y: location of map center
+    // kmlFiles: Array of KML files which need to be displayed
+
+    // Delete previously drawn map
+
+    // Delete previously drawn layers 
+    tourdbMap.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
+        tourdbMap.removeLayer(el);
+    })
+    mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+    tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+    
+    // Draw empty map & center to provided coordinate
+    var tourdbMap = new ga.Map({
+        target: targetDiv,
+        view: new ol.View({resolution: resolution, center: [coordCenterY, coordCenterX]})
+    });
+
+    // Create a background layer
+    mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+    tourdbMap.addLayer(mapSTlayer_grau);
+    
+    // Draw kml file for each file delivered in kmlFiles array
+    for (var i = 0; i < kmlFiles.length; i++) {
+
+        kmlFile = kmlFiles[i];
+
+        // Create the KML Layer for tracks
+        layer = new ol.layer.Vector({                       // create new vector layer for tracks
+            source: new ol.source.Vector({                          // Set source to kml file
+                url: kmlFile,
+                format: new ol.format.KML({
+                    projection: 'EPSG:21781'
+                })
+            })
+        });
+        tourdbMap.addLayer(layer);                                // add track layer to map    
+    } 
+/*
+    // Popup showing the position the user clicked
+    var popup = new ol.Overlay({                                    // popup to display track details
+        element: $('<div title="KML"></div>')[0]
+    });
+    tourdbMap.addOverlay(popup);
+
+    // On click we display the feature informations (code basis from map admin sample library)
+    tourdbMap.on('singleclick', function(evt) {
+        var pixel = evt.pixel;
+        var coordinate = evt.coordinate;
+        var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            return feature;
+        });
+        var element = $(popup.getElement());
+        element.popover('destroy');
+        if (feature) {
+        popup.setPosition(coordinate);
+        element.popover({
+            'placement': 'top',
+            'animation': false,
+            'html': true,
+            'content': feature.get('name')
+        });
+        element.popover('show');
+        }
+    });
+
+    // Change cursor style when cursor is hover over a feature
+    tourdbMap.on('pointermove', function(evt) {
+        var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return feature;
+        });
+        tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
+    });
+*/
 }
 
 // ==================================================
