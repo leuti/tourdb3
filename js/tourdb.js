@@ -761,6 +761,23 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 $('#statusMessage').text(responseObject.message);
                 $("#statusMessage").show().delay(5000).fadeOut();
 
+                var element = document.getElementById('displayMap-ResMap');
+                var parent = element.parentNode
+                parent.removeChild(element);
+                parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+                
+                $resolution = 500;
+                $coordCenterY = 660000; 
+                $coordCenterX = 190000;
+            
+                // Draw empty map & center to provided coordinate
+                var tourdbMap = new ga.Map({
+                    target: 'displayMap-ResMap',
+                    view: new ol.View({resolution: $resolution, center: [$coordCenterY, $coordCenterX]})
+                });
+                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+
                 // Delete previously drawn layers 
                 if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
                     && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
