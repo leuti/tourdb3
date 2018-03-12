@@ -216,7 +216,7 @@ if ($request == "temp") {
                     $lowEle = $ele;
                     $lowTime = $time;
                     $meterUp = 0;
-                    $meterDown = -0;
+                    $meterDown = 0;
                     $distance = 0;
                     $firstTrackPoint = 0;
                 }
@@ -275,6 +275,11 @@ if ($request == "temp") {
         $trkFinishEle = $ele;
         $trkFinishTime = $time;
 
+        if ( $meterDown == 0 ) {
+            $meterDown = "-0";
+            fputs($GLOBALS['logFile'],"Line 280 - meter down: $meterDown\r\n");
+        }
+
         // calculate times 
         $datetime1 = new DateTime($peakTime);                           //start time
         $datetime2 = new DateTime($startTime);                          //end time
@@ -331,6 +336,7 @@ if ($request == "temp") {
             "trkMeterUp"=>$meterUp,
             "trkDistance"=>round($overallDistance/1000, 2),
             "trkCoordinates"=>$coordString,
+            "trkCountry"=>"CH",
             "trkSaison"=>"2017/18 Wi",
             "trkType"=>"Ski",
             "trkSubType"=>"Skitour",
@@ -519,6 +525,7 @@ if ($request == "temp") {
     $outObject = array (
         'status'=>'OK',                                             // add err status to return object
         'message'=>"New track inserted successfully: ID = $trkId",                                           // add error message to return object
+        'trkId'=>$trkId 
     );
 
     // Echo output array to client

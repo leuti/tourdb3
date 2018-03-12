@@ -775,7 +775,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 // Draw kml file for tracks 
                 if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
                     $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
-                    console.info("filename" + $trackFile);                    
+                    //console.info("filename" + $trackFile);                    
                     // Create the KML Layer for tracks
                     trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
                         source: new ol.source.Vector({                          // Set source to kml file
@@ -1145,7 +1145,8 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
         jsonObject.trackobj = trackobj;                                         // send track object
         jsn = JSON.stringify ( jsonObject );
 
-        // Perform ajax call to php ( this was necessary because I did not success to send two dimensional array otherwise )
+        // Perform ajax call to php to save trackObject in table Tracks and other tables
+        // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
         $.ajax({
             url: phpLocation,
             type: "POST",
@@ -1154,7 +1155,140 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
             data: jsn
         })
         .done(function ( responseObject ) {
+
+            // Track object successfully stored in DB
             if ( responseObject.status == 'OK') {
+
+                // ------------------------------
+                // Gen KML for imported File
+                var xhr = new XMLHttpRequest();
+
+                // Draw map with imported track in center
+                xhr.onload = function() {
+                    if (xhr.status === 200) {  
+                        responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
+                        
+                        if ( responseObject["status"] == "OK") {
+                            
+                            // display message
+                            $('#statusMessage').text(responseObject.message);
+                            $("#statusMessage").show().delay(5000).fadeOut();
+            
+                            var element = document.getElementById('displayMap-ResMap');
+                            var parent = element.parentNode
+                            parent.removeChild(element);
+                            parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+                            $resolution = 500;
+                        
+                            // Draw empty map & center to provided coordinate
+                            var tourdbMap = new ga.Map({
+                                target: 'displayMap-ResMap',
+                                view: new ol.View({resolution: $resolution, center: [$coordCenterY, $coordCenterX]})
+                            });
+                            mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                            tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+                            /*
+                            // Delete previously drawn layers 
+                            if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
+                                && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
+                                $clickedButton == 'dispFilSeg_NewLoadButton' )) {           // User has clicked New Load button
+                                tourdbMap.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
+                                    tourdbMap.removeLayer(el);
+                                })
+                                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+                            }*/
+            
+                            // Draw kml file for tracks 
+                            if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
+                                $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+                                //console.info("filename" + $trackFile);                    
+                                // Create the KML Layer for tracks
+                                trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                                    source: new ol.source.Vector({                          // Set source to kml file
+                                        url: $trackFile,
+                                        format: new ol.format.KML({
+                                            projection: 'EPSG:21781'
+                                        })
+                                    })
+                                });
+                                tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
+                            }
+                            /*
+                            if ( genSegKml ) {                                              // var is true when user has set filter on segments
+                                $segFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
+            
+                                // Create the KML Layer for segments
+                                segKMLlayer = new ol.layer.Vector({                         // create new vector layer for tracks
+                                    source: new ol.source.Vector({                          // Set source to kml file
+                                        url: $segFile,
+                                        format: new ol.format.KML({
+                                            projection: 'EPSG:21781'
+                                        })
+                                    })
+                                });
+                                tourdbMap.addLayer(segKMLlayer);                                  // add segment layer to map
+                            }*/
+            
+                            // Popup showing the position the user clicked
+                            var popup = new ol.Overlay({                                    // popup to display track details
+                                element: $('<div title="KML"></div>')[0]
+                            });
+                            tourdbMap.addOverlay(popup);
+            
+                            // On click we display the feature informations (code basis from map admin sample library)
+                            tourdbMap.on('singleclick', function(evt) {
+                                var pixel = evt.pixel;
+                                var coordinate = evt.coordinate;
+                                var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                                    return feature;
+                                });
+                                var element = $(popup.getElement());
+                                element.popover('destroy');
+                                if (feature) {
+                                popup.setPosition(coordinate);
+                                element.popover({
+                                    'placement': 'top',
+                                    'animation': false,
+                                    'html': true,
+                                    'content': feature.get('name')
+                                });
+                                element.popover('show');
+                                }
+                            });
+            
+                            // Change cursor style when cursor is hover over a feature
+                            tourdbMap.on('pointermove', function(evt) {
+                                var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                                    return feature;
+                                });
+                                tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
+                            });
+            
+                        }
+                    }
+                };     
+
+                // Create where statement (to be changed --> trkId to be returned after save)
+                sqlWhereTracks = "WHERE trkId=" + responseObject["trkId"];
+                genTrackKml = true;
+                sqlWhereSegments = "";
+                genSegKml = false;
+                
+                // send required parameters to gen_kml.php
+                var jsonObject = {};
+                phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
+                jsonObject["sessionid"] = sessionid;                                    // send session ID
+                jsonObject["sqlWhereTracks"] = sqlWhereTracks;                          // send where statement for tracks
+                jsonObject["genTrackKml"] = genTrackKml;                                // send where statement for segments 
+                jsonObject["sqlWhereSegments"] = sqlWhereSegments;                             
+                jsonObject["genSegKml"] = genSegKml;                                    // append parameter session ID
+                xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
+                xhr.setRequestHeader( "Content-Type", "application/json" );
+                jsn = JSON.stringify(jsonObject);
+                xhr.send( jsn );                                                        // send formData object to service using xhr   
+                // ------------------------------
+
                 $('#statusMessage').text(responseObject.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
       
@@ -1189,6 +1323,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                     active: 0
                   });
                 
+                /*
                 // Draw map & layer (can potentially be outsourced to function)
                 var kmlFiles = [];
                 //kmlFiles.push(document.URL + "tmp/kml_disp/" + sessionid + "</tracks.kml");
@@ -1228,10 +1363,12 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                     });
                     tourdbMap.addLayer(layer);                                // add track layer to map    
                 }
+                */
                 // --- Should be function 
                 
             } else {
-                // Make panelImport disappear and panelDisplay appear
+                // Track and / related tables could not be correctly inserted
+                // Task?: Make panelImport disappear and panelDisplay appear
                 $('#statusMessage').text(responseObject.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }
@@ -1361,7 +1498,7 @@ function drawMap( targetDiv, resolution, coordCenterX, coordCenterY, kmlFiles ) 
         });
         tourdbMap.addLayer(layer);                                // add track layer to map    
     } 
-/*
+    /*
     // Popup showing the position the user clicked
     var popup = new ol.Overlay({                                    // popup to display track details
         element: $('<div title="KML"></div>')[0]
@@ -1396,7 +1533,7 @@ function drawMap( targetDiv, resolution, coordCenterX, coordCenterY, kmlFiles ) 
         });
         tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
     });
-*/
+    */
 }
 
 // ==================================================
