@@ -344,26 +344,6 @@ if ($request == "temp") {
             "trkCoordBottom"=>round($CH03_bottom_Y, 0),
             "trkCoordLeft"=>round($CH03_left_X, 0),
             "trkCoordRight"=>round($CH03_right_X, 0)
-            /*
-            "coordCenterX"=>round($coordCenterX,0),
-            "coordCenterY"=>round($coordCenterY,0)
-            "CH03_top_Y"=>$CH03_top_Y,
-            "CH03_top_X"=>$CH03_top_X,
-            "WGS_top_lat"=>"$WGS_top_lat",
-            "WGS_top_lon"=>"$WGS_top_lon",
-            "CH03_right_Y"=>$CH03_right_Y,
-            "CH03_right_X"=>$CH03_right_X,
-            "WGS_right_lat"=>"$WGS_right_lat",
-            "WGS_right_lon"=>"$WGS_right_lon",
-            "CH03_bottom_Y"=>$CH03_bottom_Y,
-            "CH03_bottom_X"=>$CH03_bottom_X,
-            "WGS_bottom_lat"=>$WGS_bottom_lat,
-            "WGS_bottom_lon"=>$WGS_bottom_lon,
-            "CH03_left_Y"=>$CH03_left_Y,
-            "CH03_left_X"=>$CH03_left_X,
-            "WGS_left_lat"=>$WGS_left_lat,
-            "WGS_left_lon"=>$WGS_left_lon,
-            */
         );
 
         $returnObject = array (

@@ -1188,6 +1188,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 // Gen KML for imported File
                 var xhr = new XMLHttpRequest();
 
+                // gen_kml.php has generated kml file and returns to js
                 // Draw map with imported track in center
                 xhr.onload = function() {
                     if (xhr.status === 200) {  
@@ -1198,6 +1199,13 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                             // display message
                             $('#statusMessage').text(responseObject.message);
                             $("#statusMessage").show().delay(5000).fadeOut();
+
+                            var coordTop = responseObject.coordTop * 1;
+                            var coordBottom = responseObject.coordBottom * 1;
+                            var coordLeft = responseObject.coordLeft * 1;
+                            var coordRight = responseObject.coordRight * 1;
+                            var coordCenterY = ( coordTop + coordBottom ) / 2;
+                            var coordCenterX = ( coordRight + coordLeft ) / 2;
             
                             var element = document.getElementById('displayMap-ResMap');
                             var parent = element.parentNode

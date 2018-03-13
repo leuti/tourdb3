@@ -29,6 +29,7 @@ include("config.inc.php");                                                  // I
 $debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                                           // Internal counter for tracks processed
 $countSegments = 0;                                                         // Internal counter for segments processed
+$firstRecord = true;
 
 // Array for the styling of the lines in the kml file
 $styleArray = array(
@@ -112,7 +113,8 @@ if ( $genTrackKml ) {
     $kml[] = '        <open>1</open>';
 
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates ";
+    $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates, ";
+    $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhereTracks;
     $sql .= " AND trkCoordinates <> '' ";
@@ -124,6 +126,14 @@ if ( $genTrackKml ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
+        // Set Coord when current record is first
+        if ( $firstRecord ) {
+            $coordTop = $singleRecord["trkCoordTop"];                               // Max 297000
+            $coordBottom = $singleRecord["trkCoordBottom"];                         // Min  74000
+            $coordLeft = $singleRecord["trkCoordLeft"];                             // Min 110000
+            $coordRight = $singleRecord["trkCoordRight"];                           // Max 840000
+        }
+
         $countTracks++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["trkId"]) . '">';
         $kml[] = '          <name>' . $singleRecord["trkId"] . ": " .  $singleRecord["trkTrackName"] . " (" . $singleRecord["trkDateBegin"] . ")" . '</name>';
@@ -153,6 +163,23 @@ if ( $genTrackKml ) {
         $kml[] = '            </coordinates>';
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
+
+        // evaluate coord boundaries
+        if ( !$firstRecord ) {
+            if ( $singleRecord["trkCoordTop"] > $coordTop ) {
+                $coordTop = $singleRecord["trkCoordTop"];
+            }
+            if ( $singleRecord["trkCoordBottom"] < $coordBottom ) {
+                $coordBottom = $singleRecord["trkCoordBottom"];
+            }
+            if ( $singleRecord["trkCoordLeft"] < $coordLeft ) {
+                $coordLeft = $singleRecord["trkCoordLeft"];
+            }
+            if ( $singleRecord["trkCoordRight"] > $coordRight ) {
+                $coordRight = $singleRecord["trkCoordRight"];
+            }
+        }
+        $firstRecord = false;
     };
 
     // Write KML trailer
@@ -235,6 +262,7 @@ if ( $genSegKml ) {
     $sql .= "vw_segments.sourceRef, vw_segments.grade, vw_segments.coordinates, ";
     $sql .= "TIME_FORMAT(tStartTarget, '%h:%i') AS timeUp FROM vw_segments ";
     $sql .= "INNER JOIN tbl_waypoints ON vw_segments.segTargetLocFID = tbl_waypoints.waypID ";
+    $sql .= "segCoordTop, segCoordBottom, segCoordLeft, segCoordRight ";
     $sql .= $sqlWhereSegments;
     $sql .= " AND coordinates <> '' ";
 
@@ -248,6 +276,14 @@ if ( $genSegKml ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
+        // Set Coord when current record is first
+        if ( $firstRecord ) {
+            $coordTop = $singleRecord["segCoordTop"];                               // Max 297000
+            $coordBottom = $singleRecord["segCoordBottom"];                         // Min  74000
+            $coordLeft = $singleRecord["segCoordLeft"];                             // Min 110000
+            $coordRight = $singleRecord["segCoordRight"];                           // Max 840000
+        }
+
         $countSegments++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
@@ -266,6 +302,23 @@ if ( $genSegKml ) {
         $kml[] = '            </coordinates>';
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
+    
+        // evaluate coord boundaries
+        if ( !$firstRecord ) {
+            if ( $singleRecord["trkCoordTop"] > $coordTop ) {
+                $coordTop = $singleRecord["trkCoordTop"];
+            }
+            if ( $singleRecord["trkCoordBottom"] < $coordBottom ) {
+                $coordBottom = $singleRecord["trkCoordBottom"];
+            }
+            if ( $singleRecord["trkCoordLeft"] < $coordLeft ) {
+                $coordLeft = $singleRecord["trkCoordLeft"];
+            }
+            if ( $singleRecord["trkCoordRight"] > $coordRight ) {
+                $coordRight = $singleRecord["trkCoordRight"];
+            }
+        }
+        $firstRecord = false;
     };
 
     // Write KML trailer
@@ -281,6 +334,7 @@ if ( $genSegKml ) {
     fclose($segOutFile);
 }
 
+// evaluate how many tracks and segments were found and add this info to return message
 if ( $countTracks && $countSegments ) {
     $returnMessage = "$countTracks Tracks and $countSegments Segments found"; 
 } else if ( $countTracks ) {
@@ -291,7 +345,11 @@ if ( $countTracks && $countSegments ) {
 
 // Create return object
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['message'] = $returnMessage;                                           // add empty error message to trackobj
+$returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+$returnObject['coordTop'] = $coordTop;
+$returnObject['coordBottom'] = $coordBottom;
+$returnObject['coordLeft'] = $coordLeft;
+$returnObject['coordRight'] = $coordRight;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
