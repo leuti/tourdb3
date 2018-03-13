@@ -297,16 +297,16 @@ if ($request == "temp") {
         $timeToFinish = $interval->format('%H:%i:%s');
      
         $CH03_top_Y = WGStoCHy($WGS_top_lat, $WGS_top_lon);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
-        $CH03_top_X = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
-        $CH03_left_Y = WGStoCHy($WGS_left_lat, $WGS_left_lon);
+        //$CH03_top_X = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
+        //$CH03_left_Y = WGStoCHy($WGS_left_lat, $WGS_left_lon);
         $CH03_left_X = WGStoCHx($WGS_left_lat, $WGS_left_lon);
-        $CH03_right_Y = WGStoCHy($WGS_right_lat, $WGS_right_lon);
+        //$CH03_right_Y = WGStoCHy($WGS_right_lat, $WGS_right_lon);
         $CH03_right_X = WGStoCHx($WGS_right_lat, $WGS_right_lon);
         $CH03_bottom_Y = WGStoCHy($WGS_bottom_lat, $WGS_bottom_lon);
-        $CH03_bottom_X = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
+        //$CH03_bottom_X = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
 
-        $coordCenterY = ( $CH03_top_Y + $CH03_bottom_Y ) / 2;
-        $coordCenterX = ( $CH03_right_X + $CH03_left_X ) / 2;
+        //$coordCenterY = ( $CH03_top_Y + $CH03_bottom_Y ) / 2;
+        //$coordCenterX = ( $CH03_right_X + $CH03_left_X ) / 2;
         
         // join array $coordArray into a string
         $coordString = "";
@@ -340,9 +340,13 @@ if ($request == "temp") {
             "trkSaison"=>"2017/18 Wi",
             "trkType"=>"Ski",
             "trkSubType"=>"Skitour",
+            "trkCoordTop"=>round($CH03_top_Y, 0),
+            "trkCoordBottom"=>round($CH03_bottom_Y, 0),
+            "trkCoordLeft"=>round($CH03_left_X, 0),
+            "trkCoordRight"=>round($CH03_right_X, 0)
+            /*
             "coordCenterX"=>round($coordCenterX,0),
             "coordCenterY"=>round($coordCenterY,0)
-            /*
             "CH03_top_Y"=>$CH03_top_Y,
             "CH03_top_X"=>$CH03_top_X,
             "WGS_top_lat"=>"$WGS_top_lat",
@@ -398,10 +402,10 @@ if ($request == "temp") {
     // ----------------------------------------------------
 
     // read received INPUT object
-    $trackObjIn = array();                                          // array storing track data in array
+    $trackobj = array();                                          // array storing track data in array
     $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
     $loginname = $receivedData["loginname"];
-    $trackObjIn = $receivedData["trackobj"];                        // Array of track data 
+    $trackobj = $receivedData["trackobj"];                        // Array of track data 
     
     if ( $debugLevel >= 3) fputs($logFile, "Line 183: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
     
@@ -409,14 +413,14 @@ if ($request == "temp") {
     $sql = " INSERT INTO `tourdb2_prod`.`tbl_tracks` (";
 
     // Loop through received track object and add to SQL statement
-    foreach ($trackObjIn as $dbField => $content) {                 // Generate update statement
+    foreach ($trackobj as $dbField => $content) {                 // Generate update statement
         $sql .= "`$dbField`,";
     }
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
     $sql .= ") VALUES (";
     
     // Loop through received track object and add to SQL statement
-    foreach ($trackObjIn as $dbField => $content) {                 // Generate update statement
+    foreach ($trackobj as $dbField => $content) {                 // Generate update statement
         $sql .= "'$content',";
     }
     $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,

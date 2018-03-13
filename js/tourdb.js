@@ -959,8 +959,12 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkLowTime = trackobj.trkLowTime;                          
                 $trkFinishEle = trackobj.trkFinishEle;
                 $trkFinishTime = trackobj.trkFinishTime;
-                $coordCenterX = trackobj.coordCenterX;
-                $coordCenterY = trackobj.coordCenterY;
+                $trkCoordTop = trackobj.trkCoordTop;
+                $trkCoordBottom = trackobj.trkCoordBottom;
+                $trkCoordLeft = trackobj.trkCoordLeft;
+                $trkCoordRight = trackobj.trkCoordRight;
+                //$coordCenterX = trackobj.coordCenterX;
+                //$coordCenterY = trackobj.coordCenterY;
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
@@ -1150,6 +1154,10 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkLowTime = $trkLowTime;                          
     trackobj.trkFinishEle = $trkFinishEle;                      
     trackobj.trkFinishTime = $trkFinishTime;  
+    trackobj.trkCoordTop = $trkCoordTop;
+    trackobj.trkCoordBottom = $trkCoordBottom;
+    trackobj.trkCoordLeft = $trkCoordLeft;
+    trackobj.trkCoordRight = $trkCoordRight;
     //trackobj.coordCenterX = $coordCenterX;
     //trackobj.coordCenterY = $coordCenterY;                 
 
