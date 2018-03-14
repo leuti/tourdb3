@@ -188,9 +188,9 @@ if ($request == "temp") {
             }
 
             fputs($logFile, "Line 156 - WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
-            fputs($logFile, "Line 156 - WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
             fputs($logFile, "Line 156 - WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
             fputs($logFile, "Line 156 - WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+            fputs($logFile, "Line 156 - WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
             fputs($logFile, "====================================================================\r\n"); 
 
             if ( $trkpt->ele == "" || $trkpt->ele == 0 ) {
@@ -267,7 +267,7 @@ if ($request == "temp") {
         }
 
         if ($GLOBALS['debugLevel']>=3) {
-            fputs($GLOBALS['logFile'],"Line 630>WGS_top_lat:$WGS_top_lat|WGS_top_lon:$WGS_top_lon\r\n");
+            fputs($GLOBALS['logFile'],"Line 630: WGS_top_lat:$WGS_top_lat|WGS_top_lon:$WGS_top_lon\r\n");
             //fputs($GLOBALS['logFile'],"Line 589>tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
         }
 
@@ -296,15 +296,20 @@ if ($request == "temp") {
         $interval = $datetime1->diff($datetime2);
         $timeToFinish = $interval->format('%H:%i:%s');
      
-        $CH03_top_Y = WGStoCHy($WGS_top_lat, $WGS_top_lon);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
-        //$CH03_top_X = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
-        //$CH03_left_Y = WGStoCHy($WGS_left_lat, $WGS_left_lon);
-        $CH03_left_X = WGStoCHx($WGS_left_lat, $WGS_left_lon);
-        //$CH03_right_Y = WGStoCHy($WGS_right_lat, $WGS_right_lon);
-        $CH03_right_X = WGStoCHx($WGS_right_lat, $WGS_right_lon);
-        $CH03_bottom_Y = WGStoCHy($WGS_bottom_lat, $WGS_bottom_lon);
-        //$CH03_bottom_X = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
+        $trkCoordTop = WGStoCHx($WGS_top_lat, $WGS_top_lon);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
+        //$trkCoordTop = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
+        //$trkCoordLeft = WGStoCHy($WGS_left_lat, $WGS_left_lon);
+        $trkCoordLeft = WGStoCHy($WGS_left_lat, $WGS_left_lon);
+        //$trkCoordRight = WGStoCHy($WGS_right_lat, $WGS_right_lon);
+        $trkCoordRight = WGStoCHy($WGS_right_lat, $WGS_right_lon);
+        $trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
+        //$trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
 
+        fputs($logFile, "Line 308 - trkCoordTop: $trkCoordTop --> WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+        fputs($logFile, "Line 308 - trkCoordBottom: $trkCoordBottom --> WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+        fputs($logFile, "Line 308 - trkCoordLeft: $trkCoordLeft --> WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+        fputs($logFile, "Line 308 - trkCoordRight: $trkCoordRight --> WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+        fputs($logFile, "=============================================================================================================\r\n"); 
         //$coordCenterY = ( $CH03_top_Y + $CH03_bottom_Y ) / 2;
         //$coordCenterX = ( $CH03_right_X + $CH03_left_X ) / 2;
         
@@ -340,10 +345,10 @@ if ($request == "temp") {
             "trkSaison"=>"2017/18 Wi",
             "trkType"=>"Ski",
             "trkSubType"=>"Skitour",
-            "trkCoordTop"=>round($CH03_top_Y, 0),
-            "trkCoordBottom"=>round($CH03_bottom_Y, 0),
-            "trkCoordLeft"=>round($CH03_left_X, 0),
-            "trkCoordRight"=>round($CH03_right_X, 0)
+            "trkCoordTop"=>round($trkCoordTop, 0),
+            "trkCoordBottom"=>round($trkCoordBottom, 0),
+            "trkCoordLeft"=>round($trkCoordLeft, 0),
+            "trkCoordRight"=>round($trkCoordRight, 0)
         );
 
         $returnObject = array (
@@ -546,6 +551,7 @@ $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000
 
 function WGStoCHy($lat, $long) {
 
+    // I have renamed function to X (from Y) and vice versa
     //fputs($GLOBALS['logFile'], "Line 534 - lat: $lat | long: $long \r\n"); 
 
     // Converts decimal degrees sexagesimal seconds

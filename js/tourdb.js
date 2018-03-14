@@ -766,14 +766,14 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 parent.removeChild(element);
                 parent.innerHTML = '<div id="displayMap-ResMap"></div>';
                 
-                $resolution = 500;
-                $coordCenterY = 660000; 
-                $coordCenterX = 190000;
+                resolution = 500;
+                coordCenterY = 660000; 
+                coordCenterX = 190000;
             
                 // Draw empty map & center to provided coordinate
                 var tourdbMap = new ga.Map({
                     target: 'displayMap-ResMap',
-                    view: new ol.View({resolution: $resolution, center: [$coordCenterY, $coordCenterX]})
+                    view: new ol.View({resolution: resolution, center: [coordCenterY, coordCenterX]})
                 });
                 mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
                 tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
@@ -963,8 +963,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkCoordBottom = trackobj.trkCoordBottom;
                 $trkCoordLeft = trackobj.trkCoordLeft;
                 $trkCoordRight = trackobj.trkCoordRight;
-                //$coordCenterX = trackobj.coordCenterX;
-                //$coordCenterY = trackobj.coordCenterY;
+                //coordCenterX = trackobj.coordCenterX;
+                //coordCenterY = trackobj.coordCenterY;
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
@@ -1158,8 +1158,8 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
     trackobj.trkCoordBottom = $trkCoordBottom;
     trackobj.trkCoordLeft = $trkCoordLeft;
     trackobj.trkCoordRight = $trkCoordRight;
-    //trackobj.coordCenterX = $coordCenterX;
-    //trackobj.coordCenterY = $coordCenterY;                 
+    //trackobj.coordCenterX = coordCenterX;
+    //trackobj.coordCenterY = coordCenterY;                 
 
     if ( valid ) { 
         phpLocation = "services/importGps.php";                                 // Variable to store location of php file
@@ -1200,6 +1200,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                             $('#statusMessage').text(responseObject.message);
                             $("#statusMessage").show().delay(5000).fadeOut();
 
+                            // Derive center of map to be projected
                             var coordTop = responseObject.coordTop * 1;
                             var coordBottom = responseObject.coordBottom * 1;
                             var coordLeft = responseObject.coordLeft * 1;
@@ -1207,35 +1208,34 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                             var coordCenterY = ( coordTop + coordBottom ) / 2;
                             var coordCenterX = ( coordRight + coordLeft ) / 2;
             
+                            // delete existing map object and set empty div
                             var element = document.getElementById('displayMap-ResMap');
                             var parent = element.parentNode
                             parent.removeChild(element);
                             parent.innerHTML = '<div id="displayMap-ResMap"></div>';
-                            $resolution = 500;
+
+                            // Calculate required resolution
+                            resolution1 = ( coordTop - coordBottom ) / 200;
+                            resolution2 = ( coordRight - coordLeft ) / 200;
+                            if ( resolution1 > resolution2 ) {
+                                resolution = resolution1;
+                            } else {
+                                resolution = resolution2;
+                            }
                         
+                            console.info("resolution: " + resolution + " - CoordCenterX: " + coordCenterX + " - CoordCenterY: " + coordCenterY);
                             // Draw empty map & center to provided coordinate
                             var tourdbMap = new ga.Map({
                                 target: 'displayMap-ResMap',
-                                view: new ol.View({resolution: $resolution, center: [$coordCenterY, $coordCenterX]})
+                                view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
                             });
                             mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
                             tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
-                            /*
-                            // Delete previously drawn layers 
-                            if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
-                                && ( $clickedButton == 'dispFilTrk_NewLoadButton' ||
-                                $clickedButton == 'dispFilSeg_NewLoadButton' )) {           // User has clicked New Load button
-                                tourdbMap.getLayers().forEach(function(el) {                      // Loop through all map layers and remove them
-                                    tourdbMap.removeLayer(el);
-                                })
-                                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
-                            }*/
-            
+                            
                             // Draw kml file for tracks 
                             if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
                                 $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
-                                //console.info("filename" + $trackFile);                    
+                            
                                 // Create the KML Layer for tracks
                                 trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
                                     source: new ol.source.Vector({                          // Set source to kml file
@@ -1247,22 +1247,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                                 });
                                 tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
                             }
-                            /*
-                            if ( genSegKml ) {                                              // var is true when user has set filter on segments
-                                $segFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
-            
-                                // Create the KML Layer for segments
-                                segKMLlayer = new ol.layer.Vector({                         // create new vector layer for tracks
-                                    source: new ol.source.Vector({                          // Set source to kml file
-                                        url: $segFile,
-                                        format: new ol.format.KML({
-                                            projection: 'EPSG:21781'
-                                        })
-                                    })
-                                });
-                                tourdbMap.addLayer(segKMLlayer);                                  // add segment layer to map
-                            }*/
-            
+                            
                             // Popup showing the position the user clicked
                             var popup = new ol.Overlay({                                    // popup to display track details
                                 element: $('<div title="KML"></div>')[0]
