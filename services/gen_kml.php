@@ -303,7 +303,7 @@ if ( $genSegKml ) {
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
     
-        // evaluate coord boundaries
+        // evaluate if current record needs to extend coord boundaries
         if ( !$firstRecord ) {
             if ( $singleRecord["trkCoordTop"] > $coordTop ) {
                 $coordTop = $singleRecord["trkCoordTop"];

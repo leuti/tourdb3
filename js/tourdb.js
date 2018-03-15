@@ -757,26 +757,70 @@ $(document).on('click', '.applyFilterButton', function (e) {
             
             if ( responseObject["status"] == "OK") {
 
-                // display message
-                $('#statusMessage').text(responseObject.message);
-                $("#statusMessage").show().delay(5000).fadeOut();
+                var latOut = 0;                                                  // counter for coord boundary resets (Top/Bottom)
+                var lonOut = 0;
+                var resolution = 0; resolution1 = 0, resolution2 = 0;
 
+                // delete current map
                 var element = document.getElementById('displayMap-ResMap');
                 var parent = element.parentNode
                 parent.removeChild(element);
                 parent.innerHTML = '<div id="displayMap-ResMap"></div>';
                 
-                resolution = 500;
-                coordCenterY = 660000; 
-                coordCenterX = 190000;
-            
+                // Derive center of map to be projected
+                var coordTop = responseObject.coordTop * 1;
+                if ( coordTop > 300000 || coordTop < 70000 || coordTop == 0 ) {
+                    coordTop = 297000;                                          // Limit coord boundaries to Switzerland
+                    latOut++;
+                }
+                var coordBottom = responseObject.coordBottom * 1;
+                if ( coordBottom < 70000 || coordBottom > 300000 || coordBottom == 0 ) {
+                    coordBottom = 74000;                                        // Limit coord boundaries to Switzerland
+                    latOut++;
+                }
+                var coordLeft = responseObject.coordLeft * 1;
+                if ( coordLeft < 105000 || coordLeft > 845000 || coordLeft == 0 ) {
+                    coordLeft = 110000;                                         // Limit coord boundaries to Switzerland
+                    lonOut++;
+                }
+                var coordRight = responseObject.coordRight * 1;
+                if ( coordRight > 845000 || coordRight < 105000 || coordRight == 0 ) {
+                    coordRight = 840000;                                        // Limit coord boundaries to Switzerland
+                    lonOut++;
+                }
+
+                // Evluate coord center (if route is outside CH - show empty CH map)
+                var coordCenterY = ( coordTop + coordBottom ) / 2;
+                if ( latOut == 2 || lonOut == 2 ) {
+                    coordCenterY = 190000;                       // latOut = 2 means that both lat points are outside CH
+                    coordTop = 297000;
+                    coordBottom = 74000;
+                }
+
+                var coordCenterX = ( coordRight + coordLeft ) / 2;
+                if ( latOut == 2 || lonOut == 2 ) {
+                    coordCenterX = 660000;                       // lonOut = 2 means that both lon points are outside CH
+                    coordRight = 840000;
+                    coordLeft = 110000;
+                }
+
+                // Calculate required resolution
+                resolution1 = ( coordTop - coordBottom ) / 200;
+                resolution2 = ( coordRight - coordLeft ) / 200;
+                if ( resolution1 > resolution2 ) {
+                    resolution = resolution1;
+                } else {
+                    resolution = resolution2;
+                }
+
+                console.info("resolution: " + resolution + " - CoordCenterX: " + coordCenterX + " - CoordCenterY: " + coordCenterY);
                 // Draw empty map & center to provided coordinate
                 var tourdbMap = new ga.Map({
                     target: 'displayMap-ResMap',
-                    view: new ol.View({resolution: resolution, center: [coordCenterY, coordCenterX]})
+                    view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
                 });
                 mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+                tourdbMap.addLayer(mapSTlayer_grau);   
 
                 // Delete previously drawn layers 
                 if ( ( trackKMLlayer || segKMLlayer )                           // var are true when user has set filter
@@ -854,6 +898,14 @@ $(document).on('click', '.applyFilterButton', function (e) {
                     });
                     tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
                 });
+
+                // display message
+                if ( latOut > 0 ) {
+                    $('#statusMessage').text("Not all objects could be (fully) displayey");    
+                } else {
+                    $('#statusMessage').text(responseObject.message);
+                }
+                $("#statusMessage").show().delay(5000).fadeOut();
 
                 $('.dispObjOpen').removeClass('visible');
                 $('.dispObjOpen').addClass('hidden');
@@ -1195,24 +1247,51 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                         responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
                         
                         if ( responseObject["status"] == "OK") {
-                            
-                            // display message
-                            $('#statusMessage').text(responseObject.message);
-                            $("#statusMessage").show().delay(5000).fadeOut();
 
-                            // Derive center of map to be projected
-                            var coordTop = responseObject.coordTop * 1;
-                            var coordBottom = responseObject.coordBottom * 1;
-                            var coordLeft = responseObject.coordLeft * 1;
-                            var coordRight = responseObject.coordRight * 1;
-                            var coordCenterY = ( coordTop + coordBottom ) / 2;
-                            var coordCenterX = ( coordRight + coordLeft ) / 2;
-            
+                            var latOut = 0;                                                 // counter for coord boundary resets
+                            var lonOut = 0;
                             // delete existing map object and set empty div
                             var element = document.getElementById('displayMap-ResMap');
                             var parent = element.parentNode
                             parent.removeChild(element);
                             parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+                            
+                            // Derive center of map to be projected
+                            var coordTop = responseObject.coordTop * 1;
+                            if ( coordTop > 300000 || coordTop < 70000 || coordTop == 0 ) {
+                                coordTop = 297000;                                          // Limit coord boundaries to Switzerland
+                                latOut++;
+                            }
+                            var coordBottom = responseObject.coordBottom * 1;
+                            if ( coordBottom < 70000 || coordBottom > 300000 || coordBottom == 0 ) {
+                                coordBottom = 74000;                                        // Limit coord boundaries to Switzerland
+                                latOut++;
+                            }
+                            var coordLeft = responseObject.coordLeft * 1;
+                            if ( coordLeft < 105000 || coordLeft > 845000 || coordLeft == 0 ) {
+                                coordLeft = 110000;                                         // Limit coord boundaries to Switzerland
+                                lonOut++;
+                            }
+                            var coordRight = responseObject.coordRight * 1;
+                            if ( coordRight > 845000 || coordRight < 105000 || coordRight == 0 ) {
+                                coordRight = 840000;                                        // Limit coord boundaries to Switzerland
+                                lonOut++;
+                            }
+
+                            // Evluate coord center (if route is outside CH - show empty CH map)
+                            var coordCenterY = ( coordTop + coordBottom ) / 2;
+                            if ( latOut == 2 || lonOut == 2 ) {
+                                coordCenterY = 190000;                       // latOut = 2 means that both lat points are outside CH
+                                coordTop = 297000;
+                                coordBottom = 74000;
+                            }
+
+                            var coordCenterX = ( coordRight + coordLeft ) / 2;
+                            if ( latOut == 2 || lonOut == 2 ) {
+                                coordCenterX = 660000;                       // lonOut = 2 means that both lon points are outside CH
+                                coordRight = 840000;
+                                coordLeft = 110000;
+                            }
 
                             // Calculate required resolution
                             resolution1 = ( coordTop - coordBottom ) / 200;
@@ -1222,7 +1301,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                             } else {
                                 resolution = resolution2;
                             }
-                        
+            
                             console.info("resolution: " + resolution + " - CoordCenterX: " + coordCenterX + " - CoordCenterY: " + coordCenterY);
                             // Draw empty map & center to provided coordinate
                             var tourdbMap = new ga.Map({
@@ -1283,6 +1362,13 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                                 tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
                             });
             
+                            // display message
+                            if ( latOut > 0 ) {
+                                $('#statusMessage').text("Not all objects could be (fully) displayey");    
+                            } else {
+                                $('#statusMessage').text(responseObject.message);
+                            }
+                            $("#statusMessage").show().delay(5000).fadeOut();
                         }
                     }
                 };     
