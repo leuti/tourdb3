@@ -95,77 +95,72 @@ $sql .= "GROUP BY waypNameLong, waypAltitude, wtypCode, waypCoordWGS84E, waypCoo
     $sql .= $sqlFilterString;  
     $sql .= " ORDER BY wtypNameShort ";
 */    
-    if ($debugLevel >= 1){
-        fputs($fp, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
-    };
-
-    $waypoints = mysqli_query($conn, $sql);
-
-    //Write document header
-    /*$kml[] = '<?xml version="1.0" encoding="UTF-8"?>';*/
-    $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '; 
-    $kml[] = 'xsi:schemaLocation="http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd">';
-    $kml[] = '<Document>';
-	$kml[] = '<name>Waypoints</name>';
-	//$kml[] = '<open>1</open>';
-    
-    while($waypoint = mysqli_fetch_assoc($waypoints)){ // loop through each waypoint with coordinates
-
-        $kml[] = '<Placemark id="marker_' . $waypoint["trwpWaypID"] .'">';
-        $kml[] = '   <name>' . $waypoint["waypNameLong"] . '</name>';
-        $kml[] = '   <description>' . $waypoint["trwpWaypID"] . ': '. $waypoint["waypNameLong"] . ' (' . $waypoint["waypAltitude"] . 'm)</description>';
-        $kml[] = '   <Style>';
-        $kml[] = '      <IconStyle>';
-        $kml[] = '          <Icon>';
-        $kml[] = '              <href>./images/' . $waypoint["wtypCode"] . '16.png</href>';
-        //$kml[] = '              <href>https://api3.geo.admin.ch/color/255,0,0/marker-24@2x.png</href>';
-        $kml[] = '              <gx:w>48</gx:w>';
-        $kml[] = '              <gx:h>48</gx:h>';   
-        $kml[] = '          </Icon>';
-        $kml[] = '          <hotSpot x="24" y="24" xunits="pixels" yunits="pixels"/>';
-        $kml[] = '      </IconStyle>';
-        $kml[] = '      <LabelStyle>';
-        $kml[] = '          <color>ff0000ff</color>';
-        $kml[] = '     	</LabelStyle>';
-        $kml[] = '   </Style>';
-        $kml[] = '   <Point>';
-        $kml[] = '      <coordinates>' . $waypoint["waypCoordWGS84E"] . ',' . $waypoint["waypCoordWGS84N"] . ',0</coordinates>';
-        $kml[] = '   </Point>';
-        $kml[] = '</Placemark>';
-    };
-        $kml[] = '</Document>';
-        $kml[] = '</kml>';
-    // Merge kml array into one variable
-    $kmlOutput = join("\n", $kml);
-
-    echo $kmlOutput;
-
-    // Define header so that the PHP file generates a KML
-    fputs($fp, "waypKmlFileName " . $_POST["waypKmlFileName"] . "\r\n");
-    if(isset($_POST["waypKmlFileName"])){
-        $fp_kml = @fopen($_POST["waypKmlFileName"],"w");
-        if(!$fp_kml){
-            fputs($fp, "Error opening files\r\n");
-        };
-    }else{
-		$fp_kml = @fopen("tourDbWaypoints.kml","w");
-        fputs($fp, "File name not set\r\n");
-	};
-    
-    if ($debugLevel >= 5){
-        fputs($fp, $kmlOutput);
-    }; 
-
-    fputs($fp_kml, $kmlOutput);
-    fclose($fp_kml);
-    
-    if ($debugLevel >= 1){
-        fputs($fp, date("Ymd-H:i:s", time()) . "-Line 102: KML File written to: " . $_POST["waypKmlFileName"] . "\r\n");
-        fclose($fp);
-    }; 
-}else{
-    if ($debugLevel >= 3){
-        fputs($fp, date("Ymd-H:i:s", time()) . "-Line 107: Invalid parameters!!\r\n");
-    };
+if ($debugLevel >= 1){
+    fputs($fp, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
 };
+
+$waypoints = mysqli_query($conn, $sql);
+
+//Write document header
+/*$kml[] = '<?xml version="1.0" encoding="UTF-8"?>';*/
+$kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '; 
+$kml[] = 'xsi:schemaLocation="http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd">';
+$kml[] = '<Document>';
+$kml[] = '<name>Waypoints</name>';
+//$kml[] = '<open>1</open>';
+
+while($waypoint = mysqli_fetch_assoc($waypoints)){ // loop through each waypoint with coordinates
+
+    $kml[] = '<Placemark id="marker_' . $waypoint["trwpWaypID"] .'">';
+    $kml[] = '   <name>' . $waypoint["waypNameLong"] . '</name>';
+    $kml[] = '   <description>' . $waypoint["trwpWaypID"] . ': '. $waypoint["waypNameLong"] . ' (' . $waypoint["waypAltitude"] . 'm)</description>';
+    $kml[] = '   <Style>';
+    $kml[] = '      <IconStyle>';
+    $kml[] = '          <Icon>';
+    $kml[] = '              <href>./images/' . $waypoint["wtypCode"] . '16.png</href>';
+    //$kml[] = '              <href>https://api3.geo.admin.ch/color/255,0,0/marker-24@2x.png</href>';
+    $kml[] = '              <gx:w>48</gx:w>';
+    $kml[] = '              <gx:h>48</gx:h>';   
+    $kml[] = '          </Icon>';
+    $kml[] = '          <hotSpot x="24" y="24" xunits="pixels" yunits="pixels"/>';
+    $kml[] = '      </IconStyle>';
+    $kml[] = '      <LabelStyle>';
+    $kml[] = '          <color>ff0000ff</color>';
+    $kml[] = '     	</LabelStyle>';
+    $kml[] = '   </Style>';
+    $kml[] = '   <Point>';
+    $kml[] = '      <coordinates>' . $waypoint["waypCoordWGS84E"] . ',' . $waypoint["waypCoordWGS84N"] . ',0</coordinates>';
+    $kml[] = '   </Point>';
+    $kml[] = '</Placemark>';
+};
+    $kml[] = '</Document>';
+    $kml[] = '</kml>';
+// Merge kml array into one variable
+$kmlOutput = join("\n", $kml);
+
+echo $kmlOutput;
+
+// Define header so that the PHP file generates a KML
+fputs($fp, "waypKmlFileName " . $_POST["waypKmlFileName"] . "\r\n");
+if(isset($_POST["waypKmlFileName"])){
+    $fp_kml = @fopen($_POST["waypKmlFileName"],"w");
+    if(!$fp_kml){
+        fputs($fp, "Error opening files\r\n");
+    };
+}else{
+    $fp_kml = @fopen("tourDbWaypoints.kml","w");
+    fputs($fp, "File name not set\r\n");
+};
+
+if ($debugLevel >= 5){
+    fputs($fp, $kmlOutput);
+}; 
+
+fputs($fp_kml, $kmlOutput);
+fclose($fp_kml);
+
+if ($debugLevel >= 1){
+    fputs($fp, date("Ymd-H:i:s", time()) . "-Line 102: KML File written to: " . $_POST["waypKmlFileName"] . "\r\n");
+    fclose($fp);
+    }; 
 ?>
