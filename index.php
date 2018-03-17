@@ -394,9 +394,57 @@
 						</div>
 
 						<!-- Segment Section of Accordion -->
-						<h2>Waypoints</h2>
+						<h2>Additional Items to display</h2>
 						<div class="accordionBackground">
-							<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+							<fieldset>
+
+								<!-- SEGMENT filter -->
+								<legend class="filterHeader">Peaks</legend>
+
+								<p>
+									<label for="dispObjPeaks_100" class="labelFirst">Peaks < 1000m</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_100" class="text ui-widget-content ui-corner-all">
+								</p>
+								<p>
+									<label for="dispObjPeaks_1000" class="labelFirst">Peaks (1000m - 1999m)</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_1000" class="text ui-widget-content ui-corner-all">
+								</p>
+								<p>
+									<label for="dispObjPeaks_2000" class="labelFirst">Peaks (2000m - 2999m)</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_2000" class="text ui-widget-content ui-corner-all">
+								</p>
+								<p>
+									<label for="dispObjPeaks_3000" class="labelFirst">Peaks (3000m - 3999m)</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_3000" class="text ui-widget-content ui-corner-all">
+								</p>
+								<p>
+									<label for="dispObjPeaks_4000" class="labelFirst">Peaks (4000m - 4999m)</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_4000" class="text ui-widget-content ui-corner-all">
+								</p>
+								<p>
+									<label for="dispObjPeaks_cant" class="labelFirst">Peaks (Top of Cantons)</label>
+									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_cant" class="text ui-widget-content ui-corner-all">
+								</p>
+							</fieldset>				
+
+							<fieldset>
+
+								<!-- SEGMENT filter -->
+								<legend class="filterHeader">Others</legend>
+
+								<p>
+									<label for="dispObjLocs" class="dispObjSel labelFirst">Hütten</label>
+									<input type="checkbox" name="dispObjLocs" id="dispObjLocs" class="text ui-widget-content ui-corner-all">
+								</p>
+								<!-- Button to newly display selection -->
+								<div class="dispObjCriteria">
+										<input type="submit" class="button applyFilterButton" id="dispFilWayp_NewLoadButton" value="New Load" />
+									</div>
+								<!-- Button to add selection to existing objects -->
+								<div class="dispObjCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispFilWayp_addObjButton" value="Add Items" />
+								</div>
+							</fieldset>								
 						</div>
 
 					</div>

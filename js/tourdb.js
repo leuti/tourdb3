@@ -681,8 +681,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
         for (i=0; i<selected.length; ++i) {
             whereString += "'" + selected[i] + "',";
         }
-    whereString = whereString.slice(0,whereString.length-1) + ")"; 
-    whereStatement.push( whereString );                                         // Add to where Statement array
+        whereString = whereString.slice(0,whereString.length-1) + ")"; 
+        whereStatement.push( whereString );                                         // Add to where Statement array
     }
     
     // Field climbGrade
@@ -701,8 +701,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
         for (i=0; i<selected.length; ++i) {
             whereString += "'" + selected[i] + "',";
         }
-    whereString = whereString.slice(0,whereString.length-1) + ")"; 
-    whereStatement.push( whereString );                                         // Add to where Statement array
+        whereString = whereString.slice(0,whereString.length-1) + ")"; 
+        whereStatement.push( whereString );                                         // Add to where Statement array
     }
 
     // Field Ernsthaftigkeit
@@ -719,7 +719,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             whereStatement.push( whereString );                                 // Add to where Statement array
         };
     });
-
+   
     // *******************************************
     // ========= Put all where statements together
     //
@@ -751,6 +751,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
     }
 
     var xhr = new XMLHttpRequest();
+
+    // onload triggered when generation of tracks and segments
     xhr.onload = function() {
         if (xhr.status === 200) {  
             responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
@@ -919,7 +921,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 $("#statusMessage").show().delay(5000).fadeOut();
             }
         }
-    }
+    };
 
     // Check if one of the buttons is clicked and the filter has been set
     if ( ( $clickedButton == 'dispFilTrk_addObjButton' || $clickedButton == 'dispFilTrk_NewLoadButton' || 
@@ -943,6 +945,152 @@ $(document).on('click', '.applyFilterButton', function (e) {
         $("#statusMessage").show().delay(5000).fadeOut();
         document.getElementById("inputFile").value = "";                        // Reset field for input file
     }
+
+    // ********************************************************************************************
+    // ****** Display waypoints
+    var dispSelected = {};
+
+    $('.dispObjSel').each(function() {
+        var itemId = this.id;
+        dispSelected[itemId] = this.checked;
+    });
+
+    /*
+    dispSelected[1] = document.getElementById("dispObjPeaks").checked;
+    dispObj4000er = document.getElementById("dispObj4000er").checked;
+    dispObjLocs = document.getElementById("dispObjLocs").checked;
+    */
+
+    var jsonObject = {};
+    phpLocation = "services/gen_wayp.php";                                  // Variable to store location of php file
+    jsonObject.sessionid = sessionid;                                       // append parameter session ID
+    jsonObject.loginname = $loginName;                                      // set login name
+    jsonObject.dispSelected = dispSelected;
+    
+    // generate kml for peaks
+    if ( dispObjPeaks ) {
+    
+        jsonObject.request = 'peaks';                                            // temp request to create track temporarily
+        jsn = JSON.stringify ( jsonObject );
+
+        // Perform ajax call to php generate kml for peaks
+        // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
+        $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: jsn
+        })
+        .done(function ( responseObject ) {
+           
+            //responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
+
+            // delete current map
+            var element = document.getElementById('displayMap-ResMap');
+            var parent = element.parentNode
+            parent.removeChild(element);
+            parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+
+            var tourdbMap = new ga.Map({
+                target: 'displayMap-ResMap',
+                view: new ol.View({resolution: 500, center: [660000, 190000]})
+            });
+            mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+            tourdbMap.addLayer(mapSTlayer_grau);   
+            
+            if ( responseObject.status == 'OK') {
+                $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks.kml";
+
+                // Create the KML Layer for tracks
+                trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                    source: new ol.source.Vector({                          // Set source to kml file
+                        url: $trackFile,
+                        format: new ol.format.KML({
+                            projection: 'EPSG:21781'
+                        })
+                    })
+                });
+                tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map                       
+            } else {
+                // generation of peaks KML returned error
+            }
+        });
+    };
+
+    // display kml for 4000er
+    if ( dispObj4000er ) {
+    
+        jsonObject.request = '4000';                                            // temp request to create track temporarily
+        jsn = JSON.stringify ( jsonObject );
+
+        // Perform ajax call to php generate kml for peaks
+        // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
+        $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: jsn
+        })
+        .done(function ( responseObject ) {
+            if (xhr.status === 200) {  
+                responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
+                
+                if ( responseObject["status"] == "OK") {
+                    $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/4000er.kml";
+                    // Create the KML Layer for tracks
+                    trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                        source: new ol.source.Vector({                          // Set source to kml file
+                            url: $trackFile,
+                            format: new ol.format.KML({
+                                projection: 'EPSG:21781'
+                            })
+                        })
+                    });
+                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map                    
+                }
+            };
+        });
+    };
+
+    // display huts
+    if ( dispObjLocs ) {
+    
+        jsonObject.request = 'locs';                                            // temp request to create track temporarily
+        jsn = JSON.stringify ( jsonObject );
+
+        // Perform ajax call to php generate kml for peaks
+        // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
+        $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: jsn
+        })
+        .done(function ( responseObject ) {
+            if (xhr.status === 200) {  
+                responseObject = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
+                
+                if ( responseObject["status"] == "OK") {
+                    $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/locs.kml";
+                    // Create the KML Layer for tracks
+                    trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                        source: new ol.source.Vector({                          // Set source to kml file
+                            url: $trackFile,
+                            format: new ol.format.KML({
+                                projection: 'EPSG:21781'
+                            })
+                        })
+                    });
+                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map                    
+                }
+            };
+        });
+    };
+
+
 });
 
 // ==========================================================================
