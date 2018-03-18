@@ -6,7 +6,7 @@
 //
 // INPUT
 // It is expecting a JSON object with following content: 
-// ["sessionid"], ["sqlWhereTracks"], ["genTrackKml"],["sqlWhereSegments"]["genSegKml"]
+// ["sessionid"], ["sqlWhere"], ["genTrackKml"],["sqlWhereSegments"]["genSegKml"]
 //
 // OUTPUT
 // The script returns a JSON object with following content:
@@ -65,18 +65,13 @@ if ($debugLevel >= 1){
 // variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];                                    
-$sqlWhereTracks = $receivedData["sqlWhereTracks"];                          // where statement to select tracks to be displayed
-$genTrackKml = $receivedData["genTrackKml"];                                // true when tracks kml file should be generated
-$sqlWhereSegments = $receivedData["sqlWhereSegments"];                      // where statement to select tracks to be displayed
-$genSegKml = $receivedData["genSegKml"];                                    // true when tracks kml file should be generated
+$sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
+$objectName = $receivedData["objectName"];
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 72: Received parameters:' . "\r\n");
     fputs($logFile, 'sessionid:       ' . $sessionid . "\r\n");
-    fputs($logFile, 'sqlWhereTracks:  ' . $sqlWhereTracks . "\r\n");
-    fputs($logFile, 'sqlWhereSegments:' . $sqlWhereSegments . "\r\n");
-    fputs($logFile, 'genTrackKml:     ' . $genTrackKml . "\r\n");
-    fputs($logFile, 'genSegKml:       ' . $genSegKml . "\r\n");
+    fputs($logFile, 'sqlWhere:        ' . $sqlWhere . "\r\n");
 };
 
 // create upload dir / file name
@@ -88,7 +83,7 @@ if (!is_dir ( $kml_dir )) {                                                 // C
 // ==================================================================
 // If flag is set to generate tracks KML
 //
-if ( $genTrackKml ) {
+if ( $objectName == "tracks" ) {
 
     // open file to store track kml file
     $trackKmlFileURL = $kml_dir . 'tracks.kml';
@@ -116,7 +111,7 @@ if ( $genTrackKml ) {
     $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates, ";
     $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
     $sql .= "FROM tbl_tracks ";
-    $sql .= $sqlWhereTracks;
+    $sql .= $sqlWhere;
     $sql .= " AND trkCoordinates <> '' ";
 
     $records = mysqli_query($conn, $sql);
@@ -193,6 +188,26 @@ if ( $genTrackKml ) {
     // Write kml into file
     fputs($trackOutFile, "$kmlOutput");                                     // Write kml to file
     fclose($trackOutFile);                                                      // close kml file
+
+    $returnMessage = "$countTracks Tracks found"; 
+    
+    // Create return object
+    $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
+    $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+    $returnObject['coordTop'] = $coordTop;
+    $returnObject['coordBottom'] = $coordBottom;
+    $returnObject['coordLeft'] = $coordLeft;
+    $returnObject['coordRight'] = $coordRight;
+    echo json_encode($returnObject);                                            // echo JSON object to client
+
+    if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+
+    // Close all files and connections
+    if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
+    mysqli_close($conn);                                                        // close SQL connection 
+
+    exit;
 }
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
@@ -200,7 +215,7 @@ if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed
 // ==================================================================
 // If flag is set to generate segments KML
 //
-if ( $genSegKml ) {
+if ( $objectName == "segments" ) {
     
     // open file to store segment kml file
     $segKmlFileURL = $kml_dir . 'segments.kml';
@@ -258,13 +273,16 @@ if ( $genSegKml ) {
     $kml[] = '        <open>1</open>';
 
     // Select tracks meeting given WHERE clause
-    $sql =  "SELECT vw_segments.Id, vw_segments.segName, vw_segments.sourceFID, ";
-    $sql .= "vw_segments.sourceRef, vw_segments.grade, vw_segments.coordinates, ";
-    $sql .= "TIME_FORMAT(tStartTarget, '%h:%i') AS timeUp FROM vw_segments ";
-    $sql .= "INNER JOIN tbl_waypoints ON vw_segments.segTargetLocFID = tbl_waypoints.waypID ";
-    $sql .= "segCoordTop, segCoordBottom, segCoordLeft, segCoordRight ";
-    $sql .= $sqlWhereSegments;
-    $sql .= " AND coordinates <> '' ";
+    $sql = "SELECT tbl_segments.segId";
+    $sql .= ", tbl_segments.segName";
+    $sql .= ", tbl_segments.segTypeFID as segType";
+    $sql .= ", tbl_segments.segSourceFID";
+    $sql .= ", tbl_segments.segSourceRef";
+    $sql .= ", tbl_segments.segGradeFID";
+    $sql .= ", tbl_segments.segCoordinates ";
+    $sql .= "FROM tbl_segments ";
+    $sql .= $sqlWhere;
+    $sql .= " AND segCoordinates <> '' ";
 
     // execute sql query and store results in variable $records
     $records = mysqli_query($conn, $sql);
@@ -288,9 +306,8 @@ if ( $genSegKml ) {
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '          <description>' . $singleRecord["sourceFID"] . '-' . $singleRecord["sourceRef"] . ' ' .
-                $singleRecord["segName"] . ' (' . $singleRecord["grade"] . '/' . $singleRecord["timeUp"] . 
-                ')</description>';
+        $kml[] = '          <description>' . $singleRecord["segSourceFID"] . '-' . $singleRecord["segSourceRef"] . ' ' .
+                $singleRecord["segName"] . ' (' . $singleRecord["segGradeFID"] . ')</description>';
         $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';         // Set styleUrl to Others in case nothing in found
         $kml[] = '          <ExtendedData>';
         $kml[] = '            <Data name="type">';
@@ -298,7 +315,7 @@ if ( $genSegKml ) {
         $kml[] = '            </Data>';
         $kml[] = '          </ExtendedData>';
         $kml[] = '          <LineString>';
-        $kml[] = '            <coordinates>' . $singleRecord["coordinates"];
+        $kml[] = '            <coordinates>' . $singleRecord["segCoordinates"];
         $kml[] = '            </coordinates>';
         $kml[] = '          </LineString>';
         $kml[] = '        </Placemark>';   
@@ -335,13 +352,7 @@ if ( $genSegKml ) {
 }
 
 // evaluate how many tracks and segments were found and add this info to return message
-if ( $countTracks && $countSegments ) {
-    $returnMessage = "$countTracks Tracks and $countSegments Segments found"; 
-} else if ( $countTracks ) {
-    $returnMessage = "$countTracks Tracks found"; 
-} else {
-    $returnMessage = "$countSegments Segments found";
-}
+$returnMessage = "$countSegments Segments found";
 
 // Create return object
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj

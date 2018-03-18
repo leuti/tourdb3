@@ -36,14 +36,13 @@ if ($debugLevel >= 1){
 // variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];                                    
-$loginname = $receivedData["loginname"];                              // where statement to select waypoints to be displayed
-$request = $receivedData["request"];                                // Type of data to be generated
+$sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
+$objectName = $receivedData["objectName"];
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 72: Received parameters:' . "\r\n");
-    fputs($logFile, 'sessionid:   ' . $sessionid . "\r\n");
-    fputs($logFile, 'loginname:   ' . $loginname . "\r\n");
-    fputs($logFile, 'request:     ' . $request . "\r\n");
+    fputs($logFile, 'sessionid:       ' . $sessionid . "\r\n");
+    fputs($logFile, 'sqlWhere:        ' . $sqlWhere . "\r\n");
 };
 
 // create upload dir / file name
@@ -72,31 +71,20 @@ $sql .= " as 'saison' ";
 $sql .= ", tbl_track_wayp.trwpReached_f ";
 $sql .= "FROM tbl_tracks ";
 $sql .= "JOIN tbl_track_wayp on tbl_tracks.trkId = tbl_track_wayp.trwpWaypId ";
-$sql .= "WHERE tbl_tracks.trkLoginName = '" . $loginname . "'";
+//$sql .= "WHERE tbl_tracks.trkLoginName = '" . $loginname . "'";
 $sql .= ") AS s1 ";
 $sql .= "RIGHT JOIN tbl_waypoints ON s1.trwpWaypID = tbl_waypoints.waypID ";
-switch ( $request ) {
-    case "peaks":
-        $sql .= "WHERE tbl_waypoints.waypTypeFID = 5 ";
-        break;
-    case "4000":
-        $sql .= "WHERE tbl_waypoints.waypTypeFID = 5 AND tbl_waypoints.waypUIAA4000 = 1 ";
-        break;
-    case "locs":
-        $sql .= "WHERE tbl_waypoints.waypTypeFID = 3 ";
-        break;
-}
-$sql .= "AND tbl_waypoints.waypCountry = 'CH' ";
-$sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, trkLoginName, s1.trwpWaypID ";
+$sql .= $sqlWhere; 
+$sql .= " GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, trkLoginName, s1.trwpWaypID ";
 $sql .= "LIMIT 70";
 
 if ($debugLevel >= 1){
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
 };
 
-$waypoints = mysqli_query($conn, $sql);
+$records = mysqli_query($conn, $sql);
 
-$waypKmlFileURL = $kml_dir . $request . '.kml';
+$waypKmlFileURL = $kml_dir . $objectName . '.kml';
 $waypOutFile = fopen($waypKmlFileURL, "w");     
 
 //Write document header
@@ -107,11 +95,11 @@ $kml[] = '<Document>';
 $kml[] = '<name>Waypoints</name>';
 //$kml[] = '<open>1</open>';
 
-while($waypoint = mysqli_fetch_assoc($waypoints)){ // loop through each waypoint with coordinates
+while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoint with coordinates
 
-    $kml[] = '<Placemark id="marker_' . $waypoint["waypID"] .'">';
-    $kml[] = '   <name>' . $waypoint["waypNameLong"] . '</name>';
-    $kml[] = '   <description>' . $waypoint["trwpWaypID"] . ': '. $waypoint["waypNameLong"] . ' (' . $waypoint["waypAltitude"] . 'm)</description>';
+    $kml[] = '<Placemark id="marker_' . $singleRecord["waypID"] .'">';
+    $kml[] = '   <name>' . $singleRecord["waypNameLong"] . '</name>';
+    $kml[] = '   <description>' . $singleRecord["trwpWaypID"] . ': '. $singleRecord["waypNameLong"] . ' (' . $singleRecord["waypAltitude"] . 'm)</description>';
     $kml[] = '   <Style>';
     $kml[] = '      <IconStyle>';
     $kml[] = '          <Icon>';
@@ -127,7 +115,7 @@ while($waypoint = mysqli_fetch_assoc($waypoints)){ // loop through each waypoint
     $kml[] = '     	</LabelStyle>';
     $kml[] = '   </Style>';
     $kml[] = '   <Point>';
-    $kml[] = '      <coordinates>' . $waypoint["waypCoordWGS84E"] . ',' . $waypoint["waypCoordWGS84N"] . ',' . $waypoint["waypAltitude"] . '</coordinates>';
+    $kml[] = '      <coordinates>' . $singleRecord["waypCoordWGS84E"] . ',' . $singleRecord["waypCoordWGS84N"] . ',' . $singleRecord["waypAltitude"] . '</coordinates>';
     $kml[] = '   </Point>';
     $kml[] = '</Placemark>';
 };
