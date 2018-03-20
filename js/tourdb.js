@@ -563,6 +563,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         dispSelectedLine["genKml"] = true;
     }
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_tracks = true;
     
     // ********************************************************************************************
     // ****** Build SQL WHERE statement for segments *******
@@ -765,6 +766,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         dispSelectedLine["genKml"] = true;
     }
     dispSelectedArray.push(dispSelectedLine);
+    var gen_segments = true;
     
     // ********************************************************************************************
     // ****** Display waypoints
@@ -783,7 +785,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_100").checked;
     dispSelectedArray.push(dispSelectedLine);
-
+    var gen_peaks_100 = true;
+    
     // ---------------------------------------------------------------------------------------
     // Peaks 1000er
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
@@ -799,6 +802,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_1000").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_1000 = true;
 
     // ---------------------------------------------------------------------------------------
     // Peaks 2000er
@@ -815,6 +819,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_2000").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_2000 = true;
 
     // ---------------------------------------------------------------------------------------
     // Peaks 3000er
@@ -831,6 +836,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_3000").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_3000 = true;
 
     // ---------------------------------------------------------------------------------------
     // Peaks 4000er
@@ -846,6 +852,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_4000").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_4000 = true;
 
     // ---------------------------------------------------------------------------------------
     // Peaks Top of Cantons
@@ -861,6 +868,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjPeaks_cant").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_cant = true;
 
     // ---------------------------------------------------------------------------------------
     // Huts
@@ -875,12 +883,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent
     dispSelectedLine["genKml"] = document.getElementById("dispObjLocs").checked;
     dispSelectedArray.push(dispSelectedLine);
+    var gen_peaks_huts = true;
 
     // ********************************************************************************************
-    // Draw map afresh
-
-    // ACTION: 
-    // * make gen_kml for tracks and segments dependent of each others --> using jQuery $.Deferred()
+    // Draw map fresh
 
     // delete current map
     var element = document.getElementById('displayMap-ResMap');
@@ -896,148 +902,166 @@ $(document).on('click', '.applyFilterButton', function (e) {
     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
     tourdbMap.addLayer(mapSTlayer_grau);   
 
-   function genKml_tracks(objectName, jsonObject, phpLocation){
-        return $.ajax({
-            url: phpLocation,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify ( jsonObject )
-        });
-    }
-
-    function genKml_segments(objectName, jsonObject, phpLocation){
-        return $.ajax({
-            url: phpLocation,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify ( jsonObject )
-        });
-    }
-
     // ********************************************************************************************
-    // ***** Call gen_kml.php for tracks
+    // ***** Loop through display array and assign relevant parameters to jsonObject
     for ( var i=0; i<dispSelectedArray.length; i++ ) {
+
+        // Prepare ajax call for TRACKS kml
         if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "tracks" ) {
-            var jsonObject_tracks = {};
-            jsonObject_tracks.sessionid = sessionid;                                    // send session ID
-            jsonObject_tracks.objectName = dispSelectedArray[i].objectName;
-            jsonObject_tracks.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
-            phpLocation_tracks = "services/gen_kml.php";                                   // Variable to store location of php file
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_tracks = JSON.stringify ( jsonObject )
+            var ajax_tracks = {
+                url: "services/gen_kml.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_tracks
+            };
+        
+        // Prepare ajax call for SEGMENTS kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "segments" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for segments
+            jsn_segments = JSON.stringify ( jsonObject )
+            var ajax_segments = {
+                url: "services/gen_kml.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_segments
+            };
+        
+        // Prepare ajax call for PEAKS 100 kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "peaks_100" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_peaks_100 = JSON.stringify ( jsonObject )
+            var ajax_peaks_100 = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_peaks_100
+            };
+        
+            // Prepare ajax call for PEAKS 1000 kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "peaks_1000" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_peaks_1000 = JSON.stringify ( jsonObject )
+            var ajax_peaks_1000 = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_peaks_1000
+            };
+
+        // Prepare ajax call for PEAKS 2000 kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "peaks_2000" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_peaks_2000 = JSON.stringify ( jsonObject )
+            var ajax_peaks_2000 = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_peaks_2000
+            };
+
+        // Prepare ajax call for PEAKS 3000 kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "peaks_3000" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_peaks_3000 = JSON.stringify ( jsonObject )
+            var ajax_peaks_3000 = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_peaks_3000
+            };
+        
+        // Prepare ajax call for PEAKS 4000 kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "peaks_4000" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_peaks_4000 = JSON.stringify ( jsonObject )
+            var ajax_peaks_4000 = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_peaks_4000
+            };
+
+        // Prepare ajax call for TOP OF CANTONS kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "cant" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_cant = JSON.stringify ( jsonObject )
+            var ajax_cant = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_cant
+            };
+        
+        // Prepare ajax call for HUTS kml
+        } else if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "huts" ) {
+            var jsonObject = {};
+            jsonObject.sessionid = sessionid;                                    // send session ID
+            jsonObject.objectName = dispSelectedArray[i].objectName;
+            jsonObject.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            jsn_huts = JSON.stringify ( jsonObject )
+            var ajax_huts = {
+                url: "services/gen_wayp.php",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: jsn_huts
+            };
         }
     }   
     
-    for ( var i=0; i<dispSelectedArray.length; i++ ) {
-        if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "segments" ) {
-            var jsonObject_segs = {};
-            jsonObject_segs.sessionid = sessionid;                                    // send session ID
-            jsonObject_segs.objectName = dispSelectedArray[i].objectName;
-            jsonObject_segs.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
-            phpLocation_segs = "services/gen_kml.php";                                   // Variable to store location of php file
-        }
-    }   
-
-    $.when( genKml_tracks("tracks", jsonObject_tracks, phpLocation_tracks), 
-            genKml_segments("segments", jsonObject_segs, phpLocation_segs) 
-    ).done( function (tracksResponse, segmentResponse ) {
-        console.log("track finished: " + tracksResponse);
-        console.log("segments finished: " + segmentResponse);
+    // Wait for each ajax call to complete & continue only when all are finished (regardless if in error)
+    $.when( $.ajax(ajax_tracks),  
+            $.ajax(ajax_segments),
+            $.ajax(ajax_peaks_100),
+            $.ajax(ajax_peaks_1000),
+            $.ajax(ajax_peaks_2000),
+            $.ajax(ajax_peaks_3000),
+            $.ajax(ajax_peaks_4000),
+            $.ajax(ajax_cant),
+            $.ajax(ajax_huts)
+    // response_xy contain the response array of the ajax call [data, statusText, jqXHR]
+    ).done( function ( response_tracks, response_segment, response_peaks_100, response_peaks_1000, 
+                      response_peaks_2000, response_peaks_3000, response_peaks_4000, response_peaks_cant, response_peaks_huts ) {
+        console.log("track finished: " + response_tracks[0]);
+        console.log("segments finished: " + response_segment[0]);
+        console.log("segments finished: " + response_peaks_100[0]);
         var eins = 1;
     });
     
-    // ********************************************************************************************
-    // ***** Call gen_kml.php for segments
-    /*
-    for ( var i=0; i<dispSelectedArray.length; i++ ) {
-        if ( dispSelectedArray[i].objectName == "segments" && 
-             dispSelectedArray[i].genKml ) {
-            
-            var jsonObject = {};
-            objectName = dispSelectedArray[i].objectName;
-            sqlWhereCurrent = dispSelectedArray[i].sqlWhereCurrent;
-            phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
-            jsonObject.sessionid = sessionid;                                    // send session ID
-            jsonObject.objectName = objectName;
-            jsonObject.sqlWhere = sqlWhereCurrent;                          // send where statement for tracks
-            jsn = JSON.stringify ( jsonObject );
-        
-            // Perform ajax call to php generate kml for peaks
-            // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
-            $.ajax({
-                url: phpLocation,
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: jsn
-            })
-            .done(function ( responseObject ) {
-                
-                if ( responseObject.status == 'OK') {
-                    console.info("kml tracks returned");
-                    
-                    // Draw kml file for tracks 
-                    $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/" + objectName + ".kml";
-                    
-                    // Create the KML Layer for tracks
-                    trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                        source: new ol.source.Vector({                          // Set source to kml file
-                            url: $trackFile,
-                            format: new ol.format.KML({
-                                projection: 'EPSG:21781'
-                            })
-                        })
-                    });
-                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
-                }      
-            });
-        }
-    }
-
-    for ( var i=0; i<dispSelectedArray.length; i++ ) {
-        if ( ( !(dispSelectedArray[i].objectName == "tracks") || !(dispSelectedArray[i].objectName == "segments") ) && 
-             dispSelectedArray[i].genKml ) {
-            
-            var jsonObject = {};
-            objectName = dispSelectedArray[i].objectName;
-            sqlWhereCurrent = dispSelectedArray[i].sqlWhereCurrent;
-            phpLocation = "services/gen_wayp.php";                                   // Variable to store location of php file
-            jsonObject.sessionid = sessionid;                                    // send session ID
-            jsonObject.objectName = objectName;
-            jsonObject.sqlWhere = sqlWhereCurrent;                          // send where statement for tracks
-            jsn = JSON.stringify ( jsonObject );
-        
-            // Perform ajax call to php generate kml for peaks
-            // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
-            $.ajax({
-                url: phpLocation,
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: jsn
-            })
-            .done(function ( responseObject ) {
-                
-                if ( responseObject.status == 'OK') {
-                    console.info("kml tracks returned");
-                    
-                    // Draw kml file for tracks 
-                    $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/" + objectName + ".kml";
-                    
-                    // Create the KML Layer for tracks
-                    trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                        source: new ol.source.Vector({                          // Set source to kml file
-                            url: $trackFile,
-                            format: new ol.format.KML({
-                                projection: 'EPSG:21781'
-                            })
-                        })
-                    });
-                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
-                }      
-            });
-        }
-    }*/
 });
 
 // ==========================================================================
