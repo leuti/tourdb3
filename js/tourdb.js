@@ -551,19 +551,17 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWhereCurrent = sqlWhereCurrent + " trkLoginName ='" + $loginName + "'";
     } 
 
-    // evaluate if sqlWhereCurrent have changed
-    if ( sqlWhereCurrent == sqlWherePrev ) {
-        genKml = false;
-    } else {
-        genKml = true;
-    }
-
     // Populate Display Array
     var dispSelectedLine = {};
     dispSelectedLine["objectName"] = "tracks";
     dispSelectedLine["sqlWherePrev"] = sqlWherePrev;
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent;
-    dispSelectedLine["genKml"] = genKml;
+    // evaluate if sqlWhereCurrent have changed
+    if ( sqlWhereCurrent == sqlWherePrev ) {
+        genKmldispSelectedLine["genKml"] = false;
+    } else {
+        dispSelectedLine["genKml"] = true;
+    }
     dispSelectedArray.push(dispSelectedLine);
     
     // ********************************************************************************************
@@ -755,19 +753,17 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWhereCurrent = sqlWhereCurrent; 
     }
 
-    // evaluate if sqlWhereCurrent have changed
-    if ( sqlWhereCurrent == sqlWherePrev ) {
-        genKml = false;
-    } else {
-        genKml = true;
-    }
-
     // Populate Display Array
     var dispSelectedLine = {};
     dispSelectedLine["objectName"] = "segments";
     dispSelectedLine["sqlWherePrev"] = sqlWherePrev;
     dispSelectedLine["sqlWhereCurrent"] = sqlWhereCurrent;
-    dispSelectedLine["genKml"] = genKml;
+    // evaluate if sqlWhereCurrent have changed
+    if ( sqlWhereCurrent == sqlWherePrev ) {
+        dispSelectedLine["genKml"] = false;
+    } else {
+        dispSelectedLine["genKml"] = true;
+    }
     dispSelectedArray.push(dispSelectedLine);
     
     // ********************************************************************************************
@@ -900,55 +896,59 @@ $(document).on('click', '.applyFilterButton', function (e) {
     mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
     tourdbMap.addLayer(mapSTlayer_grau);   
 
-    // ********************************************************************************************
-    // ***** Call gen_kml.php for tracks
-    for ( var i=0; i<dispSelectedArray.length; i++ ) {
-        if ( dispSelectedArray[i].objectName == "tracks" && 
-             dispSelectedArray[i].genKml ) {
-            
-            var jsonObject = {};
-            objectName = dispSelectedArray[i].objectName;
-            sqlWhereCurrent = dispSelectedArray[i].sqlWhereCurrent;
-            phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
-            jsonObject.sessionid = sessionid;                                    // send session ID
-            jsonObject.objectName = objectName;
-            jsonObject.sqlWhere = sqlWhereCurrent;                          // send where statement for tracks
-            jsn = JSON.stringify ( jsonObject );
-        
-            // Perform ajax call to php generate kml for peaks
-            // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
-            $.ajax({
-                url: phpLocation,
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: jsn
-            })
-            .done(function ( responseObject ) {
-                
-                if ( responseObject.status == 'OK') {
-                    console.info("kml tracks returned");
-                    
-                    // Draw kml file for tracks 
-                    $trackFile = document.URL + "tmp/kml_disp/" + sessionid + "/" + objectName + ".kml";
-                    
-                    // Create the KML Layer for tracks
-                    trackKMLlayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                        source: new ol.source.Vector({                          // Set source to kml file
-                            url: $trackFile,
-                            format: new ol.format.KML({
-                                projection: 'EPSG:21781'
-                            })
-                        })
-                    });
-                    tourdbMap.addLayer(trackKMLlayer);                                // add track layer to map
-                }      
-            });
-        }
+   function genKml_tracks(objectName, jsonObject, phpLocation){
+        return $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify ( jsonObject )
+        });
+    }
+
+    function genKml_segments(objectName, jsonObject, phpLocation){
+        return $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify ( jsonObject )
+        });
     }
 
     // ********************************************************************************************
+    // ***** Call gen_kml.php for tracks
+    for ( var i=0; i<dispSelectedArray.length; i++ ) {
+        if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "tracks" ) {
+            var jsonObject_tracks = {};
+            jsonObject_tracks.sessionid = sessionid;                                    // send session ID
+            jsonObject_tracks.objectName = dispSelectedArray[i].objectName;
+            jsonObject_tracks.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            phpLocation_tracks = "services/gen_kml.php";                                   // Variable to store location of php file
+        }
+    }   
+    
+    for ( var i=0; i<dispSelectedArray.length; i++ ) {
+        if ( dispSelectedArray[i].genKml && dispSelectedArray[i].objectName == "segments" ) {
+            var jsonObject_segs = {};
+            jsonObject_segs.sessionid = sessionid;                                    // send session ID
+            jsonObject_segs.objectName = dispSelectedArray[i].objectName;
+            jsonObject_segs.sqlWhere = dispSelectedArray[i].sqlWhereCurrent;;                          // send where statement for tracks
+            phpLocation_segs = "services/gen_kml.php";                                   // Variable to store location of php file
+        }
+    }   
+
+    $.when( genKml_tracks("tracks", jsonObject_tracks, phpLocation_tracks), 
+            genKml_segments("segments", jsonObject_segs, phpLocation_segs) 
+    ).done( function (tracksResponse, segmentResponse ) {
+        console.log("track finished: " + tracksResponse);
+        console.log("segments finished: " + segmentResponse);
+        var eins = 1;
+    });
+    
+    // ********************************************************************************************
     // ***** Call gen_kml.php for segments
+    /*
     for ( var i=0; i<dispSelectedArray.length; i++ ) {
         if ( dispSelectedArray[i].objectName == "segments" && 
              dispSelectedArray[i].genKml ) {
@@ -1037,7 +1037,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 }      
             });
         }
-    }
+    }*/
 });
 
 // ==========================================================================
