@@ -12,10 +12,7 @@
 // Create return object
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
 $returnObject['message'] = 'This php returns always an empty OK message';   // add empty error message to trackobj
-$returnObject['coordTop'] = 74000;
-$returnObject['coordBottom'] = 297000;
-$returnObject['coordLeft'] = 840000;
-$returnObject['coordRight'] = 110000;
+$returnObject['recordcount'] = 0;
 echo json_encode($returnObject);                                            // echo JSON object to client
 exit;
 

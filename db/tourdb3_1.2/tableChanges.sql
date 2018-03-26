@@ -13,3 +13,9 @@ ADD `segCoordTop` INT(11) NOT NULL COMMENT 'Y coord of northern most point of se
 ADD `segCoordBottom` INT(11) NOT NULL COMMENT 'Y coord of southern most point of segments' AFTER `segCoordTop`, 
 ADD `segCoordLeft` INT(11) NOT NULL COMMENT 'X coord of western most point of segments' AFTER `segCoordBottom`, 
 ADD `segCoordRight` INT(11) NOT NULL COMMENT 'X coord of easter most point of segments' AFTER `segCoordLeft`;
+
+-- Cleanup coordinates of waypoints
+UPDATE `tourdb2_prod`.`tbl_waypoints` 
+SET `waypCoordWGS84E` = NULL, `waypCoordWGS84N` = NULL 
+WHERE `tbl_waypoints`.`waypCoordWGS84E` = '-0.16171811111111'
+

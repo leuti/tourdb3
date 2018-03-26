@@ -198,6 +198,7 @@ if ( $objectName == "tracks" ) {
     $returnObject['coordBottom'] = $coordBottom;
     $returnObject['coordLeft'] = $coordLeft;
     $returnObject['coordRight'] = $coordRight;
+    $returnObject['recordcount'] = $countTracks;
     echo json_encode($returnObject);                                            // echo JSON object to client
 
     if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
@@ -361,6 +362,7 @@ $returnObject['coordTop'] = $coordTop;
 $returnObject['coordBottom'] = $coordBottom;
 $returnObject['coordLeft'] = $coordLeft;
 $returnObject['coordRight'] = $coordRight;
+$returnObject['recordcount'] = $countSegments;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");

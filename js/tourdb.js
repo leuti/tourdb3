@@ -22,6 +22,7 @@ sqlWhereSegmentsPrev = "";                                           // the gen_
 var trackKMLlayer;                                                   // map layer object containing all tracks
 var segKMLlayer;                                                     // map layer object containing all segments
 var mapSTlayer_grau;                                                 // map layer object containing the b/w swiss map
+var $loginName;
 
 itemsArray = new Array();                                            // array to store selected peaks, waypoints, locations and participants
 
@@ -421,7 +422,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
     // Initialise overall variables
     //var dispObj = {};                                     // Array containing information of each object type to be displayed
-    //var sqlWhereCurrent = "";                                              // Initialise var for the current where string
+    var sqlWhereCurrent = "";                                              // Initialise var for the current where string
     var sqlWherePrev_tracks = "";
     var sqlWherePrev_segments = "";
     var sqlWherePrev_peaks_100 = "";
@@ -429,7 +430,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var sqlWherePrev_peaks_2000 = "";
     var sqlWherePrev_peaks_3000 = "";
     var sqlWherePrev_peaks_4000 = "";
-    var sqlWherePrev_cant = "";
+    var sqlWherePrev_peaks_cant = "";
     var sqlWherePrev_huts = "";
     
     
@@ -565,20 +566,12 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_tracks ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+    if ( sqlWhereCurrent != sqlWherePrev_tracks && sqlWhereCurrent != "" ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -587,6 +580,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_tracks = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -785,20 +787,12 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_segments ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+    if ( sqlWhereCurrent != sqlWherePrev_segments || sqlWhereCurrent != "" ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -807,6 +801,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_segments = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -818,28 +821,22 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks < 1000
     var sqlWhereCurrent = "WHERE "
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypAltitude < 1000 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude < 1000 ";
+    
 
     // Create new display object for current object
     var objName = "peaks_100";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_peaks_100 ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+    
+    itemChecked = document.getElementById("dispObjPeaks_100").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_100 ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -848,6 +845,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
 
     var dispObject_peaks_100 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -857,27 +863,21 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypAltitude < 2000 AND ";
-    sqlWhereCurrent += "waypAltitude >= 1000 AND "
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude >= 1000 ";
+    
     
     var objName = "peaks_1000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_peaks_1000 ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+
+    itemChecked = document.getElementById("dispObjPeaks_1000").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_1000 ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -886,6 +886,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_peaks_1000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -895,27 +904,21 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypAltitude < 3000 AND ";
-    sqlWhereCurrent += "waypAltitude >= 2000 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude >= 2000 ";
+    
     
     var objName = "peaks_2000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_peaks_2000 ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+
+    itemChecked = document.getElementById("dispObjPeaks_2000").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_2000 ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -924,6 +927,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_peaks_2000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -933,27 +945,20 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypAltitude < 4000 AND ";
-    sqlWhereCurrent += "waypAltitude >= 3000 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude >= 3000 ";
+    
     
     var objName = "peaks_3000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_peaks_3000 ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+    itemChecked = document.getElementById("dispObjPeaks_3000").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_3000 ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -962,6 +967,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_peaks_3000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -970,27 +984,21 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks 4000er
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypAltitude > 4000 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude > 4000 ";
+    
 
     var objName = "peaks_4000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_peaks_4000 ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+
+    itemChecked = document.getElementById("dispObjPeaks_4000").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_4000 ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -999,6 +1007,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_peaks_4000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -1007,27 +1024,21 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks Top of Cantons
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypAltitude < 1000 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypAltitude < 1000 ";
+    
 
     var objName = "cant";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_cant ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+
+    itemChecked = document.getElementById("dispObjHuts").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_huts ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1036,34 +1047,37 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
-    var dispObject_cant = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_cant = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // ---------------------------------------------------------------------------------------
     // Huts
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
-    sqlWhereCurrent += "waypTypeFID = 4 AND ";
-    sqlWhereCurrent += "trkLoginName = '" + $loginName + "' ";
+    sqlWhereCurrent += "waypTypeFID = 4 ";
+    
 
     var objName = "huts";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
+        login: $loginName,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent == sqlWherePrev_huts ) {
-        var genKml = false;
-        var ajaxCall = {
-            url: "services/no_kml.php",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: ""
-        };
-    } else {
+
+    itemChecked = document.getElementById("dispObjPeaks_cant").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_cant ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1072,6 +1086,15 @@ $(document).on('click', '.applyFilterButton', function (e) {
             dataType: 'json',
             data: jsn
         }
+    } else {
+        var genKml = false;
+        var ajaxCall = {
+            url: "services/no_kml.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ""
+        };
     }
     
     var dispObject_huts = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
@@ -1098,7 +1121,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             $.ajax(dispObject_peaks_2000.ajaxCall),
             $.ajax(dispObject_peaks_3000.ajaxCall),
             $.ajax(dispObject_peaks_4000.ajaxCall),
-            $.ajax(dispObject_cant.ajaxCall),
+            $.ajax(dispObject_peaks_cant.ajaxCall),
             $.ajax(dispObject_huts.ajaxCall)
     // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
     ).done( function ( resp_tracks, resp_segments, resp_peaks_100, resp_peaks_1000, 
@@ -1111,29 +1134,29 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWherePrev_peaks_2000 = dispObject_peaks_2000.sqlWhereCurrent;
         sqlWherePrev_peaks_3000 = dispObject_peaks_3000.sqlWhereCurrent;
         sqlWherePrev_peaks_4000 = dispObject_peaks_4000.sqlWhereCurrent;
-        sqlWherePrev_cant = dispObject_cant.sqlWhereCurrent;
+        sqlWherePrev_peaks_cant = dispObject_peaks_cant.sqlWhereCurrent;
         sqlWherePrev_huts = dispObject_huts.sqlWhereCurrent;
-
-        console.log("track finished: " + resp_tracks[0]);
-        console.log("segments finished: " + resp_segments[0]);
-        console.log("segments finished: " + resp_peaks_100[0]);
 
         var coordTop_tracks = Number(resp_tracks[0].coordTop);
         var coordTop_segments = Number(resp_segments[0].coordTop);
         var coordTop = Math.max(coordTop_tracks, coordTop_segments);
-        
+        if ( isNaN(coordTop) ) coordTop = 297000;
+
         var coordBottom_tracks = Number(resp_tracks[0].coordBottom);
         var coordBottom_segments = Number(resp_segments[0].coordBottom);
         var coordBottom = Math.min(coordBottom_tracks, coordBottom_segments);
+        if ( isNaN(coordBottom) ) coordBottom = 74000;
 
         var coordLeft_tracks = Number(resp_tracks[0].coordLeft);
         var coordLeft_segments = Number(resp_segments[0].coordLeft);
         var coordLeft = Math.min(coordLeft_tracks, coordLeft_segments);
-        
+        if ( isNaN(coordLeft) ) coordLeft = 484000;
+
         var coordRight_tracks = Number(resp_tracks[0].coordRight);
         var coordRight_segments = Number(resp_segments[0].coordRight);
         var coordRight = Math.max(coordRight_tracks, coordRight_segments);
-        
+        if ( isNaN(coordRight) ) coordRight = 835000;
+
         // Evluate coord center (if route is outside CH - show empty CH map)
         var coordCenterY = ( coordTop + coordBottom ) / 2;
         var coordCenterX = ( coordRight + coordLeft ) / 2;
@@ -1142,12 +1165,11 @@ $(document).on('click', '.applyFilterButton', function (e) {
         resolution1 = ( coordTop - coordBottom ) / 200;
         resolution2 = ( coordRight - coordLeft ) / 200;
         if ( resolution1 > resolution2 ) {
-            resolution = resolution1;
+            resolution = Math.min(500,resolution1);
         } else {
-            resolution = resolution2;
+            resolution = Math.min(500,resolution2);
         }
 
-        console.info("resolution: " + resolution + " - CoordCenterX: " + coordCenterX + " - CoordCenterY: " + coordCenterY);
         // Draw empty map & center to provided coordinate
         var tourdbMap = new ga.Map({
             target: 'displayMap-ResMap',
@@ -1285,7 +1307,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for cant 
-        if ( dispObject_cant.genKml ) {                                            // var is true when user has set filter on cant
+        if ( dispObject_peaks_cant.genKml ) {                                            // var is true when user has set filter on cant
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/cant.kml";
         
             // Create the KML Layer for cant

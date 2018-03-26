@@ -24,7 +24,9 @@ date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
 
 $debugLevel = 3; // 0 = off, 1 = min, 3 = a lot, 5 = all
-$imageLoc = "./css/images/";
+$imgLoc = "./css/images/";
+$recordCount = 0;
+
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_wayp.log";                // Assign file location
@@ -38,11 +40,13 @@ $receivedData = json_decode ( file_get_contents('php://input'), true );
 $sessionid = $receivedData["sessionid"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
+$login = $receivedData["login"];
 
 if ($debugLevel >= 3){
-    fputs($logFile, 'Line 72: Received parameters:' . "\r\n");
-    fputs($logFile, 'sessionid:       ' . $sessionid . "\r\n");
-    fputs($logFile, 'sqlWhere:        ' . $sqlWhere . "\r\n");
+    fputs($logFile, "<$objectName> Line 72: Received parameters:\r\n");
+    fputs($logFile, "<$objectName> sessionid:       $sessionid\r\n");
+    fputs($logFile, "<$objectName> sqlWhere:        $sqlWhere\r\n");
+    fputs($logFile, "<$objectName> objectName:      $objectName\r\n");
 };
 
 // create upload dir / file name
@@ -52,31 +56,21 @@ if (!is_dir ( $kml_dir )) {                                                 // C
 }
 
 // Select waypoints for output
-$sql = "SELECT tbl_waypoints.waypID";
-$sql .= ", tbl_waypoints.waypNameLong";
-$sql .= ", tbl_waypoints.waypTypeFID";
-$sql .= ", tbl_waypoints.waypAltitude";
-$sql .= ", tbl_waypoints.waypCountry";
-$sql .= ", tbl_waypoints.waypCoordWGS84E";
-$sql .= ", tbl_waypoints.waypCoordWGS84N";
-$sql .= ", s1.trkLoginName";
-$sql .= ", s1.trwpWaypID";
-$sql .= ", sum(s1.saison) ";
-$sql .= "FROM (";
-$sql .= "SELECT tbl_track_wayp.trwpWaypID";
-$sql .= ", tbl_tracks.trkId";
-$sql .= ", tbl_tracks.trkLoginName";
-$sql .= ", CASE tbl_tracks.trkSubType WHEN 'Alpinklettern' THEN 1000 WHEN 'Alpintour' THEN 1000 WHEN 'Hochtour' THEN 1000 WHEN 'Joggen' THEN 1000 WHEN 'Mehrseilklettern' THEN 1000 WHEN 'Sportklettern' THEN 1000 WHEN 'Velotour' THEN 1000 WHEN 'Wanderung' THEN 1000 WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skitour' THEN 1 WHEN 'Winterwanderung' THEN 1 ELSE 0 END ";
-$sql .= " as 'saison' ";
-$sql .= ", tbl_track_wayp.trwpReached_f ";
+
+$sql = "SELECT tbl_waypoints.waypID, tbl_waypoints.waypNameLong, tbl_waypoints.waypTypeFID, tbl_waypoints.waypAltitude, tbl_waypoints.waypCountry, tbl_waypoints.waypCoordWGS84E, tbl_waypoints.waypCoordWGS84N, sum(s1.saison) as saisonkey ";
+$sql .= "FROM ( SELECT tbl_track_wayp.trwpWaypID, tbl_tracks.trkId, ";
+$sql .= "SUM(CASE tbl_tracks.trkSubType WHEN 'Alpinklettern' THEN 1000 WHEN 'Alpintour' THEN 1000 WHEN 'Hochtour' THEN 1000 WHEN 'Joggen' THEN 1000 WHEN 'Mehrseilklettern' THEN 1000 WHEN 'Sportklettern' THEN 1000 WHEN 'Velotour' THEN 1000 WHEN 'Wanderung' THEN 1000 WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skitour' THEN 1 WHEN 'Winterwanderung' THEN 1 ELSE 0 END) as 'saison' ";
 $sql .= "FROM tbl_tracks ";
 $sql .= "JOIN tbl_track_wayp on tbl_tracks.trkId = tbl_track_wayp.trwpWaypId ";
-//$sql .= "WHERE tbl_tracks.trkLoginName = '" . $loginname . "'";
+$sql .= "WHERE tbl_track_wayp.trwpReached_f = 1 ";
+$sql .= "AND trkLoginName = '$login' "; 
+$sql .= "GROUP BY tbl_track_wayp.trwpWaypID, tbl_tracks.trkId";
 $sql .= ") AS s1 ";
 $sql .= "RIGHT JOIN tbl_waypoints ON s1.trwpWaypID = tbl_waypoints.waypID ";
-$sql .= $sqlWhere; 
-$sql .= " GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, trkLoginName, s1.trwpWaypID ";
-$sql .= "LIMIT 70";
+$sql .= $sqlWhere;
+$sql .= " AND ( tbl_waypoints.waypCoordWGS84E is not null OR tbl_waypoints.waypCoordWGS84N is not null ) ";
+$sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, s1.trwpWaypID ";
+$sql .= "LIMIT 70 ";
 
 if ($debugLevel >= 1){
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
@@ -97,13 +91,44 @@ $kml[] = '<name>Waypoints</name>';
 
 while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoint with coordinates
 
+    $saisonkey = $singleRecord["saisonkey"];            // set to value from DB
+
+    if ( is_null($saisonkey) ) {                            // saisonkey --> tausender = Anzahl Besuche Sommer / einer = Anzahl Besuche Winter
+        $saisonkey = 0;                                     // set to 0 when NULL
+        fputs($logFile, "is_null\r\n");
+    } 
+    $sommer = floor(intval($saisonkey) / 1000);                    // devide saison key by 1000 and extract number before comma
+    $winter = $saisonkey - $sommer * 1000;                  // 
+    
+    $recordCount++;
+    
+    // wayp reached in sommer and winter
+    if ( $sommer > 0 && $winter > 0 ) {
+        $imgFile = $objectName . "-sowi.png";                // _sowi_16.png
+    
+    // wayp reached only in sommer
+    } else if ( $sommer > 0 && $winter == 0 ) {
+        $imgFile = $objectName . "-so.png";                  // _so_16.png
+
+    // wayp reached only in winter
+    } else if ( $sommer == 0 && $winter > 0 ) {
+        $imgFile = $objectName . "-wi.png";                  // _wi_16.png
+    } else {
+        $imgFile = $objectName . "-none.png";
+    }
+
+    if ( $debugLevel >= 3 ) {
+        fputs($logFile, "<$objectName> waypNameLong: ". $singleRecord["waypNameLong"] . "-->");
+        fputs($logFile, "saisonkey: $saisonkey || sommer: $sommer || winter: $winter || icon: $imgFile\r\n");
+    }
+
     $kml[] = '<Placemark id="marker_' . $singleRecord["waypID"] .'">';
     $kml[] = '   <name>' . $singleRecord["waypNameLong"] . '</name>';
-    $kml[] = '   <description>' . $singleRecord["trwpWaypID"] . ': '. $singleRecord["waypNameLong"] . ' (' . $singleRecord["waypAltitude"] . 'm)</description>';
+    $kml[] = '   <description>' . $singleRecord["waypID"] . ': '. $singleRecord["waypNameLong"] . ' (' . $singleRecord["waypAltitude"] . 'm)</description>';
     $kml[] = '   <Style>';
     $kml[] = '      <IconStyle>';
     $kml[] = '          <Icon>';
-    $kml[] = '              <href>' . $imageLoc . $objectName . '_16.png</href>';
+    $kml[] = '              <href>' . $imgLoc . $imgFile . '</href>';
     //$kml[] = '              <href>https://api3.geo.admin.ch/color/255,0,0/marker-24@2x.png</href>';
     $kml[] = '              <gx:w>48</gx:w>';
     $kml[] = '              <gx:h>48</gx:h>';   
@@ -130,23 +155,15 @@ $kmlOutput = join("\r\n", $kml);
 fputs($waypOutFile, "$kmlOutput");                                       // Write kml to file
 fclose($waypOutFile);
 
-/*
-// evaluate how many tracks and segments were found and add this info to return message
-if ( $countTracks && $countSegments ) {
-    $returnMessage = "$countTracks Tracks and $countSegments Segments found"; 
-} else if ( $countTracks ) {
-    $returnMessage = "$countTracks Tracks found"; 
-} else {
-    $returnMessage = "$countSegments Segments found";
-}
-*/
-
 // Create return object
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['message'] = 'kml file generated';                            // add empty error message to trackobj
+$returnObject['message'] = 'kml file generated with ' . $recordCount . ' ' . $objectName;                            // add empty error message to trackobj
+$returnObject['recordcount'] = $recordCount;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
+if ( $debugLevel >= 1 ) fputs($logFile, "Line 153: $recordCount $objectName items inserted into KML filer\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file

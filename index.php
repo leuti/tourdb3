@@ -433,8 +433,8 @@
 								<legend class="filterHeader">Others</legend>
 
 								<p>
-									<label for="dispObjLocs" class="dispObjSel labelFirst">Hütten</label>
-									<input type="checkbox" name="dispObjLocs" id="dispObjLocs" class="text ui-widget-content ui-corner-all">
+									<label for="dispObjHuts" class="dispObjSel labelFirst">Hütten</label>
+									<input type="checkbox" name="dispObjHuts" id="dispObjHuts" class="text ui-widget-content ui-corner-all">
 								</p>
 								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
