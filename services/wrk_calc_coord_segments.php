@@ -1,6 +1,6 @@
 <?php
 // ---------------------------------------------------------------------------------------------
-// PHP to calculate the coordinate boundaries of existing tracks
+// PHP to calculate the coordinate boundaries of existing segmentss
 //
 // This script is a working script, not intended to be integrated into the site 
 
@@ -18,31 +18,27 @@ $debugLevel = 3;                                                    // 0 = off, 
 $count = 0;
 
 // Open file to write log
-$importGpxLog = dirname(__FILE__) . "/../log/calc_coord.log";        // Assign file location
+$importGpxLog = dirname(__FILE__) . "/../log/calc_coord_segments.log";        // Assign file location
 $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
 fputs($logFile, "\r\n============================================================\r\n");    
-fputs($logFile, "calc_coord.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+fputs($logFile, "calc_coord_segments.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
-// Select tracks from db
-$sql = "SELECT trkId, trkCoordinates ";
-$sql .= "FROM tbl_tracks ";
-$sql .= "WHERE trkCoordinates <> '' ";
+// Select segments from db
+$sql = "SELECT segId, segCoordinates ";
+$sql .= "FROM tbl_segments ";
+$sql .= "WHERE segCoordinates <> '' ";
 
 fputs($logFile, "Line 29: sql: $sql\r\n");    
-// loop through each track
-$records = mysqli_query($conn, $sql);
 
-// write field content
-//while( $row = mysqli_fetch_row( $result ) ) {                           // loop through each row
+// loop through each segments
+$records = mysqli_query($conn, $sql);
 
 while($singleRecord = mysqli_fetch_assoc($records)) {    
     $firstRecord = 1;
-    $coordArray = explode ( " ", $singleRecord["trkCoordinates"]);
+    $coordArray = explode ( " ", $singleRecord["segCoordinates"]);
 
     $i=0;
     for ($i; $i<sizeof($coordArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
-
-        // fputs($logFile, "Line 44 - line: " . $coordArray[$i] . "\r\n"); 
 
         $line = explode ( ",", $coordArray[$i]);
 
@@ -82,33 +78,16 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
         $firstRecord = 0 ;
     }
 
-    $coordTop = round( WGStoCHx($WGS_top_lat, $WGS_top_lon), 0);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
+    $coordTop = round( WGStoCHx($WGS_top_lat, $WGS_top_lon), 0);                                               // variables to define min/max lon/lat to diplay segments in center of map, focused
     $coordLeft = round( WGStoCHy($WGS_left_lat, $WGS_left_lon), 0);
     $coordRight = round( WGStoCHy($WGS_right_lat, $WGS_right_lon), 0);
     $coordBottom = round( WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon), 0);
-
-    /*
-    fputs($logFile, "Track: " . $singleRecord["trkId"] . "\r\n");   
-    fputs($logFile, "WGS_top_lat: $WGS_top_lat\r\n");
-    fputs($logFile, "WGS_top_lon: $WGS_top_lon\r\n");
-    fputs($logFile, "WGS_left_lat: $WGS_left_lat\r\n");
-    fputs($logFile, "WGS_left_lon; $WGS_left_lon\r\n");
-    fputs($logFile, "WGS_right_lat: $WGS_right_lat\r\n");
-    fputs($logFile, "WGS_right_lon: $WGS_right_lon\r\n");
-    fputs($logFile, "WGS_bottom_lat: $WGS_bottom_lat\r\n");
-    fputs($logFile, "WGS_bottom_lon: $WGS_bottom_lon\r\n");
-
-    fputs($logFile, "Line 78: coordTop: $coordTop\r\n");
-    fputs($logFile, "Line 79: coordBottom: $coordBottom\r\n");
-    fputs($logFile, "Line 80: coordLeft: $coordLeft\r\n");
-    fputs($logFile, "Line 81: coordRight: $coordRight\r\n");        
-    */
     
     //create SQL statement  
-    $sql = "UPDATE `tourdb2_prod`.`tbl_tracks` ";
-    $sql .= "SET `trkCoordTop` = '$coordTop', `trkCoordBottom` = '$coordBottom', ";
-    $sql .= "`trkCoordLeft` = '$coordLeft', `trkCoordRight` = '$coordRight' ";
-    $sql .= "WHERE `tbl_tracks`.`trkId` = " . $singleRecord["trkId"];
+    $sql = "UPDATE `tourdb2_prod`.`tbl_segments` ";
+    $sql .= "SET `segCoordTop` = '$coordTop', `segCoordBottom` = '$coordBottom', ";
+    $sql .= "`segCoordLeft` = '$coordLeft', `segCoordRight` = '$coordRight' ";
+    $sql .= "WHERE `tbl_segments`.`segId` = " . $singleRecord["segId"];
 
     //fputs($logFile, "Line 29: sql: $sql\r\n");   
 
@@ -116,11 +95,11 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
     {
         $count++;
     } else {
-        echo "Error - could not update track " . $singleRecord["trkId"] . "\r\n";
+        echo "Error - could not update segments " . $singleRecord["segId"] . "\r\n";
     } 
 }
 
-echo "Finito --> $count tracks updated\r\n";
+echo "Finito --> $count segments updated\r\n";
 
 fclose($logFile);                                                      // close log file
 mysqli_close($conn);                                                   // close SQL connection 

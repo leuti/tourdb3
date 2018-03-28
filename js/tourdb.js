@@ -589,7 +589,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -810,7 +810,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -854,7 +854,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
 
@@ -895,7 +895,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -936,7 +936,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -976,7 +976,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -986,9 +986,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks 4000er
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypAltitude > 4000 ";
+    sqlWhereCurrent += "waypUIAA4000 = true ";
     
-
     var objName = "peaks_4000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
@@ -1016,7 +1015,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -1026,7 +1025,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks Top of Cantons
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypAltitude < 1000 ";
+    sqlWhereCurrent += "waypToOfCant = true ";
 
     var objName = "cant";
     var phpUrl = "services/gen_wayp.php";
@@ -1055,7 +1054,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -1094,7 +1093,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: ""
+            data: jsn
         };
     }
     
@@ -1154,25 +1153,57 @@ $(document).on('click', '.applyFilterButton', function (e) {
         phpResponse[8] = resp_huts[0];
 
         // Derive coordinate boundaries
+
+        // possible values: outside boundary / inside boundary / NaN
+        // events: both return value / only one returns value / none return value
+
         var coordTop_tracks = Number(resp_tracks[0].coordTop);
         var coordTop_segments = Number(resp_segments[0].coordTop);
-        var coordTop = Math.max(coordTop_tracks, coordTop_segments);
-        if ( isNaN(coordTop) ) coordTop = 297000;
+        if ( isNaN( coordTop_tracks ) && isNaN( coordTop_segments ) ) {                 // both do NOT deliver coordinates
+            coordTop = 297000;
+        } else if ( isNaN( coordTop_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordTop = coordTop_tracks;
+        } else if ( isNaN( coordTop_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordTop = coordTop_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordTop = Math.max(coordTop_tracks, coordTop_segments);                
+        }
 
         var coordBottom_tracks = Number(resp_tracks[0].coordBottom);
         var coordBottom_segments = Number(resp_segments[0].coordBottom);
-        var coordBottom = Math.min(coordBottom_tracks, coordBottom_segments);
-        if ( isNaN(coordBottom) ) coordBottom = 74000;
+        if ( isNaN( coordBottom_tracks ) && isNaN( coordBottom_segments ) ) {                 // both do NOT deliver coordinates
+            coordBottom = 74000;
+        } else if ( isNaN( coordBottom_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordBottom = coordBottom_tracks;
+        } else if ( isNaN( coordBottom_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordBottom = coordBottom_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordBottom = Math.max(coordBottom_tracks, coordBottom_segments);                
+        }
 
         var coordLeft_tracks = Number(resp_tracks[0].coordLeft);
         var coordLeft_segments = Number(resp_segments[0].coordLeft);
-        var coordLeft = Math.min(coordLeft_tracks, coordLeft_segments);
-        if ( isNaN(coordLeft) ) coordLeft = 484000;
+        if ( isNaN( coordLeft_tracks ) && isNaN( coordLeft_segments ) ) {                 // both do NOT deliver coordinates
+            coordLeft = 484000;
+        } else if ( isNaN( coordLeft_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordLeft = coordLeft_tracks;
+        } else if ( isNaN( coordLeft_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordLeft = coordLeft_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordLeft = Math.max(coordLeft_tracks, coordLeft_segments);                
+        }
 
         var coordRight_tracks = Number(resp_tracks[0].coordRight);
         var coordRight_segments = Number(resp_segments[0].coordRight);
-        var coordRight = Math.max(coordRight_tracks, coordRight_segments);
-        if ( isNaN(coordRight) ) coordRight = 835000;
+        if ( isNaN( coordRight_tracks ) && isNaN( coordRight_segments ) ) {                 // both do NOT deliver coordinates
+            coordRight = 835000;
+        } else if ( isNaN( coordRight_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordRight = coordRight_tracks;
+        } else if ( isNaN( coordRight_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordRight = coordRight_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordRight = Math.max(coordRight_tracks, coordRight_segments);                
+        }
 
         // Evluate coord center (if route is outside CH - show empty CH map)
         var coordCenterY = ( coordTop + coordBottom ) / 2;
@@ -1402,7 +1433,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
                 phpMessage += "-" + phpResponse[i]["message"] + "-";
                 phpHasError = true;
             } else {
-                phpObjCount++;
+                phpObjCount = phpObjCount + phpResponse[i]["recordcount"];
             }
         }
 
@@ -1500,7 +1531,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
                 $('#uiAdmTrk').addClass('active');
-                //document.getElementById("inputFile").value = "";
+                document.getElementById("inputFile").value = "";
 
             } else {
                 $('#statusMessage').text(respObj.message);
@@ -1855,17 +1886,13 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                 // Create where statement (to be changed --> trkId to be returned after save)
                 sqlWhereCurrent = "WHERE trkId=" + respObj["trkId"];
                 genTrackKml = true;
-                sqlWhereCurrent = "";
-                genSegKml = false;
                 
                 // send required parameters to gen_kml.php
                 var jsonObject = {};
                 phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
                 jsonObject["sessionid"] = sessionid;                                    // send session ID
-                jsonObject["sqlWhereCurrent"] = sqlWhereCurrent;                          // send where statement for tracks
-                jsonObject["genTrackKml"] = genTrackKml;                                // send where statement for segments 
-                jsonObject["sqlWhereCurrent"] = sqlWhereCurrent;                             
-                jsonObject["genSegKml"] = genSegKml;                                    // append parameter session ID
+                jsonObject["sqlWhere"] = sqlWhereCurrent;                          // send where statement for tracks
+                jsonObject["objectName"] = "tracks";                                // send where statement for segments 
                 xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
                 xhr.setRequestHeader( "Content-Type", "application/json" );
                 jsn = JSON.stringify(jsonObject);

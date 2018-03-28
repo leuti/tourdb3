@@ -16,7 +16,7 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/no_kml.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: gen_wayp.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: no_kml.php opened \r\n"); 
 };
 
 $receivedData = json_decode ( file_get_contents('php://input'), true );

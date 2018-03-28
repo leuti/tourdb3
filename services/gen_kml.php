@@ -282,6 +282,10 @@ if ( $objectName == "segments" ) {
     $sql .= ", tbl_segments.segSourceRef";
     $sql .= ", tbl_segments.segGradeFID";
     $sql .= ", tbl_segments.segCoordinates ";
+    $sql .= ", tbl_segments.segCoordTop ";
+    $sql .= ", tbl_segments.segCoordBottom ";
+    $sql .= ", tbl_segments.segCoordLeft ";
+    $sql .= ", tbl_segments.segCoordRight ";
     $sql .= "FROM tbl_segments ";
     $sql .= $sqlWhere;
     $sql .= " AND segCoordinates <> '' ";

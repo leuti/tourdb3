@@ -32,7 +32,7 @@ include("config.inc.php");                                        // include con
 include("coord_funct.inc.php");                                    // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 3;                                                    // 0 = off, 6 = all
+$debugLevel = 1;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
@@ -171,7 +171,7 @@ if ($request == "temp") {
             //$CH03_top_lat = WGStoCHy($lat, $lon);
             //$CH03_top_lon = WGStoCHx($lat, $lon); 
 
-            fputs($logFile, "Line 156 - INPUT --> lat: $lat | lon: $lon \r\n"); 
+            if ($debugLevel >= 3) fputs($logFile, "Line 156 - INPUT --> lat: $lat | lon: $lon \r\n"); 
 
             if( $lat > $WGS_top_lat ) {                                     // This is the top most point
                 $WGS_top_lat = $lat;
@@ -188,11 +188,13 @@ if ($request == "temp") {
                 $WGS_left_lon = $lon;                               
             }
 
-            fputs($logFile, "Line 156 - WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
-            fputs($logFile, "Line 156 - WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
-            fputs($logFile, "Line 156 - WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
-            fputs($logFile, "Line 156 - WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
-            fputs($logFile, "====================================================================\r\n"); 
+            if ($debugLevel >= 3) {
+                fputs($logFile, "Line 156 - WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+                fputs($logFile, "Line 156 - WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+                fputs($logFile, "Line 156 - WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+                fputs($logFile, "Line 156 - WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+                fputs($logFile, "====================================================================\r\n"); 
+            }
 
             if ( $trkpt->ele == "" || $trkpt->ele == 0 ) {
                 $ele = 0;
@@ -306,11 +308,13 @@ if ($request == "temp") {
         $trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
         //$trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
 
-        fputs($logFile, "Line 308 - trkCoordTop: $trkCoordTop --> WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
-        fputs($logFile, "Line 308 - trkCoordBottom: $trkCoordBottom --> WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
-        fputs($logFile, "Line 308 - trkCoordLeft: $trkCoordLeft --> WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
-        fputs($logFile, "Line 308 - trkCoordRight: $trkCoordRight --> WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
-        fputs($logFile, "=============================================================================================================\r\n"); 
+        if ($debugLevel >= 3) {
+            fputs($logFile, "Line 308 - trkCoordTop: $trkCoordTop --> WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+            fputs($logFile, "Line 308 - trkCoordBottom: $trkCoordBottom --> WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+            fputs($logFile, "Line 308 - trkCoordLeft: $trkCoordLeft --> WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+            fputs($logFile, "Line 308 - trkCoordRight: $trkCoordRight --> WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+            fputs($logFile, "=============================================================================================================\r\n"); 
+        }
         //$coordCenterY = ( $CH03_top_Y + $CH03_bottom_Y ) / 2;
         //$coordCenterX = ( $CH03_right_X + $CH03_left_X ) / 2;
         

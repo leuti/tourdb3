@@ -54,8 +54,6 @@ if (!is_dir ( $kml_dir )) {                                                 // C
     mkdir($kml_dir, 0777);
 }
 
-// 
-
 // Select waypoints for output
 $sql = "SELECT tbl_waypoints.waypID, tbl_waypoints.waypNameLong, tbl_waypoints.waypTypeFID, tbl_waypoints.waypAltitude, tbl_waypoints.waypCountry, tbl_waypoints.waypCoordWGS84E, tbl_waypoints.waypCoordWGS84N, sum(s1.saison) as saisonkey ";
 $sql .= "FROM ( SELECT tbl_track_wayp.trwpWaypID, tbl_tracks.trkId, ";
