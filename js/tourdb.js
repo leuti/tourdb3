@@ -373,8 +373,10 @@ $(document).ready(function() {
 
                     $('#statusMessage').text('Login successful');
                     $("#statusMessage").show().delay(5000).fadeOut(); 
-                    tourdbMap = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
-                    //drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                    if ( typeof(ga) != 'undefined' ) {
+                        tourdbMap = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                        //drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
+                    }
                 }
             }
         }
@@ -1025,7 +1027,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypAltitude < 1000 ";
-    
 
     var objName = "cant";
     var phpUrl = "services/gen_wayp.php";
@@ -1037,8 +1038,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjHuts").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_huts ) {
+    itemChecked = document.getElementById("dispObjPeaks_cant").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_cant ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1076,8 +1077,8 @@ $(document).on('click', '.applyFilterButton', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjPeaks_cant").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_cant ) {
+    itemChecked = document.getElementById("dispObjHuts").checked;
+    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_huts ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1125,8 +1126,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
             $.ajax(dispObject_huts.ajaxCall)
     // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
     ).done( function ( resp_tracks, resp_segments, resp_peaks_100, resp_peaks_1000, 
-                      resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_peaks_huts ) {
+                      resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_huts ) {
         respObj = {};
+
+        // store current where statement as previous where statement
         sqlWherePrev_tracks = dispObject_tracks.sqlWhereCurrent;
         sqlWherePrev_segments = dispObject_segments.sqlWhereCurrent;
         sqlWherePrev_peaks_100 = dispObject_peaks_100.sqlWhereCurrent;
@@ -1137,6 +1140,20 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWherePrev_peaks_cant = dispObject_peaks_cant.sqlWhereCurrent;
         sqlWherePrev_huts = dispObject_huts.sqlWhereCurrent;
 
+        // store responses from php calls
+
+        var phpResponse = new Array();  
+        phpResponse[0] = resp_tracks[0];
+        phpResponse[1] = resp_segments[0];
+        phpResponse[2] = resp_peaks_100[0];
+        phpResponse[3] = resp_peaks_1000[0];
+        phpResponse[4] = resp_peaks_2000[0];
+        phpResponse[5] = resp_peaks_3000[0];
+        phpResponse[6] = resp_peaks_4000[0];
+        phpResponse[7] = resp_peaks_cant[0];
+        phpResponse[8] = resp_huts[0];
+
+        // Derive coordinate boundaries
         var coordTop_tracks = Number(resp_tracks[0].coordTop);
         var coordTop_segments = Number(resp_segments[0].coordTop);
         var coordTop = Math.max(coordTop_tracks, coordTop_segments);
@@ -1171,15 +1188,17 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw empty map & center to provided coordinate
-        var tourdbMap = new ga.Map({
-            target: 'displayMap-ResMap',
-            view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
-        });
-        mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-        tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
-        
+        if ( typeof(ga) != 'undefined' ) {
+            var tourdbMap = new ga.Map({
+                target: 'displayMap-ResMap',
+                view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
+            });
+            mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+            tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+        }
+
         // Draw kml file for tracks 
-        if ( dispObject_tracks.genKml ) {                                            // var is true when user has set filter on tracks
+        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
         
             // Create the KML Layer for tracks
@@ -1195,7 +1214,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for tracks 
-        if ( dispObject_tracks.genKml ) {                                            // var is true when user has set filter on tracks
+        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
         
             // Create the KML Layer for tracks
@@ -1211,7 +1230,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for segments 
-        if ( dispObject_segments.genKml ) {                                            // var is true when user has set filter on segments
+        if ( dispObject_segments.genKml && tourdbMap ) {                                            // var is true when user has set filter on segments
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
         
             // Create the KML Layer for segments
@@ -1227,7 +1246,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for peaks_100 
-        if ( dispObject_peaks_100.genKml ) {                                            // var is true when user has set filter on peaks_100
+        if ( dispObject_peaks_100.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_100
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_100.kml";
         
             // Create the KML Layer for peaks_100
@@ -1243,7 +1262,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for peaks_1000 
-        if ( dispObject_peaks_1000.genKml ) {                                            // var is true when user has set filter on peaks_1000
+        if ( dispObject_peaks_1000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_1000
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_1000.kml";
         
             // Create the KML Layer for peaks_1000
@@ -1259,7 +1278,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for peaks_2000 
-        if ( dispObject_peaks_2000.genKml ) {                                            // var is true when user has set filter on peaks_2000
+        if ( dispObject_peaks_2000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_2000
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_2000.kml";
         
             // Create the KML Layer for peaks_2000
@@ -1275,7 +1294,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for peaks_3000 
-        if ( dispObject_peaks_3000.genKml ) {                                            // var is true when user has set filter on peaks_3000
+        if ( dispObject_peaks_3000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_3000
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_3000.kml";
         
             // Create the KML Layer for peaks_3000
@@ -1291,7 +1310,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for peaks_4000 
-        if ( dispObject_peaks_4000.genKml ) {                                            // var is true when user has set filter on peaks_4000
+        if ( dispObject_peaks_4000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_4000
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_4000.kml";
         
             // Create the KML Layer for peaks_4000
@@ -1307,7 +1326,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for cant 
-        if ( dispObject_peaks_cant.genKml ) {                                            // var is true when user has set filter on cant
+        if ( dispObject_peaks_cant.genKml && tourdbMap ) {                                            // var is true when user has set filter on cant
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/cant.kml";
         
             // Create the KML Layer for cant
@@ -1323,7 +1342,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         }
 
         // Draw kml file for huts 
-        if ( dispObject_huts.genKml ) {                                            // var is true when user has set filter on huts
+        if ( dispObject_huts.genKml && tourdbMap ) {                                            // var is true when user has set filter on huts
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/huts.kml";
         
             // Create the KML Layer for huts
@@ -1337,46 +1356,70 @@ $(document).on('click', '.applyFilterButton', function (e) {
             });
             tourdbMap.addLayer(kmlLayer);                                // add track layer to map
         }
-        
-        // Popup showing the position the user clicked
-        var popup = new ol.Overlay({                                    // popup to display track details
-            element: $('<div title="KML"></div>')[0]
-        });
-        tourdbMap.addOverlay(popup);
+        if ( tourdbMap ) {
+            // Popup showing the position the user clicked
+            var popup = new ol.Overlay({                                    // popup to display track details
+                element: $('<div title="KML"></div>')[0]
+            });
+            tourdbMap.addOverlay(popup);
 
-        // On click we display the feature informations (code basis from map admin sample library)
-        tourdbMap.on('singleclick', function(evt) {
-            var pixel = evt.pixel;
-            var coordinate = evt.coordinate;
-            var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
-                return feature;
+            // On click we display the feature informations (code basis from map admin sample library)
+            tourdbMap.on('singleclick', function(evt) {
+                var pixel = evt.pixel;
+                var coordinate = evt.coordinate;
+                var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                    return feature;
+                });
+                var element = $(popup.getElement());
+                element.popover('destroy');
+                if (feature) {
+                popup.setPosition(coordinate);
+                element.popover({
+                    'placement': 'top',
+                    'animation': false,
+                    'html': true,
+                    'content': feature.get('name')
+                });
+                element.popover('show');
+                }
             });
-            var element = $(popup.getElement());
-            element.popover('destroy');
-            if (feature) {
-            popup.setPosition(coordinate);
-            element.popover({
-                'placement': 'top',
-                'animation': false,
-                'html': true,
-                'content': feature.get('name')
+
+            // Change cursor style when cursor is hover over a feature
+            tourdbMap.on('pointermove', function(evt) {
+                var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                    return feature;
+                });
+                tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
             });
-            element.popover('show');
+        }
+
+        // Display message
+        var phpMessage = "";
+        var phpObjCount = 0; 
+        var phpHasError = false;
+        for ( var i = 0; i < phpResponse.length; i++ ) {
+            if ( phpResponse[i]["status"] != "OK" ) {
+                phpMessage += "-" + phpResponse[i]["message"] + "-";
+                phpHasError = true;
+            } else {
+                phpObjCount++;
             }
-        });
+        }
 
-        // Change cursor style when cursor is hover over a feature
-        tourdbMap.on('pointermove', function(evt) {
-            var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                return feature;
-            });
-            tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
-        });
-
-        // display message
-        $('#statusMessage').text(respObj.message);
-        $("#statusMessage").show().delay(5000).fadeOut();
-
+        if ( phpHasError ) {
+            $('#statusMessage').text(phpMessage);    
+        } else {
+            $('#statusMessage').text(phpObjCount + " objects are displayed");
+        }
+        
+        $("#statusMessage").show().delay(5000).fadeOut();                       // hide message after 5 seconds
+    
+        // Hide display filter form
+        $('.dispObjOpen').removeClass('visible');
+        $('.dispObjOpen').addClass('hidden');
+        $('.dispObjMini').addClass('visible');
+        $('.dispObjMini').removeClass('hidden');
+    
     });
     
 });

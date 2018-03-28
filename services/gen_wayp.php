@@ -19,7 +19,6 @@
 // Tasks
 // * 
 
-
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
 
@@ -55,8 +54,9 @@ if (!is_dir ( $kml_dir )) {                                                 // C
     mkdir($kml_dir, 0777);
 }
 
-// Select waypoints for output
+// 
 
+// Select waypoints for output
 $sql = "SELECT tbl_waypoints.waypID, tbl_waypoints.waypNameLong, tbl_waypoints.waypTypeFID, tbl_waypoints.waypAltitude, tbl_waypoints.waypCountry, tbl_waypoints.waypCoordWGS84E, tbl_waypoints.waypCoordWGS84N, sum(s1.saison) as saisonkey ";
 $sql .= "FROM ( SELECT tbl_track_wayp.trwpWaypID, tbl_tracks.trkId, ";
 $sql .= "SUM(CASE tbl_tracks.trkSubType WHEN 'Alpinklettern' THEN 1000 WHEN 'Alpintour' THEN 1000 WHEN 'Hochtour' THEN 1000 WHEN 'Joggen' THEN 1000 WHEN 'Mehrseilklettern' THEN 1000 WHEN 'Sportklettern' THEN 1000 WHEN 'Velotour' THEN 1000 WHEN 'Wanderung' THEN 1000 WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skitour' THEN 1 WHEN 'Winterwanderung' THEN 1 ELSE 0 END) as 'saison' ";
@@ -70,7 +70,7 @@ $sql .= "RIGHT JOIN tbl_waypoints ON s1.trwpWaypID = tbl_waypoints.waypID ";
 $sql .= $sqlWhere;
 $sql .= " AND ( tbl_waypoints.waypCoordWGS84E is not null OR tbl_waypoints.waypCoordWGS84N is not null ) ";
 $sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, s1.trwpWaypID ";
-$sql .= "LIMIT 70 ";
+//$sql .= "LIMIT 70 ";
 
 if ($debugLevel >= 1){
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
@@ -159,11 +159,11 @@ fclose($waypOutFile);
 $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
 $returnObject['message'] = 'kml file generated with ' . $recordCount . ' ' . $objectName;                            // add empty error message to trackobj
 $returnObject['recordcount'] = $recordCount;
+$returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 1 ) fputs($logFile, "Line 153: $recordCount $objectName items inserted into KML filer\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
-
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file

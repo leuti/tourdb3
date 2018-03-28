@@ -199,6 +199,7 @@ if ( $objectName == "tracks" ) {
     $returnObject['coordLeft'] = $coordLeft;
     $returnObject['coordRight'] = $coordRight;
     $returnObject['recordcount'] = $countTracks;
+    $returnObject['objectName'] = $objectName;
     echo json_encode($returnObject);                                            // echo JSON object to client
 
     if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
@@ -304,7 +305,7 @@ if ( $objectName == "segments" ) {
         }
 
         $countSegments++;                                                     // Counter for the number of tracks produced
-        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["Id"]) . '">';
+        $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["segId"]) . '">';
         $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
         $kml[] = '          <visibility>1</visibility>';
         $kml[] = '          <description>' . $singleRecord["segSourceFID"] . '-' . $singleRecord["segSourceRef"] . ' ' .
@@ -363,6 +364,7 @@ $returnObject['coordBottom'] = $coordBottom;
 $returnObject['coordLeft'] = $coordLeft;
 $returnObject['coordRight'] = $coordRight;
 $returnObject['recordcount'] = $countSegments;
+$returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
