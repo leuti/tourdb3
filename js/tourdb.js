@@ -1027,7 +1027,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypToOfCant = true ";
 
-    var objName = "cant";
+    var objName = "peaks_cant";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionid: sessionid,
@@ -1357,7 +1357,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
 
         // Draw kml file for cant 
         if ( dispObject_peaks_cant.genKml && tourdbMap ) {                                            // var is true when user has set filter on cant
-            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/cant.kml";
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_cant.kml";
         
             // Create the KML Layer for cant
             kmlLayer = new ol.layer.Vector({                       // create new vector layer for cant

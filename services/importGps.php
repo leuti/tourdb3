@@ -36,9 +36,11 @@ $loopSize = 5000;                                                   // Number of
 
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/importGpx.log";        // Assign file location
-$logFile = @fopen($importGpxLog,"a");                               // open log file handler 
-fputs($logFile, "\r\n============================================================\r\n");    
-fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $debugLevel >= 1 ) {
+    $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
+    fputs($logFile, "\r\n============================================================\r\n");    
+    fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+}
 
 // Evaluate request type
 if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != '' )    // if call to this service was done with dataForm (temp)
@@ -100,7 +102,7 @@ if ($request == "temp") {
             mkdir($uploaddir, 0777);
         }
 
-        fputs($logFile, "Line 104 - uploadfile: $uploadfile\r\n");
+        if ( $debugLevel >= 3 ) fputs($logFile, "Line 104 - uploadfile: $uploadfile\r\n");
 
         // move file to upload dir
         if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
@@ -118,7 +120,7 @@ if ($request == "temp") {
         $trackName = $gpx->trk->name;                                   // Track name  
         //$trackName = $trackName[0];  
  
-        fputs($logFile, "Line 120 - trackName: $trackName\r\n"); 
+        if ( $debugLevel >= 3 ) fputs($logFile, "Line 120 - trackName: $trackName\r\n"); 
 
         // -------------------------------------------------
         // Calculate times, meters up/down, distances

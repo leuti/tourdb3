@@ -18,7 +18,7 @@ date_default_timezone_set('Europe/Zurich');                         // must be s
 
 // Open file for import log
 $importGpxLog = dirname(__FILE__) . "/../log/login.log";            // Assign file location
-$logFile = @fopen($importGpxLog,"a");                               // open log file handler 
+if ( $debugLevel >= 1) $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
 if ( $debugLevel >= 1 ) fputs($logFile, "\r\n============================================================\r\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
@@ -56,5 +56,6 @@ if ( $debugLevel >= 1 )
 {
     fputs($logFile, "Line 60: Login script completed --> sessionid: " . $returnObject['sessionid'] . " | login: " 
     . $loginName . " | loginstatus: " . $returnObject['loginstatus'] . "\r\n");
+    fclose($logFile);                                   // close log file
 }
 ?>
