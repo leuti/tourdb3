@@ -1758,61 +1758,30 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                         
                         if ( respObj["status"] == "OK") {
 
-                            var latOut = 0;                                                 // counter for coord boundary resets
-                            var lonOut = 0;
-                            // delete existing map object and set empty div
+                            // delete current map
                             var element = document.getElementById('displayMap-ResMap');
                             var parent = element.parentNode
                             parent.removeChild(element);
                             parent.innerHTML = '<div id="displayMap-ResMap"></div>';
-                            
-                            // Derive center of map to be projected
-                            var coordTop = respObj.coordTop * 1;
-                            if ( coordTop > 300000 || coordTop < 70000 || coordTop == 0 ) {
-                                coordTop = 297000;                                          // Limit coord boundaries to Switzerland
-                                latOut++;
-                            }
-                            var coordBottom = respObj.coordBottom * 1;
-                            if ( coordBottom < 70000 || coordBottom > 300000 || coordBottom == 0 ) {
-                                coordBottom = 74000;                                        // Limit coord boundaries to Switzerland
-                                latOut++;
-                            }
-                            var coordLeft = respObj.coordLeft * 1;
-                            if ( coordLeft < 105000 || coordLeft > 845000 || coordLeft == 0 ) {
-                                coordLeft = 110000;                                         // Limit coord boundaries to Switzerland
-                                lonOut++;
-                            }
-                            var coordRight = respObj.coordRight * 1;
-                            if ( coordRight > 845000 || coordRight < 105000 || coordRight == 0 ) {
-                                coordRight = 840000;                                        // Limit coord boundaries to Switzerland
-                                lonOut++;
-                            }
 
+                            var coordTop = Number(respObj.coordTop);
+                            var coordBottom = Number(respObj.coordBottom);
+                            var coordLeft = Number(respObj.coordLeft);
+                            var coordRight = Number(respObj.coordRight);
+                            
                             // Evluate coord center (if route is outside CH - show empty CH map)
                             var coordCenterY = ( coordTop + coordBottom ) / 2;
-                            if ( latOut == 2 || lonOut == 2 ) {
-                                coordCenterY = 190000;                       // latOut = 2 means that both lat points are outside CH
-                                coordTop = 297000;
-                                coordBottom = 74000;
-                            }
-
                             var coordCenterX = ( coordRight + coordLeft ) / 2;
-                            if ( latOut == 2 || lonOut == 2 ) {
-                                coordCenterX = 660000;                       // lonOut = 2 means that both lon points are outside CH
-                                coordRight = 840000;
-                                coordLeft = 110000;
-                            }
-
+                            
                             // Calculate required resolution
                             resolution1 = ( coordTop - coordBottom ) / 200;
                             resolution2 = ( coordRight - coordLeft ) / 200;
                             if ( resolution1 > resolution2 ) {
-                                resolution = resolution1;
+                                resolution = Math.min(500,resolution1);
                             } else {
-                                resolution = resolution2;
+                                resolution = Math.min(500,resolution2);
                             }
-            
-                            console.info("resolution: " + resolution + " - CoordCenterX: " + coordCenterX + " - CoordCenterY: " + coordCenterY);
+
                             // Draw empty map & center to provided coordinate
                             var tourdbMap = new ga.Map({
                                 target: 'displayMap-ResMap',
@@ -1873,11 +1842,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                             });
             
                             // display message
-                            if ( latOut > 0 ) {
-                                $('#statusMessage').text("Not all objects could be (fully) displayey");    
-                            } else {
-                                $('#statusMessage').text(respObj.message);
-                            }
+                            $('#statusMessage').text(respObj.message);
                             $("#statusMessage").show().delay(5000).fadeOut();
                         }
                     }

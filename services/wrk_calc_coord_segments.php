@@ -14,7 +14,6 @@ include("./config.inc.php");                                        // include c
 include("coord_funct.inc.php");                                    // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 3;                                                    // 0 = off, 6 = all
 $count = 0;
 
 // Open file to write log

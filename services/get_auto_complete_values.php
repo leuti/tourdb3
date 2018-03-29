@@ -1,8 +1,6 @@
 <?php
 date_default_timezone_set('Europe/Zurich');
-
-//DEBUG
-$debugLevel = 5; // 0 = off, 1 = min, 3 = a lot, 5 = all 
+include("config.inc.php");                                                  // Include config file
 
 if ($debugLevel >= 1){
     $fp = @fopen("log/getValues.log","a"); // TASK: Add Date/Time

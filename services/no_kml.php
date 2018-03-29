@@ -9,8 +9,7 @@
 // Tasks
 // * 
 
-// Set debug level
-$debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
+include("config.inc.php");                                                  // Include config file
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/no_kml.log";                // Assign file location

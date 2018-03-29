@@ -22,10 +22,8 @@
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
 
-$debugLevel = 3; // 0 = off, 1 = min, 3 = a lot, 5 = all
 $imgLoc = "./css/images/";
 $recordCount = 0;
-
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_wayp.log";                // Assign file location

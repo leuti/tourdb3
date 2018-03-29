@@ -26,7 +26,6 @@ date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
 
 // Set debug level
-$debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
 $countTracks = 0;                                                           // Internal counter for tracks processed
 $countSegments = 0;                                                         // Internal counter for segments processed
 $firstRecord = true;

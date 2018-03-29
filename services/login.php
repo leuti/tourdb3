@@ -16,8 +16,6 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 1;                                                    // 0 = off, 1 = regular, 3 = many, 6 = all
-
 // Open file for import log
 $importGpxLog = dirname(__FILE__) . "/../log/login.log";            // Assign file location
 $logFile = @fopen($importGpxLog,"a");                               // open log file handler 

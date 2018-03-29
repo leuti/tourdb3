@@ -1,5 +1,7 @@
 <?php
 
+    $debugLevel = 1;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
+
     $db_username 		= 'leuti'; //database username
     $db_password 		= 'yTBgve0xgIAgaGyF8nXj'; //database password
     $db_name 			= 'tourdb2_prod'; //database name

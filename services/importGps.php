@@ -32,7 +32,6 @@ include("config.inc.php");                                        // include con
 include("coord_funct.inc.php");                                    // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 1;                                                    // 0 = off, 6 = all
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
@@ -165,7 +164,6 @@ if ($request == "temp") {
                 $WGS_right_lon = $lon;
                 $WGS_bottom_lat = $lat;
                 $WGS_bottom_lon = $lon;
-                fputs($logFile, "Line 170: First run\r\n");     
             }
 
             //$CH03_top_lat = WGStoCHy($lat, $lon);
@@ -367,7 +365,7 @@ if ($request == "temp") {
         
         // remove imported file & close connections
         fclose($uploadfile);
-        if (file_exists) unlink ($uploadfile);                  // remove file if existing
+        if ( file_exists($uploadfile) ) unlink($uploadfile);                   // remove file if existing
         rmdir($uploaddir, 0777);                                // remove upload directory          
     } else {
 
@@ -442,7 +440,7 @@ if ($request == "temp") {
     $waypRun = false;                                                 // True when at least one item to insert
     $partRun = false;                                                 // True when at least one item to insert
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line 216 - Part II entered\r\n");
+    if ( $debugLevel >= 6) fputs($logFile, "Line 216 - Part II entered\r\n");
  
     if ( sizeof($itemsArray) > 0 ) {
 

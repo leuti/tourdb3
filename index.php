@@ -216,12 +216,14 @@
 
 								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_NewLoadButton" value="New Load" />
+									<input type="submit" class="button applyFilterButton" id="dispFilTrk_NewLoadButton" value="Load" />
 								</div>
 								<!-- Button to add selection to existing objects -->
-								<div class="dispObjCriteria">
+								<!--
+									<div class="dispObjCriteria">
 									<input type="submit" class="button applyFilterButton" id="dispFilTrk_addObjButton" value="Add Tracks" />
 								</div>
+								-->
 								<!-- Button to reset filter -->
 								<!--
 								<div class="dispObjCriteria">
@@ -230,16 +232,17 @@
 								
 							</fieldset>
 						</div>
-						
-						<!-- Segment Section of Accordion -->
+
+<!--						
+						<!- - Segment Section of Accordion - ->
 						<h2>Segments</h2>
 						<div class="accordionBackground">
 							<fieldset>
 
-								<!-- SEGMENT filter -->
+								<!- - SEGMENT filter - ->
 								<legend class="filterHeader">Segments</legend>
 
-								<!-- segTypeFID -->
+								<!- - segTypeFID - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_segTypeFID" class="selectable filterItems">
@@ -248,32 +251,31 @@
 										<li id="segTypeFID_HT" class="ui-widget-content">Hochtour</li>
 										<li id="segTypeFID_ST" class="ui-widget-content">Skitour</li>
 										<li id="segTypeFID_SS" class="ui-widget-content">Schneeschuhtour</li>
-										<!--<li class="ui-widget-content">alle</li>-->
 									</ol>
 								</div>
 
-								<!-- segName -->
+								<!- - segName - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_segName" class="labelFirst">Segment Name contains</label>
 									<input id="dispFilSeg_segName" class="filterItems" type="text" size="50">
 								</div>
 
-								<!--startLocName -->
+								<!- -startLocName - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_startLocName" class="labelFirst">Select Start Location</label>
 									<input id="dispFilSeg_startLocName" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_startLocID">
 								</div>
 								
-								<!--startLocAlt
+								<!- -startLocAlt
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Start Altitude</label>
 									<input type="text" id="dispFilSeg_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
 								<div id="dispFilSeg_startLocAlt_slider"></div>
-								-->
+								- ->
 
-								<!-- startLocType -->
+								<!- - startLocType - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
@@ -285,22 +287,22 @@
 									</ol>
 								</div>
 								
-								<!--TargetLocName -->
+								<!- -TargetLocName - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_targetLocName" class="labelFirst">Target Location</label>
 									<input id="dispFilSeg_targetLocName" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_targetLocID">
 								</div>
 
-								<!--targetLocAlt 
+								<!- -targetLocAlt 
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Target Altitude</label>
 									<input type="text" id="dispFilSeg_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
 								</div>
 								<div id="dispFilSeg_targetLocAlt_slider"></div>
-								-->
+								- ->
 
-								<!-- targetLocType -->
+								<!- - targetLocType - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
@@ -312,21 +314,21 @@
 									</ol>
 								</div>
 
-								<!-- region -->
+								<!- - region - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_segRegion" class="labelFirst">Region</label>
 									<input id="dispFilSeg_segRegion" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_segRegionID">
 								</div>
 								
-								<!-- Gebiet -->
+								<!- - Gebiet - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_segArea" class="labelFirst">Area</label>
 									<input id="dispFilSeg_segArea" class="filterItems" type="text" size="50">
 									<input type="hidden" id="dispFilSeg_segAreaID">
 								</div>
 					
-								<!-- grade -->
+								<!- - grade - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_grade" class="selectable filterItems">
@@ -346,7 +348,7 @@
 									</ol>
 								</div>
 								
-								<!-- climbGrade -->
+								<!- - climbGrade - ->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
@@ -360,38 +362,39 @@
 									</ol>
 								</div>
 
-								<!--tStartTarget -->
-								<!-- WAITING FOR JQUI WIDGET
+								<!- -tStartTarget - ->
+								<!- - WAITING FOR JQUI WIDGET
 								<div class="dispObjCriteria">
 									<br>t St-Zi  min. <input type="text" name="tStartTargetMin">
 									max. <input type="text" name="tStartTargetMax">
 								</div>
-								-->
+								- ->
 									
-								<!--mUStartTarget -->
-								<!-- WAITING FOR JQUI WIDGET
+								<!- -mUStartTarget - ->
+								<!- - WAITING FOR JQUI WIDGET
 								<div class="dispObjCriteria">
 									<br>Aufstieg  min. <input type="text" name="mUStartTargetMin">
 									max. <input type="text" name="mUStartTargetMax"><br>
 								</div>
-								-->
+								- ->
 								
-								<!-- Button to newly display selection -->
+								<!- - Button to newly display selection - ->
 								<div class="dispObjCriteria">
 									<input type="submit" class="button applyFilterButton" id="dispFilSeg_NewLoadButton" value="New Load" />
 								</div>
-								<!-- Button to add selection to existing objects -->
+								<!- - Button to add selection to existing objects - ->
 								<div class="dispObjCriteria">
 									<input type="submit" class="button applyFilterButton" id="dispFilSeg_addObjButton" value="Add Segments" />
 								</div>
-								<!-- Button to reset filter -->
-								<!--
+								<!- - Button to reset filter - ->
+								<!- -
 								<div class="dispObjCriteria">
 									<input type="submit" class="button filterResetButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
-								</div>-->
+								</div>- ->
 
 							</fieldset>
 						</div>
+-->
 
 						<!-- Segment Section of Accordion -->
 						<h2>Additional Items to display</h2>
@@ -436,15 +439,13 @@
 									<label for="dispObjHuts" class="dispObjSel labelFirst">Hütten</label>
 									<input type="checkbox" name="dispObjHuts" id="dispObjHuts" class="text ui-widget-content ui-corner-all">
 								</p>
-								<!-- Button to newly display selection -->
-								<div class="dispObjCriteria">
-										<input type="submit" class="button applyFilterButton" id="dispFilWayp_NewLoadButton" value="New Load" />
-									</div>
-								<!-- Button to add selection to existing objects -->
-								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilWayp_addObjButton" value="Add Items" />
-								</div>
-							</fieldset>								
+							</fieldset>
+
+							<!-- Button to newly display selection -->
+							<div class="dispObjCriteria">
+								<input type="submit" class="button applyFilterButton" id="dispFilWayp_NewLoadButton" value="Load" />
+							</div>
+							
 						</div>
 
 					</div>
@@ -789,7 +790,7 @@
 	</section> <!-- End main -->
 
 	<footer id="footer">
-        <div id=footerText>&copy; tourdb 3 - 2017 leuti - Version 20171227</div>
+        <div id=footerText>&copy; tourdb - 2018 leuti - Version 1.1</div>
 		<div id="statusMessage"></div>
     </footer>
 	
