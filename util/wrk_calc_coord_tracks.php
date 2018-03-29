@@ -10,8 +10,8 @@
 // * 
 
 // Set variables and parameters
-include("./config.inc.php");                                        // include config file
-include("coord_funct.inc.php");                                    // include coord calc functions
+include("../services/config.inc.php");                                        // include config file
+include("../services/coord_funct.inc.php");                                    // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
 $count = 0;
@@ -23,9 +23,9 @@ fputs($logFile, "\r\n===========================================================
 fputs($logFile, "calccalc_coord_tracks_coord.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Select tracks from db
-$sql = "SELECT trkId, trkCoordinates ";
+$sql = "SELECT trkId, trkTrackName, trkCoordinates ";
 $sql .= "FROM tbl_tracks ";
-$sql .= "WHERE trkCoordinates <> '' ";
+$sql .= "WHERE trkCoordinates <> ''";
 
 fputs($logFile, "Line 29: sql: $sql\r\n");    
 // loop through each track
@@ -39,7 +39,7 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
     $coordArray = explode ( " ", $singleRecord["trkCoordinates"]);
 
     $i=0;
-    for ($i; $i<sizeof($coordArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
+    for ($i; $i<sizeof($coordArray)-1; $i++) {                            // 10 is the number of existing subtypes in array (lines)
 
         // fputs($logFile, "Line 44 - line: " . $coordArray[$i] . "\r\n"); 
 
@@ -79,6 +79,19 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
         }
 
         $firstRecord = 0 ;
+
+        if ( $debugLevel >= 6 ) {
+            fputs($logFile, "...........................................\r\n");  
+            fputs($logFile, "Track: " . $singleRecord["trkId"] . " - " .  $singleRecord["trkTrackName"] . "\r\n");   
+            fputs($logFile, "WGS_top_lat: $WGS_top_lat\r\n");
+            fputs($logFile, "WGS_top_lon: $WGS_top_lon\r\n");
+            fputs($logFile, "WGS_left_lat: $WGS_left_lat\r\n");
+            fputs($logFile, "WGS_left_lon; $WGS_left_lon\r\n");
+            fputs($logFile, "WGS_right_lat: $WGS_right_lat\r\n");
+            fputs($logFile, "WGS_right_lon: $WGS_right_lon\r\n");
+            fputs($logFile, "WGS_bottom_lat: $WGS_bottom_lat\r\n");
+            fputs($logFile, "WGS_bottom_lon: $WGS_bottom_lon\r\n");
+        }
     }
 
     $coordTop = round( WGStoCHx($WGS_top_lat, $WGS_top_lon), 0);                                               // variables to define min/max lon/lat to diplay track in center of map, focused
@@ -86,30 +99,31 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
     $coordRight = round( WGStoCHy($WGS_right_lat, $WGS_right_lon), 0);
     $coordBottom = round( WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon), 0);
 
-    /*
-    fputs($logFile, "Track: " . $singleRecord["trkId"] . "\r\n");   
-    fputs($logFile, "WGS_top_lat: $WGS_top_lat\r\n");
-    fputs($logFile, "WGS_top_lon: $WGS_top_lon\r\n");
-    fputs($logFile, "WGS_left_lat: $WGS_left_lat\r\n");
-    fputs($logFile, "WGS_left_lon; $WGS_left_lon\r\n");
-    fputs($logFile, "WGS_right_lat: $WGS_right_lat\r\n");
-    fputs($logFile, "WGS_right_lon: $WGS_right_lon\r\n");
-    fputs($logFile, "WGS_bottom_lat: $WGS_bottom_lat\r\n");
-    fputs($logFile, "WGS_bottom_lon: $WGS_bottom_lon\r\n");
+    if ( $debugLevel >= 3 ) {
+        fputs($logFile, "--------------------------------------------------------------------------------------\r\n");  
+        fputs($logFile, "Track: " . $singleRecord["trkId"] . " - " .  $singleRecord["trkTrackName"] . "\r\n");   
+        fputs($logFile, "WGS_top_lat: $WGS_top_lat\r\n");
+        fputs($logFile, "WGS_top_lon: $WGS_top_lon\r\n");
+        fputs($logFile, "WGS_left_lat: $WGS_left_lat\r\n");
+        fputs($logFile, "WGS_left_lon; $WGS_left_lon\r\n");
+        fputs($logFile, "WGS_right_lat: $WGS_right_lat\r\n");
+        fputs($logFile, "WGS_right_lon: $WGS_right_lon\r\n");
+        fputs($logFile, "WGS_bottom_lat: $WGS_bottom_lat\r\n");
+        fputs($logFile, "WGS_bottom_lon: $WGS_bottom_lon\r\n");
 
-    fputs($logFile, "Line 78: coordTop: $coordTop\r\n");
-    fputs($logFile, "Line 79: coordBottom: $coordBottom\r\n");
-    fputs($logFile, "Line 80: coordLeft: $coordLeft\r\n");
-    fputs($logFile, "Line 81: coordRight: $coordRight\r\n");        
-    */
-    
+        fputs($logFile, "Line 78: coordTop: $coordTop\r\n");
+        fputs($logFile, "Line 79: coordBottom: $coordBottom\r\n");
+        fputs($logFile, "Line 80: coordLeft: $coordLeft\r\n");
+        fputs($logFile, "Line 81: coordRight: $coordRight\r\n");        
+    }
+
     //create SQL statement  
     $sql = "UPDATE `tourdb2_prod`.`tbl_tracks` ";
     $sql .= "SET `trkCoordTop` = '$coordTop', `trkCoordBottom` = '$coordBottom', ";
     $sql .= "`trkCoordLeft` = '$coordLeft', `trkCoordRight` = '$coordRight' ";
     $sql .= "WHERE `tbl_tracks`.`trkId` = " . $singleRecord["trkId"];
 
-    //fputs($logFile, "Line 29: sql: $sql\r\n");   
+    fputs($logFile, "Line 29: sql: $sql\r\n");   
 
     if ($conn->query($sql) === TRUE)                                // run sql against DB
     {

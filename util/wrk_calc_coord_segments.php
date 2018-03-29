@@ -10,8 +10,8 @@
 // * 
 
 // Set variables and parameters
-include("./config.inc.php");                                        // include config file
-include("coord_funct.inc.php");                                    // include coord calc functions
+include("../services/config.inc.php");                                        // include config file
+include("../services/coord_funct.inc.php");                                    // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
 $count = 0;
@@ -37,7 +37,7 @@ while($singleRecord = mysqli_fetch_assoc($records)) {
     $coordArray = explode ( " ", $singleRecord["segCoordinates"]);
 
     $i=0;
-    for ($i; $i<sizeof($coordArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
+    for ($i; $i<sizeof($coordArray)-1; $i++) {                            // 10 is the number of existing subtypes in array (lines)
 
         $line = explode ( ",", $coordArray[$i]);
 

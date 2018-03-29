@@ -58,7 +58,6 @@ if ($debugLevel >= 1){
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
     if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: gen_kml.php opened \r\n"); 
-    if ( $debugLevel >= 1 ) fputs($logFile, "Line 57: debuglevel set to: $debugLevel\r\n");   
 };
 
 // variables passed on by client (as JSON object)
@@ -69,7 +68,7 @@ $objectName = $receivedData["objectName"];
 
 if ($debugLevel >= 3){
     fputs($logFile, 'Line 72: Received parameters:' . "\r\n");
-    fputs($logFile, 'sessionid:       ' . $sessionid . "\r\n");
+    fputs($logFile, 'objectName:       ' . $objectName . "\r\n");
     fputs($logFile, 'sqlWhere:        ' . $sqlWhere . "\r\n");
 };
 
@@ -208,10 +207,9 @@ if ( $objectName == "tracks" ) {
     if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
     mysqli_close($conn);                                                        // close SQL connection 
 
+    if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
     exit;
 }
-
-if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
 
 // ==================================================================
 // If flag is set to generate segments KML
@@ -299,6 +297,7 @@ if ( $objectName == "segments" ) {
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
     { 
+        
         // Set Coord when current record is first
         if ( $firstRecord ) {
             $coordTop = $singleRecord["segCoordTop"];                               // Max 297000
@@ -327,20 +326,32 @@ if ( $objectName == "segments" ) {
     
         // evaluate if current record needs to extend coord boundaries
         if ( !$firstRecord ) {
-            if ( $singleRecord["trkCoordTop"] > $coordTop ) {
-                $coordTop = $singleRecord["trkCoordTop"];
+            if ( $singleRecord["segCoordTop"] > $coordTop ) {
+                $coordTop = $singleRecord["segCoordTop"];
             }
-            if ( $singleRecord["trkCoordBottom"] < $coordBottom ) {
-                $coordBottom = $singleRecord["trkCoordBottom"];
+            if ( $singleRecord["segCoordBottom"] < $coordBottom ) {
+                $coordBottom = $singleRecord["segCoordBottom"];
             }
-            if ( $singleRecord["trkCoordLeft"] < $coordLeft ) {
-                $coordLeft = $singleRecord["trkCoordLeft"];
+            if ( $singleRecord["segCoordLeft"] < $coordLeft ) {
+                $coordLeft = $singleRecord["segCoordLeft"];
             }
-            if ( $singleRecord["trkCoordRight"] > $coordRight ) {
-                $coordRight = $singleRecord["trkCoordRight"];
+            if ( $singleRecord["segCoordRight"] > $coordRight ) {
+                $coordRight = $singleRecord["segCoordRight"];
             }
         }
         $firstRecord = false;
+        if ( $debugLevel >= 3 ) {
+            fputs($logFile, "=============================================\r\n");
+            fputs($logFile, "Line 78: segId: " . $singleRecord["segId"] . $singleRecord["segName"] . "\r\n");
+            fputs($logFile, "Line 78: segcoordTop: " . $singleRecord["segCoordTop"] ."\r\n");
+            fputs($logFile, "Line 79: segcoordBottom: " . $singleRecord["segCoordBottom"] ."\r\n");
+            fputs($logFile, "Line 80: segcoordLeft: " . $singleRecord["segCoordLeft"] ."\r\n");
+            fputs($logFile, "Line 81: segcoordRight: " . $singleRecord["segCoordRight"] ."\r\n");  
+            fputs($logFile, "Line 78: coordTop: $coordTop\r\n");
+            fputs($logFile, "Line 79: coordBottom: $coordBottom\r\n");
+            fputs($logFile, "Line 80: coordLeft: $coordLeft\r\n");
+            fputs($logFile, "Line 81: coordRight: $coordRight\r\n");    
+        }
     };
 
     // Write KML trailer

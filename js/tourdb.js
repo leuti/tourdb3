@@ -573,7 +573,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    if ( sqlWhereCurrent != sqlWherePrev_tracks && sqlWhereCurrent != "" ) {
+    if ( sqlWhereCurrent != "" ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -599,7 +599,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // ****** Build SQL WHERE statement for segments *******
     
     // Initialize segments variables
-    
+
     //var sqlWhereSegments = "";                                      // Initialise var for where string for segments
     var whereStatement = [];                                        // Initialise array for whereStatement
     var whereString = "";                                           // Initialise var for where string
@@ -784,6 +784,10 @@ $(document).on('click', '.applyFilterButton', function (e) {
         sqlWhereCurrent = sqlWhereCurrent; 
     }
 
+    // This statement needs to be removed when segments are used again
+    //sqlWhereCurrent = ""; 
+    // This statement needs to be removed when segments are used again
+
     // Create new display object for current object
     var objName = "segments";
     var phpUrl = "services/gen_kml.php";
@@ -813,7 +817,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
             data: jsn
         };
     }
-    
+  
     var dispObject_segments = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // ********************************************************************************************
@@ -825,7 +829,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
     sqlWhereCurrent += "waypAltitude < 1000 ";
     
-
     // Create new display object for current object
     var objName = "peaks_100";
     var phpUrl = "services/gen_wayp.php";
@@ -838,7 +841,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
     
     itemChecked = document.getElementById("dispObjPeaks_100").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_100 ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -867,7 +870,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     sqlWhereCurrent += "waypAltitude < 2000 AND ";
     sqlWhereCurrent += "waypAltitude >= 1000 ";
     
-    
     var objName = "peaks_1000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
@@ -879,7 +881,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
 
     itemChecked = document.getElementById("dispObjPeaks_1000").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_1000 ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -908,7 +910,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     sqlWhereCurrent += "waypAltitude < 3000 AND ";
     sqlWhereCurrent += "waypAltitude >= 2000 ";
     
-    
     var objName = "peaks_2000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
@@ -920,7 +921,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
 
     itemChecked = document.getElementById("dispObjPeaks_2000").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_2000 ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -949,7 +950,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     sqlWhereCurrent += "waypAltitude < 4000 AND ";
     sqlWhereCurrent += "waypAltitude >= 3000 ";
     
-    
     var objName = "peaks_3000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
@@ -960,7 +960,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
     itemChecked = document.getElementById("dispObjPeaks_3000").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_3000 ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -999,7 +999,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
 
     itemChecked = document.getElementById("dispObjPeaks_4000").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_4000 ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1038,7 +1038,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
 
     itemChecked = document.getElementById("dispObjPeaks_cant").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_peaks_cant ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1064,7 +1064,6 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Huts
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 4 ";
-    
 
     var objName = "huts";
     var phpUrl = "services/gen_wayp.php";
@@ -1077,7 +1076,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     jsn = JSON.stringify ( jsonObject )
 
     itemChecked = document.getElementById("dispObjHuts").checked;
-    if ( itemChecked && sqlWhereCurrent != sqlWherePrev_huts ) {
+    if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
             url: phpUrl,
@@ -1178,7 +1177,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         } else if ( isNaN( coordBottom_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
             var coordBottom = coordBottom_segments;
         } else {                                                                        // both deliver coordinates
-            var coordBottom = Math.max(coordBottom_tracks, coordBottom_segments);                
+            var coordBottom = Math.min(coordBottom_tracks, coordBottom_segments);                
         }
 
         var coordLeft_tracks = Number(resp_tracks[0].coordLeft);
@@ -1190,7 +1189,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
         } else if ( isNaN( coordLeft_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
             var coordLeft = coordLeft_segments;
         } else {                                                                        // both deliver coordinates
-            var coordLeft = Math.max(coordLeft_tracks, coordLeft_segments);                
+            var coordLeft = Math.min(coordLeft_tracks, coordLeft_segments);                
         }
 
         var coordRight_tracks = Number(resp_tracks[0].coordRight);
