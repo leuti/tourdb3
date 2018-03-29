@@ -21,7 +21,6 @@ $importGpxLog = dirname(__FILE__) . "/../log/login.log";            // Assign fi
 $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
 if ( $debugLevel >= 1 ) fputs($logFile, "\r\n============================================================\r\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
-if ( $debugLevel >= 1 ) fputs($logFile, "Line 26: debuglevel set to: $debugLevel\r\n");    
 
 // variables passed on by client (as formData object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );

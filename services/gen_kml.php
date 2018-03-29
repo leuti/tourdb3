@@ -201,8 +201,8 @@ if ( $objectName == "tracks" ) {
     $returnObject['objectName'] = $objectName;
     echo json_encode($returnObject);                                            // echo JSON object to client
 
-    if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+    if ( $debugLevel >= 1 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
     // Close all files and connections
     if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
@@ -370,8 +370,8 @@ $returnObject['recordcount'] = $countSegments;
 $returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $debugLevel >= 3 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
-if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $debugLevel >= 1 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file

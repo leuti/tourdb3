@@ -68,7 +68,7 @@ $sql .= " AND ( tbl_waypoints.waypCoordWGS84E is not null OR tbl_waypoints.waypC
 $sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS84E, waypCoordWGS84N, s1.trwpWaypID ";
 //$sql .= "LIMIT 70 ";
 
-if ($debugLevel >= 1){
+if ($debugLevel >= 3){
     fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
 };
 

@@ -14,8 +14,8 @@ date_default_timezone_set('Europe/Zurich');                                     
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/exportData.log";                   // Assign file location
 $logFile = @fopen($importGpxLog,"a");                                           // open log file handler 
-fputs($logFile, "\r\n============================================================\r\n");    
-fputs($logFile, "exportData.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $debugLevel >=1 ) fputs($logFile, "\r\n============================================================\r\n");    
+if ( $debugLevel >=1 ) fputs($logFile, "exportData.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Evaluate request type
 if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){                        // Make sure that it is a POST request
@@ -145,5 +145,5 @@ switch ( $request ) {
     $result->close();                                                           // close SQL connection 
     echo json_encode($returnObject);                                            // echo return object to client
 
-    fputs($logFile, "exportData.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+    if ( $debugLevel >=1 ) fputs($logFile, "exportData.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 ?>
