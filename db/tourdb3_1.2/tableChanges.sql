@@ -15,6 +15,7 @@ ADD `segCoordLeft` INT(11) NOT NULL COMMENT 'X coord of western most point of se
 ADD `segCoordRight` INT(11) NOT NULL COMMENT 'X coord of easter most point of segments' AFTER `segCoordLeft`;
 
 ALTER TABLE `tbl_waypoints` ADD `waypToOfCant` TINYINT(1) NOT NULL AFTER `waypUIAA4000`;
+ALTER TABLE `tbl_waypoints` CHANGE `waypToOfCant` `waypToOfCant` VARCHAR(2) NOT NULL;
 
 -- Cleanup coordinates of waypoints
 UPDATE `tourdb2_prod`.`tbl_waypoints` 
