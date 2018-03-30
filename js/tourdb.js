@@ -1025,7 +1025,7 @@ $(document).on('click', '.applyFilterButton', function (e) {
     // Peaks Top of Cantons
     var sqlWhereCurrent = "WHERE ";                                        // Initialise array for whereStatement
     sqlWhereCurrent += "waypTypeFID = 5 AND ";
-    sqlWhereCurrent += "waypToOfCant != 0 ";
+    sqlWhereCurrent += "waypToOfCant != '0' ";
 
     var objName = "peaks_cant";
     var phpUrl = "services/gen_wayp.php";
