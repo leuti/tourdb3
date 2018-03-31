@@ -55,7 +55,8 @@ if (!is_dir ( $kml_dir )) {                                                 // C
 // Select waypoints for output
 $sql = "SELECT tbl_waypoints.waypID, tbl_waypoints.waypNameLong, tbl_waypoints.waypTypeFID, tbl_waypoints.waypAltitude, tbl_waypoints.waypCountry, tbl_waypoints.waypCoordWGS84E, tbl_waypoints.waypCoordWGS84N, sum(s1.saison) as saisonkey ";
 $sql .= "FROM ( SELECT tbl_track_wayp.trwpWaypID, tbl_tracks.trkId, ";
-$sql .= "SUM(CASE tbl_tracks.trkSubType WHEN 'Alpinklettern' THEN 1000 WHEN 'Alpintour' THEN 1000 WHEN 'Hochtour' THEN 1000 WHEN 'Joggen' THEN 1000 WHEN 'Mehrseilklettern' THEN 1000 WHEN 'Sportklettern' THEN 1000 WHEN 'Velotour' THEN 1000 WHEN 'Wanderung' THEN 1000 WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skitour' THEN 1 WHEN 'Winterwanderung' THEN 1 ELSE 0 END) as 'saison' ";
+$sql .= "SUM(CASE tbl_tracks.trkSubType WHEN 'Alpinklettern' THEN 1000 WHEN 'Alpintour' THEN 1000 WHEN 'Hochtour' THEN 1000 WHEN 'Joggen' THEN 1000 WHEN 'Mehrseilklettern' THEN 1000 WHEN 'Radfahren' THEN 1000 WHEN 'Sportklettern' THEN 1000 WHEN 'Velotour' THEN 1000 WHEN 'Wanderung' THEN 1000 WHEN 'Schwimmen' THEN 1000 WHEN 'Rennrad' THEN 1000";
+$sql .= "WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skitour' THEN 1 WHEN 'Winterwanderung' THEN 1 WHEN 'Alpinski' THEN 1 ELSE 0 END) as 'saison' ";
 $sql .= "FROM tbl_tracks ";
 $sql .= "JOIN tbl_track_wayp on tbl_tracks.trkId = tbl_track_wayp.trwpWaypId ";
 $sql .= "WHERE tbl_track_wayp.trwpReached_f = 1 ";
