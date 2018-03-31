@@ -13,7 +13,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="-1">
-	<title>tourdb 1.0></title>
+	<title>tourdb 1.0</title>
 	<!-- from https://www.jqwidgets.com/ -->
     <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
 
