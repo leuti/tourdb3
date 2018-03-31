@@ -13,7 +13,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="-1">
-	<title>Tour DB 3.0 - PROTOTYPE></title>
+	<title>tourdb 1.0></title>
 	<!-- from https://www.jqwidgets.com/ -->
     <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
 
@@ -788,7 +788,7 @@
 	</section> <!-- End main -->
 
 	<footer id="footer">
-        <div id=footerText>&copy; tourdb - 2018 leuti - Version 1.1</div>
+        <div id=footerText>&copy; tourdb - 2018 leuti - Version 1.0 - 20180331</div>
 		<div id="statusMessage"></div>
     </footer>
 	
