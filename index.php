@@ -14,34 +14,21 @@
 	<meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="-1">
 	<title>tourdb 1.0</title>
-	<!-- from https://www.jqwidgets.com/ -->
-    <!-- <link rel="stylesheet" href="jqw/jqwidgets/styles/jqx.base.css" type="text/css" />-->
 
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="css/tourdb_main.css">	
 </head>
-<body> <!--style="height: 100%;">-->
-	<!-- load jquery sources --> 
-	<script type="text/javascript" src="js/jquery-3.1.0.js"></script> <!-- JQuery from local server -->  <!-- local -->
-	<script type="text/javascript" src="js/jquery-ui.js"></script> <!-- JQuery UI from local server --> <!-- local -->
-	<!-- <script type="text/javascript" src="jqw/scripts/demos.js"> --> </script>  <!-- uncelear if the whole jqw folder is required for jquery -->
-
+<body>
+	<!-- load jquery sources -->
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> <!-- JQuery from local server -->  <!-- local -->
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script> <!-- JQuery UI from local server --> <!-- local -->
+	
 	<!-- load swissmap sources -->
-	<!-- <script src="//api3.geo.admin.ch/loader.js"></script> --> <!-- Swissmap javascript --> 
 	<script src="http://api3.geo.admin.ch/loader.js?lang=en" type="text/javascript"></script>
-	<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
-
-	<!-- from https://www.jqwidgets.com/ -->
-    <!-- <script type="text/javascript" src="jqw/jqwidgets/jqxcore.js"></script>-->
-    <!--<script type="text/javascript" src="jqw/jqwidgets/jqxsplitter.js"></script>-->
-   
+	
 	<script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- local -->
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
 
-	<!--<script src="//code.jquery.com/jquery-2.2.0.min.js"></script> -->  <!-- CDN -->
-	<!-- <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->  <!-- CDN -->   
-	<!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> --> <!-- CDN -->
-	
 	<!-- ========================================================================== -->
 	<!-- ========================== header ======================================== -->
 	<!-- ========================================================================== -->
@@ -56,9 +43,12 @@
 			<li id="navBtns_btn_login" class="navBtns_btn_li active" style="display:none;">
 				<a id="navBtns_btn_login_a" class="navBtns_btns_a" href="#panelLogin"><h2>Login</h2></a>
 			</li>
-			<li id="navBtns_btn_diplay" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_diplay_a" class="navBtns_btns_a" href="#panelDisplay"><h2>Display</h2></a>
+			<li id="navBtns_btn_map" class="navBtns_btn_li loginReq">
+				<a id="navBtns_btn_dispmap_a" class="navBtns_btns_a" href="#panelDisplayMap"><h2>Map</h2></a>
 			</li>
+			<li id="buttonDisplayLists" class="navBtns_btn_li loginReq">
+				<a id="navBtns_btn_displists_a" class="navBtns_btns_a" href="#panelDisplayLists"><h2>Lists</h2></a> 
+			</li>			
 			<li id="navBtns_btn_import" class="navBtns_btn_li loginReq">
 				<a id="navBtns_btn_import_a" class="navBtns_btns_a" href="#panelImport"><h2>Import</h2></a> 
 			</li>
@@ -113,9 +103,9 @@
 		</div> <!-- End div panelLogin -->
 
 		<!-- ========================================================================== -->
-		<!-- ========================== panelDisplay ================================== -->
+		<!-- ========================== panelDisplayMap ================================== -->
 		<!-- ========================================================================== -->
-		<div id="panelDisplay" class="tourdbPanel">
+		<div id="panelDisplayMap" class="tourdbPanel">
 			
 			<!-- Div for Menu buttons -->
 			<div id="contObjectSelector">
@@ -460,14 +450,24 @@
 			
 			</div> <!-- End displayMap -->
 
-		</div> <!-- End div panelDisplay -->
+		</div> <!-- End div panelDisplayLists -->
 
 		<!-- ========================================================================== -->
-		<!-- ======================== panelMaintain =================================== -->
+		<!-- ======================== panelDisplayLists =================================== -->
 		<!-- ========================================================================== -->		
-		<div id="panelMaintain" class="tourdbPanel">
-			<p>Ich bin das panel panelMaintain</p>
-		</div> <!-- End div panelMaintain -->
+		<div id="panelDisplayLists" class="tourdbPanel">
+			<div id="tabDispLists" class="tabDispLists">
+				<ul>
+					<li><a href="#tabDispLists_trks">Tracks</a></li>
+					<li><a href="#tabDispLists_segs">Segments</a></li>
+					<li><a href="#tabDispLists_part">Participants</a></li>
+				</ul>
+				<div id="tabDispLists_trks"></div>
+				<div id="tabDispLists_segs"></div>
+				<div id="tabDispLists_part"></div>
+			</div>
+			
+		</div> <!-- End div panelDisplayLists -->
 
 		<!-- ========================================================================== -->
 		<!-- ====================== panelImport ======================================= -->
@@ -776,6 +776,13 @@
 			</div>		
 
 		</div> <!-- End div panelExport -->
+
+		<!-- ========================================================================== -->
+		<!-- ======================== panelMaintain =================================== -->
+		<!-- ========================================================================== -->		
+		<div id="panelMaintain" class="tourdbPanel">
+			<p>Ich bin das panel panelMaintain</p>
+		</div> <!-- End div panelMaintain -->
 
 		<!-- ========================================================================== -->
 		<!-- ======================== panelAdmin ========================================== -->

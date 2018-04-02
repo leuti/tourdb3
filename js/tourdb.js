@@ -325,7 +325,7 @@ $(document).ready(function() {
     $(this).on('click', '.navBtns_btns_a', function(e) {                  
         e.preventDefault();                                          // Prevent link behaviour
         var $activeButtonA = $(this)                                 // Store the current link <a> element
-        var buttonId = this.hash;                                    // Get div class of selected topic (e.g #panelDisplay)
+        var buttonId = this.hash;                                    // Get div class of selected topic (e.g #panelDisplayLists)
         
         // Run following block if selected topic is currently not active
         if (buttonId && !$activeButtonA.is('.active')) {
@@ -360,7 +360,7 @@ $(document).ready(function() {
                     $('#statusMessage').show().delay(5000).fadeOut();
                 } else {
                     // Open Panel Display
-                    var $activeButtonA = $('#navBtns_btn_diplay_a'); // Store the current link <a> element
+                    var $activeButtonA = $('#navBtns_btn_dispmap_a'); // Store the current link <a> element
                     buttonId = $activeButtonA.attr('href'); 
                     
                     // Run following block if selected topic is currently not active
@@ -377,6 +377,11 @@ $(document).ready(function() {
                         tourdbMap = drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                         //drawMapEmpty('displayMap-ResMap');         // Draw empty map (without additional layers) 
                     }
+
+                    // Fetch page for tracks
+                    var fetch_pages_filterString = " trkLoginName='leut' ";
+                    var page = 1;
+                    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
                 }
             }
         }
@@ -394,7 +399,7 @@ $(document).ready(function() {
 });
 
 // ==========================================================================
-// ========================== panelDisplay ==================================
+// ========================== panelDisplayMap ===============================
 // ==========================================================================
 
 // On click the minimize large display objects icon to minimized
@@ -1454,6 +1459,21 @@ $(document).on('click', '.applyFilterButton', function (e) {
     
 });
 
+// ============================================================================
+// ========================== panelDisplayLists ===============================
+// ============================================================================
+
+// Executes code below when user click on pagination links
+$(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
+    e.preventDefault();
+    $(".loading-div").show(); //show loading element
+    var fetch_pages_filterString = " trkLoginName='leut' ";
+    var page = $(this).attr("data-page"); //get page number from link
+    $("#tabDispLists_trks").load("services/fetch_pages.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
+        $(".loading-div").hide(); //once done, hide loading element
+    });
+});
+
 // ==========================================================================
 // ========================== panelImport ===================================
 // ==========================================================================
@@ -1463,7 +1483,7 @@ $(document).on('click', '.uiAdmTrk_btns_a', function(e) {
     e.preventDefault();                                             // Prevent link behaviour
     
     var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplay)
+    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplayLists)
     
     // Run following block if selected topic is currently not active
     if (buttonId && !$activeButtonA.is('.active')) {
@@ -1590,7 +1610,7 @@ $(document).on('click', '.itemDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplay)
+    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
     var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
     var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
 
@@ -1898,7 +1918,7 @@ $(document).on('click', '#uiAdmTrk_fld_save', function (e) {
                   });
             } else {
                 // Track and / related tables could not be correctly inserted
-                // Task?: Make panelImport disappear and panelDisplay appear
+                // Task?: Make panelImport disappear and panelDisplayLists appear
                 $('#statusMessage').text(respObj.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }

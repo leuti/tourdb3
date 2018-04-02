@@ -41,8 +41,9 @@ em { /* formatting for DB in logo*/
     color: #ffffff;}
 #main {          
     clear: both;} /* ensures that main content doesn't flow around top section */
-/*table {
-    color: #ccccff;}*/
+table {
+    color: #ccccff;
+}
 
 /********** TOPIC BUTTONS **********/
 .navBtns_btn_li.loginReq {
@@ -134,11 +135,24 @@ tr.tblpeak>td, tr.tblwayp>td {
     background: #cacaca;*/
 }
 
+.uiDiv {
+    display: none;
+}
+
 .formCenter, .uiDiv.active {
     /*margin-top: 40px;
     padding: 0.5em 0.5em;*/
     margin: auto;
     /*margin-top: 200px;*/
+    display: block;
+    background-color: #cce6ff;
+    width: 600px;
+    color: #333333;
+    overflow: hidden;
+}
+
+.tabDispLists {
+    margin: auto;
     display: block;
     background-color: #cce6ff;
     width: 600px;
@@ -315,10 +329,6 @@ tr.tblpeak>td, tr.tblwayp>td {
 /********** panelImport **********/
 /*********************************/
 
-.uiDiv {
-    display: none;
-}
-
 /*.uiDiv.active {
     margin: auto;
     margin-top: 200px;
@@ -397,3 +407,69 @@ tr.tblpeak>td, tr.tblwayp>td {
     height: 80%;
     margin: 30px;
 }
+
+/******** TABLE FORMATTING ********/
+tr.header>th {
+    padding: 3px 5px 3px 5px;
+    color: #e6e6ff;
+    border-top: 3px solid #4da9ff;
+    border-bottom: 0.2px solid #4da9ff;}
+tr.sqlName>th {
+    padding: 3px 5px 3px 5px;
+    color: #e6e6ff;
+    border-bottom: 3px solid #4da9ff;
+    font-size: 8pt;
+    font-weight: normal;}
+td {
+    padding: 1px 5px 1px 5px;
+    text-align: left;
+    font-size: 90%;
+    border-bottom: 0.5px solid #4d4dff;}
+tr.coord{
+    /*font-weight: bold;*/
+    color: #ccffe6;}
+.contents{
+	margin: 20px;
+	padding: 20px;
+	list-style: none;
+	background: #F9F9F9;
+	border: 1px solid #ddd;
+	border-radius: 5px;}
+.contents li{
+    margin-bottom: 10px;}
+.loading-div{
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.56);
+	z-index: 999;
+	display:none;}
+.loading-div img {
+	margin-top: 20%;
+	margin-left: 50%;}
+
+/******** Pagination style ********/
+.pagination{
+    padding: 30px;
+    margin: auto;}
+.pagination li{
+	display: inline;
+	border: 1px solid #ddd;
+    font: 15px/20px Arial, Helvetica, sans-serif;
+	background: #FFFFFF;
+	box-shadow: inset 1px 1px 5px #F4F4F4;
+    padding: 7px; }
+.pagination li a{
+    text-decoration:none;
+    color: rgb(89, 141, 235);}
+.pagination li.first {
+    border-radius: 5px 0px 0px 5px;}
+.pagination li.last {
+    border-radius: 0px 5px 5px 0px;}
+.pagination li:hover{
+	background: #9933ff;
+    color: #e6e6ff;}
+.pagination li a:hover{
+    color: #e6e6ff;}
+.pagination li.active{
+	background: #4da9ff;
+	color: #333;}

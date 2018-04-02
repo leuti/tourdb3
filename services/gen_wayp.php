@@ -114,7 +114,7 @@ while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoi
         $imgFile = $objectName . "-none.png";
     }
 
-    if ( $debugLevel >= 3 ) {
+    if ( $debugLevel >= 4 ) {
         fputs($logFile, "<$objectName> waypNameLong: ". $singleRecord["waypNameLong"] . "-->");
         fputs($logFile, "saisonkey: $saisonkey || sommer: $sommer || winter: $winter || icon: $imgFile\r\n");
     }
