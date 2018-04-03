@@ -85,12 +85,29 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     // Write for each waypoint one line
     while($singleRecord = mysqli_fetch_assoc($records)) {
 
-    echo '<tr>';
+        echo '<tr>';
         echo '<td>'.$singleRecord["trkId"].'</td>';                       // 1
         echo '<td>'.$singleRecord["trkTrackName"].'</td>';                // 2
+        echo '<td>';
+        echo '<ul>';
+        echo '<li class="button_Li">';
+        echo '<a class="trkEdit button_A " href="#trkEdit_' . $singleRecord["trkId"] . '">';
+        echo '<img id="trkEdit_' . $singleRecord["trkId"] . '" src="css/images/edit16.png">';
+        echo '</a>';
+        echo '</li>';
+        echo '</ul>';
+        echo '</td>';
+        echo '<td>';
+        echo '<ul>';
+        echo '<li class="button_Li">';
+        echo '<a class="trkDel button_A " href="#trkDel_' . $singleRecord["trkId"] . '">';
+        echo '<img id="trkDel_' . $singleRecord["trkId"] . '" src="css/images/delete.png">';
+        echo '</a>';
+        echo '</li>';
+        echo '</ul>';
+        echo '</td>';
         echo '</tr>';
-    };
-
+    }
     // Write remaining HTML code
     echo '</table>'; 
 
@@ -162,4 +179,3 @@ function paginate_function($item_per_page, $current_page, $total_records, $total
 }
 
 ?>
-

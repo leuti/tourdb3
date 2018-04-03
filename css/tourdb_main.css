@@ -41,9 +41,9 @@ em { /* formatting for DB in logo*/
     color: #ffffff;}
 #main {          
     clear: both;} /* ensures that main content doesn't flow around top section */
-table {
+/*table {
     color: #ccccff;
-}
+}*/
 
 /********** TOPIC BUTTONS **********/
 .navBtns_btn_li.loginReq {
@@ -154,6 +154,8 @@ tr.tblpeak>td, tr.tblwayp>td {
     width: 600px;
     color: #333333;
     overflow: hidden;
+    margin: 40px;
+    padding: 0.5em 0.5em;
 }
 
 /********** FILTER STYLES *********/
@@ -405,11 +407,6 @@ tr.tblpeak>td, tr.tblwayp>td {
 #displayMap-ResMap {
     height: 80%;
     margin: 30px;
-}
-
-#tabDispLists {
-    margin-top: 40px;
-    padding: 0.5em 0.5em;
 }
 
 /******** TABLE FORMATTING ********/

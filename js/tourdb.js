@@ -1478,6 +1478,48 @@ $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     });
 });
 
+// Fires when edit symbol in track table is clicked
+$(document).on('click', '.trkEdit', function (e) {
+    console.info("clicked on Edit")
+    e.preventDefault();                                                         // Prevent link behaviour
+    /*
+    var $activeButtonA = $(this)                                                // Store the current link <a> element
+    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
+    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
+    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+
+    // Loop through items array and set display flag to false --> these records will not be saved/shown
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["itemId"] == itemId && itemsArray[i]["itemType"] == itemType ) {
+            itemsArray[i]["disp_f"] = false;
+        }    
+    }
+
+    drawItemsTables ( itemsArray, itemType );                                   // call function to draw items table
+    */
+});
+
+// Fires when delete symbol in track table is clicked
+$(document).on('click', '.trkDel', function (e) {
+    console.info("clicked on Delete")
+    e.preventDefault();                                                         // Prevent link behaviour
+    /*
+    var $activeButtonA = $(this)                                                // Store the current link <a> element
+    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
+    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
+    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+
+    // Loop through items array and set display flag to false --> these records will not be saved/shown
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["itemId"] == itemId && itemsArray[i]["itemType"] == itemType ) {
+            itemsArray[i]["disp_f"] = false;
+        }    
+    }
+
+    drawItemsTables ( itemsArray, itemType );                                   // call function to draw items table
+    */
+});
+
 // ==========================================================================
 // ========================== panelImport ===================================
 // ==========================================================================
