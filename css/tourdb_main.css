@@ -135,10 +135,6 @@ tr.tblpeak>td, tr.tblwayp>td {
     background: #cacaca;*/
 }
 
-.uiDiv {
-    display: none;
-}
-
 .formCenter, .uiDiv.active {
     /*margin-top: 40px;
     padding: 0.5em 0.5em;*/
@@ -325,7 +321,10 @@ tr.tblpeak>td, tr.tblwayp>td {
 .popover-title{
     display: none;}
 
-
+.uiDiv {
+    display: none;
+}
+    
 /********** panelImport **********/
 /*********************************/
 
@@ -406,6 +405,11 @@ tr.tblpeak>td, tr.tblwayp>td {
 #displayMap-ResMap {
     height: 80%;
     margin: 30px;
+}
+
+#tabDispLists {
+    margin-top: 40px;
+    padding: 0.5em 0.5em;
 }
 
 /******** TABLE FORMATTING ********/
