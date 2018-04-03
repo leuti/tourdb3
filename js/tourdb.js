@@ -305,6 +305,10 @@ $(document).ready(function() {
         }
     });
 
+    // =====================================
+    // ====== Display List 
+    $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
+
     // Evaluate which button/panel is active
     $('.navBtns_btns').each(function() {
         var $thisTopicButton = $(this);                              // $thisTopicButton becomes ul.navBtns_btns
