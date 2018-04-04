@@ -50,12 +50,12 @@ em { /* formatting for DB in logo*/
     display: none;
 }
 
-.navBtns, .uiAdmTrk_btns {
+.navBtns, .uiImpTrk_btns, .uiEditTrk_btns {
     margin: 0;
     padding: 0;
     padding-top: 36px;}
 
-.navBtns_btn_li, .uiAdmTrk_btns_li {
+.navBtns_btn_li, .uiImpTrk_btns_li, .uiEditTrk_btns_li {
     display: inline-block;
     /*list-style-type: none;*/
     background-color: #cce6ff;
@@ -78,7 +78,7 @@ em { /* formatting for DB in logo*/
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.navBtns_btns_a, .uiAdmTrk_btns_a {
+.navBtns_btns_a, .uiImpTrk_btns_a, .uiImpTrk_btns_a {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;
@@ -370,9 +370,15 @@ tr.tblpeak>td, tr.tblwayp>td {
     font-family: Candara, Verdana, Arial, sans-serif;
 }
 
-#uiAdmTrk{
+#uiImpTrk, #uiEditTrk{
     margin-top: 40px;
     padding: 0.5em 0.5em;
+}
+
+#uiEditTrk{
+    position: absolute;
+    top: 40px;
+    left:20px;
 }
 
 #pImpSaveSuccess {
