@@ -39,17 +39,17 @@ $term = $_GET["term"];
 //fputs($fp, 'Line 41: array: ' . $idField . "-" . $nameField . "-" . $tableField . "-" . $term ."\r\n");
 
 if ( $searchObject == "peak") {
-    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
-    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID = 5 ORDER BY waypNameShort";
+    $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID = 5 ORDER BY waypNameLong";
 } else if ( $searchObject == "wayp") {
-    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
-    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID in (1,2,3) ORDER BY waypNameShort";
+    $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID in (1,2,3) ORDER BY waypNameLong";
 } else if ( $searchObject == "loca") {
-    $sql = "SELECT waypID, waypNameShort FROM tbl_waypoints ";
-    $sql .= "WHERE waypNameShort LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID = 4 ORDER BY waypNameShort";
+    $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
+    $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
+    $sql .= "AND waypTypeFID = 4 ORDER BY waypNameLong";
 } else if ( $searchObject == "part") {
     $sql = "SELECT prtId, CONCAT(prtFirstName, ' ', prtLastName) AS participant FROM tbl_part ";
     $sql .= "WHERE prtLastName LIKE '%" . $_GET["term"] . "%' ";

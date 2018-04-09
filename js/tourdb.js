@@ -1606,23 +1606,77 @@ $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
 // Fires when edit symbol in track table is clicked
 $(document).on('click', '.trkEdit', function (e) {
     console.info("clicked on Edit")
-    e.preventDefault();                                                         // Prevent link behaviour
-    $('#uiEditTrk').addClass('active');
-    /*
+    e.preventDefault();                                                 // Prevent link behaviour
+    var jsonObject = {};     
+
+    // evaluate id of object to be deleted
     var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
-    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
-    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+    var itemEditId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
+    var itemType = itemEditId.substring(1,4);                                    // Get type of item to delete
+    var itemId = itemEditId.substring(9);                                        // Extract id of item to be deleted                                                  
 
-    // Loop through items array and set display flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsArray.length; i++) {
-        if ( itemsArray[i]["itemId"] == itemId && itemsArray[i]["itemType"] == itemType ) {
-            itemsArray[i]["disp_f"] = false;
-        }    
-    }
+    phpLocation = "services/getObjectSingle.php";                                 // Variable to store location of php file
+    jsonObject.itemType = itemType;                                            // temp request to create track temporarily
+    jsonObject.requestType = 'select';
+    jsonObject.itemId = itemId;
+    jsn = JSON.stringify ( jsonObject );
 
-    drawItemsTables ( itemsArray, itemType );                                   // call function to draw items table
-    */
+    $.ajax({
+        url: phpLocation,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: jsn
+    })
+    .done(function ( respObj ) {
+
+        // Track object successfully stored in DB
+        if ( respObj.status == 'OK') {
+            
+            trackobj = respObj.trackObj;
+            $('#uiEditTrk_fld_trkId').val(trackobj.trkId); 
+            $('#uiEditTrk_fld_trkTrackName').val(trackobj.trkTrackName);    
+            $('#uiEditTrk_fld_trkRoute').val(trackobj.trkRoute);
+            $('#uiEditTrk_fld_trkDateBegin').val(trackobj.trkDateBegin);
+            $('#uiEditTrk_fld_trkDateFinish').val(trackobj.trkDateFinish);
+            $('#uiEditTrk_fld_trkSaison').val(trackobj.trkSaison);
+            $('#uiEditTrk_fld_trkType').val(trackobj.trkType);
+            $('#uiEditTrk_fld_trkSubType').val(trackobj.trkSubType);
+            $('#uiEditTrk_fld_trkOrg').val(trackobj.trkOrg);
+            $('#uiEditTrk_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
+            $('#uiEditTrk_fld_trkParticipants').val(trackobj.trkParticipants);
+            $('#uiEditTrk_fld_trkEvent').val(trackobj.trkEvent);
+            $('#uiEditTrk_fld_trkRemarks').val(trackobj.trkRemarks);
+            $('#uiEditTrk_fld_trkDistance').val(trackobj.trkDistance);
+            $('#uiEditTrk_fld_trkTimeOverall').val(trackobj.trkTimeOverall);
+            $('#uiEditTrk_fld_trkTimeToPeak').val(trackobj.trkTimeToPeak);
+            $('#uiEditTrk_fld_trkTimeToFinish').val(trackobj.trkTimeToFinish);
+            $('#uiEditTrk_fld_trkGrade').val(trackobj.trkGrade);
+            $('#uiEditTrk_fld_trkMeterUp').val(trackobj.trkMeterUp);
+            $('#uiEditTrk_fld_trkMeterDown').val(trackobj.trkMeterDown);
+            $('#uiEditTrk_fld_trkCountry').val(trackobj.trkCountry);
+    
+            var elementId = "uiEditTrk_peakList";                            // element which contains table 
+            var trWpArray = {};
+            var trWpArray 
+            var itemsTable = drawItemsTablesNew ( respObj.trWpArray, 'peak', elementId )
+            document.getElementById(elementId).innerHTML = itemsTable;
+
+            $('#uiEditTrk').addClass('active');
+
+        } else {
+            $('#statusMessage').text(respObj.message);
+            $('#statusMessage').show().delay(5000).fadeOut();
+        }
+    });
+});
+
+$(document).on('click', '#uiEditTrk_fld_cancel', function (e) {
+    e.preventDefault();
+    //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
+    $('#uiEditTrk').removeClass('active');                   // hide update form
+    $('#statusMessage').text('Edit Track cancelled');
+    $("#statusMessage").show().delay(5000).fadeOut();
 });
 
 // Fires when delete symbol in track table is clicked
@@ -2280,6 +2334,52 @@ function checkExistance( origin, name ) {
     } else {
         return true;
     }
+}
+
+// Draws the table that list the selected waypoints
+function drawItemsTablesNew ( itemsArray, itemType, elementId ) {
+
+    // Assign var
+    var itemDelClass = itemType + "Del";                                        // e.g. waypDel
+    var itemDelImg = "btn" + itemType + "DelImg";                               // e.g. btnwaypDelImg
+    var reachedCheck = "cb_" + itemType;                                        // e.g. cb_peak
+
+    // create new html table with value returned by autocomplete
+    var itemsTable = '';
+    itemsTable += '<table class="itemsTable" cellspacing="0" cellpadding="0">';
+    if ( itemType == "peak" ) {
+        itemsTable += '<tr><td>Peak</td><td>   reached</td><td></td></tr>';
+    } else if ( itemType == "wayp" ) {
+        itemsTable += '<tr><td>Waypoint</td><td></td></tr>';
+    } else if ( itemType == "loca" ) {
+        itemsTable += '<tr><td>Location</td><td></td></tr>';
+    } else if ( itemType == "part" ) {
+        itemsTable += '<tr><td>Participant</td><td></td></tr>';
+    }
+    // loop through items array and draw table content
+    for (var i = 0; i < itemsArray.length; i++) {
+        if ( itemsArray[i]["disp_f"] == true && itemsArray[i]["itemType"] == itemType ) {
+            itemsTable += '<tr class="' + itemClass + '">';  
+            itemsTable += '<td>' + itemsArray[i]["itemName"] + '</td>';               // 1    
+            // if item = peak the reached flag needs to be displayed
+            if ( itemType == "peak" ) {
+                itemsTable += '<td><input type="checkbox" name="' + reachedCheck + itemsArray[i]["itemId"]
+                    + '" id="' + reachedCheck + itemsArray[i]["itemId"];
+                if ( itemsArray[i]["reached_f"] ) {
+                    itemsTable += '" class="cbReached" checked></td>'; 
+                } else {
+                    itemsTable += '" class="cbReached"></td>'; 
+                }
+            }
+            itemsTable += '<td><ul class="' + itemClass + '">';
+            itemsTable += '<li class="button_Li"><a class="itemDel button_A"' 
+                            + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
+                            + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
+                            itemsTable += '</tr>';
+        }               
+    }
+    itemsTable += '</table>';   
+    return itemsTable;
 }
 
 // Draws the table that list the selected waypoints
