@@ -1657,8 +1657,6 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiEditTrk_fld_trkCountry').val(trackobj.trkCountry);
     
             var elementId = "uiEditTrk_peakList";                            // element which contains table 
-            var trWpArray = {};
-            var trWpArray 
             var itemsTable = drawItemsTablesNew ( respObj.trWpArray, 'peak', elementId )
             document.getElementById(elementId).innerHTML = itemsTable;
 
