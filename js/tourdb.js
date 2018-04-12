@@ -1656,9 +1656,8 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiEditTrk_fld_trkMeterDown').val(trackobj.trkMeterDown);
             $('#uiEditTrk_fld_trkCountry').val(trackobj.trkCountry);
     
-            var elementId = "uiEditTrk_peakList";                            // element which contains table 
-            var itemsTable = drawItemsTablesNew ( respObj.trWpArray, 'peak', elementId )
-            document.getElementById(elementId).innerHTML = itemsTable;
+            var itemsTable = drawItemsTablesNew ( respObj.trWpArray, "peak", "uiEditTrk_peakList" )
+            document.getElementById("uiEditTrk_peakList").innerHTML = itemsTable;
 
             $('#uiEditTrk').addClass('active');
 
@@ -2356,8 +2355,8 @@ function drawItemsTablesNew ( itemsArray, itemType, elementId ) {
     }
     // loop through items array and draw table content
     for (var i = 0; i < itemsArray.length; i++) {
-        if ( itemsArray[i]["disp_f"] == true && itemsArray[i]["itemType"] == itemType ) {
-            itemsTable += '<tr class="' + itemClass + '">';  
+        if ( itemsArray[i]["disp_f"] == "true" && itemsArray[i]["itemType"] == itemType ) {
+            itemsTable += '<tr class="tblItems">';  
             itemsTable += '<td>' + itemsArray[i]["itemName"] + '</td>';               // 1    
             // if item = peak the reached flag needs to be displayed
             if ( itemType == "peak" ) {
@@ -2369,7 +2368,7 @@ function drawItemsTablesNew ( itemsArray, itemType, elementId ) {
                     itemsTable += '" class="cbReached"></td>'; 
                 }
             }
-            itemsTable += '<td><ul class="' + itemClass + '">';
+            itemsTable += '<td><ul class="tblItems">';
             itemsTable += '<li class="button_Li"><a class="itemDel button_A"' 
                             + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
                             + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';

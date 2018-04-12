@@ -59,7 +59,7 @@ if ( $itemType == "trk" ) {
             
             // Evaluate type of waypoint
             if ( $trkwpRecord["waypTypeFID"] == "5" ) {
-                $itemType = "peaks";
+                $itemType = "peak";
             } else if ( $trkwpRecord["waypTypeFID"] == "4" ) {
                 $itemType = "loca";
             } else {
