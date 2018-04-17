@@ -69,7 +69,7 @@ if ( $itemType == "trk" ) {
             if ($debugLevel >= 3) fputs($logFile, "Line 79: waypNameLong: " . $trkwpRecord["waypNameLong"] . "\r\n");
 
             $trkWpLine = array (
-                "disp_f"=>'true',
+                "disp_f"=>"1",
                 "itemId"=>$trkwpRecord["trwpWaypId"],
                 "itemName"=>$trkwpRecord["waypNameLong"],                                             // add inner join
                 "itemType"=>$itemType,
