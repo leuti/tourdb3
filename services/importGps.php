@@ -525,5 +525,161 @@ if ($request == "temp") {
     // Echo output array to client
     echo json_encode($outObject);  
     exit;      
-} 
+} else if ( $request == "update") {
+    // ---------------------------------------------------------------------------------
+    // request type is "update" meaning that the user has modified a record
+    // ---------------------------------------------------------------------------------
+
+    // read received INPUT object
+    $trackobj = array();                                          // array storing track data in array
+    $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
+    $loginname = $receivedData["loginname"];
+    $trackobj = $receivedData["trackobj"];                        // Array of track data 
+    
+    if ( $debugLevel >= 3) fputs($logFile, "Line 539: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
+  
+    // UPDATE `tourdb2_prod`.`tbl_tracks` SET `trkTrackName` = 'Skitour Schilt Test' WHERE `tbl_tracks`.`trkId` = 4
+
+    // Create SQL statement to update track 
+    $sql = " UPDATE `tourdb2_prod`.`tbl_tracks` SET ";
+
+    // Loop through received track object and add to SQL statement
+    foreach ($trackobj as $dbField => $content) {                 // Generate update statement
+        if ( $dbField == 'trkId' ) {
+            $trkId = $content;
+        } else {
+            $sql .= "`$dbField` = '$content',";
+        }
+    }
+    
+    $sql = substr($sql,0,strlen($sql)-1);                           // remove last ,
+    $sql .= " WHERE trkId = $trkId";
+
+    if ($debugLevel >= 3) fputs($logFile, "Line 558 Update Track - sql: $sql\r\n");
+
+    // run SQL and handle error
+    
+    if ($conn->query($sql) === TRUE)                                // run sql against DB
+    {
+        if ( $debugLevel >= 3) fputs($logFile, "Line 201 - New track inserted successfully: ID = $trkId\r\n");
+    } else {
+        fputs($logFile, "Line 203 - Error inserting trkPt: $conn->error\r\n");
+        $message = "Error inserting Track: $conn->error";
+
+        $outObject = array (
+            'status'=>'NOK',                                             // add err status to return object
+            'message'=> $message  
+        );
+        echo json_encode($outObject); 
+        return;
+    } 
+    
+   // Part 2: Delete trb_track_wayp before insert
+   // --------------------------------------------------
+   $sql = "DELETE FROM `tourdb2_prod`.`tbl_track_wayp` ";
+   $sql .= "WHERE `tbl_track_wayp`.`trwpTrkId` = $trkId";
+
+   // run SQL and handle error
+   if ( $conn->query($sql) === TRUE )                                // run sql against DB
+   {
+       if ( $debugLevel >= 6) fputs($logFile, "Line 585 - Records in tbl_track_wayp for waypoints successfully deleted \r\n");
+   } else {
+       fputs($logFile, "Line 587 - Error deleting trkPt: $conn->error\r\n");
+       fputs($logFile, "Line 588 - sql: $sql\r\n");
+       // write output array
+       $outObject = array (
+           'status'=>'NOK',                                             // add err status to return object
+           'message'=>'Error deleting tbl_track_wayp for peaks: ' . $conn->error,  
+       );                                         // add error message to return object
+       echo json_encode($outObject); 
+       return;
+   }
+
+   if ($debugLevel >= 3) fputs($logFile, "Line 583 Delete tbl_track_wayp - sql: $sql\r\n");
+
+   // Part 3: Insert records to tbl_track_wayp for peaks
+   // --------------------------------------------------
+
+    $itemsArray = $receivedData["itemsTrkEdit"];                        // Array of peaks selected
+    if ( sizeof($itemsArray) > 0 ) {
+
+        //create SQL statement  
+        $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpReached_f) VALUES ";
+        $i=0;
+        for ( $i; $i < sizeof($itemsArray); $i++ ) {                   // loop through records in array
+            if ( $itemsArray[$i]["disp_f"] == true && ( $itemsArray[$i]["itemType"] == "peak"  || 
+            $itemsArray[$i]["itemType"] == "loca" || $itemsArray[$i]["itemType"] == "wayp" )) {                 // disp_f = true when user has not deleted peak on UI
+                $waypRun = true;
+                $sql .= "(" . $trkId . "," . $itemsArray[$i]["itemId"] . "," . $itemsArray[$i]["reached_f"] . "),";  
+            }
+        }
+        $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
+        
+        if ( $debugLevel >= 3) fputs($logFile, "Line 603 Insert tbl_track_wyp - sql: " . $sql . "\r\n");
+        
+        // run SQL and handle error
+        if ( $conn->query($sql) === TRUE )                                // run sql against DB
+        {
+            if ( $debugLevel >= 6) fputs($logFile, "Line 234 - New record in tbl_track_wayp for peaks successfully inserted \r\n");
+        } else {
+            fputs($logFile, "Line 236 - Error inserting trkPt: $conn->error\r\n");
+            fputs($logFile, "Line 237 - sql: $sql\r\n");
+            // write output array
+            $outObject = array (
+                'status'=>'NOK',                                             // add err status to return object
+                'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+            );                                         // add error message to return object
+            echo json_encode($outObject); 
+            return;
+        }
+ 
+        // Insert items into tbl_track_part
+
+        /*
+        // create SQL statement  
+        $sql = "INSERT INTO tbl_track_part (trpaTrkId, trpaPartId) VALUES ";
+
+        $i=0;
+        for ( $i; $i < sizeof($itemsArray); $i++ ) {                   // loop through records in array
+            if ( $itemsArray[$i]["disp_f"] == true && $itemsArray[$i]["itemType"] == "part" ) {                 // disp_f = true when user has not deleted part on UI
+                $sql .= "(" . $trkId . "," . $itemsArray[$i]["itemId"] . "),";  
+                $partRun = true;
+            }
+        }
+        if ( $debugLevel >= 3) fputs($logFile, "Line 256 - part sql: $sql\r\n");
+        
+        // run SQL and handle error
+        $sql = substr( $sql, 0, strlen($sql) - 1 );                       // trim last unnecessary ,
+        if ( $partRun ) {
+            if ( $conn->query($sql) === TRUE )                                // run sql against DB
+            {
+                if ( $debugLevel >= 3) fputs($logFile, "Line 343 - New record in tbl_track_part inserted successfully\r\n");
+            } else {
+                fputs($logFile, "Line 345 - Error inserting trkPt: $conn->error\r\n");
+                fputs($logFile, "Line 346 - sql: $sql\r\n");
+                // write output array
+                $outObject = array (
+                    'status'=>'NOK',                                             // add err status to return object
+                    'message'=>'Error inserting tbl_track_wayp : ' . $conn->error,  
+                );                                         // add error message to return object
+                echo json_encode($outObject); 
+                return;
+            }
+        } else {
+            if ( $debugLevel >= 6) fputs($logFile, "Line 254 - Nothing to insert into tbl_tracks_wayp\r\n");
+        }
+        */
+    }
+
+    // write output array
+    $outObject = array (
+        'status'=>'OK',                                             // add err status to return object
+        'message'=>"New track inserted successfully: ID = $trkId",                                           // add error message to return object
+        'trkId'=>$trkId 
+    );
+
+    // Echo output array to client
+    echo json_encode($outObject);  
+    exit;      
+}
 ?>

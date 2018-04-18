@@ -229,8 +229,10 @@ $(document).ready(function() {
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
             itemsTrkImp.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrkImp" )
+            document.getElementById("uiTrkImp_peakList").innerHTML = itemsTable;
+            // not working: $('#uiTrkImp_peakSrch').val("");                        // clear autocomplete source field
 
-            drawItemsTables_old ( itemsTrkImp, "peak" );                  // draw table with selected item and delete buttoon
         }
     });
 
@@ -360,6 +362,7 @@ $(document).ready(function() {
             itemsTrkEdit.push(itemsList);                              // Push record to array
             var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+            // not working:  $('#uiTrkEdit_peakSrch').val("");                        // clear autocomplete source field
         }
     });
 
@@ -1670,6 +1673,7 @@ $(document).on('click', '.trkEdit', function (e) {
     });
 });
 
+// Fires when cancel button is pressed
 $(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
     e.preventDefault();
     //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
@@ -1697,26 +1701,137 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
 });
 
+// Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
+$(document).on('click', '#uiTrkEdit_fld_save', function (e) {
+    e.preventDefault();
+    var valid = true;                                                           // true when field check are passed
+    var trackobj = {};
+    var jsonObject = {};
+   
+    trackobj.trkId = $('#uiTrkEdit_fld_trkId').val();
+    
+    $('#uiTrkEdit_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkTrackName'), "Track Name" );
+    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackobj.trkTrackName = $('#uiTrkEdit_fld_trkTrackName').val();
+    
+    $('#uiTrkEdit_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
+    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkRoute'), "Route" );
+    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackobj.trkRoute = $('#uiTrkEdit_fld_trkRoute').val();
+    
+    $('#uiTrkEdit_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkDateBegin'), "Date Begin" );
+    trackobj.trkDateBegin = $('#uiTrkEdit_fld_trkDateBegin').val();     
 
-// Fires when delete symbol in track table is clicked
-$(document).on('click', '.trkDel', function (e) {
-    console.info("clicked on Delete")
-    e.preventDefault();                                                         // Prevent link behaviour
-    /*
-    var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
-    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
-    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+    $('#uiTrkEdit_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkDateFinish'), "Date Finish" );
+    trackobj.trkDateFinish = $('#uiTrkEdit_fld_trkDateFinish').val();
+    
+    trackobj.trkSaison = $('#uiTrkEdit_fld_trkSaison').val();
+    trackobj.trkType = $('#uiTrkEdit_fld_trkType').val();
+    trackobj.trkSubType = $('#uiTrkEdit_fld_trkSubType').val();
 
-    // Loop through items array and set display flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsTrkImp.length; i++) {
-        if ( itemsTrkImp[i]["itemId"] == itemId && itemsTrkImp[i]["itemType"] == itemType ) {
-            itemsTrkImp[i]["disp_f"] = false;
-        }    
+    $('#uiTrkEdit_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
+    trackobj.trkOrg = $('#uiTrkEdit_fld_trkOrg').val();    
+    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    
+    $('#uiTrkEdit_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
+    trackobj.trkEvent = $('#uiTrkEdit_fld_trkEvent').val();
+    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+
+    $('#uiTrkEdit_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
+    trackobj.trkRemarks = $('#uiTrkEdit_fld_trkRemarks').val();
+    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+
+    $('#uiTrkEdit_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
+    trackobj.trkDistance = $('#uiTrkEdit_fld_trkDistance').val();
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
+
+    $('#uiTrkEdit_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkTimeOverall = $('#uiTrkEdit_fld_trkTimeOverall').val();
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    
+    $('#uiTrkEdit_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkTimeToPeak = $('#uiTrkEdit_fld_trkTimeToPeak').val();
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+
+    $('#uiTrkEdit_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkTimeToFinish = $('#uiTrkEdit_fld_trkTimeToFinish').val();
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+
+    trackobj.trkGrade = $('#uiTrkEdit_fld_trkGrade').val();
+
+    $('#uiTrkEdit_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkMeterUp = $('#uiTrkEdit_fld_trkMeterUp').val();
+    valid = valid && checkIfNum ( $('#uiTrkEdit_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
+
+    $('#uiTrkEdit_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackobj.trkMeterDown = $('#uiTrkEdit_fld_trkMeterDown').val();
+    valid = valid && checkIfNum ( $('#uiTrkEdit_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
+    
+    $('#uiTrkEdit_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
+    country = $('#uiTrkEdit_fld_trkCountry').val();
+    trackobj.trkCountry = country.toUpperCase();
+    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
+     
+    trackobj.trkLoginName = $loginName;    
+
+    if ( valid ) { 
+        phpLocation = "services/importGps.php";                                 // Variable to store location of php file
+        jsonObject.sessionid = sessionid;                                       // append parameter session ID
+        jsonObject.request = 'update';                                            // temp request to create track temporarily
+        jsonObject.loginname = $loginName;                                      // set login name
+        jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
+        jsonObject.trackobj = trackobj;                                         // send track object
+        jsonObject.itemsTrkEdit = itemsTrkEdit;
+        jsn = JSON.stringify ( jsonObject );
+
+        // Perform ajax call to php to save trackObject in table Tracks and other tables
+        // (JQUERY was necessary because I did not success to send two dimensional array otherwise)
+        $.ajax({
+            url: phpLocation,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: jsn
+        })
+        .done(function ( respObj ) {
+
+            // Track object successfully stored in DB
+            if ( respObj.status == 'OK') {
+
+                $('#statusMessage').text(respObj.message);
+                $('#statusMessage').show().delay(5000).fadeOut();
+      
+                // Open Panel Display
+                var $activeButtonA = $('#navBtns_btn_diplay_a');                // Store the current link <a> element
+                buttonId = $activeButtonA.attr('href'); 
+
+                // Run following block if selected topic is currently not active
+                $topicButton.removeClass('active');                             // Make current panel inactive
+                $activeButton.removeClass('active');                            // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');                  // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active');     // Make new tab active
+                
+                // Close upload file div and open form to update track data
+                $('#uiUplFileGps').addClass('active');
+                $('#uiTrkEdit').removeClass('active');
+
+                // Change active tab to main tab
+                $( "#uiTrkEdit" ).tabs({
+                    active: 0
+                  });
+            } else {
+                // Track and / related tables could not be correctly inserted
+                // Task?: Make panelImport disappear and panelDisplayLists appear
+                $('#statusMessage').text(respObj.message);
+                $('#statusMessage').show().delay(5000).fadeOut();
+            }
+        });
     }
-
-    drawItemsTables_old ( itemsTrkImp, itemType );                                   // call function to draw items table
-    */
 });
 
 // ==========================================================================
@@ -1789,8 +1904,6 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $trkCoordBottom = trackobj.trkCoordBottom;
                 $trkCoordLeft = trackobj.trkCoordLeft;
                 $trkCoordRight = trackobj.trkCoordRight;
-                //coordCenterX = trackobj.coordCenterX;
-                //coordCenterY = trackobj.coordCenterY;
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
@@ -1851,7 +1964,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
 });
 
 // Fires when delete symbol on items table is clicked
-$(document).on('click', '.itemDel .uiTrkImp', function (e) {
+$(document).on('click', '.itemDel.uiTrkImp', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
@@ -1865,7 +1978,8 @@ $(document).on('click', '.itemDel .uiTrkImp', function (e) {
             itemsTrkImp[i]["disp_f"] = false;
         }    
     }
-    drawItemsTables_old ( itemsTrkImp, itemType );                                   // call function to draw items table
+    var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrkImp" )
+    document.getElementById("uiTrkImp_peakList").innerHTML = itemsTable;
 });
 
 // Fires when reached checkbox is changed
