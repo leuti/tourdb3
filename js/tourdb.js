@@ -358,7 +358,7 @@ $(document).ready(function() {
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
             itemsTrkEdit.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit_peakList" )
+            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
         }
     });
@@ -1658,7 +1658,7 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiTrkEdit_fld_trkCountry').val(trackobj.trkCountry);
     
             itemsTrkEdit = respObj.trWpArray;
-            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit_peakList" )
+            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
 
             $('#uiTrkEdit').addClass('active');
@@ -1677,6 +1677,26 @@ $(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
     $('#statusMessage').text('Edit Track cancelled');
     $("#statusMessage").show().delay(5000).fadeOut();
 });
+
+// Fires when delete symbol on items table is clicked
+$(document).on('click', '.itemDel.uiTrkEdit', function (e) {
+    console.info("clicked on del")
+    e.preventDefault();                                                         // Prevent link behaviour
+    var $activeButtonA = $(this)                                                // Store the current link <a> element
+    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
+    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
+    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+
+    // Loop through items array and set display flag to false --> these records will not be saved/shown
+    for (var i = 0; i < itemsTrkEdit.length; i++) {
+        if ( itemsTrkEdit[i]["itemId"] == itemId && itemsTrkEdit[i]["itemType"] == itemType ) {
+            itemsTrkEdit[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
+    document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+});
+
 
 // Fires when delete symbol in track table is clicked
 $(document).on('click', '.trkDel', function (e) {
@@ -1831,7 +1851,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
 });
 
 // Fires when delete symbol on items table is clicked
-$(document).on('click', '.itemDel', function (e) {
+$(document).on('click', '.itemDel .uiTrkImp', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
@@ -2336,7 +2356,7 @@ function checkExistance( origin, name ) {
 }
 
 // Draws the table that list the selected waypoints
-function drawItemsTables ( itemsArray, itemType, elementId ) {
+function drawItemsTables ( itemsArray, itemType, elDelClass ) {
 
     // Assign var
     var itemDelClass = itemType + "Del";                                        // e.g. waypDel
@@ -2371,7 +2391,7 @@ function drawItemsTables ( itemsArray, itemType, elementId ) {
                 }
             }
             itemsTable += '<td><ul class="tblItems">';
-            itemsTable += '<li class="button_Li"><a class="itemDel button_A"' 
+            itemsTable += '<li class="button_Li"><a class="itemDel button_A ' + elDelClass + '"' 
                             + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
                             + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
                             itemsTable += '</tr>';
