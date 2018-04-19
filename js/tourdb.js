@@ -25,7 +25,7 @@ var mapSTlayer_grau;                                                 // map laye
 var $loginName;
 
 itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
-itemsTrkEdit = new Array();
+trkEdit_waypItems = new Array();
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -359,8 +359,8 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
-            itemsTrkEdit.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
+            trkEdit_waypItems.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
             // not working:  $('#uiTrkEdit_peakSrch').val("");                        // clear autocomplete source field
         }
@@ -384,9 +384,9 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
-            itemsTrkEdit.push(itemsList);
-
-            drawItemsTables_old ( itemsTrkEdit, "wayp" ); 
+            trkEdit_waypItems.push(itemsList);
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
         }
     });
 
@@ -408,9 +408,9 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
 
-            itemsTrkEdit.push(itemsList);
-
-            drawItemsTables_old ( itemsTrkEdit, "loca" ); 
+            trkEdit_waypItems.push(itemsList);
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
         }
     });
 
@@ -1660,9 +1660,15 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiTrkEdit_fld_trkMeterDown').val(trackobj.trkMeterDown);
             $('#uiTrkEdit_fld_trkCountry').val(trackobj.trkCountry);
     
-            itemsTrkEdit = respObj.trWpArray;
-            var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
+            trkEdit_waypItems = respObj.trWpArray;
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
+
+            var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
 
             $('#uiTrkEdit').addClass('active');
 
@@ -1680,6 +1686,9 @@ $(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
     $('#uiTrkEdit').removeClass('active');                   // hide update form
     $('#statusMessage').text('Edit Track cancelled');
     $("#statusMessage").show().delay(5000).fadeOut();
+    $( "#uiTrkEdit" ).tabs({
+        active: 0
+      });
 });
 
 // Fires when delete symbol on items table is clicked
@@ -1692,13 +1701,32 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
 
     // Loop through items array and set display flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsTrkEdit.length; i++) {
-        if ( itemsTrkEdit[i]["itemId"] == itemId && itemsTrkEdit[i]["itemType"] == itemType ) {
-            itemsTrkEdit[i]["disp_f"] = false;
+    // peaks
+    for (var i = 0; i < trkEdit_waypItems.length; i++) {
+        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
+            trkEdit_waypItems[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( itemsTrkEdit, "peak", "uiTrkEdit" )
+    var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
     document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+
+    // wayp
+    for (var i = 0; i < trkEdit_waypItems.length; i++) {
+        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
+            trkEdit_waypItems[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
+    document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
+
+    // loca
+    for (var i = 0; i < trkEdit_waypItems.length; i++) {
+        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
+            trkEdit_waypItems[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
+    document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
@@ -1786,7 +1814,7 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
         jsonObject.loginname = $loginName;                                      // set login name
         jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                                         // send track object
-        jsonObject.itemsTrkEdit = itemsTrkEdit;
+        jsonObject.trkEdit_waypItems = trkEdit_waypItems;
         jsn = JSON.stringify ( jsonObject );
 
         // Perform ajax call to php to save trackObject in table Tracks and other tables

@@ -600,7 +600,7 @@ if ($request == "temp") {
    // Part 3: Insert records to tbl_track_wayp for peaks
    // --------------------------------------------------
 
-    $itemsArray = $receivedData["itemsTrkEdit"];                        // Array of peaks selected
+    $itemsArray = $receivedData["trkEdit_waypItems"];                        // Array of peaks selected
     if ( sizeof($itemsArray) > 0 ) {
 
         //create SQL statement  
