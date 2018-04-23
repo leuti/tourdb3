@@ -26,6 +26,7 @@ var $loginName;
 
 itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
 trkEdit_waypItems = new Array();
+trkEdit_partItems = new Array();
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -432,9 +433,9 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
 
-            itemsTrkImp.push(itemsList);                              // Add selected item to array
-
-            drawItemsTables_old ( itemsTrkImp, "part" ); 
+            trkEdit_partItems.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
         }
     });
 
@@ -1727,6 +1728,15 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     }
     var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
     document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
+
+    // part
+    for (var i = 0; i < trkEdit_partItems.length; i++) {
+        if ( trkEdit_partItems[i]["itemId"] == itemId && trkEdit_partItems[i]["itemType"] == itemType ) {
+            trkEdit_partItems[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
+    document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
 });
 
 // Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
@@ -1815,6 +1825,7 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
         jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                                         // send track object
         jsonObject.trkEdit_waypItems = trkEdit_waypItems;
+        jsonObject.trkEdit_partItems = trkEdit_partItems;
         jsn = JSON.stringify ( jsonObject );
 
         // Perform ajax call to php to save trackObject in table Tracks and other tables
