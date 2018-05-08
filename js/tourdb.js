@@ -36,13 +36,11 @@ $(document).ready(function() {
     // Initialse all jquery functional fields for the mask display objects
     // ===================================================================
 
-    // Initialise filter area as JQUERY Accordion                                                       
     $( "#dispObjAccordion" ).accordion({
         heightStyle: "content",                                      // hight of section dependent on content of section
         autoHeight: false,
         collapsible: true
     });
-
     $( "#dispFilTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -52,7 +50,6 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    
     $( "#dispFilTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
@@ -62,12 +59,8 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-
     $( "#dispFilTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
-
     $( "#dispFilTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable
-
-    // mapUF_sourceName
     $( "#dispFilSeg_sourceName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=segSourceFID",
         minLength: 2,
@@ -81,11 +74,7 @@ $(document).ready(function() {
         }
     });
     var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-
-    // mapUF_segTypeFID
     $( "#dispFilSeg_segTypeFID" ).selectable({});
-    
-    // startLocName
     $( "#dispFilSeg_startLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
@@ -99,8 +88,6 @@ $(document).ready(function() {
         }
     });
     var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-    
-    // startLocAlt 
     $( "#dispFilSeg_startLocAlt_slider" ).slider({
         range: true,
         min: 0,
@@ -112,11 +99,7 @@ $(document).ready(function() {
     });
     $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
     "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    
-    // startLocType
     $( "#dispFilSeg_startLocType" ).selectable({});
-
-    // targetLocName
     $( "#dispFilSeg_targetLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
@@ -129,9 +112,6 @@ $(document).ready(function() {
             }
         }
     });
-    var mapUF_targetLocID = $( "#dispFilSeg_targetLocID" ); 
-
-    // targetLocAlt
     $( "#dispFilSeg_targetLocAlt_slider" ).slider({
         range: true,
         min: 0,
@@ -143,11 +123,7 @@ $(document).ready(function() {
     });
     $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
     "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-
-    // targetLocType
     $( "#dispFilSeg_targetLocType" ).selectable({});
-
-    // Region
     $( "#dispFilSeg_segRegion" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=regionID",
         minLength: 1,
@@ -161,8 +137,6 @@ $(document).ready(function() {
         }
     });
     var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
-
-    // Area
     $( "#dispFilSeg_segArea" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=areaID",
         minLength: 1,
@@ -176,17 +150,42 @@ $(document).ready(function() {
         }
     });
     var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-
     $( "#dispFilSeg_grade" ).selectable({});
     $( "#dispFilSeg_climbGrade" ).selectable({});
     $( "#dispFilSeg_ehaft" ).selectable({});   
 
-    // =====================================
-    // ====== UI Tracks Admin Mask
+    // Initialse all jquery functional fields for the list display for tracks
+    // ======================================================================
+    $( "#dispListTrkAccordion" ).accordion({
+        heightStyle: "content",                                      // hight of section dependent on content of section
+        autoHeight: false,
+        collapsible: true
+    });
+    $( "#dispListTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
+        dateFormat: 'yy-mm-dd', 
+        changeMonth: true,
+        changeYear: true,
+        showOn: "button",
+        buttonImage: "css/images/calendar.gif",
+        buttonImageOnly: true,
+        buttonText: "Select date"
+    });
+    $( "#dispListTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        showOn: "button",
+        buttonImage: "css/images/calendar.gif",
+        buttonImageOnly: true,
+        buttonText: "Select date"
+    });
+    $( "#dispListTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
+    $( "#dispListTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable   
+
+    // Initialse all jquery functional fields for the import track mask
+    // ================================================================
     $( "#uiTrkImp" ).tabs();                                         // Tabs in UI Track mask
-
     valComments = $( "#validateComments" );
-
     $( "#uiTrkImp_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -196,7 +195,6 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-
     $( "#uiTrkImp_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -206,11 +204,9 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-
     $( "#uiTrkImp_fld_trkSaison" ).selectmenu();
     $( "#uiTrkImp_fld_trkType" ).selectmenu();
     $( "#uiTrkImp_fld_trkSubType" ).selectmenu();
-
     $( "#uiTrkImp_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
@@ -236,7 +232,6 @@ $(document).ready(function() {
 
         }
     });
-
     $( "#uiTrkImp_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
@@ -260,7 +255,6 @@ $(document).ready(function() {
             drawItemsTables_old ( itemsTrkImp, "wayp" ); 
         }
     });
-
     $( "#uiTrkImp_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
@@ -284,7 +278,6 @@ $(document).ready(function() {
             drawItemsTables_old ( itemsTrkImp, "loca" ); 
         }
     });
-
     $( "#uiTrkImp_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
@@ -312,12 +305,9 @@ $(document).ready(function() {
     // =====================================
     // ====== Display List 
     $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
-
     // form to edit tracks
     $( "#uiTrkEdit" ).tabs();                                         // Tabs in UI Track mask
-
     valComments = $( "#validateComments" );
-
     $( "#uiTrkEdit_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -327,7 +317,6 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-
     $( "#uiTrkEdit_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -337,11 +326,9 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-
     $( "#uiTrkEdit_fld_trkSaison" ).selectmenu();
     $( "#uiTrkEdit_fld_trkType" ).selectmenu();
     $( "#uiTrkEdit_fld_trkSubType" ).selectmenu();
-
     $( "#uiTrkEdit_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
@@ -366,7 +353,6 @@ $(document).ready(function() {
             // not working:  $('#uiTrkEdit_peakSrch').val("");                        // clear autocomplete source field
         }
     });
-
     $( "#uiTrkEdit_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
@@ -390,7 +376,6 @@ $(document).ready(function() {
             document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
         }
     });
-
     $( "#uiTrkEdit_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
@@ -414,7 +399,6 @@ $(document).ready(function() {
             document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
         }
     });
-
     $( "#uiTrkEdit_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
@@ -1596,6 +1580,26 @@ $(document).on('click', '.applyFilterButton', function (e) {
 // ============================================================================
 // ========================== panelDisplayLists ===============================
 // ============================================================================
+
+// On click of minimized filter icon --> open large display objects mask
+$(document).on('click', '#dispListTrkMenuMiniOpen', function(e) {
+    e.preventDefault();
+    var $activeButton = $(this);
+    $activeButton.parent().removeClass('visible');
+    $activeButton.parent().addClass('hidden');
+    $('#dispListTrkMenuLarge').removeClass('hidden');
+    $('#dispListTrkMenuLarge').addClass('visible');
+})
+
+// On click the minimize large display objects icon to minimized
+$(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
+    e.preventDefault();
+    var $activeButton = $(this);
+    $activeButton.parent().removeClass('visible');
+    $activeButton.parent().addClass('hidden');
+    $('#dispListTrkMenuMini').removeClass('hidden');
+    $('#dispListTrkMenuMini').addClass('visible');
+})
 
 // Executes code below when user click on pagination links
 $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"

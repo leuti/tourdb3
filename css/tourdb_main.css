@@ -160,16 +160,16 @@ tr.tblpeak>td, tr.tblwayp>td {
 
 /********** FILTER STYLES *********/
 
-.dispObjOpen.hidden, .dispObjMini.hidden {
+.dispObjOpen.hidden, .dispObjMini.hidden, .dispListTrkOpen.hidden, .dispListTrkMini.hidden {
     display: none;
 }
 
-.dispObjOpen.visible, .dispObjMini.visible {
+.dispObjOpen.visible, .dispObjMini.visible, .dispListTrkOpen.visible, .dispListTrkMini.visible {
     display: block;
     margin-top: 18px;
 }
 
-#contObjectSelector {
+#dispObjectSelector, #dispListTrkectSelector {
     width: 432px;
     position: absolute;
     top: 122px;
@@ -178,19 +178,21 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - both large and small */
-#dispObjMenuLarge, #dispObjMenuMini {
+#dispObjMenuLarge, #dispObjMenuMini, #dispListTrkMenuLarge, #dispListTrkMenuMini {
+    position: relative;
     background-color: #0b17c7;
     height: 30px;
     padding: 5px;
+    z-index: 1000;
 }
 
 /* display search main bar on top - small */
-#dispObjMenuMini {
+#dispObjMenuMini, #dispListTrkMenuMini {
     width: 30px;
 }
 
 /* display search main bar on top - icon in large menu */
-#dispObjMenuCloseImg {
+#dispObjMenuCloseImg, #dispListTrkMenuCloseImg {
     height: 20px;
     width: 20px;
     padding: 5px;
@@ -198,13 +200,13 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - icon in small menu */
-#dispObjMenuOpenImg {
+#dispObjMenuOpenImg, #dispListTrkMenuOpenImg {
     height: 20px;
     width: 20px;
     padding: 5px;
 }
 
-.dispObjMenuText {
+.dispObjMenuText, .dispListTrkMenuText {
     height: 10px;
     padding: 5px;
     margin-left: 40px;

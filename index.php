@@ -108,7 +108,7 @@
 		<div id="panelDisplayMap" class="tourdbPanel">
 			
 			<!-- Div for Menu buttons -->
-			<div id="contObjectSelector">
+			<div id="dispObjectSelector">
 				<!-- This div shows only filter button > onclick opens the full accordion -->
 				<div id="dispObjMenuMini" class="dispObjMini hidden">
 					<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">
@@ -457,6 +457,125 @@
 		<!-- ========================================================================== -->		
 		<div id="panelDisplayLists" class="tourdbPanel">
 
+			<!-- This div shows the filter UI -->
+			<div id="listTracksSelector">
+				<!-- This div shows only filter button > onclick opens the full accordion -->
+				<div id="dispListTrkMenuMini" class="dispListTrkMini visible">
+					<a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">
+						<img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">
+					</a> 
+				</div>
+				<div id="dispListTrkMenuLarge" class="dispListTrkOpen hidden">
+					<a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">
+						<img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
+					</a> 
+					<p class="dispListTrkMenuText">Select tracks to be displayed</p>
+								
+					<!-- this div shows the jquery accordion for the display selection -->
+					<div id="dispListTrkAccordion" class="dispListTrkOpen visible"> 
+
+						<!-- Segment Section of Accordion -->
+						<h2>Tracks</h2>
+						<div class="accordionBackground">
+							<fieldset>
+								<!-- SEGMENT filter -->
+								<legend class="filterHeader">Tracks</legend>
+
+								<!-- Track ID -->
+								<div class="dispListTrkCriteria">	
+									<label for="dispListTrk_trackIdFrom" class="labelFirst">Track ID From</label>
+									<input type="text" name="dispListTrk_trackIdFrom" id="dispListTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
+									<label for="dispListTrk_trackIdTo" class="labelNext">Track ID To</label>
+									<input type="text" name="dispListTrk_trackIdTo" id="dispListTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Track name contains (standard text field) -->
+								<div class="dispListTrkCriteria">	
+									<label for="dispListTrk_trackName" class="labelFirst">Track Names contains</label>
+									<input type="text" name="dispListTrk_trackName" id="dispListTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Route contains (standard text field) -->
+								<div class="dispListTrkCriteria">
+									<label for="dispListTrk_route" class="labelFirst">Route contains</label>
+									<input name="dispListTrk_route" id="dispListTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Date witin range -->
+								<div class="dispListTrkCriteria">
+									<label for="dispListTrk_dateFrom" class="labelFirst">From Date</label>
+									<input name="dispListTrk_dateFrom" id="dispListTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
+									<label for="dispListTrk_dateTo" class="labelNext">To Date</label>
+									<input name="dispListTrk_dateTo" id="dispListTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Type as select items (selectable) -->
+								<div class="dispListTrkCriteria">
+									<label for="dispListTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
+									<ol id="dispListTrk_type" class="selectable filterItems">
+										<li id="dispListTrk_type_Klettern" class="ui-widget-content">Klettern</li>
+										<li id="dispListTrk_type_Ski" class="ui-widget-content">Ski</li>
+										<li id="dispListTrk_type_Sport" class="ui-widget-content">Sport</li>
+										<li id="dispListTrk_type_Velo" class="ui-widget-content">Velo</li>
+										<li id="dispListTrk_type_Wasser" class="ui-widget-content">Wasser</li>
+										<li id="dispListTrk_type_Zufuss" class="ui-widget-content first">Zufuss</li>
+									</ol>
+								</div>
+
+								<!-- Subtype as select items (selectable) -->
+								<div class="dispListTrkCriteria">
+									<label for="dispListTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
+									<ol id="dispListTrk_subtype" class="selectable filterItems">
+										<li id="dispListTrk_subtype_alpinklettern" class="ui-widget-content">Alpinklettern</li>
+										<li id="dispListTrk_subtype_alpintour" class="ui-widget-content">Alpintour</li>
+										<li id="dispListTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
+										<li id="dispListTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
+										<li id="dispListTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
+										<li id="dispListTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
+										<li id="dispListTrk_subtype_Schwimmen" class="ui-widget-content">Schwimmen</li>
+										<li id="dispListTrk_subtype_Skihochtour" class="ui-widget-content">Skihochtour</li>
+										<li id="dispListTrk_subtype_Skitour" class="ui-widget-content">Skitour</li>
+										<li id="dispListTrk_subtype_Sportklettern" class="ui-widget-content">Sportklettern</li>
+										<li id="dispListTrk_subtype_Velotour" class="ui-widget-content">Velotour</li>
+										<li id="dispListTrk_subtype_Wanderung" class="ui-widget-content first">Wanderung</li>
+										<li id="dispListTrk_subtype_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
+									</ol>
+								</div>
+								
+								<!-- participants like (standard text field) -->
+								<div class="dispListTrkCriteria">	
+									<label for="dispListTrk_participants" class="labelFirst">Participants contains</label>
+									<input type="text" name="dispListTrk_participants" id="dispListTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Country (standard text field) -->
+								<div class="dispListTrkCriteria">	
+									<label for="dispListTrk_country" class="labelFirst">Country like</label>
+									<input type="text" name="dispListTrk_country" id="dispListTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
+								</div>
+
+								<!-- Button to newly display selection -->
+								<div class="dispListTrkCriteria">
+									<input type="submit" class="button" id="dispListTrk_NewLoadButton" value="Load" />
+								</div>
+								<!-- Button to add selection to existing objects -->
+								<!--
+									<div class="dispListTrkCriteria">
+									<input type="submit" class="button applyFilterButton" id="dispListTrk_addObjButton" value="Add Tracks" />
+								</div>
+								-->
+								<!-- Button to reset filter -->
+								<!--
+								<div class="dispListTrkCriteria">
+									<input type="submit" class="button filterResetButton" id="dispListTrk_ResetButton" value="Reset Filter" />
+								</div>-->
+								
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- Accordion to display different lists -->
 			<div id="tabDispLists" class="tabDispLists">
 				<ul>
@@ -468,7 +587,7 @@
 				<div id="tabDispLists_segs"></div>
 				<div id="tabDispLists_part"></div>
 			</div>
-
+			
 			<!-- Form to display different lists -->
 			<div id="uiTrkEdit" class="formCenter uiDiv">
 				<ul>
