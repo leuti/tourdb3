@@ -541,7 +541,7 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
 })
 
 // Executes code below when user clicks the 'Apply' filter button for tracks
-$(document).on('click', '.applyFilterButton', function (e) {
+$(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     e.preventDefault();
     $clickedButton = this.id;                                       // store id of button clicked
 
@@ -1600,6 +1600,157 @@ $(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
     $('#dispListTrkMenuMini').removeClass('hidden');
     $('#dispListTrkMenuMini').addClass('visible');
 })
+
+// On click on button load the track list is refreshed
+$(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
+    e.preventDefault();
+    $clickedButton = this.id;                                       // store id of button clicked
+
+    // ********************************************************************************************
+    // Build SQL WHERE statement for tracks
+
+    // Initialise tracks variables
+    var whereStatement = [];                                        // Initialise array for whereStatement
+    var whereString = "";                                           // Initialise var for where string
+   
+    // Field trackID from / to
+    var trackIdFrom = "";                                           // Initialse var for track id from 
+    var trackIdTo = "";                                             // Initialse var for track id to
+    if ( ($('#dispListTrk_trackIdFrom').val()) != "" ) {                           
+        trackIdFrom = $('#dispListTrk_trackIdFrom').val();
+    } else {
+        trackIdFrom = "";
+    };
+
+    if ( ($('#dispListTrk_trackIdTo').val()) != "" ) {                           
+        trackIdTo = $('#dispListTrk_trackIdTo').val();
+    } else {
+        trackIdTo = "";
+    };
+
+    if ( trackIdFrom != "" && trackIdTo != "" ) {
+        whereString = "trkID >= " + trackIdFrom + " AND trkId <= " + trackIdTo;   // complete WHERE BETWEEN statement
+    } else if ( trackIdFrom != "" ) {
+        whereString = "trkID >= " + trackIdFrom;                                  // complete WHERE BETWEEN statement
+    } else if ( trackIdTo != "" ) {
+        whereString = "trkId <= " + trackIdTo;                                    // complete WHERE BETWEEN statement
+    }
+
+    if ( whereString.length > 0 ) {
+        whereStatement.push( whereString );                                       // Add to where Statement array
+    }
+
+    // Field track name
+    var whereString = "";
+    if ( ($('#dispListTrk_trackName').val()) != "" ) {                           
+        whereString = "trkTrackName like '%" + $('#dispListTrk_trackName').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field route
+    var whereString = "";
+    if ( ($('#dispListTrk_route').val()) != "" ) {
+        whereString = "trkRoute like '%" + $('#dispListTrk_route').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field date begin (date finished not used)
+    var whereString = "";                                                       // clear where string
+    fromDateArt = "1968-01-01";                                                 // Set from date in case no date is entered
+    var today = new Date();                                                     // Set to date to today in case no date is entered
+    month = today.getMonth()+1;                                                 // Extract month (January = 0)
+    toDateArt = today.getFullYear() + '-' + month + '-' + today.getDate();      // Set to date to today (format yyyy-mm-dd)
+    
+    if ( ($('#dispListTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
+        fromDate = ($('#dispListTrk_dateFrom').val());
+    } else {
+        fromDate = "";
+    }
+
+    if ( ($('#dispListTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
+        toDate = ($('#dispListTrk_dateTo').val())                                // Add to where Statement array
+    } else {
+        toDate = "";
+    }
+
+    if ( fromDate != "" && toDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDate + "'";           // complete WHERE BETWEEN statement
+    } else if ( fromDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDate + "' AND '" + toDateArt + "'";        // complete WHERE BETWEEN statement
+    } else if ( toDate != "" ) {
+        whereString = "trkDateBegin BETWEEN '" + fromDateArt + "' AND '" + toDate + "'";        // complete WHERE BETWEEN statement
+    }
+    if ( whereString.length > 0 ) {
+        whereStatement.push( whereString );                                         // Add to where Statement array
+    }
+
+    // Field type
+    var whereString = "";
+    $('#dispListTrk_type .ui-selected').each(function() {                        // loop through each selected type item
+        var itemId = this.id                                                    // Extract id of selected item
+        whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
+    });
+    if ( whereString.length > 0 ) {
+        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+        whereString = "trkType in (" + whereString + ")";                       // complete SELECT IN statement
+        whereStatement.push( whereString );                                     // Add to where Statement array
+    };
+
+    // Field subtype
+    var whereString = "";                                                       
+    $('#dispListTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
+        var itemId = this.id                                                    // Extract id of selected item
+        whereString = whereString + "'" + itemId.slice(20) + "',";              // Substring tyye from id
+    });
+    if ( whereString.length > 0 ) {
+        whereString = whereString.slice(0,whereString.length-1);                // remove last comma
+        whereString = "trkSubType in (" + whereString + ")";                    // complete SELECT IN statement
+        whereStatement.push( whereString );                                     // Add to where Statement array
+    }           
+
+    // Field participants
+    var whereString = "";
+    if ( ($('#dispListTrk_participants').val()) != "" ) {
+        whereString = "trkParticipants like '%" + $('#dispListTrk_participants').val() + "%'";
+        whereStatement.push( whereString );
+    };
+
+    // Field country
+    var whereString = "";
+    if ( ($('#dispListTrk_country').val()) != "" ) {
+        whereString = "trkCountry like '%" + $('#dispListTrk_country').val() + "%'";
+        whereStatement.push( whereString );
+    };
+    
+    // ========== Put all where statements together
+    if ( whereStatement.length > 0 ) {
+        var sqlWhereCurrent = "";
+
+        for (var i=0; i < whereStatement.length; i++) {
+            sqlWhereCurrent += whereStatement[i];
+            sqlWhereCurrent += " AND ";
+        }
+        sqlWhereCurrent = sqlWhereCurrent + " trkLoginName ='" + $loginName + "'";
+    } 
+
+    // ***********************************************************************
+    // Fetch page for tracks
+
+    var page = 1;
+    // delete current map
+    var element = document.getElementById("tabDispLists_trks");
+    var parent = element.parentNode
+    parent.removeChild(element);
+    parent.innerHTML = '<div id="tabDispLists_trks"></div>';
+
+    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":sqlWhereCurrent,"page":page}); //get content from PHP page
+
+    $('#dispListTrkMenuLarge').removeClass('visible');
+    $('#dispListTrkMenuLarge').addClass('hidden');
+    $('#dispListTrkMenuMini').removeClass('hidden');
+    $('#dispListTrkMenuMini').addClass('visible');
+
+});
 
 // Executes code below when user click on pagination links
 $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
