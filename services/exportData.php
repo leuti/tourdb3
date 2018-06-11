@@ -46,19 +46,14 @@ if (!is_dir ( $outDir )) {                                                      
 }
    
 // Create SQL SELECT statement
-$sql .= "SELECT trkId, trkLogbookId, trkSourceFileName, trkPeakRef, trkTrackName, trkRoute, ";
+$sql .= "SELECT trkId, trkTrackName, trkRoute, ";
 $sql .= "trkDateBegin, trkDateFinish, trkGPSStartTime, trkSaison, trkType, trkSubType, trkOrg, trkOvernightLoc, ";
 $sql .= "trkParticipants, trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, ";
 $sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, trkGrade, ";
-$sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName, trkToReview, COUNT(tbl_trackpoints.tptNumber) AS numOfTpt ";
+$sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName ";
 $sql .= "FROM tbl_tracks ";
-$sql .= "INNER JOIN tbl_trackpoints ON tbl_trackpoints.tptTrackFID = tbl_tracks.trkId ";
-//$sql .= "WHERE trkId in (2,3)";
-$sql .= "GROUP BY trkId, trkLogbookId, trkSourceFileName, trkPeakRef, trkTrackName, trkRoute, trkDateBegin, ";
-$sql .= "trkDateFinish, trkGPSStartTime, trkSaison, trkType, trkSubType, trkOrg, trkOvernightLoc, trkParticipants, ";
-$sql .= "trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, trkStartEle, ";
-$sql .= "trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, trkGrade, trkMeterUp, ";
-$sql .= "trkMeterDown, trkCountry, trkLoginName, trkToReview";
+
+if ($debugLevel > 2) fputs($logFile, "Line 63: SQL: $sql\r\n");    
 
 // Evaluate request type
 switch ( $request ) {
