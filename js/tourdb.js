@@ -18,6 +18,7 @@ var today = new Date();                                              // Create u
 
 sqlWherePrev = "";                                             // variable to store previous sql where statement
 sqlWhereSegmentsPrev = "";                                           // the gen_kml.php is only called if statement has changed
+var fetch_pages_filterString;                                        // variable to store where clause for list view
 
 var trackKMLlayer;                                                   // map layer object containing all tracks
 var segKMLlayer;                                                     // map layer object containing all segments
@@ -497,7 +498,6 @@ $(document).ready(function() {
                     }
 
                     // Fetch page for tracks
-                    var fetch_pages_filterString = " trkLoginName='leut' ";
                     var page = 1;
                     $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
                 }
@@ -506,6 +506,7 @@ $(document).ready(function() {
 
         var jsonObject = {};                                         // Initialise JSON Object for server 
         $loginName = ($('#loginName').val());                        // read login name from mask
+        fetch_pages_filterString = " trkLoginName='leut' ";      // where string for list view (fetch_pages.php)
         phpLocation = "services/login.php";                          // Variable to store location of php file
         jsonObject["loginName"] = $loginName;                        // append login name to JSON object
         jsonObject["loginPasswd"] = ($('#loginPasswd').val());       // append password to JSON object
@@ -1743,7 +1744,8 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     parent.removeChild(element);
     parent.innerHTML = '<div id="tabDispLists_trks"></div>';
 
-    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":sqlWhereCurrent,"page":page}); //get content from PHP page
+    fetch_pages_filterString = sqlWhereCurrent;
+    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
 
     $('#dispListTrkMenuLarge').removeClass('visible');
     $('#dispListTrkMenuLarge').addClass('hidden');
@@ -1756,7 +1758,6 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
 $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     e.preventDefault();
     $(".loading-div").show(); //show loading element
-    var fetch_pages_filterString = " trkLoginName='leut' ";
     var page = $(this).attr("data-page"); //get page number from link
     $("#tabDispLists_trks").load("services/fetch_pages.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
         $(".loading-div").hide(); //once done, hide loading element
