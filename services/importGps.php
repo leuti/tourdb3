@@ -531,11 +531,13 @@ if ($request == "temp") {
     // ---------------------------------------------------------------------------------
 
     // read received INPUT object
-    $trackobj = array();                                          // array storing track data in array
-    $sessionid = $receivedData["sessionid"];                        // ID of current user session - required to make site multiuser capable
+    $trackobj = array();                                                            // array storing track data in array
+    $sessionid = $receivedData["sessionid"];                                        // ID of current user session - required to make site multiuser capable
     $loginname = $receivedData["loginname"];
-    $trackobj = $receivedData["trackobj"];                        // Array of track data 
-    
+    $trackobj = $receivedData["trackobj"];                                          // Array of track data 
+    $trkEdit_waypItems = $receivedData["trkEdit_waypItems"];                        // Array of waypoiunts selected
+    $trkEdit_partItems = $receivedData["trkEdit_partItems"];                        // Array of participants selected
+
     if ( $debugLevel >= 3) fputs($logFile, "Line 539: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
 
     // Part 1: Update tracks
@@ -579,13 +581,17 @@ if ($request == "temp") {
         
     // count number of items
     $countItems = 0;
+    // fputs($logFile, "Line 584 - trkEdit_waypItems: ". sizeof($trkEdit_waypItems). "\r\n");
+
     for ( $i; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
-        if ( ( $trkEdit_waypItems[$i]["itemType"] == "peak" and $trkEdit_waypItems[$i]["disp_f"] == "true" ) || 
-             ( $trkEdit_waypItems[$i]["itemType"] == "wayp" and $trkEdit_waypItems[$i]["disp_f"] == "true" ) || 
-             ( $trkEdit_waypItems[$i]["itemType"] == "loca" and $trkEdit_waypItems[$i]["disp_f"] == "true" ) ) {                 // disp_f = true when user has not deleted peak on UI
-            $countPart += 1;  
+        if ( ( $trkEdit_waypItems[$i]["itemType"] == "peak" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) || 
+             ( $trkEdit_waypItems[$i]["itemType"] == "wayp" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) || 
+             ( $trkEdit_waypItems[$i]["itemType"] == "loca" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) ) {                 // disp_f = true when user has not deleted peak on UI
+            $countItems += 1;  
         }
     }
+
+    // fputs($logFile, "Line 589 - waypoints found: $countItems\r\n");
 
     // only enter into code section when at least one item 
     if ( $countItems > 0 ) {    
