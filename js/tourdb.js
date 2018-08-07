@@ -559,7 +559,6 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var sqlWherePrev_peaks_cant = "";
     var sqlWherePrev_huts = "";
     
-    
     // ********************************************************************************************
     // Build SQL WHERE statement for tracks
 

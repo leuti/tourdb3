@@ -171,7 +171,7 @@ if ($request == "temp") {
             //$CH03_top_lat = WGStoCHy($lat, $lon);
             //$CH03_top_lon = WGStoCHx($lat, $lon); 
 
-            if ($debugLevel >= 3) fputs($logFile, "Line 156 - INPUT --> lat: $lat | lon: $lon \r\n"); 
+            if ($debugLevel >= 5) fputs($logFile, "Line 156 - INPUT --> lat: $lat | lon: $lon \r\n"); 
 
             if( $lat > $WGS_top_lat ) {                                     // This is the top most point
                 $WGS_top_lat = $lat;
@@ -188,7 +188,7 @@ if ($request == "temp") {
                 $WGS_left_lon = $lon;                               
             }
 
-            if ($debugLevel >= 3) {
+            if ($debugLevel >= 4) {
                 fputs($logFile, "Line 156 - WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
                 fputs($logFile, "Line 156 - WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
                 fputs($logFile, "Line 156 - WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
@@ -438,7 +438,7 @@ if ($request == "temp") {
     // Part 2: Insert records to tbl_track_wayp for peaks
     // --------------------------------------------------
 
-    $trkEdit_waypItems = $receivedData["trkEdit_waypItems"];                        // Array of peaks selected
+    $trkEdit_waypItems = $receivedData["itemsTrkImp"];                        // Array of peaks selected
     $waypRun = false;                                                 // True when at least one item to insert
     $partRun = false;                                                 // True when at least one item to insert
 
