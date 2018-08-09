@@ -1826,6 +1826,10 @@ $(document).on('click', '.trkEdit', function (e) {
             var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
 
+            trkEdit_partItems = respObj.trpaArray;
+            var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
+            document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
+
             $('#uiTrkEdit').addClass('active');
 
         } else {
@@ -2665,6 +2669,15 @@ function checkExistance( origin, name ) {
 
 // Draws the table that list the selected waypoints
 function drawItemsTables ( itemsArray, itemType, elDelClass ) {
+
+    // Parameters:
+    //    itemsArray: Array of following content
+    //                - disp_f: {1|0|true|false}
+    //                - itemId: num (id of item)
+    //                - itemName: string (name of item at display)
+    //                - reached_f: [true|false]
+    //    itemType: string {peak,wayp,loca,part}
+    //    elDelClass: string 
 
     // Assign var
     var itemDelClass = itemType + "Del";                                        // e.g. waypDel

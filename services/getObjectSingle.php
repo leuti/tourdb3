@@ -27,15 +27,18 @@ $itemType = $receivedData["itemType"];
 $requestType = $receivedData["requestType"];                            
 $itemId = $receivedData["itemId"];                          // where statement to select tracks to be displayed
 
-fputs($logFile, "itemType: $itemType | requestType: $requestType | itemId: $itemId\r\n");    
+if ( $debugLevel >= 1 ) {
+    fputs($logFile, "Request params: itemType: $itemType | requestType: $requestType | itemId: $itemId\r\n");    
+}
 
 if ( $itemType == "trk" ) {
 
     if ( $requestType == "select" ) {
 
-        if ($debugLevel >= 3) fputs($logFile, 'Line 90: gugus\r\n');
+        //if ($debugLevel >= 3) fputs($logFile, 'Line 90: gugus\r\n');
 
-        // Select tracks meeting given WHERE clause
+        // Select tracks 
+        // -------------
         $sql = "SELECT * FROM tbl_tracks ";
         $sql .= "WHERE trkId = " . $itemId;
 
@@ -45,6 +48,7 @@ if ( $itemType == "trk" ) {
         $trackRecord = mysqli_fetch_assoc($records);
 
         // Select records from tbl_trk_wayp
+        // --------------------------------
         $sql =  "SELECT trwp.trwpId, trwp.trwpTrkId, trwp.trwpWaypId, ";
         $sql .= "wp.waypNameLong, wp.waypTypeFID, trwp.trwpReached_f ";
         $sql .= "FROM tbl_track_wayp trwp ";
@@ -78,11 +82,40 @@ if ( $itemType == "trk" ) {
             array_push ($trWpArray, $trkWpLine);
         }
 
+        // Select records from tbl_trk_part
+        // --------------------------------
+        $sql =  "SELECT trpa.trpaId, trpa.trpaTrkId, trpa.trpaPartId, ";
+        $sql .= "part.prtFirstName, part.prtLastName ";
+        $sql .= "FROM tbl_track_part trpa ";
+        $sql .= "INNER JOIN tbl_part part ON trpa.trpaPartId = part.prtID ";
+        $sql .= "WHERE trpaTrkId = " . $itemId;
+
+        if ($debugLevel >= 3) fputs($logFile, "Line 93: sql: " . $sql . "\r\n");
+
+        $records = mysqli_query($conn, $sql);
+        
+        $trpaArray = array();
+        // select single line result
+        while ( $trpaRecord = mysqli_fetch_assoc($records) ) {
+            
+            if ($debugLevel >= 3) fputs($logFile, "Line 101: trkId: " . $trpaRecord["trpaTrkId"] 
+                . "FirstName: " . $trpaRecord["prtFirstName"] . "\r\n");
+
+            $trpaLine = array (
+                "disp_f"=>"1",
+                "itemType"=>"part",
+                "itemId"=>$trpaRecord["trpaPartId"],
+                "itemName"=>$trpaRecord["prtFirstName"] . " " . $trpaRecord["prtLastName"]
+            );
+            array_push ($trpaArray, $trpaLine);
+        }
+
         $returnObject = array (
             "status"=>"OK",
             "message"=>"",
             "trackObj"=>$trackRecord,
-            "trWpArray"=>$trWpArray
+            "trWpArray"=>$trWpArray,
+            "trpaArray"=>$trpaArray
             );
 
         echo json_encode($returnObject);                           // echo JSON object to client
