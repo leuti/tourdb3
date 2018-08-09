@@ -291,18 +291,17 @@ $(document).ready(function() {
             var itemsList =  new Object();
 
             // Add new part to array
+            itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+            itemsList.itemType = "part";                             // Type of item (must be 4 char)
             itemsList.itemId = id;                                   // id of item selected
             itemsList.itemName = value;                              // Name of item selected
-            itemsList.itemType = "part";                             // Type of item (must be 4 char)
-            itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
+            //itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
 
             itemsTrkImp.push(itemsList);                              // Add selected item to array
-
             drawItemsTables_old ( itemsTrkImp, "part" ); 
         }
     });
-
+    
     // =====================================
     // ====== Display List 
     $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
@@ -412,12 +411,11 @@ $(document).ready(function() {
             var itemsList =  new Object();
 
             // Add new part to array
+            itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
+            itemsList.itemType = "part";                             // Type of item (must be 4 char)
             itemsList.itemId = id;                                   // id of item selected
             itemsList.itemName = value;                              // Name of item selected
-            itemsList.itemType = "part";                             // Type of item (must be 4 char)
-            itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
-
+            
             trkEdit_partItems.push(itemsList);                              // Push record to array
             var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
             document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
@@ -1898,7 +1896,8 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
 });
 
-// Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
+// Upon click on the 'Save' button in edit mode
+// --> calls importGps.php in save mode (call php with JQUERY $AJAX)
 $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
@@ -1981,7 +1980,7 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
         jsonObject.sessionid = sessionid;                                       // append parameter session ID
         jsonObject.request = 'update';                                            // temp request to create track temporarily
         jsonObject.loginname = $loginName;                                      // set login name
-        jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
+        //jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
         jsonObject.trackobj = trackobj;                                         // send track object
         jsonObject.trkEdit_waypItems = trkEdit_waypItems;
         jsonObject.trkEdit_partItems = trkEdit_partItems;
@@ -2199,7 +2198,8 @@ $(document).on('click', '.cbReached', function (e) {
     drawItemsTables_old ( itemsTrkImp, "peak" ); 
 });
 
-// Upon click on the 'Save' button --> call importGps.php in save mode (call php with JQUERY $AJAX)
+// Upon click on the 'Save' button in the import track mode
+// --> calls importGps.php in save mode (call php with JQUERY $AJAX)
 $(document).on('click', '#uiTrkImp_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
@@ -2250,7 +2250,6 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
     $('#uiTrkImp_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
     trackobj.trkDistance = $('#uiTrkImp_fld_trkDistance').val();
     valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
-
 
     $('#uiTrkImp_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackobj.trkTimeOverall = $('#uiTrkImp_fld_trkTimeOverall').val();

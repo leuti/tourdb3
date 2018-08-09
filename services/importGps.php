@@ -583,13 +583,15 @@ if ($request == "temp") {
     $countItems = 0;
     // fputs($logFile, "Line 584 - trkEdit_waypItems: ". sizeof($trkEdit_waypItems). "\r\n");
 
-    for ( $i; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
-        if ( ( $trkEdit_waypItems[$i]["itemType"] == "peak" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) || 
-             ( $trkEdit_waypItems[$i]["itemType"] == "wayp" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) || 
-             ( $trkEdit_waypItems[$i]["itemType"] == "loca" and ( $trkEdit_waypItems[$i]["disp_f"] == "true" or $trkEdit_waypItems[$i]["disp_f"] == "1") ) ) {                 // disp_f = true when user has not deleted peak on UI
+    for ( $i=0; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
+        if ( $trkEdit_waypItems[$i]["itemType"] == "peak" || 
+             $trkEdit_waypItems[$i]["itemType"] == "wayp" || 
+             $trkEdit_waypItems[$i]["itemType"] == "loca" ) {
             $countItems += 1;  
         }
     }
+
+    if ( $debugLevel >= 3) fputs($logFile, "Line 665 - countItems(wayp): $countItems\r\n");
 
     // fputs($logFile, "Line 589 - waypoints found: $countItems\r\n");
 
@@ -616,15 +618,24 @@ if ($request == "temp") {
         }
 
         if ($debugLevel >= 3) fputs($logFile, "Line 583 Delete tbl_track_wayp - sql: $sql\r\n");
-
-        // Part 3: Insert records to tbl_track_wayp for wayp
-        // --------------------------------------------------
+    }
+    // Part 3: Insert records to tbl_track_wayp for wayp
+    // --------------------------------------------------
+    $countItems = 0;
+    for ( $i=0; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
+        if ( $trkEdit_waypItems[$i]["itemType"] == "peak" && ( $trkEdit_waypItems[$i]["disp_f"] == "true" || $trkEdit_waypItems[$i]["disp_f"] == 1 ) || 
+                $trkEdit_waypItems[$i]["itemType"] == "wayp" && ( $trkEdit_waypItems[$i]["disp_f"] == "true" || $trkEdit_waypItems[$i]["disp_f"] == 1 ) || 
+                $trkEdit_waypItems[$i]["itemType"] == "loca" && ( $trkEdit_waypItems[$i]["disp_f"] == "true" || $trkEdit_waypItems[$i]["disp_f"] == 1 ) ) {
+            $countItems += 1;  
+        }
+    }
+    
+    if ( $countItems > 0 ) { 
         //create SQL statement  
         $sql = "INSERT INTO tbl_track_wayp (trwpTrkId, trwpWaypID, trwpReached_f) VALUES ";
-        $i=0;
-        for ( $i; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
+        for ( $i=0; $i < sizeof($trkEdit_waypItems); $i++ ) {                   // loop through records in array
             if ( $trkEdit_waypItems[$i]["disp_f"] == true && ( $trkEdit_waypItems[$i]["itemType"] == "peak"  || 
-            $trkEdit_waypItems[$i]["itemType"] == "loca" || $trkEdit_waypItems[$i]["itemType"] == "wayp" )) {                 // disp_f = true when user has not deleted peak on UI
+                $trkEdit_waypItems[$i]["itemType"] == "loca" || $trkEdit_waypItems[$i]["itemType"] == "wayp" )) {                 // disp_f = true when user has not deleted peak on UI
                 $waypRun = true;
                 $sql .= "(" . $trkId . "," . $trkEdit_waypItems[$i]["itemId"] . "," . $trkEdit_waypItems[$i]["reached_f"] . "),";  
             }
@@ -652,16 +663,21 @@ if ($request == "temp") {
 
     // part
     
-    // count number of items
+    // count number of items in participants array
     $countItems = 0;
-    for ( $i; $i < sizeof($trkEdit_partItems); $i++ ) {                   // loop through records in array
-        if ( $trkEdit_partItems[$i]["itemType"] == "part" and $trkEdit_partItems[$i]["disp_f"] == "true"  ) {                 // disp_f = true when user has not deleted peak on UI
-            $countPart += 1;  
+    for ( $i=0; $i < sizeof($trkEdit_partItems); $i++ ) {                   // loop through records in array
+        if ( $trkEdit_partItems[$i]["itemType"] == "part" ) {                 // disp_f = true when user has not deleted peak on UI
+            $countItems += 1;  
+            fputs($logFile, "Line 661 - itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
         }
     }
 
+    if ( $debugLevel >= 3) fputs($logFile, "Line 665 - countItems(part): $countItems\r\n");
+
     // only enter into code section when at least one item 
-    if ( $countItems > 0 ) {    
+    if ( $countItems > 0 ) {  
+        
+        if ( $debugLevel >= 3) fputs($logFile, "Line 668 - countItems grösser null \r\n");
     
         // Part 4: Delete trb_track_part before insert
         // --------------------------------------------------
@@ -671,7 +687,7 @@ if ($request == "temp") {
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                                // run sql against DB
         {
-            if ( $debugLevel >= 6) fputs($logFile, "Line 681 - Records in tbl_track_part for waypoints successfully deleted \r\n");
+            if ( $debugLevel >= 3) fputs($logFile, "Line 676 - Records in tbl_track_part successfully deleted \r\n");
         } else {
             fputs($logFile, "Line 683 - Error deleting tbl_track_part: $conn->error\r\n");
             fputs($logFile, "Line 684 - sql: $sql\r\n");
@@ -683,17 +699,28 @@ if ($request == "temp") {
             echo json_encode($outObject); 
             return;
         }
+    }
 
-        if ($debugLevel >= 3) fputs($logFile, "Line 694 Delete tbl_track_part - sql: $sql\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line 694 Delete tbl_track_part - sql: $sql\r\n");
 
-        // Part 5: Insert records to tbl_track_wayp for peaks
-        // --------------------------------------------------
+    // Part 5: Insert records to tbl_track_part
+    // ----------------------------------------
 
+    $countItems = 0;
+    for ( $i=0; $i < sizeof($trkEdit_partItems); $i++ ) {                   // loop through records in array
+        if ( $trkEdit_partItems[$i]["itemType"] == "part" && ( $trkEdit_partItems[$i]["disp_f"] == "true" || $trkEdit_partItems[$i]["disp_f"] == 1 ) ) {                 // disp_f = true when user has not deleted peak on UI
+            $countItems += 1;  
+            fputs($logFile, "Line 661 - itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
+        }
+    }
+
+    if ( $countItems > 0 ) { 
         //create SQL statement  
         $sql = "INSERT INTO tbl_track_part (trpaTrkId, trpaPartID) VALUES ";
         $i=0;
         for ( $i; $i < sizeof($trkEdit_partItems); $i++ ) {                   // loop through records in array
-            if ( $trkEdit_partItems[$i]["disp_f"] == true && $trkEdit_partItems[$i]["itemType"] == "part" ) {                 // disp_f = true when user has not deleted peak on UI
+            if ( ( $trkEdit_partItems[$i]["disp_f"] == true || $trkEdit_partItems[$i]["disp_f"] == 1 )
+               && $trkEdit_partItems[$i]["itemType"] == "part" ) {                 // disp_f = true when user has not deleted peak on UI
                 $sql .= "(" . $trkId . "," . $trkEdit_partItems[$i]["itemId"] . ")," ;
             }
         }
@@ -704,7 +731,7 @@ if ($request == "temp") {
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                                // run sql against DB
         {
-            if ( $debugLevel >= 6) fputs($logFile, "Line 234 - New record in tbl_track_wayp for peaks successfully inserted \r\n");
+            if ( $debugLevel >= 3) fputs($logFile, "Line 234 - New record in tbl_track_wayp for peaks successfully inserted \r\n");
         } else {
             fputs($logFile, "Line 236 - Error inserting trkPt: $conn->error\r\n");
             fputs($logFile, "Line 237 - sql: $sql\r\n");
@@ -717,7 +744,6 @@ if ($request == "temp") {
             return;
         }
     }
-
 
     // write output array
     $outObject = array (
