@@ -367,9 +367,9 @@ if ($request == "temp") {
         echo json_encode($returnObject);                                // echo JSON object to client
         
         // remove imported file & close connections
-        fclose($uploadfile);
-        //if ( file_exists($uploadfile) ) unlink($uploadfile);            // remove file if existing
-        //rmdir($uploaddir, 0777);                                        // remove upload directory          
+        //fclose($uploadfile);
+        if ( file_exists($uploadfile) ) unlink($uploadfile);            // remove file if existing
+        rmdir($uploaddir);                                        // remove upload directory          
     } else {
 
         // if filetype is not GPX
