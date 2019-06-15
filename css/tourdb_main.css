@@ -420,7 +420,7 @@ tr.tblpeak>td, tr.tblwayp>td {
 /******** TABLE FORMATTING ********/
 tr.header>th {
     padding: 3px 5px 3px 5px;
-    color: #e6e6ff;
+    text-align: left;
     border-top: 3px solid #4da9ff;
     border-bottom: 0.2px solid #4da9ff;}
 tr.sqlName>th {
@@ -429,11 +429,14 @@ tr.sqlName>th {
     border-bottom: 3px solid #4da9ff;
     font-size: 8pt;
     font-weight: normal;}
+ul {
+    padding: unset;}
 td {
     padding: 1px 5px 1px 5px;
     text-align: left;
     font-size: 90%;
-    border-bottom: 0.5px solid #4d4dff;}
+    border-bottom: 0.5px solid #4d4dff;
+    white-space: nowrap;}
 tr.coord{
     /*font-weight: bold;*/
     color: #ccffe6;}

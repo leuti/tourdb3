@@ -16,6 +16,7 @@
 // Set timezone (otherwise warnings are written to log)
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
+$debugLevel = 3;
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/fetch_pages.log";                // Assign file location
@@ -65,11 +66,11 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     };   	
 	
     // Select statement to read data from vw_waypoints
-    $sql = "SELECT trkId, trkTrackName  
+    $sql = "SELECT trkId, trkTrackName, trkDateBegin  
             FROM tbl_tracks 
             WHERE ";
     $sql .= $sqlFilterString;  
-    $sql .= " ORDER BY trkId DESC LIMIT $page_position, $item_per_page";
+    $sql .= " ORDER BY trkDateBegin DESC, trkId DESC LIMIT $page_position, $item_per_page";
 
     if ($debugLevel >= 1) fputs($logFile, 'Line 64: sql: ' . $sql . "\r\n");
 
@@ -79,7 +80,8 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     echo '<table>';
     echo '<tr class="header">';
     echo '<th>ID</th>';                           // 1
-    echo '<th>Name</th>';                         // 2
+    echo '<th>Date</th>';                         // 2
+    echo '<th>Name</th>';                         // 3
     echo '</tr>';
 
     // Write for each waypoint one line
@@ -87,6 +89,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
 
         echo '<tr>';
         echo '<td>'.$singleRecord["trkId"].'</td>';                       // 1
+        echo '<td>'.$singleRecord["trkDateBegin"].'</td>';               // 2
         echo '<td>'.$singleRecord["trkTrackName"].'</td>';                // 2
         echo '<td>';
         echo '<ul>';
