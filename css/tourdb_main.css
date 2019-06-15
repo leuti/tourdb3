@@ -421,8 +421,8 @@ tr.tblpeak>td, tr.tblwayp>td {
 tr.header>th {
     padding: 3px 5px 3px 5px;
     text-align: left;
-    border-top: 3px solid #4da9ff;
-    border-bottom: 0.2px solid #4da9ff;}
+    border-top: 3px solid #4d4dff;
+    border-bottom: 2px solid #4d4dff;}
 tr.sqlName>th {
     padding: 3px 5px 3px 5px;
     color: #e6e6ff;
@@ -435,8 +435,7 @@ td {
     padding: 1px 5px 1px 5px;
     text-align: left;
     font-size: 90%;
-    border-bottom: 0.5px solid #4d4dff;
-    white-space: nowrap;}
+    border-bottom: 0.5px solid #4d4dff;}
 tr.coord{
     /*font-weight: bold;*/
     color: #ccffe6;}

@@ -82,6 +82,8 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     echo '<th>ID</th>';                           // 1
     echo '<th>Date</th>';                         // 2
     echo '<th>Name</th>';                         // 3
+    echo '<th>Edit</th>';                         // 4
+    echo '<th>Del</th>';                          // 5
     echo '</tr>';
 
     // Write for each waypoint one line

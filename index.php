@@ -1161,7 +1161,7 @@
 	</section> <!-- End main -->
 
 	<footer id="footer">
-        <div id=footerText>&copy; tourdb - 2018 leuti - Version 1.0 - 20180331</div>
+        <div id=footerText>&copy; tourdb - 2019 leuti - Version Built 20190615</div>
 		<div id="statusMessage"></div>
     </footer>
 	
