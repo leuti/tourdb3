@@ -9,7 +9,7 @@
 //    data is deleted before the data is written to the DB again.
 //
 // The table tbl_trackpoints is not used anymore
-(()) 
+
 // Parameters:
 // sessionid: id of user session; used to ensure multi-user capabilities
 // filename: name of file to be uploaded (one at a time); file is expected at import/gpx or import/kml
