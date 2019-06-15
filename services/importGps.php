@@ -28,16 +28,17 @@
 // trackObj
 
 // Set variables and parameters
-include("config.inc.php");                                        // include config file
-include("coord_funct.inc.php");                                    // include coord calc functions
+include("config.inc.php");                                          // include config file
+include("coord_funct.inc.php");                                     // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
+$debugLevel = 3;
 
 $loopSize = 5000;                                                   // Number of trkPts inserted in one go
 
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/importGpx.log";        // Assign file location
 if ( $debugLevel >= 1 ) {
-    $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
+    $logFile = @fopen($importGpxLog,"a");                           // open log file handler 
     fputs($logFile, "\r\n============================================================\r\n");    
     fputs($logFile, "importGpx.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 }
@@ -85,10 +86,10 @@ if ($request == "temp") {
     // ---------------------------------------------------------------------------------
   
     // Read posted parameters
-    $sessionid = $_REQUEST["sessionid"];                            // ID of current user session - required to make site multiuser capable
-    $filename = basename($_FILES['filename']['name']);              // file name of gps file to be processed
-    $loginname = $_REQUEST["loginname"];                            // Login name
-    $fileinfo = pathinfo($filename);                                // evaluate file extension 
+    $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
+    $filename = basename($_FILES['filename']['name']);                  // file name of gps file to be processed
+    $loginname = $_REQUEST["loginname"];                                // Login name
+    $fileinfo = pathinfo($filename);                                    // evaluate file extension 
     $filetype = $fileinfo['extension'];
     if ($debugLevel >= 3) fputs($logFile, "Line 92: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
 
@@ -96,9 +97,9 @@ if ($request == "temp") {
     if ( $filetype == "gpx" ) {
         
         // create upload dir / file name
-        $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';      // Session id used to create unique directory
+        $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';          // Session id used to create unique directory
         $uploadfile = $uploaddir . $filename;           
-        if (!is_dir ( $uploaddir )) {                               // Create directory with name = session id
+        if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
             mkdir($uploaddir, 0777);
         }
 
@@ -115,8 +116,8 @@ if ($request == "temp") {
         $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
         $newTrackTime = $gpx->trk->trkseg->trkpt->time;
         $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-        $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));// convert track time 
-        $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime)); // convert track time 
+        $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));    // convert track time 
+        $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime));   // convert track time 
         $trackName = $gpx->trk->name;                                   // Track name  
         //$trackName = $trackName[0];  
  
@@ -363,12 +364,12 @@ if ($request == "temp") {
             );
 
         // return 
-        echo json_encode($returnObject);                           // echo JSON object to client
+        echo json_encode($returnObject);                                // echo JSON object to client
         
         // remove imported file & close connections
         fclose($uploadfile);
-        if ( file_exists($uploadfile) ) unlink($uploadfile);                   // remove file if existing
-        rmdir($uploaddir, 0777);                                // remove upload directory          
+        //if ( file_exists($uploadfile) ) unlink($uploadfile);            // remove file if existing
+        //rmdir($uploaddir, 0777);                                        // remove upload directory          
     } else {
 
         // if filetype is not GPX
