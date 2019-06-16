@@ -1248,7 +1248,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
                       resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_huts ) {
         console.log("then entered");
         respObj = {};
-
+/*
         // store current where statement as previous where statement
         sqlWherePrev_tracks = dispObject_tracks.sqlWhereCurrent;
         sqlWherePrev_segments = dispObject_segments.sqlWhereCurrent;
@@ -1277,7 +1277,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
 
         // possible values: outside boundary / inside boundary / NaN
         // events: both return value / only one returns value / none return value
-/*
+
         var coordTop_tracks = Number(resp_tracks[0].coordTop);
         var coordTop_segments = Number(resp_segments[0].coordTop);
         if ( isNaN( coordTop_tracks ) && isNaN( coordTop_segments ) ) {                 // both do NOT deliver coordinates
@@ -1510,7 +1510,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
             });
             tourdbMap.addLayer(kmlLayer);                                // add track layer to map
         }
-        */
+    
         if ( tourdbMap ) {
             // Popup showing the position the user clicked
             var popup = new ol.Overlay({                                    // popup to display track details
@@ -1574,6 +1574,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
         $('.dispObjOpen').addClass('hidden');
         $('.dispObjMini').addClass('visible');
         $('.dispObjMini').removeClass('hidden');
+        */
     });
     
 });
