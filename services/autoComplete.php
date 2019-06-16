@@ -14,11 +14,12 @@
 // 
 
 header('content-type: application/json; charset=utf-8');
-include("config.inc.php");  //include config file
+include("config.inc.php");                                              //include config file
 date_default_timezone_set('Europe/Zurich');
+$debugLevel = 3;
 
 if ($debugLevel >= 1){
-    $fp = @fopen("../log/autoComplete.log","a"); // TASK: Add Date/Time
+    $fp = @fopen("../log/autoComplete.log","a");
     fputs($fp, "=================================================================\r\n");
     fputs($fp, date("Ymd-H:i:s", time()) . "-Line 8: autoComplete.php opened \r\n"); 
 };
@@ -30,13 +31,6 @@ if ($debugLevel >= 3){
 
 $searchObject = $_GET["field"];
 $term = $_GET["term"];
-//$idField = $sqlStmts[$searchObject]["id"];
-//$nameField = $sqlStmts[$searchObject]["name"];
-//$tableField = $sqlStmts[$searchObject]["table"];
-
-// ================= Generic
-
-//fputs($fp, 'Line 41: array: ' . $idField . "-" . $nameField . "-" . $tableField . "-" . $term ."\r\n");
 
 if ( $searchObject == "peak") {
     $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
@@ -56,11 +50,11 @@ if ( $searchObject == "peak") {
     $sql .= "OR prtFirstName LIKE '%" . $_GET["term"] . "%' ";   
 } 
 
-fputs($fp, "Line 54: sql: $sql\r\n");
+if ($debugLevel >= 1){fputs($fp, "Line 53: sql: $sql\r\n")};
 
 $results = $conn->prepare($sql);
-$results->execute(); //Execute prepared Query
-$results->bind_result($ID, $Short); //bind variables to prepared statement
+$results->execute();                                                    // Execute prepared Query
+$results->bind_result($ID, $Short);                                     // Bind variables to prepared statement
 
 $json = array();
 while($results->fetch()) {
@@ -72,10 +66,11 @@ while($results->fetch()) {
 }
 
 $jsonstring = json_encode($json);
-if ($debugLevel >= 5){
-    fputs($fp, 'Line 38: jsonstring: ' . $jsonstring . "\r\n");
-};
+
+if ($debugLevel >= 5){fputs($fp, 'Line 70: jsonstring: ' . $jsonstring . "\r\n")};
+
 echo $jsonstring;
+
 die();
 
 ?>
