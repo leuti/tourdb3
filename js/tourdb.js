@@ -1233,9 +1233,21 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
 
     // Prepare ajax call for TRACKS kml
     
+    $.when( $.ajax( "services/test1.php" ), $.ajax( "services/test2.php" ) ).done(function( a1, a2 ) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var data = a1[ 0 ] + a2[ 0 ]; // a1[ 0 ] = "Whip", a2[ 0 ] = " It"
+        if ( /Whip It/.test( data ) ) {
+          alert( "We got what we came for!" );
+        }
+      });
+
+    var ajaxCall1 = {url: "services/test1.php",type: "POST",contentType: "application/json; charset=utf-8",dataType: 'json',data: jsn};
+    var dispObject_tracks = new DisplayObj( "tracks", "", "", false, jsn, ajaxCall1 );
+    var ajaxCall2 = {url: "services/test2.php",type: "POST",contentType: "application/json; charset=utf-8",dataType: 'json',data: jsn};
+    var dispObject_huts = new DisplayObj( "tracks", "", "", false, jsn, ajaxCall2 )   
     // Wait for each ajax call to complete & continue only when all are finished (regardless if in error)
-    $.when( $.ajax(dispObject_tracks.ajaxCall),  
-            $.ajax(dispObject_huts.ajaxCall)
+    $.when( $.ajax(dispObject_tracks.ajaxCall1), $.ajax(dispObject_huts.ajaxCall2)
     // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
     ).then( function ( resp_tracks, resp_huts ) {
         console.log("then entered");  
