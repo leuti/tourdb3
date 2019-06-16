@@ -10,6 +10,7 @@
 // * 
 
 include("config.inc.php");                                                  // Include config file
+$debugLevel = 3;
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/no_kml.log";                // Assign file location
