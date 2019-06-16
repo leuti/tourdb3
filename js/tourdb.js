@@ -1277,7 +1277,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
 
         // possible values: outside boundary / inside boundary / NaN
         // events: both return value / only one returns value / none return value
-
+/*
         var coordTop_tracks = Number(resp_tracks[0].coordTop);
         var coordTop_segments = Number(resp_segments[0].coordTop);
         if ( isNaN( coordTop_tracks ) && isNaN( coordTop_segments ) ) {                 // both do NOT deliver coordinates
@@ -1382,7 +1382,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
             tourdbMap.addLayer(kmlLayer);                                // add track layer to map
         }
         */
-
+/*
         // Draw kml file for segments 
         if ( dispObject_segments.genKml && tourdbMap ) {                                            // var is true when user has set filter on segments
             $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
