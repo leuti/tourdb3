@@ -1235,10 +1235,343 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     
     // Wait for each ajax call to complete & continue only when all are finished (regardless if in error)
     $.when( $.ajax(dispObject_tracks.ajaxCall),  
+            $.ajax(dispObject_segments.ajaxCall),
+            $.ajax(dispObject_peaks_100.ajaxCall),
+            $.ajax(dispObject_peaks_1000.ajaxCall),
+            $.ajax(dispObject_peaks_2000.ajaxCall),
+            $.ajax(dispObject_peaks_3000.ajaxCall),
+            $.ajax(dispObject_peaks_4000.ajaxCall),
+            $.ajax(dispObject_peaks_cant.ajaxCall),
             $.ajax(dispObject_huts.ajaxCall)
     // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
-    ).then( function ( resp_tracks, resp_huts ) {
-        console.log("then entered");  
+    ).then( function ( resp_tracks, resp_segments, resp_peaks_100, resp_peaks_1000, 
+                      resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_huts ) {
+        console.log("then entered");
+        respObj = {};
+
+        // store current where statement as previous where statement
+        sqlWherePrev_tracks = dispObject_tracks.sqlWhereCurrent;
+        sqlWherePrev_segments = dispObject_segments.sqlWhereCurrent;
+        sqlWherePrev_peaks_100 = dispObject_peaks_100.sqlWhereCurrent;
+        sqlWherePrev_peaks_1000 = dispObject_peaks_1000.sqlWhereCurrent;
+        sqlWherePrev_peaks_2000 = dispObject_peaks_2000.sqlWhereCurrent;
+        sqlWherePrev_peaks_3000 = dispObject_peaks_3000.sqlWhereCurrent;
+        sqlWherePrev_peaks_4000 = dispObject_peaks_4000.sqlWhereCurrent;
+        sqlWherePrev_peaks_cant = dispObject_peaks_cant.sqlWhereCurrent;
+        sqlWherePrev_huts = dispObject_huts.sqlWhereCurrent;
+
+        // store responses from php calls
+
+        var phpResponse = new Array();  
+        phpResponse[0] = resp_tracks[0];
+        phpResponse[1] = resp_segments[0];
+        phpResponse[2] = resp_peaks_100[0];
+        phpResponse[3] = resp_peaks_1000[0];
+        phpResponse[4] = resp_peaks_2000[0];
+        phpResponse[5] = resp_peaks_3000[0];
+        phpResponse[6] = resp_peaks_4000[0];
+        phpResponse[7] = resp_peaks_cant[0];
+        phpResponse[8] = resp_huts[0];
+
+        // Derive coordinate boundaries
+
+        // possible values: outside boundary / inside boundary / NaN
+        // events: both return value / only one returns value / none return value
+
+        var coordTop_tracks = Number(resp_tracks[0].coordTop);
+        var coordTop_segments = Number(resp_segments[0].coordTop);
+        if ( isNaN( coordTop_tracks ) && isNaN( coordTop_segments ) ) {                 // both do NOT deliver coordinates
+            coordTop = 297000;
+        } else if ( isNaN( coordTop_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordTop = coordTop_tracks;
+        } else if ( isNaN( coordTop_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordTop = coordTop_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordTop = Math.max(coordTop_tracks, coordTop_segments);                
+        }
+
+        var coordBottom_tracks = Number(resp_tracks[0].coordBottom);
+        var coordBottom_segments = Number(resp_segments[0].coordBottom);
+        if ( isNaN( coordBottom_tracks ) && isNaN( coordBottom_segments ) ) {                 // both do NOT deliver coordinates
+            coordBottom = 74000;
+        } else if ( isNaN( coordBottom_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordBottom = coordBottom_tracks;
+        } else if ( isNaN( coordBottom_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordBottom = coordBottom_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordBottom = Math.min(coordBottom_tracks, coordBottom_segments);                
+        }
+
+        var coordLeft_tracks = Number(resp_tracks[0].coordLeft);
+        var coordLeft_segments = Number(resp_segments[0].coordLeft);
+        if ( isNaN( coordLeft_tracks ) && isNaN( coordLeft_segments ) ) {                 // both do NOT deliver coordinates
+            coordLeft = 484000;
+        } else if ( isNaN( coordLeft_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordLeft = coordLeft_tracks;
+        } else if ( isNaN( coordLeft_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordLeft = coordLeft_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordLeft = Math.min(coordLeft_tracks, coordLeft_segments);                
+        }
+
+        var coordRight_tracks = Number(resp_tracks[0].coordRight);
+        var coordRight_segments = Number(resp_segments[0].coordRight);
+        if ( isNaN( coordRight_tracks ) && isNaN( coordRight_segments ) ) {                 // both do NOT deliver coordinates
+            coordRight = 835000;
+        } else if ( isNaN( coordRight_segments ) ) {                                      // segments DOES NOT deliver coordinates
+            var coordRight = coordRight_tracks;
+        } else if ( isNaN( coordRight_tracks ) ) {                                        // tracks DOES NOT deliver coordinates
+            var coordRight = coordRight_segments;
+        } else {                                                                        // both deliver coordinates
+            var coordRight = Math.max(coordRight_tracks, coordRight_segments);                
+        }
+
+        // Evluate coord center (if route is outside CH - show empty CH map)
+        var coordCenterY = ( coordTop + coordBottom ) / 2;
+        var coordCenterX = ( coordRight + coordLeft ) / 2;
+        
+        // Calculate required resolution
+        resolution1 = ( coordTop - coordBottom ) / 200;
+        resolution2 = ( coordRight - coordLeft ) / 200;
+        if ( resolution1 > resolution2 ) {
+            resolution = Math.min(500,resolution1);
+        } else {
+            resolution = Math.min(500,resolution2);
+        }
+
+        // Draw empty map & center to provided coordinate
+        if ( typeof(ga) != 'undefined' ) {
+            var tourdbMap = new ga.Map({
+                target: 'displayMap-ResMap',
+                view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
+            });
+            mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+            tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+        }
+
+        // Draw kml file for tracks 
+        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+        
+            // Create the KML Layer for tracks
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for tracks 
+        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+        
+            // Create the KML Layer for tracks
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for segments 
+        if ( dispObject_segments.genKml && tourdbMap ) {                                            // var is true when user has set filter on segments
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/segments.kml";
+        
+            // Create the KML Layer for segments
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for segments
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for peaks_100 
+        if ( dispObject_peaks_100.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_100
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_100.kml";
+        
+            // Create the KML Layer for peaks_100
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for peaks_100
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for peaks_1000 
+        if ( dispObject_peaks_1000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_1000
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_1000.kml";
+        
+            // Create the KML Layer for peaks_1000
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for peaks_1000
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for peaks_2000 
+        if ( dispObject_peaks_2000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_2000
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_2000.kml";
+        
+            // Create the KML Layer for peaks_2000
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for peaks_2000
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for peaks_3000 
+        if ( dispObject_peaks_3000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_3000
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_3000.kml";
+        
+            // Create the KML Layer for peaks_3000
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for peaks_3000
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for peaks_4000 
+        if ( dispObject_peaks_4000.genKml && tourdbMap ) {                                            // var is true when user has set filter on peaks_4000
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_4000.kml";
+        
+            // Create the KML Layer for peaks_4000
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for peaks_4000
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for cant 
+        if ( dispObject_peaks_cant.genKml && tourdbMap ) {                                            // var is true when user has set filter on cant
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/peaks_cant.kml";
+        
+            // Create the KML Layer for cant
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for cant
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+
+        // Draw kml file for huts 
+        if ( dispObject_huts.genKml && tourdbMap ) {                                            // var is true when user has set filter on huts
+            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/huts.kml";
+        
+            // Create the KML Layer for huts
+            kmlLayer = new ol.layer.Vector({                       // create new vector layer for huts
+                source: new ol.source.Vector({                          // Set source to kml file
+                    url: $kmlFile,
+                    format: new ol.format.KML({
+                        projection: 'EPSG:21781'
+                    })
+                })
+            });
+            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+        }
+        if ( tourdbMap ) {
+            // Popup showing the position the user clicked
+            var popup = new ol.Overlay({                                    // popup to display track details
+                element: $('<div title="KML"></div>')[0]
+            });
+            tourdbMap.addOverlay(popup);
+
+            // On click we display the feature informations (code basis from map admin sample library)
+            tourdbMap.on('singleclick', function(evt) {
+                var pixel = evt.pixel;
+                var coordinate = evt.coordinate;
+                var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                    return feature;
+                });
+                var element = $(popup.getElement());
+                element.popover('destroy');
+                if (feature) {
+                popup.setPosition(coordinate);
+                element.popover({
+                    'placement': 'top',
+                    'animation': false,
+                    'html': true,
+                    'content': feature.get('name')
+                });
+                element.popover('show');
+                }
+            });
+
+            // Change cursor style when cursor is hover over a feature
+            tourdbMap.on('pointermove', function(evt) {
+                var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                    return feature;
+                });
+                tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
+            });
+        }
+
+        // Display message
+        var phpMessage = "";
+        var phpObjCount = 0; 
+        var phpHasError = false;
+        for ( var i = 0; i < phpResponse.length; i++ ) {
+            if ( phpResponse[i]["status"] != "OK" ) {
+                phpMessage += "-" + phpResponse[i]["message"] + "-";
+                phpHasError = true;
+            } else {
+                phpObjCount = phpObjCount + phpResponse[i]["recordcount"];
+            }
+        }
+
+        if ( phpHasError ) {
+            $('#statusMessage').text(phpMessage);    
+        } else {
+            $('#statusMessage').text(phpObjCount + " objects are displayed");
+        }
+        
+        $("#statusMessage").show().delay(5000).fadeOut();                       // hide message after 5 seconds
+    
+        // Hide display filter form
+        $('.dispObjOpen').removeClass('visible');
+        $('.dispObjOpen').addClass('hidden');
+        $('.dispObjMini').addClass('visible');
+        $('.dispObjMini').removeClass('hidden');
+    
     });
     
 });
