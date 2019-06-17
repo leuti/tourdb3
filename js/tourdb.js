@@ -2790,9 +2790,9 @@ function checkRegexp( o, regexp, n ) {
     } else {
         return true;
     }
-}
+}  
 
-// function checking if content of field is a number
+// function checking if content of field is a  number
 function checkIfNum( o, n ) {
     if ( isNaN( o.val() ) ) {                                                   // isNaN returns false if value is a number --> 1234 = false
         o.addClass( "ui-state-error" );
