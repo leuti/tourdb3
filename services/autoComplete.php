@@ -48,9 +48,11 @@ if ( $searchObject == "peak") {
     $sql = "SELECT prtId, CONCAT(prtFirstName, ' ', prtLastName) AS participant FROM tbl_part ";
     $sql .= "WHERE prtLastName LIKE '%" . $_GET["term"] . "%' ";
     $sql .= "OR prtFirstName LIKE '%" . $_GET["term"] . "%' ";   
-} 
+};
 
-if ($debugLevel >= 1){fputs($fp, "Line 53: sql: $sql\r\n")};
+if ( $debugLevel >= 1 ) { 
+    fputs($fp, "Line 53: sql: " . $sql ."\r\n")
+};
 
 $results = $conn->prepare($sql);
 $results->execute();                                                    // Execute prepared Query

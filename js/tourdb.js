@@ -1246,7 +1246,6 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
     ).then( function ( resp_tracks, resp_segments, resp_peaks_100, resp_peaks_1000, 
                       resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_huts ) {
-        console.log("then entered");
         respObj = {};
 
         // store current where statement as previous where statement
