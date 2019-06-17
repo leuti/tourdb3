@@ -1232,20 +1232,21 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     // ***** Loop through display array and assign relevant parameters to jsonObject
 
     // Prepare ajax call for TRACKS kml
-    
+
     // Wait for each ajax call to complete & continue only when all are finished (regardless if in error)
     $.when( $.ajax(dispObject_tracks.ajaxCall),  
-            $.ajax(dispObject_segments.ajaxCall),
-            $.ajax(dispObject_peaks_100.ajaxCall),
-            $.ajax(dispObject_peaks_1000.ajaxCall),
-            $.ajax(dispObject_peaks_2000.ajaxCall),
-            $.ajax(dispObject_peaks_3000.ajaxCall),
-            $.ajax(dispObject_peaks_4000.ajaxCall),
-            $.ajax(dispObject_peaks_cant.ajaxCall),
+            //$.ajax(dispObject_segments.ajaxCall),
+            //$.ajax(dispObject_peaks_100.ajaxCall),
+            //$.ajax(dispObject_peaks_1000.ajaxCall),
+            //$.ajax(dispObject_peaks_2000.ajaxCall),
+            //$.ajax(dispObject_peaks_3000.ajaxCall),
+            //$.ajax(dispObject_peaks_4000.ajaxCall),
+            //$.ajax(dispObject_peaks_cant.ajaxCall),
             $.ajax(dispObject_huts.ajaxCall)
-    // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
-    ).done( function ( resp_tracks, resp_segments, resp_peaks_100, resp_peaks_1000, 
-                      resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, resp_huts ) {
+    
+            // resp_xy contain the response array of the ajax call [data, statusText, jqXHR]
+    ).then( function ( resp_tracks, /*resp_segments, resp_peaks_100, resp_peaks_1000, 
+                      resp_peaks_2000, resp_peaks_3000, resp_peaks_4000, resp_peaks_cant, */ resp_huts ) {
         console.log("then entered");
         respObj = {};
 /*
@@ -1575,11 +1576,9 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
         $('.dispObjMini').addClass('visible');
         $('.dispObjMini').removeClass('hidden');
         */
-    }).fail(
-        console.log("fail Callback entered")
-    );
-    
+    });
 });
+
 
 // ============================================================================
 // ========================== panelDisplayLists ===============================

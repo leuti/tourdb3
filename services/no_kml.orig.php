@@ -16,7 +16,7 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/no_kml.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 19: no_kml.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: no_kml.php opened \r\n"); 
 };
 
 $receivedData = json_decode ( file_get_contents('php://input'), true );
@@ -29,7 +29,7 @@ $returnObject['status'] = 'OK';                                             // a
 $returnObject['message'] = 'This php returns always an empty OK message';   // add empty error message to trackobj
 $returnObject['recordcount'] = 0;
 $returnObject['objectName'] = $objectName;
-echo json_encode('OK');                                            // echo JSON object to client
+echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
 
