@@ -208,7 +208,6 @@ if ( $objectName == "tracks" ) {
     if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
     mysqli_close($conn);                                                        // close SQL connection 
 
-    if ( $debugLevel >= 3 ) fputs($logFile, "Line 162: $countTracks Tracks processed\r\n");
     exit;
 }
 
