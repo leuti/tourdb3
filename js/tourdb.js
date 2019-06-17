@@ -1575,7 +1575,9 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
         $('.dispObjMini').addClass('visible');
         $('.dispObjMini').removeClass('hidden');
         */
-    });
+    }).fail(
+        console.log("fail Callback entered")
+    );
     
 });
 
