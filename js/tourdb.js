@@ -459,7 +459,7 @@ $(document).ready(function() {
     // ==========================================================================
 
     // ............................................................................
-    // Executes code below when user clicks the 'Login' button
+    // Authenticate user, display empty map and load first portion of track list
     $(document).on('click', '#navBtns_btn_login', function (e) {
         e.preventDefault();                                                                             
         var xhr = new XMLHttpRequest();                              // create new xhr object
@@ -519,7 +519,7 @@ $(document).ready(function() {
 // ========================== panelDisplayMap ===============================
 // ==========================================================================
 
-// On click the minimize large display objects icon to minimized
+// Minimize the map filter UI
 $(document).on('click', '#dispObjMenuLargeClose', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
@@ -529,7 +529,7 @@ $(document).on('click', '#dispObjMenuLargeClose', function(e) {
     $('.dispObjMini').addClass('visible');
 })
 
-// On click of minimized filter icon --> open large display objects mask
+// Open the map filter UI
 $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
@@ -539,7 +539,7 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
     $('.dispObjOpen').addClass('visible');
 })
 
-// Executes code below when user clicks the 'Apply' filter button for tracks
+// Triggers KML generation for filtered tracks and selected waypoints and segments
 $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     e.preventDefault();
     $clickedButton = this.id;                                       // store id of button clicked
@@ -1579,7 +1579,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
 // ========================== panelDisplayLists ===============================
 // ============================================================================
 
-// On click of minimized filter icon --> open large display objects mask
+// Opens the list filter UI
 $(document).on('click', '#dispListTrkMenuMiniOpen', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
@@ -1589,7 +1589,7 @@ $(document).on('click', '#dispListTrkMenuMiniOpen', function(e) {
     $('#dispListTrkMenuLarge').addClass('visible');
 })
 
-// On click the minimize large display objects icon to minimized
+// Minimizes the list filter UI
 $(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
@@ -1599,7 +1599,7 @@ $(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
     $('#dispListTrkMenuMini').addClass('visible');
 })
 
-// On click on button load the track list is refreshed
+// Loads the selected tracks and displays as table
 $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     e.preventDefault();
     $clickedButton = this.id;                                       // store id of button clicked
@@ -1751,7 +1751,7 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
 
 });
 
-// Executes code below when user click on pagination links
+// Loads the next portion of filtered tracks
 $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     e.preventDefault();
     $(".loading-div").show(); //show loading element
@@ -1761,7 +1761,7 @@ $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     });
 });
 
-// Fires when edit symbol in track table is clicked
+// Opens the edit track UI
 $(document).on('click', '.trkEdit', function (e) {
     console.info("clicked on Edit")
     e.preventDefault();                                                 // Prevent link behaviour
@@ -1837,7 +1837,7 @@ $(document).on('click', '.trkEdit', function (e) {
     });
 });
 
-// Fires when cancel button is pressed
+// Cancels the edit process and returns to the list view
 $(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
     e.preventDefault();
     //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
@@ -1849,7 +1849,7 @@ $(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
       });
 });
 
-// Fires when delete symbol on items table is clicked
+// Deletes items (waypoints, participants, etc.) in the items array
 $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
@@ -1896,8 +1896,7 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
     document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
 });
 
-// Upon click on the 'Save' button in edit mode
-// --> calls importGps.php in save mode (call php with JQUERY $AJAX)
+// Sends the track data to the server for storage
 $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
@@ -2052,7 +2051,7 @@ $(document).on('click', '.uiTrkImp_btns_a', function(e) {
     }
 }); 
 
-// Upon click on the 'Upload GPX File' button --> call importGps.php in temp mode
+// Upload file to server and receive the extracted track data (calls importGps.php in temp mode)
 $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
     var xhr = new XMLHttpRequest();                                            // create new xhr object
@@ -2160,7 +2159,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
     xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
-// Fires when delete symbol on items table is clicked
+// Deletes items (waypoints, participants, etc.) in the items array
 $(document).on('click', '.itemDel.uiTrkImp', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
@@ -2179,7 +2178,7 @@ $(document).on('click', '.itemDel.uiTrkImp', function (e) {
     document.getElementById("uiTrkImp_peakList").innerHTML = itemsTable;
 });
 
-// Fires when reached checkbox is changed
+// Changes the status of the reached checkbox
 $(document).on('click', '.cbReached', function (e) {
     console.info("checkbox ticked")
     e.preventDefault();                                                         // Prevent link behaviour
@@ -2198,8 +2197,7 @@ $(document).on('click', '.cbReached', function (e) {
     drawItemsTables_old ( itemsTrkImp, "peak" ); 
 });
 
-// Upon click on the 'Save' button in the import track mode
-// --> calls importGps.php in save mode (call php with JQUERY $AJAX)
+// Sends the track data to the server for update --> calls importGps.php in save mode)
 $(document).on('click', '#uiTrkImp_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
@@ -2482,7 +2480,7 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
     }
 });
 
-// On click on the 'cancel' button --> cancel update & delete temp track (call php with xhr in JSON mode)
+// Cancels update
 $(document).on('click', '#uiTrkImp_fld_cancel', function (e) {
     e.preventDefault();
     $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
@@ -2495,7 +2493,7 @@ $(document).on('click', '#uiTrkImp_fld_cancel', function (e) {
 // ========================== panelExport ===================================
 // ==========================================================================
 
-// Export Tracks JSON Button clicked
+// Export Tracks JSON file to export directory on server
 $(document).on('click', '#buttonExportTracks01JSON', function (e) {
     e.preventDefault();
     var xhr = new XMLHttpRequest();   
@@ -2519,7 +2517,7 @@ $(document).on('click', '#buttonExportTracks01JSON', function (e) {
     xhr.send( jsn );                                                            // send formData object to service using xhr  
 });
 
-// Export Tracks CSV Button clicked
+// Export Tracks CSV file to export directory on server
 $(document).on('click', '#buttonExportTracks01CSV', function (e) {
     e.preventDefault();
     var xhr = new XMLHttpRequest();   
@@ -2561,6 +2559,7 @@ function drawMapEmpty(targetDiv) {
     return tourdbMap;
 }
 
+// Draws map
 function drawMap( targetDiv, resolution, coordCenterX, coordCenterY, kmlFiles ) {
 
     // parameters:
@@ -2640,30 +2639,6 @@ function drawMap( targetDiv, resolution, coordCenterX, coordCenterY, kmlFiles ) 
         tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
     });
     */
-}
-
-// ==================================================
-// == Functions to validate fields at insert & update
-
-// Function updating Validation Comments    
-function updateValComments( text ) {
-    valComments
-        .text( text )
-        .addClass( "ui-state-highlight" );
-    //setTimeout(function() {
-    //    valComments.removeClass( "ui-state-highlight", 1500 );
-    //}, 500 );
-}
-
-// Funtion checking existance of file content in ADD dialog
-function checkExistance( origin, name ) {
-    if ( origin.val().length == 0 ) {
-        origin.addClass( "ui-state-error" );
-        updateValComments( "Field " + name + " must be entered" );
-        return false;
-    } else {
-        return true;
-    }
 }
 
 // Draws the table that list the selected waypoints
@@ -2769,7 +2744,28 @@ function drawItemsTables_old ( itemsArray, itemType ) {
     document.getElementById(elementId).innerHTML = itemsTable;
 }
 
-// function checking of field against REGEX - error when matching
+// Import validation: Checks Validation Comments    
+function updateValComments( text ) {
+    valComments
+        .text( text )
+        .addClass( "ui-state-highlight" );
+    //setTimeout(function() {
+    //    valComments.removeClass( "ui-state-highlight", 1500 );
+    //}, 500 );
+}
+
+// Import validation: Checks existance of file content in ADD dialog
+function checkExistance( origin, name ) {
+    if ( origin.val().length == 0 ) {
+        origin.addClass( "ui-state-error" );
+        updateValComments( "Field " + name + " must be entered" );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// Import validation: Checks content of field against REGEX - error when matching
 function checkRegexpNot( o, regexp, n ) {
     if ( regexp.test( o.val() ) )  {
         o.addClass( "ui-state-error" );
@@ -2780,7 +2776,7 @@ function checkRegexpNot( o, regexp, n ) {
     }
 }
 
-// function checking of field against REGEX - error when NOT matching
+// Import validation: Checks content of field against REGEX - error when NOT matching
 function checkRegexp( o, regexp, n ) {
     if ( !( regexp.test( o.val() ) ) ) {
         o.addClass( "ui-state-error" );
@@ -2791,7 +2787,7 @@ function checkRegexp( o, regexp, n ) {
     }
 }  
 
-// function checking if content of field is a  number
+// Import validation: Checks if content of field is a  number
 function checkIfNum( o, n ) {
     if ( isNaN( o.val() ) ) {                                                   // isNaN returns false if value is a number --> 1234 = false
         o.addClass( "ui-state-error" );
@@ -2802,7 +2798,7 @@ function checkIfNum( o, n ) {
     }
 }
 
-// Function checking the min / max length of field content of ADD dialog 
+// Import valication: Checks the min / max length of field content of ADD dialog 
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
         o.addClass( "ui-state-error" );
@@ -2813,6 +2809,7 @@ function checkLength( o, n, min, max ) {
     }
 }
 
+// ???
 function DisplayObj ( objectName, sqlWherePrev, sqlWhereCurrent, genKml, jsonObject, ajaxCall ) {
     this.objectName = objectName;
     this.sqlWherePrev = sqlWherePrev;
