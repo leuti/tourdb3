@@ -205,7 +205,7 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#uiTrkImp_fld_trkSaison" ).selectmenu();
+    //$( "#uiTrkImp_fld_trkSaison" ).selectmenu();
     $( "#uiTrkImp_fld_trkType" ).selectmenu();
     $( "#uiTrkImp_fld_trkSubType" ).selectmenu();
     $( "#uiTrkImp_peakSrch" ).autocomplete({
@@ -326,7 +326,7 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#uiTrkEdit_fld_trkSaison" ).selectmenu();
+    //$( "#uiTrkEdit_fld_trkSaison" ).selectmenu();
     $( "#uiTrkEdit_fld_trkType" ).selectmenu();
     $( "#uiTrkEdit_fld_trkSubType" ).selectmenu();
     $( "#uiTrkEdit_peakSrch" ).autocomplete({
@@ -1365,20 +1365,20 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
         }
 
         // Draw kml file for tracks 
-        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
-            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
-        
-            // Create the KML Layer for tracks
-            kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                source: new ol.source.Vector({                          // Set source to kml file
-                    url: $kmlFile,
-                    format: new ol.format.KML({
-                        projection: 'EPSG:21781'
-                    })
-                })
-            });
-            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
-        }
+//        if ( dispObject_tracks.genKml && tourdbMap ) {                                            // var is true when user has set filter on tracks
+//            $kmlFile = document.URL + "tmp/kml_disp/" + sessionid + "/tracks.kml";
+//        
+//            // Create the KML Layer for tracks
+//            kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
+//                source: new ol.source.Vector({                          // Set source to kml file
+//                    url: $kmlFile,
+//                    format: new ol.format.KML({
+//                        projection: 'EPSG:21781'
+//                    })
+//                })
+//            });
+//            tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+//        }
 
         // Draw kml file for segments 
         if ( dispObject_segments.genKml && tourdbMap ) {                                            // var is true when user has set filter on segments
@@ -1797,7 +1797,7 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiTrkEdit_fld_trkRoute').val(trackobj.trkRoute);
             $('#uiTrkEdit_fld_trkDateBegin').val(trackobj.trkDateBegin);
             $('#uiTrkEdit_fld_trkDateFinish').val(trackobj.trkDateFinish);
-            $('#uiTrkEdit_fld_trkSaison').val(trackobj.trkSaison);
+            //$('#uiTrkEdit_fld_trkSaison').val(trackobj.trkSaison);
             $('#uiTrkEdit_fld_trkType').val(trackobj.trkType);
             $('#uiTrkEdit_fld_trkSubType').val(trackobj.trkSubType);
             $('#uiTrkEdit_fld_trkOrg').val(trackobj.trkOrg);
@@ -1923,7 +1923,7 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
     valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkDateFinish'), "Date Finish" );
     trackobj.trkDateFinish = $('#uiTrkEdit_fld_trkDateFinish').val();
     
-    trackobj.trkSaison = $('#uiTrkEdit_fld_trkSaison').val();
+    //trackobj.trkSaison = $('#uiTrkEdit_fld_trkSaison').val();
     trackobj.trkType = $('#uiTrkEdit_fld_trkType').val();
     trackobj.trkSubType = $('#uiTrkEdit_fld_trkSubType').val();
 
@@ -2070,7 +2070,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiTrkImp_fld_trkRoute').val(trackobj.trkRoute);
                 $('#uiTrkImp_fld_trkDateBegin').val(trackobj.trkDateBegin);
                 $('#uiTrkImp_fld_trkDateFinish').val(trackobj.trkDateFinish);
-                $('#uiTrkImp_fld_trkSaison').val(trackobj.trkSaison);
+                //$('#uiTrkImp_fld_trkSaison').val(trackobj.trkSaison);
                 $('#uiTrkImp_fld_trkType').val(trackobj.trkType);
                 $('#uiTrkImp_fld_trkSubType').val(trackobj.trkSubType);
                 $('#uiTrkImp_fld_trkOrg').val(trackobj.trkOrg);
@@ -2226,7 +2226,7 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
     valid = valid && checkExistance ( $('#uiTrkImp_fld_trkDateFinish'), "Date Finish" );
     trackobj.trkDateFinish = $('#uiTrkImp_fld_trkDateFinish').val();
     
-    trackobj.trkSaison = $('#uiTrkImp_fld_trkSaison').val();
+    //trackobj.trkSaison = $('#uiTrkImp_fld_trkSaison').val();
     trackobj.trkType = $('#uiTrkImp_fld_trkType').val();
     trackobj.trkSubType = $('#uiTrkImp_fld_trkSubType').val();
 

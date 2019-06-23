@@ -633,6 +633,7 @@
 						</div>
 
 						<!-- Saison -->
+						<!--
 						<div>
 							<label for="uiTrkEdit_fld_trkSaison" class="updTrackLabelFirst">Saison</label>
 							<select name="trkSaison" id="uiTrkEdit_fld_trkSaison">
@@ -642,7 +643,8 @@
 								<option>2018 So</option>
 							</select>
 						</div>
-
+						-->
+						
 						<!-- Type -->
 						<div>
 							<label for="uiTrkEdit_fld_trkType" class="updTrackLabelFirst">Type</label>
@@ -914,6 +916,7 @@
 						</div>
 
 						<!-- Saison -->
+						<!--
 						<div>
 							<label for="uiTrkImp_fld_trkSaison" class="updTrackLabelFirst">Saison</label>
 							<select name="trkSaison" id="uiTrkImp_fld_trkSaison">
@@ -923,6 +926,7 @@
 								<option>2018 So</option>
 							</select>
 						</div>
+						-->
 
 						<!-- Type -->
 						<div>
