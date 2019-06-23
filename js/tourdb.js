@@ -1799,7 +1799,9 @@ $(document).on('click', '.trkEdit', function (e) {
             $('#uiTrkEdit_fld_trkDateFinish').val(trackobj.trkDateFinish);
             //$('#uiTrkEdit_fld_trkSaison').val(trackobj.trkSaison);
             $('#uiTrkEdit_fld_trkType').val(trackobj.trkType);
+            $('#uiTrkEdit_fld_trkType').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
             $('#uiTrkEdit_fld_trkSubType').val(trackobj.trkSubType);
+            $('#uiTrkEdit_fld_trkSubType').selectmenu("refresh");
             $('#uiTrkEdit_fld_trkOrg').val(trackobj.trkOrg);
             $('#uiTrkEdit_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
             $('#uiTrkEdit_fld_trkParticipants').val(trackobj.trkParticipants);
