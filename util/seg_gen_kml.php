@@ -1,8 +1,6 @@
 <?php
 date_default_timezone_set('Europe/Zurich');
 
-$debugLevel = 1; // 0 = off, 1 = min, 3 = a lot, 5 = all
-
 if ($debugLevel >= 1){
     $fp = @fopen("log/gen_seg_kml.log","a"); 
     fputs($fp, "\r\n====================================================================================\r\n");

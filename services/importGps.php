@@ -24,7 +24,6 @@
 include("config.inc.php");                                              // include config file
 include("coord_funct.inc.php");                                         // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                             // must be set when using time functions
-//$debugLevel = 3;
 
 $loopSize = 5000;                                                       // Number of trkPts inserted in one go
 

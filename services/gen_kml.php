@@ -24,7 +24,6 @@
 // Set variables and parameters    
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
-$debugLevel = 3;
 
 // Set debug level
 $countTracks = 0;                                                           // Internal counter for tracks processed

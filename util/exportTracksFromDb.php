@@ -15,8 +15,6 @@
 include("./config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
 
-$debugLevel = 5;                                                    // 0 = off, 6 = all
-
 // Open file to write log
 $log = dirname(__FILE__) . "/../log/exportTrkFmDB.log";        // Assign file location
 $logFile = @fopen($log,"a");                               // open log file handler 

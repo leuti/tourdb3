@@ -16,7 +16,6 @@
 // Set timezone (otherwise warnings are written to log)
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
-$debugLevel = 3;
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/fetch_pages.log";                // Assign file location

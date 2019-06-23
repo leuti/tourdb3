@@ -16,7 +16,6 @@
 header('content-type: application/json; charset=utf-8');
 include("config.inc.php");                                              //include config file
 date_default_timezone_set('Europe/Zurich');
-$debugLevel = 3;
 
 if ($debugLevel >= 1){
     $fp = @fopen("../log/autoComplete.log","a");
