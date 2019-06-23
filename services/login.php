@@ -36,7 +36,7 @@ session_start();
 if ( isset($loginName) )
 {
     if ( $loginName == "leut" && $loginPasswd == "sugus" ||          // check if login in known --> these login must be moved to DB
-        $loginName == "admin" && $loginPasswd == "admin" )
+        $loginName == "admin" && $loginPasswd == "20Rh5530rpHqiEpfc6Is" )
     {
         $_SESSION["login"] = $loginName;                            // set session var
     }
