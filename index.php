@@ -602,10 +602,10 @@
 						<!-- Import Tracks -->
 						<legend class="filterHeader">Import Track</legend>
 
-						<!-- Track Name -->
+						<!-- Track ID -->
 						<div>
-							<label for="uiTrkEdit_fld_trkId" class="updTrackLabelFirst">Track ID</label>
-							<input type="text" name="uiTrkEdit_fld_trkId" id="uiTrkEdit_fld_trkId" size="20" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+							<!--<label for="uiTrkEdit_fld_trkId" class="updTrackLabelFirst">Track ID</label>-->
+							<input type="hidden" name="uiTrkEdit_fld_trkId" id="uiTrkEdit_fld_trkId" size="20" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
 						</div>
 
 						<!-- Track Name -->
@@ -644,7 +644,7 @@
 							</select>
 						</div>
 						-->
-						
+
 						<!-- Type -->
 						<div>
 							<label for="uiTrkEdit_fld_trkType" class="updTrackLabelFirst">Type</label>
@@ -729,10 +729,9 @@
 
 						<!-- Coordinates -->
 						<div>
-							<label for="uiTrkEdit_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
-							<input type="text" name="uiTrkEdit_fld_trkCoordinates" id="uiTrkEdit_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+							<!--<label for="uiTrkEdit_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>-->
+							<input type="hidden" name="uiTrkEdit_fld_trkCoordinates" id="uiTrkEdit_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
 						</div>
-
 					</fieldset>
 				</div>
 				<div id="uiTrkEdit_tabWayp">
@@ -885,10 +884,10 @@
 						<!-- Import Tracks -->
 						<legend class="filterHeader">Import Track</legend>
 
-						<!-- Track Name -->
+						<!-- Track ID -->
 						<div>
-							<label for="uiTrkImp_fld_trkId" class="updTrackLabelFirst">Track ID</label>
-							<input type="text" name="uiTrkImp_fld_trkId" id="uiTrkImp_fld_trkId" size="20" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+							<!--<label for="uiTrkImp_fld_trkId" class="updTrackLabelFirst">Track ID</label>-->
+							<input type="hidden" name="uiTrkImp_fld_trkId" id="uiTrkImp_fld_trkId" size="20" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
 						</div>
 
 						<!-- Track Name -->
@@ -1012,8 +1011,8 @@
 
 						<!-- Coordinates -->
 						<div>
-							<label for="uiTrkImp_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>
-							<input type="text" name="uiTrkImp_fld_trkCoordinates" id="uiTrkImp_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+							<!--<label for="uiTrkImp_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>-->
+							<input type="hidden" name="uiTrkImp_fld_trkCoordinates" id="uiTrkImp_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
 						</div>
 
 					</fieldset>
