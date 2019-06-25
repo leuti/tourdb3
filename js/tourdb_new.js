@@ -36,8 +36,8 @@ var TOURDBURL = "http://localhost";
 
 
 itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
-trkEdit_waypItems = new Array();
-trkEdit_partItems = new Array();
+uiTrack_waypItems = new Array();
+uiTrack_partItems = new Array();
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -195,9 +195,9 @@ $(document).ready(function() {
 
     // Initialse all jquery functional fields for the import track mask
     // ================================================================
-    $( "#uiTrkImp" ).tabs();                                         // Tabs in UI Track mask
+    $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
     valComments = $( "#validateComments" );
-    $( "#uiTrkImp_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
+    $( "#uiTrack_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -206,7 +206,7 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#uiTrkImp_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
+    $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -215,10 +215,10 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    //$( "#uiTrkImp_fld_trkSaison" ).selectmenu();
-    $( "#uiTrkImp_fld_trkType" ).selectmenu();
-    $( "#uiTrkImp_fld_trkSubType" ).selectmenu();
-    $( "#uiTrkImp_peakSrch" ).autocomplete({
+    //$( "#uiTrack_fld_trkSaison" ).selectmenu();
+    $( "#uiTrack_fld_trkType" ).selectmenu();
+    $( "#uiTrack_fld_trkSubType" ).selectmenu();
+    $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
         select: function( event, ui ) {                              // function fires on select of element   
@@ -237,13 +237,13 @@ $(document).ready(function() {
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
             itemsTrkImp.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrkImp" )
-            document.getElementById("uiTrkImp_peakList").innerHTML = itemsTable;
-            // not working: $('#uiTrkImp_peakSrch').val("");                        // clear autocomplete source field
+            var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrack" )
+            document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
+            // not working: $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
 
         }
     });
-    $( "#uiTrkImp_waypSrch" ).autocomplete({
+    $( "#uiTrack_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -266,7 +266,7 @@ $(document).ready(function() {
             drawItemsTables_old ( itemsTrkImp, "wayp" ); 
         }
     });
-    $( "#uiTrkImp_locaSrch" ).autocomplete({
+    $( "#uiTrack_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -289,7 +289,7 @@ $(document).ready(function() {
             drawItemsTables_old ( itemsTrkImp, "loca" ); 
         }
     });
-    $( "#uiTrkImp_partSrch" ).autocomplete({
+    $( "#uiTrack_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -316,9 +316,9 @@ $(document).ready(function() {
     // ====== Display List 
     $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
     // form to edit tracks
-    $( "#uiTrkEdit" ).tabs();                                         // Tabs in UI Track mask
+    $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
     valComments = $( "#validateComments" );
-    $( "#uiTrkEdit_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
+    $( "#uiTrack_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -327,7 +327,7 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#uiTrkEdit_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
+    $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -336,10 +336,10 @@ $(document).ready(function() {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    //$( "#uiTrkEdit_fld_trkSaison" ).selectmenu();
-    $( "#uiTrkEdit_fld_trkType" ).selectmenu();
-    $( "#uiTrkEdit_fld_trkSubType" ).selectmenu();
-    $( "#uiTrkEdit_peakSrch" ).autocomplete({
+    //$( "#uiTrack_fld_trkSaison" ).selectmenu();
+    $( "#uiTrack_fld_trkType" ).selectmenu();
+    $( "#uiTrack_fld_trkSubType" ).selectmenu();
+    $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
         select: function( event, ui ) {                              // function fires on select of element   
@@ -357,13 +357,13 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
-            trkEdit_waypItems.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
-            // not working:  $('#uiTrkEdit_peakSrch').val("");                        // clear autocomplete source field
+            uiTrack_waypItems.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "peak", "uiTrack" )
+            document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
+            // not working:  $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
         }
     });
-    $( "#uiTrkEdit_waypSrch" ).autocomplete({
+    $( "#uiTrack_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -381,12 +381,12 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default
 
-            trkEdit_waypItems.push(itemsList);
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
+            uiTrack_waypItems.push(itemsList);
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "wayp", "uiTrack" )
+            document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
         }
     });
-    $( "#uiTrkEdit_locaSrch" ).autocomplete({
+    $( "#uiTrack_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -404,12 +404,12 @@ $(document).ready(function() {
             itemsList.disp_f = true;                                 // Set display to true (if false --> item is not shown)
             itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
 
-            trkEdit_waypItems.push(itemsList);
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
+            uiTrack_waypItems.push(itemsList);
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "loca", "uiTrack" )
+            document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
         }
     });
-    $( "#uiTrkEdit_partSrch" ).autocomplete({
+    $( "#uiTrack_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
         select: function( event, ui ) {                              // see above
@@ -426,9 +426,9 @@ $(document).ready(function() {
             itemsList.itemId = id;                                   // id of item selected
             itemsList.itemName = value;                              // Name of item selected
             
-            trkEdit_partItems.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
+            uiTrack_partItems.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( uiTrack_partItems, "part", "uiTrack" )
+            document.getElementById("uiTrack_partList").innerHTML = itemsTable;
         }
     });
 
@@ -441,8 +441,8 @@ $(document).ready(function() {
     });
 
     // Evaluate which button/panel is active
-    $('.uiTrkImp_btns').each(function() {
-        var $clickedUpdTrkBtn = $(this);                             // $clickedUpdTrkBtn becomes ul.uiTrkImp_btns
+    $('.uiTrack_btns').each(function() {
+        var $clickedUpdTrkBtn = $(this);                             // $clickedUpdTrkBtn becomes ul.uiTrack_btns
         $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');         // Find and store current active li element
         var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');      // Get link <a> from active li element 
         $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));    // Get active panel      
@@ -520,9 +520,9 @@ $(document).ready(function() {
 
                     // Fetch page for tracks
                     var page = 1;
-                    fetch_pages_filterString = " trkLoginName = '" + sessionObj.login + "'";      // where string for list view (fetch_pages.php)
+                    fetch_pages_filterString = " trkLoginName = '" + sessionObj.login + "'";      // where string for list view (fetch_pages_new.php)
                     console.log("ici");
-                    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
+                    $("#tabDispLists_trks").load("services/fetch_pages_new.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
                 } else {
                     // Login failed
@@ -1767,7 +1767,7 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     parent.innerHTML = '<div id="tabDispLists_trks"></div>';
 
     fetch_pages_filterString = sqlWhereCurrent;
-    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
+    $("#tabDispLists_trks").load("services/fetch_pages_new.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
 
     $('#dispListTrkMenuLarge').removeClass('visible');
     $('#dispListTrkMenuLarge').addClass('hidden');
@@ -1781,27 +1781,26 @@ $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     e.preventDefault();
     $(".loading-div").show(); //show loading element
     var page = $(this).attr("data-page"); //get page number from link
-    $("#tabDispLists_trks").load("services/fetch_pages.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
+    $("#tabDispLists_trks").load("services/fetch_pages_new.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
         $(".loading-div").hide(); //once done, hide loading element
     });
 });
 
 // Opens the edit track UI
-$(document).on('click', '.trkEdit', function (e) {
-    console.info("clicked on Edit")
+$(document).on('click', '.uiTrack', function (e) {
     e.preventDefault();                                                 // Prevent link behaviour
+    sessionObj.currentFunction = "uiTrack";
     var jsonObject = {};     
 
     // evaluate id of object to be deleted
-    var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemEditId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
-    var itemType = itemEditId.substring(1,4);                                    // Get type of item to delete
-    var itemId = itemEditId.substring(9);                                        // Extract id of item to be deleted                                                  
+    var $activeButtonA = $(this)                                    // Store the current link <a> element
+    var idString = this.hash;                                       // Get div class of selected topic (e.g #panelDisplayLists)
+    var trackId = idString.substring(9);                            // Extract id of item to be deleted                                                  
 
-    phpLocation = "services/getObjectSingle.php";                                 // Variable to store location of php file
-    jsonObject.itemType = itemType;                                            // temp request to create track temporarily
-    jsonObject.requestType = 'select';
-    jsonObject.itemId = itemId;
+    phpLocation = "services/getObject_new.php";                     // Variable to store location of php file
+    jsonObject.objectType = "trk";                                    // Item type = track
+    jsonObject.requestType = 'get';                              // Request type = get track data
+    jsonObject.objectId = trackId;
     jsn = JSON.stringify ( jsonObject );
 
     $.ajax({
@@ -1816,46 +1815,58 @@ $(document).on('click', '.trkEdit', function (e) {
         // Track object successfully stored in DB
         if ( respObj.status == 'OK') {
             
-            trackobj = respObj.trackObj;
-            $('#uiTrkEdit_fld_trkId').val(trackobj.trkId); 
-            $('#uiTrkEdit_fld_trkTrackName').val(trackobj.trkTrackName);    
-            $('#uiTrkEdit_fld_trkRoute').val(trackobj.trkRoute);
-            $('#uiTrkEdit_fld_trkDateBegin').val(trackobj.trkDateBegin);
-            $('#uiTrkEdit_fld_trkDateFinish').val(trackobj.trkDateFinish);
-            //$('#uiTrkEdit_fld_trkSaison').val(trackobj.trkSaison);
-            $('#uiTrkEdit_fld_trkType').val(trackobj.trkType);
-            $('#uiTrkEdit_fld_trkType').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
-            $('#uiTrkEdit_fld_trkSubType').val(trackobj.trkSubType);
-            $('#uiTrkEdit_fld_trkSubType').selectmenu("refresh");
-            $('#uiTrkEdit_fld_trkOrg').val(trackobj.trkOrg);
-            $('#uiTrkEdit_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
-            $('#uiTrkEdit_fld_trkParticipants').val(trackobj.trkParticipants);
-            $('#uiTrkEdit_fld_trkEvent').val(trackobj.trkEvent);
-            $('#uiTrkEdit_fld_trkRemarks').val(trackobj.trkRemarks);
-            $('#uiTrkEdit_fld_trkDistance').val(trackobj.trkDistance);
-            $('#uiTrkEdit_fld_trkTimeOverall').val(trackobj.trkTimeOverall);
-            $('#uiTrkEdit_fld_trkTimeToPeak').val(trackobj.trkTimeToPeak);
-            $('#uiTrkEdit_fld_trkTimeToFinish').val(trackobj.trkTimeToFinish);
-            $('#uiTrkEdit_fld_trkGrade').val(trackobj.trkGrade);
-            $('#uiTrkEdit_fld_trkMeterUp').val(trackobj.trkMeterUp);
-            $('#uiTrkEdit_fld_trkMeterDown').val(trackobj.trkMeterDown);
-            $('#uiTrkEdit_fld_trkCountry').val(trackobj.trkCountry);
+            trackObj = respObj.trackObj;
+            $('#uiTrack_fld_trkId').val(trackObj.trkId); 
+            $('#uiTrack_fld_trkTrackName').val(trackObj.trkTrackName);    
+            $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
+            $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
+            $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
+            $('#uiTrack_fld_trkType').val(trackObj.trkType);
+            $('#uiTrack_fld_trkType').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
+            $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
+            $('#uiTrack_fld_trkSubType').selectmenu("refresh");
+            $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
+            $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);
+            $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);
+            $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
+            $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
+            $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
+            $('#uiTrack_fld_trkTimeOverall').val(trackObj.trkTimeOverall);
+            $('#uiTrack_fld_trkTimeToPeak').val(trackObj.trkTimeToPeak);
+            $('#uiTrack_fld_trkTimeToFinish').val(trackObj.trkTimeToFinish);
+            $('#uiTrack_fld_trkGrade').val(trackObj.trkGrade);
+            $('#uiTrack_fld_trkMeterUp').val(trackObj.trkMeterUp);
+            $('#uiTrack_fld_trkMeterDown').val(trackObj.trkMeterDown);
+            $('#uiTrack_fld_trkCountry').val(trackObj.trkCountry);
+
+            // hidden fields
+            $('#uiTrack_fld_trkStartEle').val(trackObj.trkStartEle);                        
+            $('#uiTrack_fld_trkPeakEle').val(trackObj.trkPeakEle);                          
+            $('#uiTrack_fld_trkPeakTime').val(trackObj.trkPeakTime);                        
+            $('#uiTrack_fld_trkLowEle').val(trackObj.trkLowEle);                            
+            $('#uiTrack_fld_trkLowTime').val(trackObj.trkLowTime);                          
+            $('#uiTrack_fld_trkFinishEle').val(trackObj.trkFinishEle);                      
+            $('#uiTrack_fld_trkFinishTime').val(trackObj.trkFinishTime);  
+            $('#uiTrack_fld_trkCoordTop').val(trackObj.trkCoordTop);
+            $('#uiTrack_fld_trkCoordBottom').val(trackObj.trkCoordBottom);
+            $('#uiTrack_fld_trkCoordLeft').val(trackObj.trkCoordLeft);
+            $('#uiTrack_fld_trkCoordRight').val(trackObj.trkCoordRight);
     
-            trkEdit_waypItems = respObj.trWpArray;
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+            uiTrack_waypItems = respObj.trackWaypArray;
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "peak", "uiTrack" )
+            document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
 
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "wayp", "uiTrack" )
+            document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
 
-            var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
+            var itemsTable = drawItemsTables ( uiTrack_waypItems, "loca", "uiTrack" )
+            document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
 
-            trkEdit_partItems = respObj.trpaArray;
-            var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
-            document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
+            uiTrack_partItems = respObj.trackPartArray;
+            var itemsTable = drawItemsTables ( uiTrack_partItems, "part", "uiTrack" )
+            document.getElementById("uiTrack_partList").innerHTML = itemsTable;
 
-            $('#uiTrkEdit').addClass('active');
+            $('#uiTrack').addClass('active');
 
         } else {
             $('#statusMessage').text(respObj.message);
@@ -1865,19 +1876,19 @@ $(document).on('click', '.trkEdit', function (e) {
 });
 
 // Cancels the edit process and returns to the list view
-$(document).on('click', '#uiTrkEdit_fld_cancel', function (e) {
+$(document).on('click', '#uiTrack_fld_cancel', function (e) {
     e.preventDefault();
     //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
-    $('#uiTrkEdit').removeClass('active');                   // hide update form
+    $('#uiTrack').removeClass('active');                   // hide update form
     $('#statusMessage').text('Edit Track cancelled');
     $("#statusMessage").show().delay(5000).fadeOut();
-    $( "#uiTrkEdit" ).tabs({
+    $( "#uiTrack" ).tabs({
         active: 0
       });
 });
 
 // Deletes items (waypoints, participants, etc.) in the items array
-$(document).on('click', '.itemDel.uiTrkEdit', function (e) {
+$(document).on('click', '.itemDel.uiTrack', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
@@ -1887,119 +1898,119 @@ $(document).on('click', '.itemDel.uiTrkEdit', function (e) {
 
     // Loop through items array and set display flag to false --> these records will not be saved/shown
     // peaks
-    for (var i = 0; i < trkEdit_waypItems.length; i++) {
-        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
-            trkEdit_waypItems[i]["disp_f"] = false;
+    for (var i = 0; i < uiTrack_waypItems.length; i++) {
+        if ( uiTrack_waypItems[i]["itemId"] == itemId && uiTrack_waypItems[i]["itemType"] == itemType ) {
+            uiTrack_waypItems[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( trkEdit_waypItems, "peak", "uiTrkEdit" )
-    document.getElementById("uiTrkEdit_peakList").innerHTML = itemsTable;
+    var itemsTable = drawItemsTables ( uiTrack_waypItems, "peak", "uiTrack" )
+    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
 
     // wayp
-    for (var i = 0; i < trkEdit_waypItems.length; i++) {
-        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
-            trkEdit_waypItems[i]["disp_f"] = false;
+    for (var i = 0; i < uiTrack_waypItems.length; i++) {
+        if ( uiTrack_waypItems[i]["itemId"] == itemId && uiTrack_waypItems[i]["itemType"] == itemType ) {
+            uiTrack_waypItems[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( trkEdit_waypItems, "wayp", "uiTrkEdit" )
-    document.getElementById("uiTrkEdit_waypList").innerHTML = itemsTable;
+    var itemsTable = drawItemsTables ( uiTrack_waypItems, "wayp", "uiTrack" )
+    document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
 
     // loca
-    for (var i = 0; i < trkEdit_waypItems.length; i++) {
-        if ( trkEdit_waypItems[i]["itemId"] == itemId && trkEdit_waypItems[i]["itemType"] == itemType ) {
-            trkEdit_waypItems[i]["disp_f"] = false;
+    for (var i = 0; i < uiTrack_waypItems.length; i++) {
+        if ( uiTrack_waypItems[i]["itemId"] == itemId && uiTrack_waypItems[i]["itemType"] == itemType ) {
+            uiTrack_waypItems[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( trkEdit_waypItems, "loca", "uiTrkEdit" )
-    document.getElementById("uiTrkEdit_locaList").innerHTML = itemsTable;
+    var itemsTable = drawItemsTables ( uiTrack_waypItems, "loca", "uiTrack" )
+    document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
 
     // part
-    for (var i = 0; i < trkEdit_partItems.length; i++) {
-        if ( trkEdit_partItems[i]["itemId"] == itemId && trkEdit_partItems[i]["itemType"] == itemType ) {
-            trkEdit_partItems[i]["disp_f"] = false;
+    for (var i = 0; i < uiTrack_partItems.length; i++) {
+        if ( uiTrack_partItems[i]["itemId"] == itemId && uiTrack_partItems[i]["itemType"] == itemType ) {
+            uiTrack_partItems[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( trkEdit_partItems, "part", "uiTrkEdit" )
-    document.getElementById("uiTrkEdit_partList").innerHTML = itemsTable;
+    var itemsTable = drawItemsTables ( uiTrack_partItems, "part", "uiTrack" )
+    document.getElementById("uiTrack_partList").innerHTML = itemsTable;
 });
 
 // Sends the track data to the server for storage
-$(document).on('click', '#uiTrkEdit_fld_save', function (e) {
+$(document).on('click', '#uiTrack_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
-    var trackobj = {};
+    var trackObj = {};
     var jsonObject = {};
    
-    trackobj.trkId = $('#uiTrkEdit_fld_trkId').val();
+    trackObj.trkId = $('#uiTrack_fld_trkId').val();
     
-    $('#uiTrkEdit_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
-    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkTrackName'), "Track Name" );
-    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
-    trackobj.trkTrackName = $('#uiTrkEdit_fld_trkTrackName').val();
+    $('#uiTrack_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkTrackName'), "Track Name" );
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackObj.trkTrackName = $('#uiTrack_fld_trkTrackName').val();
     
-    $('#uiTrkEdit_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
-    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkRoute'), "Route" );
-    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
-    trackobj.trkRoute = $('#uiTrkEdit_fld_trkRoute').val();
+    $('#uiTrack_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkRoute'), "Route" );
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackObj.trkRoute = $('#uiTrack_fld_trkRoute').val();
     
-    $('#uiTrkEdit_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
-    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkDateBegin'), "Date Begin" );
-    trackobj.trkDateBegin = $('#uiTrkEdit_fld_trkDateBegin').val();     
+    $('#uiTrack_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkDateBegin'), "Date Begin" );
+    trackObj.trkDateBegin = $('#uiTrack_fld_trkDateBegin').val();     
 
-    $('#uiTrkEdit_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
-    valid = valid && checkExistance ( $('#uiTrkEdit_fld_trkDateFinish'), "Date Finish" );
-    trackobj.trkDateFinish = $('#uiTrkEdit_fld_trkDateFinish').val();
+    $('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkDateFinish'), "Date Finish" );
+    trackObj.trkDateFinish = $('#uiTrack_fld_trkDateFinish').val();
     
-    //trackobj.trkSaison = $('#uiTrkEdit_fld_trkSaison').val();
-    trackobj.trkType = $('#uiTrkEdit_fld_trkType').val();
-    trackobj.trkSubType = $('#uiTrkEdit_fld_trkSubType').val();
+    //trackObj.trkSaison = $('#uiTrack_fld_trkSaison').val();
+    trackObj.trkType = $('#uiTrack_fld_trkType').val();
+    trackObj.trkSubType = $('#uiTrack_fld_trkSubType').val();
 
-    $('#uiTrkEdit_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkOrg = $('#uiTrkEdit_fld_trkOrg').val();    
-    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    $('#uiTrack_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkOrg = $('#uiTrack_fld_trkOrg').val();    
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
     
-    $('#uiTrkEdit_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkEvent = $('#uiTrkEdit_fld_trkEvent').val();
-    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+    $('#uiTrack_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkEvent = $('#uiTrack_fld_trkEvent').val();
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
 
-    $('#uiTrkEdit_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkRemarks = $('#uiTrkEdit_fld_trkRemarks').val();
-    valid = valid && checkRegexpNot ( $('#uiTrkEdit_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+    $('#uiTrack_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkRemarks = $('#uiTrack_fld_trkRemarks').val();
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
 
-    $('#uiTrkEdit_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkDistance = $('#uiTrkEdit_fld_trkDistance').val();
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
+    $('#uiTrack_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkDistance = $('#uiTrack_fld_trkDistance').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
 
-    $('#uiTrkEdit_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeOverall = $('#uiTrkEdit_fld_trkTimeOverall').val();
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeOverall = $('#uiTrack_fld_trkTimeOverall').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
     
-    $('#uiTrkEdit_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeToPeak = $('#uiTrkEdit_fld_trkTimeToPeak').val();
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeToPeak = $('#uiTrack_fld_trkTimeToPeak').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
 
-    $('#uiTrkEdit_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeToFinish = $('#uiTrkEdit_fld_trkTimeToFinish').val();
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeToFinish = $('#uiTrack_fld_trkTimeToFinish').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
 
-    trackobj.trkGrade = $('#uiTrkEdit_fld_trkGrade').val();
+    trackObj.trkGrade = $('#uiTrack_fld_trkGrade').val();
 
-    $('#uiTrkEdit_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkMeterUp = $('#uiTrkEdit_fld_trkMeterUp').val();
-    valid = valid && checkIfNum ( $('#uiTrkEdit_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
+    $('#uiTrack_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkMeterUp = $('#uiTrack_fld_trkMeterUp').val();
+    valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
 
-    $('#uiTrkEdit_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkMeterDown = $('#uiTrkEdit_fld_trkMeterDown').val();
-    valid = valid && checkIfNum ( $('#uiTrkEdit_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
+    $('#uiTrack_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkMeterDown = $('#uiTrack_fld_trkMeterDown').val();
+    valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
     
-    $('#uiTrkEdit_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
-    country = $('#uiTrkEdit_fld_trkCountry').val();
-    trackobj.trkCountry = country.toUpperCase();
-    valid = valid && checkRegexp ( $('#uiTrkEdit_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
+    $('#uiTrack_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
+    country = $('#uiTrack_fld_trkCountry').val();
+    trackObj.trkCountry = country.toUpperCase();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
      
-    trackobj.trkLoginName = sessionObj.login;    
+    trackObj.trkLoginName = sessionObj.login;    
 
     if ( valid ) { 
         phpLocation = "services/importGps.php";                                 // Variable to store location of php file
@@ -2007,9 +2018,9 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
         jsonObject.request = 'update';                                            // temp request to create track temporarily
         jsonObject.loginname = sessionObj.login;                                      // set login name
         //jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
-        jsonObject.trackobj = trackobj;                                         // send track object
-        jsonObject.trkEdit_waypItems = trkEdit_waypItems;
-        jsonObject.trkEdit_partItems = trkEdit_partItems;
+        jsonObject.trackObj = trackObj;                                         // send track object
+        jsonObject.uiTrack_waypItems = uiTrack_waypItems;
+        jsonObject.uiTrack_partItems = uiTrack_partItems;
         jsn = JSON.stringify ( jsonObject );
 
         // Perform ajax call to php to save trackObject in table Tracks and other tables
@@ -2041,10 +2052,10 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').addClass('active');
-                $('#uiTrkEdit').removeClass('active');
+                $('#uiTrack').removeClass('active');
 
                 // Change active tab to main tab
-                $( "#uiTrkEdit" ).tabs({
+                $( "#uiTrack" ).tabs({
                     active: 0
                   });
             } else {
@@ -2062,7 +2073,7 @@ $(document).on('click', '#uiTrkEdit_fld_save', function (e) {
 // ==========================================================================
 
 // Change to selected panel
-$(document).on('click', '.uiTrkImp_btns_a', function(e) {                  
+$(document).on('click', '.uiTrack_btns_a', function(e) {                  
     e.preventDefault();                                             // Prevent link behaviour
     
     var $activeButtonA = $(this)                                    // Store the current link <a> element
@@ -2091,46 +2102,46 @@ $(document).on('click', '#buttonUploadFile', function (e) {
             if ( respObj.status == 'OK') {
 
                 // assign returned track values to UI fields
-                trackobj = respObj.trackObj;
-                //$('#uiTrkImp_fld_trkId').val(trackobj.trkId); 
-                $('#uiTrkImp_fld_trkTrackName').val(trackobj.trkTrackName);    
-                $('#uiTrkImp_fld_trkRoute').val(trackobj.trkRoute);
-                $('#uiTrkImp_fld_trkDateBegin').val(trackobj.trkDateBegin);
-                $('#uiTrkImp_fld_trkDateFinish').val(trackobj.trkDateFinish);
-                //$('#uiTrkImp_fld_trkSaison').val(trackobj.trkSaison);
-                $('#uiTrkImp_fld_trkType').val(trackobj.trkType);
-                $('#uiTrkImp_fld_trkSubType').val(trackobj.trkSubType);
-                $('#uiTrkImp_fld_trkOrg').val(trackobj.trkOrg);
-                $('#uiTrkImp_fld_trkOvernightLoc').val(trackobj.trkOvernightLoc);
-                $('#uiTrkImp_fld_trkParticipants').val(trackobj.trkParticipants);
-                $('#uiTrkImp_fld_trkEvent').val(trackobj.trkEvent);
-                $('#uiTrkImp_fld_trkRemarks').val(trackobj.trkRemarks);
-                $('#uiTrkImp_fld_trkDistance').val(trackobj.trkDistance);
-                $('#uiTrkImp_fld_trkTimeOverall').val(trackobj.trkTimeOverall);
-                $('#uiTrkImp_fld_trkTimeToPeak').val(trackobj.trkTimeToPeak);
-                $('#uiTrkImp_fld_trkTimeToFinish').val(trackobj.trkTimeToFinish);
-                $('#uiTrkImp_fld_trkGrade').val(trackobj.trkGrade);
-                $('#uiTrkImp_fld_trkMeterUp').val(trackobj.trkMeterUp);
-                $('#uiTrkImp_fld_trkMeterDown').val(trackobj.trkMeterDown);
-                $('#uiTrkImp_fld_trkCountry').val(trackobj.trkCountry);
-                $('#uiTrkImp_fld_trkCoordinates').val(trackobj.trkCoordinates);
+                trackObj = respObj.trackObj;
+                //$('#uiTrack_fld_trkId').val(trackObj.trkId); 
+                $('#uiTrack_fld_trkTrackName').val(trackObj.trkTrackName);    
+                $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
+                $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
+                $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
+                //$('#uiTrack_fld_trkSaison').val(trackObj.trkSaison);
+                $('#uiTrack_fld_trkType').val(trackObj.trkType);
+                $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
+                $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
+                $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);
+                $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);
+                $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
+                $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
+                $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
+                $('#uiTrack_fld_trkTimeOverall').val(trackObj.trkTimeOverall);
+                $('#uiTrack_fld_trkTimeToPeak').val(trackObj.trkTimeToPeak);
+                $('#uiTrack_fld_trkTimeToFinish').val(trackObj.trkTimeToFinish);
+                $('#uiTrack_fld_trkGrade').val(trackObj.trkGrade);
+                $('#uiTrack_fld_trkMeterUp').val(trackObj.trkMeterUp);
+                $('#uiTrack_fld_trkMeterDown').val(trackObj.trkMeterDown);
+                $('#uiTrack_fld_trkCountry').val(trackObj.trkCountry);
+                $('#uiTrack_fld_trkCoordinates').val(trackObj.trkCoordinates);
                 
                 // not displayed fields
-                $trkStartEle = trackobj.trkStartEle;                        
-                $trkPeakEle = trackobj.trkPeakEle;                          
-                $trkPeakTime = trackobj.trkPeakTime;                        
-                $trkLowEle = trackobj.trkLowEle;                            
-                $trkLowTime = trackobj.trkLowTime;                          
-                $trkFinishEle = trackobj.trkFinishEle;
-                $trkFinishTime = trackobj.trkFinishTime;
-                $trkCoordTop = trackobj.trkCoordTop;
-                $trkCoordBottom = trackobj.trkCoordBottom;
-                $trkCoordLeft = trackobj.trkCoordLeft;
-                $trkCoordRight = trackobj.trkCoordRight;
+                $('#uiTrack_fld_trkStartEle').val(trackObj.trkStartEle);                        
+                $('#uiTrack_fld_$trkPeakEle').val(trackObj.trkPeakEle);                          
+                $('#uiTrack_fld_$trkPeakTime').val(trackObj.trkPeakTime);                        
+                $('#uiTrack_fld_$trkLowEle').val(trackObj.trkLowEle);                            
+                $('#uiTrack_fld_$trkLowTime').val(trackObj.trkLowTime);                          
+                $('#uiTrack_fld_$trkFinishEle').val(trackObj.trkFinishEle);
+                $('#uiTrack_fld_$trkFinishTime').val(trackObj.trkFinishTime);
+                $('#uiTrack_fld_$trkCoordTop').val(trackObj.trkCoordTop);
+                $('#uiTrack_fld_$trkCoordBottom').val(trackObj.trkCoordBottom);
+                $('#uiTrack_fld_$trkCoordLeft').val(trackObj.trkCoordLeft);
+                $('#uiTrack_fld_$trkCoordRight').val(trackObj.trkCoordRight);
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
-                $('#uiTrkImp').addClass('active');
+                $('#uiTrack').addClass('active');
                 document.getElementById("inputFile").value = "";
 
             } else {
@@ -2187,7 +2198,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
 });
 
 // Deletes items (waypoints, participants, etc.) in the items array
-$(document).on('click', '.itemDel.uiTrkImp', function (e) {
+$(document).on('click', '.itemDel.uiTrack', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
@@ -2201,8 +2212,8 @@ $(document).on('click', '.itemDel.uiTrkImp', function (e) {
             itemsTrkImp[i]["disp_f"] = false;
         }    
     }
-    var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrkImp" )
-    document.getElementById("uiTrkImp_peakList").innerHTML = itemsTable;
+    var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrack" )
+    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
 });
 
 // Changes the status of the reached checkbox
@@ -2225,111 +2236,109 @@ $(document).on('click', '.cbReached', function (e) {
 });
 
 // Sends the track data to the server for update --> calls importGps.php in save mode)
-$(document).on('click', '#uiTrkImp_fld_save', function (e) {
+$(document).on('click', '#uiTrack_fld_save', function (e) {
     e.preventDefault();
     var valid = true;                                                           // true when field check are passed
-    var trackobj = {};
+    var trackObj = {};
     var jsonObject = {};
 
-    //$('#uiTrkImp_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
-    //valid = valid && checkExistance ( $('#uiTrkImp_fld_trkId'), "Track ID" );   // check validity of field
-    //trackobj.trkId = $('#uiTrkImp_fld_trkId').val();                            // assign field value to track object
+    //$('#uiTrack_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
+    //valid = valid && checkExistance ( $('#uiTrack_fld_trkId'), "Track ID" );   // check validity of field
+    //trackObj.trkId = $('#uiTrack_fld_trkId').val();                            // assign field value to track object
 
-    $('#uiTrkImp_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
-    valid = valid && checkExistance ( $('#uiTrkImp_fld_trkTrackName'), "Track Name" );
-    valid = valid && checkRegexpNot ( $('#uiTrkImp_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
-    trackobj.trkTrackName = $('#uiTrkImp_fld_trkTrackName').val();
+    $('#uiTrack_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkTrackName'), "Track Name" );
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkTrackName'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackObj.trkTrackName = $('#uiTrack_fld_trkTrackName').val();
     
-    $('#uiTrkImp_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
-    valid = valid && checkExistance ( $('#uiTrkImp_fld_trkRoute'), "Route" );
-    valid = valid && checkRegexpNot ( $('#uiTrkImp_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
-    trackobj.trkRoute = $('#uiTrkImp_fld_trkRoute').val();
+    $('#uiTrack_fld_trkRoute').removeClass( "ui-state-error" );                // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkRoute'), "Route" );
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkRoute'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    trackObj.trkRoute = $('#uiTrack_fld_trkRoute').val();
     
-    $('#uiTrkImp_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
-    valid = valid && checkExistance ( $('#uiTrkImp_fld_trkDateBegin'), "Date Begin" );
-    trackobj.trkDateBegin = $('#uiTrkImp_fld_trkDateBegin').val();     
+    $('#uiTrack_fld_trkDateBegin').removeClass( "ui-state-error" );            // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkDateBegin'), "Date Begin" );
+    trackObj.trkDateBegin = $('#uiTrack_fld_trkDateBegin').val();     
 
-    $('#uiTrkImp_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
-    valid = valid && checkExistance ( $('#uiTrkImp_fld_trkDateFinish'), "Date Finish" );
-    trackobj.trkDateFinish = $('#uiTrkImp_fld_trkDateFinish').val();
+    $('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkDateFinish'), "Date Finish" );
+    trackObj.trkDateFinish = $('#uiTrack_fld_trkDateFinish').val();
     
-    //trackobj.trkSaison = $('#uiTrkImp_fld_trkSaison').val();
-    trackobj.trkType = $('#uiTrkImp_fld_trkType').val();
-    trackobj.trkSubType = $('#uiTrkImp_fld_trkSubType').val();
+    //trackObj.trkSaison = $('#uiTrack_fld_trkSaison').val();
+    trackObj.trkType = $('#uiTrack_fld_trkType').val();
+    trackObj.trkSubType = $('#uiTrack_fld_trkSubType').val();
 
-    $('#uiTrkImp_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkOrg = $('#uiTrkImp_fld_trkOrg').val();    
-    valid = valid && checkRegexpNot ( $('#uiTrkImp_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
+    $('#uiTrack_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkOrg = $('#uiTrack_fld_trkOrg').val();    
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
     
-    //trackobj.trkOvernightLoc = $('#uiTrkImp_fld_trkOvernightLoc').val();
-    //trackobj.trkParticipants = $('#uiTrkImp_fld_trkParticipants').val();
+    //trackObj.trkOvernightLoc = $('#uiTrack_fld_trkOvernightLoc').val();
+    //trackObj.trkParticipants = $('#uiTrack_fld_trkParticipants').val();
     
-    $('#uiTrkImp_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkEvent = $('#uiTrkImp_fld_trkEvent').val();
-    valid = valid && checkRegexpNot ( $('#uiTrkImp_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+    $('#uiTrack_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkEvent = $('#uiTrack_fld_trkEvent').val();
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkEvent'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
 
-    $('#uiTrkImp_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkRemarks = $('#uiTrkImp_fld_trkRemarks').val();
-    valid = valid && checkRegexpNot ( $('#uiTrkImp_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
+    $('#uiTrack_fld_trkRemarks').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkRemarks = $('#uiTrack_fld_trkRemarks').val();
+    valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkRemarks'), /[&;,"']/, "No special characters [&;,\"\'] allowed " );
 
-    $('#uiTrkImp_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
-    trackobj.trkDistance = $('#uiTrkImp_fld_trkDistance').val();
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
+    $('#uiTrack_fld_trkDistance').removeClass( "ui-state-error" );           // same as above
+    trackObj.trkDistance = $('#uiTrack_fld_trkDistance').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkDistance'), /^[0-9]{0,3}.[0-9]{0,3}$/, "Enter distance as mmm.nnn " );
 
-    $('#uiTrkImp_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeOverall = $('#uiTrkImp_fld_trkTimeOverall').val();
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeOverall').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeOverall = $('#uiTrack_fld_trkTimeOverall').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeOverall'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
     
-    $('#uiTrkImp_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeToPeak = $('#uiTrkImp_fld_trkTimeToPeak').val();
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeToPeak').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeToPeak = $('#uiTrack_fld_trkTimeToPeak').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeToPeak'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
 
-    $('#uiTrkImp_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkTimeToFinish = $('#uiTrkImp_fld_trkTimeToFinish').val();
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
+    $('#uiTrack_fld_trkTimeToFinish').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkTimeToFinish = $('#uiTrack_fld_trkTimeToFinish').val();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkTimeToFinish'), /^[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]:[0-9]{0,1}[0-9]$/, "Enter time as HH:MM:SS " );
 
-    trackobj.trkGrade = $('#uiTrkImp_fld_trkGrade').val();
+    trackObj.trkGrade = $('#uiTrack_fld_trkGrade').val();
 
-    $('#uiTrkImp_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkMeterUp = $('#uiTrkImp_fld_trkMeterUp').val();
-    valid = valid && checkIfNum ( $('#uiTrkImp_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
+    $('#uiTrack_fld_trkMeterUp').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkMeterUp = $('#uiTrack_fld_trkMeterUp').val();
+    valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterUp'), "Enter valid number (mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" );
 
-    $('#uiTrkImp_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
-    trackobj.trkMeterDown = $('#uiTrkImp_fld_trkMeterDown').val();
-    valid = valid && checkIfNum ( $('#uiTrkImp_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
+    $('#uiTrack_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
+    trackObj.trkMeterDown = $('#uiTrack_fld_trkMeterDown').val();
+    valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
     
-    $('#uiTrkImp_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
-    country = $('#uiTrkImp_fld_trkCountry').val();
-    trackobj.trkCountry = country.toUpperCase();
-    valid = valid && checkRegexp ( $('#uiTrkImp_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
+    $('#uiTrack_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
+    country = $('#uiTrack_fld_trkCountry').val();
+    trackObj.trkCountry = country.toUpperCase();
+    valid = valid && checkRegexp ( $('#uiTrack_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
      
-    trackobj.trkCoordinates = $('#uiTrkImp_fld_trkCoordinates').val();  
-    trackobj.trkLoginName = sessionObj.login;    
+    trackObj.trkCoordinates = $('#uiTrack_fld_trkCoordinates').val();  
+    trackObj.trkLoginName = sessionObj.login;    
 
     // not displayed fields
-    trackobj.trkStartEle = $trkStartEle;                        
-    trackobj.trkPeakEle = $trkPeakEle;                          
-    trackobj.trkPeakTime = $trkPeakTime;                        
-    trackobj.trkLowEle = $trkLowEle;                            
-    trackobj.trkLowTime = $trkLowTime;                          
-    trackobj.trkFinishEle = $trkFinishEle;                      
-    trackobj.trkFinishTime = $trkFinishTime;  
-    trackobj.trkCoordTop = $trkCoordTop;
-    trackobj.trkCoordBottom = $trkCoordBottom;
-    trackobj.trkCoordLeft = $trkCoordLeft;
-    trackobj.trkCoordRight = $trkCoordRight;
-    //trackobj.coordCenterX = coordCenterX;
-    //trackobj.coordCenterY = coordCenterY;                 
-
+    trackObj.trkStartEle = $('#uiTrack_fld_trkStartEle').val();                        
+    trackObj.trkPeakEle = $('#uiTrack_fld_trkPeakEle').val();                          
+    trackObj.trkPeakTime = $('#uiTrack_fld_trkPeakTime').val();                        
+    trackObj.trkLowEle = $('#uiTrack_fld_trkLowEle').val();                            
+    trackObj.trkLowTime = $('#uiTrack_fld_trkLowTime').val();                          
+    trackObj.trkFinishEle = $('#uiTrack_fld_trkFinishEle').val();                      
+    trackObj.trkFinishTime = $('#uiTrack_fld_trkFinishTime').val();  
+    trackObj.trkCoordTop = $('#uiTrack_fld_trkCoordTop').val();
+    trackObj.trkCoordBottom = $('#uiTrack_fld_trkCoordBottom').val();
+    trackObj.trkCoordLeft = $('#uiTrack_fld_trkCoordLeft').val();
+    trackObj.trkCoordRight = $('#uiTrack_fld_trkCoordRight').val();
+    
     if ( valid ) { 
         phpLocation = "services/importGps.php";                                 // Variable to store location of php file
         jsonObject.sessionid = sessionObj.sessionId;                                       // append parameter session ID
         jsonObject.request = 'save';                                            // temp request to create track temporarily
         jsonObject.loginname = sessionObj.login;                                      // set login name
         jsonObject.itemsTrkImp = itemsTrkImp;                                     // Array containing selected peaks
-        jsonObject.trackobj = trackobj;                                         // send track object
+        jsonObject.trackObj = trackObj;                                         // send track object
         jsn = JSON.stringify ( jsonObject );
 
         // Perform ajax call to php to save trackObject in table Tracks and other tables
@@ -2474,10 +2483,10 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
                 drawItemsTables_old ( itemsTrkImp, "loca" ); 
                 drawItemsTables_old ( itemsTrkImp, "part" ); 
 
-                $( "#uiTrkImp_peakSrch" ).val("");
-                $( "#uiTrkImp_waypSrch" ).val("");
-                $( "#uiTrkImp_locaSrch" ).val("");
-                $( "#uiTrkImp_partSrch" ).val("");
+                $( "#uiTrack_peakSrch" ).val("");
+                $( "#uiTrack_waypSrch" ).val("");
+                $( "#uiTrack_locaSrch" ).val("");
+                $( "#uiTrack_partSrch" ).val("");
 
                 // Open Panel Display
                 var $activeButtonA = $('#navBtns_btn_diplay_a');                // Store the current link <a> element
@@ -2491,10 +2500,10 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
                 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').addClass('active');
-                $('#uiTrkImp').removeClass('active');
+                $('#uiTrack').removeClass('active');
 
                 // Change active tab to main tab
-                $( "#uiTrkImp" ).tabs({
+                $( "#uiTrack" ).tabs({
                     active: 0
                   });
             } else {
@@ -2508,10 +2517,10 @@ $(document).on('click', '#uiTrkImp_fld_save', function (e) {
 });
 
 // Cancels update
-$(document).on('click', '#uiTrkImp_fld_cancel', function (e) {
+$(document).on('click', '#uiTrack_fld_cancel', function (e) {
     e.preventDefault();
     $('#uiUplFileGps').addClass('active');                 // Make File upload div visible
-    $('#uiTrkImp').removeClass('active');                   // hide update form
+    $('#uiTrack').removeClass('active');                   // hide update form
     $('#statusMessage').text('Import cancelled');
     $("#statusMessage").show().delay(5000).fadeOut();
 });
@@ -2730,7 +2739,7 @@ function drawItemsTables_old ( itemsArray, itemType ) {
     var itemClass = "tblItems";
     var itemDelClass = itemType + "Del";                                        // e.g. waypDel
     var itemDelImg = "btn" + itemType + "DelImg";                               // e.g. btnwaypDelImg
-    var elementId = "uiTrkImp_" + itemType + "List";                            // e.g. uiTrkImp_peakList
+    var elementId = "uiTrack_" + itemType + "List";                            // e.g. uiTrack_peakList
     var reachedCheck = "cb_" + itemType;                                        // e.g. cb_peak
 
     // create new html table with value returned by autocomplete
