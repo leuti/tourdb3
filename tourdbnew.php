@@ -579,261 +579,6 @@
 				<div id="tabDispLists_part"></div>
 			</div>
 			
-			<!-- Form to display different lists -->
-			<div id="uiTrack" class="formCenter uiDiv">
-				<ul>
-					<li><a href="#uiTrack_tabMain">Main</a></li>
-					<li><a href="#uiTrack_tabWayp">Waypoints</a></li>
-					<li><a href="#uiTrack_tabOth">Others</a></li>
-				</ul>
-				<p id="validateComments">Please fill / update fields.</p>
-				<div id="uiTrack_tabMain">
-					<fieldset>
-					
-						<!-- Import Tracks -->
-						<legend class="filterHeader">Import Track</legend>
-
-						<!-- Track ID -->
-						<div>
-							<!--<label for="uiTrack_fld_trkId" class="updTrackLabelFirst">Track ID</label>-->
-							<input type="hidden" name="uiTrack_fld_trkId" id="uiTrack_fld_trkId" size="20" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-						</div>
-
-						<!-- Track Name -->
-						<div>
-							<label for="uiTrack_fld_trkTrackName" class="updTrackLabelFirst">Track Name</label>
-							<input type="text" name="uiTrack_fld_trkTrackName" id="uiTrack_fld_trkTrackName" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-							
-						<!-- Route -->
-						<div>
-							<label for="uiTrack_fld_trkRoute" class="updTrackLabelFirst">Route</label>
-							<input type="text" name="uiTrack_fld_trkRoute" id="uiTrack_fld_trkRoute" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Date Begin -->
-						<div>
-							<label for="uiTrack_fld_trkDateBegin" class="updTrackLabelFirst">Date Begin</label>
-							<input type="text" name="uiTrack_fld_trkDateBegin" id="uiTrack_fld_trkDateBegin" size="20" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Date Finish -->
-						<div>
-							<label for="uiTrack_fld_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
-							<input type="text" name="uiTrack_fld_trkDateFinish" id="uiTrack_fld_trkDateFinish" size="20" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Saison -->
-						<!--
-						<div>
-							<label for="uiTrack_fld_trkSaison" class="updTrackLabelFirst">Saison</label>
-							<select name="trkSaison" id="uiTrack_fld_trkSaison">
-								<option>2016/17 Wi</option>
-								<option>2017 So</option>
-								<option selected="selected">2017/18 Wi</option>
-								<option>2018 So</option>
-							</select>
-						</div>
-						-->
-
-						<!-- Type -->
-						<div>
-							<label for="uiTrack_fld_trkType" class="updTrackLabelFirst">Type</label>
-							<!-- <input type="text" name="uiTrack_fld_trkType" id="uiTrack_fld_trkType" size="50" class="updTrackInput text ui-widget-content ui-corner-all">-->
-							<select name="trkType" id="uiTrack_fld_trkType">
-								<option>Zufuss</option>
-								<option selected="selected">Ski</option>
-								<option>Velo</option>
-								<option>Wasser</option>
-								<option>Klettern</option>
-								<option>Sport</option>
-							</select>
-						</div>
-
-						<!-- SubType -->
-						<div>
-							<label for="uiTrack_fld_trkSubType" class="updTrackLabelFirst">SubType</label>
-							<select name="trkSubType" id="uiTrack_fld_trkSubType">
-								<option>Alpinklettern</option>
-								<option>Alpintour</option>
-								<option>Hochtour</option>
-								<option>Joggen</option>
-								<option>Mehrseilklettern</option>
-								<option>Schneeschuhwanderung</option>
-								<option>Schwimmen</option>
-								<option>Skihochtour</option>
-								<option selected="selected">Skitour</option>
-								<option>Sportklettern</option>
-								<option>Velotour</option>
-								<option>Wanderung</option>
-								<option>Winterwanderung</option>
-							</select>
-						</div>
-
-						<!-- Distance -->
-						<div>
-							<label for="uiTrack_fld_trkDistance" class="updTrackLabelFirst">Distance</label>
-							<input type="text" name="uiTrack_fld_trkDistance" id="uiTrack_fld_trkDistance" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Time Overall -->
-						<div>
-							<label for="uiTrack_fld_trkTimeOverall" class="updTrackLabelFirst">Overall Time</label>
-							<input type="text" name="uiTrack_fld_trkTimeOverall" id="uiTrack_fld_trkTimeOverall" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- TimeToPeak -->
-						<div>
-							<label for="uiTrack_fld_trkTimeToPeak" class="updTrackLabelFirst">Time to Peak</label>
-							<input type="text" name="uiTrack_fld_trkTimeToPeak" id="uiTrack_fld_trkTimeToPeak" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- TimeToFinish -->
-						<div>
-							<label for="uiTrack_fld_trkTimeToFinish" class="updTrackLabelFirst">Time To Finish</label>
-							<input type="text" name="uiTrack_fld_trkTimeToFinish" id="uiTrack_fld_trkTimeToFinish" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Grade -->
-						<div>
-							<label for="uiTrack_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
-							<input type="text" name="uiTrack_fld_trkGrade" id="uiTrack_fld_trkGrade" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- MeterUp -->
-						<div>
-							<label for="uiTrack_fld_trkMeterUp" class="updTrackLabelFirst">Meter Up</label>
-							<input type="text" name="uiTrack_fld_trkMeterUp" id="uiTrack_fld_trkMeterUp" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- MeterDown -->
-						<div>
-							<label for="uiTrack_fld_trkMeterDown" class="updTrackLabelFirst">Meter Down</label>
-							<input type="text" name="uiTrack_fld_trkMeterDown" id="uiTrack_fld_trkMeterDown" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Country -->
-						<div>
-							<label for="uiTrack_fld_trkCountry" class="updTrackLabelFirst">Country</label>
-							<input type="text" name="uiTrack_fld_trkCountry" id="uiTrack_fld_trkCountry" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Hidden Fields -->
-						<div>
-							<input type="hidden" name="uiTrack_fld_trkCoordinates" id="uiTrack_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkStartEle" id="uiTrack_fld_trkStartEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-                			<input type="hidden" name="uiTrack_fld_trkPeakEle" id="uiTrack_fld_trkPeakEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-                			<input type="hidden" name="uiTrack_fld_trkPeakTime" id="uiTrack_fld_trkPeakTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-                			<input type="hidden" name="uiTrack_fld_trkLowEle" id="uiTrack_fld_trkLowEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-                			<input type="hidden" name="uiTrack_fld_trkLowTime" id="uiTrack_fld_trkLowTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-                			<input type="hidden" name="uiTrack_fld_trkFinishEle" id="uiTrack_fld_trkFinishEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkFinishTime" id="uiTrack_fld_trkFinishTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkCoordTop" id="uiTrack_fld_trkCoordTop" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkCoordBottom" id="uiTrack_fld_trkCoordBottom" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkCoordLeft" id="uiTrack_fld_trkCoordLeft" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-							<input type="hidden" name="uiTrack_fld_trkCoordRight" id="uiTrack_fld_trkCoordRight" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
-						</div>
-					</fieldset>
-				</div>
-				<div id="uiTrack_tabWayp">
-					<fieldset>
-						<legend class="filterHeader">Add Peaks</legend>
-						<div class="ui-widget" style="float:left;">
-							<label for="uiTrack_peakSrch" class="updTrackLabelWayp">Peak</label>
-							<input id="uiTrack_peakSrch" size="25">
-				  		</div>
-						<div id="uiTrack_peakList" style="float:left;">
-						<table class="itemsTable" cellspacing="0" cellpadding="0">
-            				<tr>
-            					<td>Peak</td>
-            					<td></td> 
-            					<td></td>
-							</tr>
-						</table>
-						</div>
-					</fieldset>
-
-					<fieldset>
-						<legend class="filterHeader">Add Waypoints</legend>
-						<div class="ui-widget" style="float:left;">
-							<label for="uiTrack_waypSrch" class="updTrackLabelWayp">Waypoint</label>
-							<input id="uiTrack_waypSrch" size="25">
-				  		</div>
-						<div id="uiTrack_waypList" style="float:left;">
-						<table class="itemsTable" cellspacing="0" cellpadding="0">
-							<tr>
-								<td>Waypoint</td>
-								<td></td>
-							</tr>
-						</table>
-						</div>
-					</fieldset>
-
-					<fieldset>
-						<legend class="filterHeader">Add Overnight Location</legend>		
-						<!-- Overnight Location -->
-						<div class="ui-widget" style="float:left;">
-							<label for="uiTrack_locaSrch" class="updTrackLabelWayp">Overnight Loc.</label>
-							<input id="uiTrack_locaSrch" size="25">
-				  		</div>
-						<div id="uiTrack_locaList" style="float:left;">
-						<table class="itemsTable" cellspacing="0" cellpadding="0">
-							<tr>
-            					<td>Location</td>
-            					<td></td>
-							</tr>
-						</table>
-						</div>				
-					</fieldset>
-
-				</div>
-				<div id="uiTrack_tabOth">
-					<fieldset>
-						<legend class="filterHeader">Participants</legend>	
-
-						<!-- Participants -->
-						<div class="ui-widget" style="float:left;">
-							<label for="uiTrack_partSrch" class="updTrackLabelWayp">Participants</label>
-							<input id="uiTrack_partSrch" size="25">
-				  		</div>
-						<div id="uiTrack_partList" style="float:left;">
-						<table class="itemsTable" cellspacing="0" cellpadding="0">
-							<tr>
-            					<td>Participant</td>
-            					<td></td>
-                            </tr>
-						</div>	
-					</table>	
-					</fieldset>
-
-					<fieldset>
-						<legend class="filterHeader">Other Information</legend>
-						
-						<!-- Org -->
-						<div>
-							<label for="uiTrack_fld_trkOrg" class="updTrackLabelWayp">Organisation</label>
-							<input type="text" name="uiTrack_fld_trkOrg" id="uiTrack_fld_trkOrg" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Event -->
-						<div>
-							<label for="uiTrack_fld_trkEvent" class="updTrackLabelWayp">Event</label>
-							<input type="text" name="uiTrack_fld_trkEvent" id="uiTrack_fld_trkEvent" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-						<!-- Remarks -->
-						<div>
-							<label for="uiTrack_fld_trkRemarks" class="updTrackLabelWayp">Remarks</label>
-							<input type="text" name="uiTrack_fld_trkRemarks" id="uiTrack_fld_trkRemarks" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
-						</div>
-
-					</fieldset>
-				</div>
-				<div id="updTrk_btn" class="formCenter">
-					<input type="submit" class="button" id="uiTrack_fld_save" value="Save Track" />
-					<input type="submit" class="button" id="uiTrack_fld_cancel" value="Cancel import" />
-				</div>
-			</div>
 		</div> <!-- End div panelDisplayLists -->
 
 		<!-- ========================================================================== -->
@@ -905,7 +650,8 @@
 		<!-- ======================== UI Import/Edit Track ============================ -->
 		<!-- ========================================================================== -->
 		
-		<div id="uiTrack" class="UI uiTrack formCenter uiDiv">
+		<!-- Form to display different lists -->
+		<div id="uiTrack" class="uiTrack formCenter uiDiv">
 			<ul>
 				<li><a href="#uiTrack_tabMain">Main</a></li>
 				<li><a href="#uiTrack_tabWayp">Waypoints</a></li>
@@ -1043,12 +789,21 @@
 						<input type="text" name="uiTrack_fld_trkCountry" id="uiTrack_fld_trkCountry" size="50" class="updTrackInput text ui-widget-content ui-corner-all">
 					</div>
 
-					<!-- Coordinates -->
+					<!-- Hidden Fields -->
 					<div>
-						<!--<label for="uiTrack_fld_trkCoordinates" class="updTrackLabelFirst">Coordinates</label>-->
 						<input type="hidden" name="uiTrack_fld_trkCoordinates" id="uiTrack_fld_trkCoordinates" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkStartEle" id="uiTrack_fld_trkStartEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkPeakEle" id="uiTrack_fld_trkPeakEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkPeakTime" id="uiTrack_fld_trkPeakTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkLowEle" id="uiTrack_fld_trkLowEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkLowTime" id="uiTrack_fld_trkLowTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkFinishEle" id="uiTrack_fld_trkFinishEle" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkFinishTime" id="uiTrack_fld_trkFinishTime" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkCoordTop" id="uiTrack_fld_trkCoordTop" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkCoordBottom" id="uiTrack_fld_trkCoordBottom" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkCoordLeft" id="uiTrack_fld_trkCoordLeft" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
+						<input type="hidden" name="uiTrack_fld_trkCoordRight" id="uiTrack_fld_trkCoordRight" size="50" class="updTrackInput text ui-widget-content ui-corner-all" readonly>
 					</div>
-
 				</fieldset>
 			</div>
 			<div id="uiTrack_tabWayp">
@@ -1150,6 +905,7 @@
 				<input type="submit" class="button" id="uiTrack_fld_cancel" value="Cancel import" />
 			</div>
 		</div>
+
 
 	</section> <!-- End main -->
 

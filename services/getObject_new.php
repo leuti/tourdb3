@@ -76,11 +76,11 @@ if ( $objectType == "trk" ) {
             if ($debugLevel >= 3) fputs($logFile, "Line 79: waypNameLong: " . $trackWaypRecord["waypNameLong"] . "\r\n");
 
             $trkWpLine = array (
-                "disp_f"=>"1",
-                "itemID"=>$trackWaypRecord["trwpWaypId"],
-                "itemName"=>$trackWaypRecord["waypNameLong"],                                             // add inner join
-                "itemType"=>$itemType,
-                "reached_f"=>$trackWaypRecord["trwpReached_f"]
+                "disp_f" => 1,
+                "itemId" => $trackWaypRecord["trwpWaypId"],
+                "itemName" => $trackWaypRecord["waypNameLong"],                                             // add inner join
+                "itemType" => $itemType,
+                "reached_f" => $trackWaypRecord["trwpReached_f"]
             );
             array_push ($trackWaypArray, $trkWpLine);
         }
@@ -105,10 +105,10 @@ if ( $objectType == "trk" ) {
                 . "FirstName: " . $trackPartRecord["prtFirstName"] . "\r\n");
 
             $trpaLine = array (
-                "disp_f"=>"1",
-                "itemType"=>"part",
-                "itemID"=>$trackPartRecord["trpaPartId"],
-                "itemName"=>$trackPartRecord["prtFirstName"] . " " . $trackPartRecord["prtLastName"]
+                "disp_f" => 1,
+                "itemType" => "part",
+                "itemId" => $trackPartRecord["trpaPartId"],
+                "itemName" => $trackPartRecord["prtFirstName"] . " " . $trackPartRecord["prtLastName"]
             );
             array_push ($trackPartArray, $trpaLine);
         }
