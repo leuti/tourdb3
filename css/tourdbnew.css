@@ -78,7 +78,7 @@ em { /* formatting for DB in logo*/
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.navBtns_btns_a, .uiTrkImp_btns_a, .uiTrkImp_btns_a {
+.panelChangeBtn, .uiTrkImp_btns_a, .uiTrkImp_btns_a {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;
@@ -114,7 +114,7 @@ em { /* formatting for DB in logo*/
     list-style: none;
 }
 
-.button_A {
+.uiTrackEditBtn {
     text-decoration: none;
 }
 

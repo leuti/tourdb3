@@ -192,16 +192,22 @@ if ( $objectName == "tracks" ) {
     fclose($trackOutFile);                                                      // close kml file
 
     $returnMessage = "$countTracks Tracks found"; 
+
+    if ( $countTracks > 0 ) {
     
-    // Create return object
-    $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-    $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
-    $returnObject['coordTop'] = $coordTop;
-    $returnObject['coordBottom'] = $coordBottom;
-    $returnObject['coordLeft'] = $coordLeft;
-    $returnObject['coordRight'] = $coordRight;
-    $returnObject['recordcount'] = $countTracks;
-    $returnObject['objectName'] = $objectName;
+        // Create return object
+        $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+        $returnObject['coordTop'] = $coordTop;
+        $returnObject['coordBottom'] = $coordBottom;
+        $returnObject['coordLeft'] = $coordLeft;
+        $returnObject['coordRight'] = $coordRight;
+        $returnObject['recordcount'] = $countTracks;
+        $returnObject['objectName'] = $objectName;
+    } else {
+        $returnObject['status'] = 'NOK';                                             // add status field (OK) to trackobj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+    }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
     if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");

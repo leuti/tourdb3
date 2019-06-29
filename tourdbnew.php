@@ -39,22 +39,22 @@
 		</div>
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
-		<ul class="navBtns_btns">
+		<ul class="panelBtn">
 			<li id="navBtns_btn_login" class="navBtns_btn_li active" style="display:none;">
-				<a id="navBtns_btn_login_a" class="navBtns_btns_a" href="#panelLogin"><h2>Login</h2></a>
+				<a id="navBtns_btn_login_a" class="panelChangeBtn" href="#panelLogin"><h2>Login</h2></a>
 			</li>
 			<li id="navBtns_btn_map" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_dispmap_a" class="navBtns_btns_a" href="#panelDisplayMap"><h2>Map</h2></a>
+				<a id="navBtns_btn_dispmap_a" class="panelChangeBtn" href="#panelDisplayMap"><h2>Map</h2></a>
 			</li>
 			<li id="buttonDisplayLists" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_displists_a" class="navBtns_btns_a" href="#panelDisplayLists"><h2>Lists</h2></a> 
+				<a id="navBtns_btn_displists_a" class="panelChangeBtn" href="#panelDisplayLists"><h2>Lists</h2></a> 
 			</li>			
 			<li id="navBtns_btn_import" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_import_a" class="navBtns_btns_a" href="#panelImport"><h2>Import</h2></a> 
+				<a id="navBtns_btn_import_a" class="panelChangeBtn" href="#panelImport"><h2>Import</h2></a> 
 			</li>
 			
 			<li id="buttonExport" class="navBtns_btn_li loginReq">
-				<a id="a_panelExport" class="navBtns_btns_a" href="#panelExport"><h2>Export</h2></a> 
+				<a id="a_panelExport" class="panelChangeBtn" href="#panelExport"><h2>Export</h2></a> 
 			</li>
 		</ul>
 	</header> 
