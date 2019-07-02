@@ -39,53 +39,52 @@
 		</div>
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
-		<ul class="panelBtn">
-			<li id="navBtns_btn_login" class="navBtns_btn_li active" style="display:none;">
-				<a id="navBtns_btn_login_a" class="panelChangeBtn" href="#panelLogin"><h2>Login</h2></a>
+		<ul class="mainButtons">
+			<li id="uiLogin_loginBtn" class="mainButtons_li active" style="display:none;">
+				<a id="uiLogin_loginBtn_a" class="mainButtons_a" href="#panelLogin"><h2>Login</h2></a>
 			</li>
-			<li id="navBtns_btn_map" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_dispmap_a" class="panelChangeBtn" href="#panelDisplayMap"><h2>Map</h2></a>
+			<li id="mainButtons_mapBtn" class="mainButtons_li loginReq">
+				<a id="mainButtons_mapBtn_a" class="mainButtons_a" href="#panelMap"><h2>Map</h2></a>
 			</li>
-			<li id="buttonDisplayLists" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_displists_a" class="panelChangeBtn" href="#panelDisplayLists"><h2>Lists</h2></a> 
+			<li id="mainButtons_listBtn" class="mainButtons_li loginReq">
+				<a id="mainButtons_listBtn_a" class="mainButtons_a" href="#panelLists"><h2>Lists</h2></a> 
 			</li>			
-			<li id="navBtns_btn_import" class="navBtns_btn_li loginReq">
-				<a id="navBtns_btn_import_a" class="panelChangeBtn" href="#panelImport"><h2>Import</h2></a> 
+			<li id="mainButtons_importBtn" class="mainButtons_li loginReq">
+				<a id="mainButtons_importBtn_a" class="mainButtons_a" href="#panelImport"><h2>Import</h2></a> 
 			</li>
-			
-			<li id="buttonExport" class="navBtns_btn_li loginReq">
-				<a id="a_panelExport" class="panelChangeBtn" href="#panelExport"><h2>Export</h2></a> 
+			<li id="mainButtons_exportBtn" class="mainButtons_li loginReq">
+				<a id="mainButtons_exportBtn_a" class="mainButtons_a" href="#panelExport"><h2>Export</h2></a> 
 			</li>
 		</ul>
 	</header> 
 
     <!-- In the div #main all page content is diplayed -->
-	<section id="main"> <!-- style="height: 100%;">-->
+	<section id="main"> 
 		
 		<!-- ========================================================================== -->
 		<!-- ======================== panelLogin ========================================== -->
 		<!-- ========================================================================== -->
 		<div id="panelLogin" class="tourdbPanel active">
-			<div id=loginForm class="formCenter">
+			<div id=uiLogin class="formCenter">
 				<fieldset>
         		
 					<!-- Import Tracks -->
 					<legend class="filterHeader">Enter you login credentials</legend>
 
 					<div>
-						<label for="loginName" class="labelFirst">User Login</label>
-						<input id="loginName" class="loginFields" type="text" size="50">
+						<label for="uiLogin_login" class="labelFirst">User Login</label>
+						<input id="uiLogin_login" class="loginFields" type="text" size="50">
 					</div>
 					<div>
-						<label for="loginPasswd" class="labelFirst">Password</label>
-						<input id="loginPasswd" class="loginFields" type="password" size="50">
+						<label for="uiLogin_password" class="labelFirst">Password</label>
+						<input id="uiLogin_password" class="loginFields" type="password" size="50">
 					</div>
 
-					<div class="navBtns_btn_login">
-						<input type="submit" class="button" id="navBtns_btn_login" value="Login" />
+					<div class="uiLogin_loginBtn">
+						<input type="submit" class="button" id="uiLogin_loginBtn" value="Login" />
 					</div>
 					
-					<div id="loginStatus" class="statusMessage">	
+					<div id="uiLogin_status" class="statusMessage">	
 					</div>
 				</fieldset>
 				
@@ -94,9 +93,9 @@
 		</div> <!-- End div panelLogin -->
 
 		<!-- ========================================================================== -->
-		<!-- ========================== panelDisplayMap ================================== -->
+		<!-- ========================== panelMap ================================== -->
 		<!-- ========================================================================== -->
-		<div id="panelDisplayMap" class="tourdbPanel">
+		<div id="panelMap" class="tourdbPanel">
 			
 			<!-- Div for Menu buttons -->
 			<div id="dispObjectSelector">
@@ -441,12 +440,12 @@
 			
 			</div> <!-- End displayMap -->
 
-		</div> <!-- End div panelDisplayLists -->
+		</div> <!-- End div panelLists -->
 
 		<!-- ========================================================================== -->
-		<!-- ======================== panelDisplayLists =================================== -->
+		<!-- ======================== panelLists =================================== -->
 		<!-- ========================================================================== -->		
-		<div id="panelDisplayLists" class="tourdbPanel">
+		<div id="panelLists" class="tourdbPanel">
 
 			<!-- This div shows the filter UI -->
 			<div id="listTracksSelector">
@@ -579,7 +578,7 @@
 				<div id="tabDispLists_part"></div>
 			</div>
 			
-		</div> <!-- End div panelDisplayLists -->
+		</div> <!-- End div panelLists -->
 
 		<!-- ========================================================================== -->
 		<!-- ====================== panelImport ======================================= -->
@@ -620,10 +619,10 @@
 					-->
 
 					<div class="buttonUpload">
-						<input type="submit" class="button" id="buttonExportTracks01JSON" value="Export Tracks as JSON" />
+						<input type="submit" class="button" id="mainButtons_exportBtnTracks01JSON" value="Export Tracks as JSON" />
 					</div>
 					<div class="buttonUpload">
-						<input type="submit" class="button" id="buttonExportTracks01CSV" value="Export Tracks as CSV" />
+						<input type="submit" class="button" id="mainButtons_exportBtnTracks01CSV" value="Export Tracks as CSV" />
 					</div>
 
 				</fieldset>
@@ -905,7 +904,6 @@
 				<input type="submit" class="button" id="uiTrack_fld_cancel" value="Cancel import" />
 			</div>
 		</div>
-
 
 	</section> <!-- End main -->
 

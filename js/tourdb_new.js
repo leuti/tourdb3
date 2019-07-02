@@ -49,8 +49,8 @@ $(document).ready(function() {
     initJqueryItems();
 
     // Evaluate which button/panel is active
-    $('.panelBtn').each(function() {
-        var $thisTopicButton = $(this);                              // $thisTopicButton becomes ul.panelBtn
+    $('.mainButtons').each(function() {
+        var $thisTopicButton = $(this);                              // $thisTopicButton becomes ul.mainButtons
         $activeButton = $thisTopicButton.find('li.active');          // Find and store current active li element
         var $activeButtonA = $activeButton.find('a');                // Get link <a> from active li element 
         $topicButton = $($activeButtonA.attr('href'));               // Get active panel      
@@ -66,10 +66,10 @@ $(document).ready(function() {
     });
 
     // Change to selected panel
-    $(this).on('click', '.panelChangeBtn', function(e) {                  
+    $(this).on('click', '.mainButtons_a', function(e) {                  
         e.preventDefault();                                          // Prevent link behaviour
         var $activeButtonA = $(this)                                 // Store the current link <a> element
-        var buttonId = this.hash;                                    // Get div class of selected topic (e.g #panelDisplayLists)
+        var buttonId = this.hash;                                    // Get div class of selected topic (e.g #panelLists)
         
         // Run following block if selected topic is currently not active
         if (buttonId && !$activeButtonA.is('.active')) {
@@ -87,13 +87,13 @@ $(document).ready(function() {
 
     // ............................................................................
     // Authenticate user, display empty map and load first portion of track list
-    $(document).on('click', '#navBtns_btn_login', function (e) {
+    $(document).on('click', '#uiLogin_loginBtn', function (e) {
         e.preventDefault();
 
         // prepare json to post to service
         var jsonOut = {};                                           // Initialise JSON Object for server 
-        jsonOut["login"] = ($('#loginName').val());                 // read login name from mask
-        jsonOut["password"] = ($('#loginPasswd').val());            // append password to JSON object
+        jsonOut["login"] = ($('#uiLogin_login').val());                 // read login name from mask
+        jsonOut["password"] = ($('#uiLogin_password').val());            // append password to JSON object
         phpLocation = "services/login_new.php";                     // Variable to store location of php file
         jsn = JSON.stringify(jsonOut);                              // Convert jsonn object to JSON formated string
         
@@ -121,7 +121,7 @@ $(document).ready(function() {
                     // ----------------------
 
                     // Open Panel Display
-                    var $activeButtonA = $('#navBtns_btn_dispmap_a')            // Store the current link <a> element
+                    var $activeButtonA = $('#mainButtons_mapBtn_a')            // Store the current link <a> element
                     buttonId = $activeButtonA.attr('href'); 
                     
                     // Run following block if selected topic is currently not active
@@ -130,7 +130,7 @@ $(document).ready(function() {
                     $topicButton = $(buttonId).addClass('active');              // Make new panel active
                     $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                     $('.loginReq').removeClass('loginReq');                     // Free deactivated menues
-                    $('#navBtns_btn_login').addClass('loginReq');
+                    $('#uiLogin_loginBtn').addClass('loginReq');
 
                     // Display status message
                     // ----------------------
@@ -167,7 +167,7 @@ $(document).ready(function() {
 });
 
 // ==========================================================================
-// ========================== panelDisplayMap ===============================
+// ========================== panelMap ===============================
 // ==========================================================================
 
 // Minimize the map filter UI
@@ -891,7 +891,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
 });
 
 // ============================================================================
-// ========================== panelDisplayLists ===============================
+// ========================== panelLists ===============================
 // ============================================================================
 
 // Opens the list filter UI
@@ -1084,7 +1084,7 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
 
     // evaluate id of object to be deleted
     var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var idString = this.hash;                                       // Get div class of selected topic (e.g #panelDisplayLists)
+    var idString = this.hash;                                       // Get div class of selected topic (e.g #panelLists)
     var trackId = idString.substring(9);                            // Extract id of item to be deleted                                                  
 
     phpLocation = "services/getObject_new.php";                     // Variable to store location of php file
@@ -1165,75 +1165,21 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
     });
 });
 
-// Cancels the edit process and returns to the list view
-$(document).on('click', '#uiTrack_fld_cancel', function (e) {
-    e.preventDefault();
-    //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
-    $('#uiTrack').removeClass('active');                   // hide update form
-    $('#statusMessage').text('Edit Track cancelled');
-    $("#statusMessage").show().delay(5000).fadeOut();
-    $( "#uiTrack" ).tabs({
-        active: 0
-      });
-});
-
-// Deletes items (waypoints, participants, etc.) in the items array
-$(document).on('click', '.itemDel.uiTrack', function (e) {
-    console.info("clicked on del")
-    e.preventDefault();                                                         // Prevent link behaviour
-    var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
-    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
-    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
-
-    // Loop through items array and set display flag to false --> these records will not be saved/shown
-    // peaks
-    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
-        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
-        }    
-    }
-    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
-    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
-
-    // wayp
-    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
-        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
-        }    
-    }
-    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
-    document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
-
-    // loca
-    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
-        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
-        }    
-    }
-    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
-    document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
-
-    // part
-    for (var i = 0; i < TRACK_PART_ARRAY.length; i++) {
-        if ( TRACK_PART_ARRAY[i]["itemId"] == itemId && TRACK_PART_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_PART_ARRAY[i]["disp_f"] = false;
-        }    
-    }
-    var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
-    document.getElementById("uiTrack_partList").innerHTML = itemsTable;
-});
+// Delete track
+$(document).on('click', '.trkDel', function (e) {
+    console.log("Delete track");
+})
 
 // ==========================================================================
 // ========================== panelImport ===================================
 // ==========================================================================
 
-// Change to selected panel
+// Change to selected panel (IS THIS FUNCTION REALLY REQUIRED???)
 $(document).on('click', '.uiTrack_btns_a', function(e) {                  
     e.preventDefault();                                             // Prevent link behaviour
     
     var $activeButtonA = $(this)                                    // Store the current link <a> element
-    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelDisplayLists)
+    var buttonId = this.hash;                                       // Get div class of selected topic (e.g #panelLists)
     
     // Run following block if selected topic is currently not active
     if (buttonId && !$activeButtonA.is('.active')) {
@@ -1296,7 +1242,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiTrack_fld_trkCoordRight').val(trackObj.trkCoordRight);
                 
                 // Change current function to import
-                SESSION_OBJ.currentFunction = "imp";
+                SESSION_OBJ.currentFunction = "ins";
 
                 // Close upload file div and open form to update track data
                 $('#uiUplFileGps').removeClass('active');
@@ -1355,44 +1301,6 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
     xhr.send( jsn );                                           // send formData object to service using xhr  
 });
 
-// Deletes items (waypoints, participants, etc.) in the items array
-$(document).on('click', '.itemDel.uiTrack', function (e) {
-    console.info("clicked on del")
-    e.preventDefault();                                                         // Prevent link behaviour
-    var $activeButtonA = $(this)                                                // Store the current link <a> element
-    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelDisplayLists)
-    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
-    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
-
-    // Loop through items array and set display flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsTrkImp.length; i++) {
-        if ( itemsTrkImp[i]["itemId"] == itemId && itemsTrkImp[i]["itemType"] == itemType ) {
-            itemsTrkImp[i]["disp_f"] = false;
-        }    
-    }
-    var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrack" )
-    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
-});
-
-// Changes the status of the reached checkbox
-$(document).on('click', '.cbReached', function (e) {
-    console.info("checkbox ticked")
-    e.preventDefault();                                                         // Prevent link behaviour
-    var $activeCb = $(this)                                                     // Store the current link <a> element
-    var itemChecked = $activeCb.is(":checked");                                 // Store state of checkbox
-    cbId = $activeCb.attr("id");                                                // Read id of checked checkbox
-    var itemType = cbId.substring(3,7);                                         // Extract item type
-    var itemId = cbId.substring(7);                                             // Extract item id
-
-    // Loop through items array and set reached flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsTrkImp.length; i++) {
-        if ( itemsTrkImp[i]["itemId"] == itemId && itemsTrkImp[i]["itemType"] == itemType ) {
-            itemsTrkImp[i]["reached_f"] = itemChecked;
-        }    
-    }
-    drawItemsTables_old ( itemsTrkImp, "peak" ); 
-});
-
 // Cancels update
 $(document).on('click', '#uiTrack_fld_cancel', function (e) {
     e.preventDefault();
@@ -1407,7 +1315,7 @@ $(document).on('click', '#uiTrack_fld_cancel', function (e) {
 // ==========================================================================
 
 // Export Tracks JSON file to export directory on server
-$(document).on('click', '#buttonExportTracks01JSON', function (e) {
+$(document).on('click', '#mainButtons_exportBtnTracks01JSON', function (e) {
     e.preventDefault();
     var xhr = new XMLHttpRequest();   
     var jsonObject = {};
@@ -1431,7 +1339,7 @@ $(document).on('click', '#buttonExportTracks01JSON', function (e) {
 });
 
 // Export Tracks CSV file to export directory on server
-$(document).on('click', '#buttonExportTracks01CSV', function (e) {
+$(document).on('click', '#mainButtons_exportBtnTracks01CSV', function (e) {
     e.preventDefault();
     var xhr = new XMLHttpRequest();   
     var jsonObject = {};
@@ -1582,10 +1490,22 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
 
                 $('#statusMessage').text(respObj.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
-
-                // Purge TRACK_PART_ARRAY and TRACK_WAYP_ARRAY
-                TRACK_PART_ARRAY = {};
+                
+                // Purge TRACK_PART_ARRAY and TRACK_WAYP_ARRAY (array and UI)
                 TRACK_WAYP_ARRAY = {};
+                var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
+                document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
+    
+                var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
+                document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
+    
+                var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
+                document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
+    
+                TRACK_PART_ARRAY = {};
+                var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
+                document.getElementById("uiTrack_partList").innerHTML = itemsTable;
+    
 
                 // ------------------------------
                 // Gen KML for imported File
@@ -1732,12 +1652,106 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                   });
             } else {
                 // Track and / related tables could not be correctly inserted
-                // Task?: Make panelImport disappear and panelDisplayLists appear
+                // Task?: Make panelImport disappear and panelLists appear
                 $('#statusMessage').text(respObj.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }
         });
     }
+});
+
+// Cancels the edit process and returns to the list view
+$(document).on('click', '#uiTrack_fld_cancel', function (e) {
+    e.preventDefault();
+    //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
+    
+    // Purge TRACK_PART_ARRAY and TRACK_WAYP_ARRAY (array and UI)
+    TRACK_WAYP_ARRAY = {};
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
+    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
+
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
+    document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
+
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
+    document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
+
+    TRACK_PART_ARRAY = {};
+    var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
+    document.getElementById("uiTrack_partList").innerHTML = itemsTable;
+
+    $('#uiTrack').removeClass('active');                   // hide update form
+    $('#statusMessage').text('Edit Track cancelled');
+    $("#statusMessage").show().delay(5000).fadeOut();
+    $( "#uiTrack" ).tabs({
+        active: 0
+      });
+});
+
+// Deletes items (waypoints, participants, etc.) in the track UI
+$(document).on('click', '.itemDel.uiTrack', function (e) {
+    console.info("clicked on del")
+    e.preventDefault();                                                         // Prevent link behaviour
+    var $activeButtonA = $(this)                                                // Store the current link <a> element
+    var itemDelId = this.hash;                                                  // Get div class of selected topic (e.g #panelLists)
+    var itemType = itemDelId.substring(1,5);                                    // Get type of item to delete
+    var itemId = itemDelId.substring(9);                                        // Extract id of item to be deleted
+
+    // Loop through items array and set display flag to false --> these records will not be saved/shown
+    // peaks
+    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
+        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
+            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
+    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
+
+    // wayp
+    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
+        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
+            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
+    document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
+
+    // loca
+    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
+        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
+            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
+    document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
+
+    // part
+    for (var i = 0; i < TRACK_PART_ARRAY.length; i++) {
+        if ( TRACK_PART_ARRAY[i]["itemId"] == itemId && TRACK_PART_ARRAY[i]["itemType"] == itemType ) {
+            TRACK_PART_ARRAY[i]["disp_f"] = false;
+        }    
+    }
+    var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
+    document.getElementById("uiTrack_partList").innerHTML = itemsTable;
+});
+
+// Changes the status of the reached checkbox
+$(document).on('click', '.cbReached', function (e) {
+    console.info("checkbox ticked")
+    e.preventDefault();                                                         // Prevent link behaviour
+    var $activeCb = $(this)                                                     // Store the current link <a> element
+    var itemChecked = $activeCb.is(":checked");                                 // Store state of checkbox
+    cbId = $activeCb.attr("id");                                                // Read id of checked checkbox
+    var itemType = cbId.substring(3,7);                                         // Extract item type
+    var itemId = cbId.substring(7);                                             // Extract item id
+
+    // Loop through items array and set reached flag to false --> these records will not be saved/shown
+    for (var i = 0; i < itemsTrkImp.length; i++) {
+        if ( itemsTrkImp[i]["itemId"] == itemId && itemsTrkImp[i]["itemType"] == itemType ) {
+            itemsTrkImp[i]["reached_f"] = itemChecked;
+        }    
+    }
+    drawItemsTables_old ( itemsTrkImp, "peak" ); 
 });
 
 // =============================================

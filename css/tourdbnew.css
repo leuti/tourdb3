@@ -46,7 +46,7 @@ em { /* formatting for DB in logo*/
 }*/
 
 /********** TOPIC BUTTONS **********/
-.navBtns_btn_li.loginReq {
+.mainButtons_li.loginReq {
     display: none;
 }
 
@@ -55,7 +55,7 @@ em { /* formatting for DB in logo*/
     padding: 0;
     padding-top: 36px;}
 
-.navBtns_btn_li, .uiTrkImp_btns_li, .uiTrack_btns_li {
+.mainButtons_li, .uiTrkImp_btns_li, .uiTrack_btns_li {
     display: inline-block;
     /*list-style-type: none;*/
     background-color: #cce6ff;
@@ -66,19 +66,19 @@ em { /* formatting for DB in logo*/
     /*border-bottom: 3px solid #cce6ff;*/
 }
 
-.navBtns_btn_li.active {
+.mainButtons_li.active {
     background-color: #4da9ff;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.navBtns_btn_li:hover {
+.mainButtons_li:hover {
     background-color: #b16af8;
     /*border-bottom: 3px solid #4da9ff;
     border-bottom: 3px solid #4da9ff;*/
 }
 
-.panelChangeBtn, .uiTrkImp_btns_a, .uiTrkImp_btns_a {
+.mainButtons_a, .uiTrkImp_btns_a, .uiTrkImp_btns_a {
     display: block;
     color: #001a33;
     padding: 3px 30px 3px 30px;
