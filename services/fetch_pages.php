@@ -95,7 +95,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
         echo '<td>';
         echo '<ul>';
         echo '<li class="button_Li">';
-        echo '<a class="trkEdit button_A " href="#trkEdit_' . $singleRecord["trkId"] . '">';
+        echo '<a class="uiTrack uiTrackEditBtn " href="#trkEdit_' . $singleRecord["trkId"] . '">';
         echo '<img id="trkEdit_' . $singleRecord["trkId"] . '" src="css/images/edit16.png">';
         echo '</a>';
         echo '</li>';
@@ -104,7 +104,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
         echo '<td>';
         echo '<ul>';
         echo '<li class="button_Li">';
-        echo '<a class="trkDel button_A " href="#trkDel_' . $singleRecord["trkId"] . '">';
+        echo '<a class="trkDel" href="#trkDel_' . $singleRecord["trkId"] . '">';
         echo '<img id="trkDel_' . $singleRecord["trkId"] . '" src="css/images/delete.png">';
         echo '</a>';
         echo '</li>';

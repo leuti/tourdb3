@@ -6,7 +6,7 @@
 //
 // INPUT
 // It is expecting a JSON object with following content: 
-// ["sessionid"], ["sqlWhere"], ["genTrackKml"],["sqlWhereSegments"]["genSegKml"]
+// ["sessionId"], ["sqlWhere"], ["genTrackKml"],["sqlWhereSegments"]["genSegKml"]
 //
 // OUTPUT
 // The script returns a JSON object with following content:
@@ -54,26 +54,28 @@ $styleArray = array(
 
 // Open log file
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
+    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml_new.log";                // Assign file location
+    //$logFileLoc = dirname(__FILE__) . "/../log/" . basename(__FILE__)";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: gen_kml.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": " . basename(__FILE__) . " opened \r\n"); 
 };
 
 // variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
-$sessionid = $receivedData["sessionid"];                                    
+$sessionId = $receivedData["sessionId"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
 
 if ($debugLevel >= 3){
-    fputs($logFile, 'Line 72: Received parameters:' . "\r\n");
-    fputs($logFile, 'objectName:       ' . $objectName . "\r\n");
-    fputs($logFile, 'sqlWhere:        ' . $sqlWhere . "\r\n");
+    fputs($logFile, "Line " . __LINE__ . ": Received parameters: \r\n");
+    fputs($logFile, "   objectName: " . $objectName . "\r\n");
+    fputs($logFile, "   sessionId:  " . $sessionId . "\r\n");
+    fputs($logFile, "   sqlWhere:   " . $sqlWhere . "\r\n");
 };
 
 // create upload dir / file name
-$kml_dir = '../tmp/kml_disp/' . $sessionid . '/';                           // Session id used to create unique directory
+$kml_dir = '../tmp/kml_disp/' . $sessionId . '/';                           // Session id used to create unique directory
 if (!is_dir ( $kml_dir )) {                                                 // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
@@ -114,7 +116,7 @@ if ( $objectName == "tracks" ) {
 
     $records = mysqli_query($conn, $sql);
 
-    if ($debugLevel >= 3) fputs($logFile, 'Line 117: sql to select track: ' . $sql . "\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sql to select track: " . $sql . "\r\n");
 
     // Loop through each selected track and write main track data
     while($singleRecord = mysqli_fetch_assoc($records))
@@ -188,19 +190,25 @@ if ( $objectName == "tracks" ) {
     fclose($trackOutFile);                                                      // close kml file
 
     $returnMessage = "$countTracks Tracks found"; 
+
+    if ( $countTracks > 0 ) {
     
-    // Create return object
-    $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-    $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
-    $returnObject['coordTop'] = $coordTop;
-    $returnObject['coordBottom'] = $coordBottom;
-    $returnObject['coordLeft'] = $coordLeft;
-    $returnObject['coordRight'] = $coordRight;
-    $returnObject['recordcount'] = $countTracks;
-    $returnObject['objectName'] = $objectName;
+        // Create return object
+        $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+        $returnObject['coordTop'] = $coordTop;
+        $returnObject['coordBottom'] = $coordBottom;
+        $returnObject['coordLeft'] = $coordLeft;
+        $returnObject['coordRight'] = $coordRight;
+        $returnObject['recordcount'] = $countTracks;
+        $returnObject['objectName'] = $objectName;
+    } else {
+        $returnObject['status'] = 'NOK';                                             // add status field (OK) to trackobj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+    }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
-    if ( $debugLevel >= 1 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
     if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
     // Close all files and connections
@@ -290,7 +298,7 @@ if ( $objectName == "segments" ) {
     $records = mysqli_query($conn, $sql);
     
     if ($debugLevel >= 3){
-        fputs($logFile, 'Line 182: sql: ' . $sql . "\r\n");
+        fputs($logFile, "Line " . __LINE__ . ": sql: " . $sql . "\r\n");
     };
 
     // Loop through each selected track and write main track data
@@ -341,15 +349,15 @@ if ( $objectName == "segments" ) {
         $firstRecord = false;
         if ( $debugLevel >= 3 ) {
             fputs($logFile, "=============================================\r\n");
-            fputs($logFile, "Line 78: segId: " . $singleRecord["segId"] . $singleRecord["segName"] . "\r\n");
-            fputs($logFile, "Line 78: segcoordTop: " . $singleRecord["segCoordTop"] ."\r\n");
-            fputs($logFile, "Line 79: segcoordBottom: " . $singleRecord["segCoordBottom"] ."\r\n");
-            fputs($logFile, "Line 80: segcoordLeft: " . $singleRecord["segCoordLeft"] ."\r\n");
-            fputs($logFile, "Line 81: segcoordRight: " . $singleRecord["segCoordRight"] ."\r\n");  
-            fputs($logFile, "Line 78: coordTop: $coordTop\r\n");
-            fputs($logFile, "Line 79: coordBottom: $coordBottom\r\n");
-            fputs($logFile, "Line 80: coordLeft: $coordLeft\r\n");
-            fputs($logFile, "Line 81: coordRight: $coordRight\r\n");    
+            fputs($logFile, "Line " . __LINE__ . ": segId: " . $singleRecord["segId"] . $singleRecord["segName"] . "\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": segcoordTop: " . $singleRecord["segCoordTop"] ."\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": segcoordBottom: " . $singleRecord["segCoordBottom"] ."\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": segcoordLeft: " . $singleRecord["segCoordLeft"] ."\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": segcoordRight: " . $singleRecord["segCoordRight"] ."\r\n");  
+            fputs($logFile, "Line " . __LINE__ . ": coordTop: $coordTop\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": coordBottom: $coordBottom\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": coordLeft: $coordLeft\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": coordRight: $coordRight\r\n");    
         }
     };
 
@@ -380,7 +388,7 @@ $returnObject['recordcount'] = $countSegments;
 $returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $debugLevel >= 1 ) fputs($logFile, "Line 281: $countTracks Segments processed\r\n");
+if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
 if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections

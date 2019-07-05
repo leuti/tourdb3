@@ -27,7 +27,7 @@ $importGpxLog = dirname(__FILE__) . "/../log/getObject_new.log";        // Assig
 if ( $debugLevel >= 1 ) {
     $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
     fputs($logFile, "\r\n============================================================\r\n");    
-    fputs($logFile, "getObject_new.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+    fputs($logFile, "getObject.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 }
 
 // variables passed on by client (as JSON object)

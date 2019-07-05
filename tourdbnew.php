@@ -16,7 +16,7 @@
 	<title>tourdb 3.0</title>
 
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
-	<link type="text/css" rel="stylesheet" href="css/tourdbnew.css">	
+	<link type="text/css" rel="stylesheet" href="css/tourdb.css">	
 </head>
 <body>
 	<!-- load jquery sources -->
