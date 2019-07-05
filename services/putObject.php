@@ -17,14 +17,10 @@
 // message:         Message about performed action
 // trkId:           track ID
 
-$debugLevel = 3; 
-
 // Set variables and parameters
 include("config.inc.php");                                              // include config file
 include("coord_funct.inc.php");                                         // include coord calc functions
 date_default_timezone_set('Europe/Zurich');                             // must be set when using time functions
-
-$loopSize = 5000;                                                       // Number of trkPts inserted in one go
 
 // Open file to write log
 $logFileName = dirname(__FILE__) . "/../log/putObject.log";             // Assign file location
