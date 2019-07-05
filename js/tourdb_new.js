@@ -37,7 +37,7 @@ var trackKMLlayer;                                                   // map laye
 var segKMLlayer;                                                     // map layer object containing all segments
 var mapSTlayer_grau;                                                 // map layer object containing the b/w swiss map
 
-itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
+//itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -1195,7 +1195,7 @@ $(document).on('click', '.uiTrack_btns_a', function(e) {
 $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();                                                                                 
     var xhr = new XMLHttpRequest();                                            // create new xhr object
-    itemsTrkImp = [];                                              // array to store selected peaks, waypoints, locations and participants
+    //itemsTrkImp = [];                                              // array to store selected peaks, waypoints, locations and participants
 
     // Execute following code when JSON object is received from importGpsTmp.php - TEMP service
     xhr.onload = function() {
@@ -1440,7 +1440,8 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     $('#uiTrack_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackObj.trkMeterDown = $('#uiTrack_fld_trkMeterDown').val();
     valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
-    valid = valid && checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" );
+    valid = valid && ( checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" ) 
+    || checkRegexp ( $('#uiTrack_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" ) );
     
     $('#uiTrack_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
     country = $('#uiTrack_fld_trkCountry').val();
@@ -1492,7 +1493,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 $('#statusMessage').show().delay(5000).fadeOut();
                 
                 // Purge TRACK_PART_ARRAY and TRACK_WAYP_ARRAY (array and UI)
-                TRACK_WAYP_ARRAY = {};
+                TRACK_WAYP_ARRAY = new Array();
                 var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
                 document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
     
@@ -1502,11 +1503,10 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
                 document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
     
-                TRACK_PART_ARRAY = {};
+                TRACK_PART_ARRAY = new Array();
                 var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
                 document.getElementById("uiTrack_partList").innerHTML = itemsTable;
     
-
                 // ------------------------------
                 // Gen KML for imported File
                 var xhr = new XMLHttpRequest();
@@ -1620,17 +1620,24 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 jsn = JSON.stringify(jsonObject);
                 xhr.send( jsn );                                                        // send formData object to service using xhr   
       
-                // empty items array and redraw empty items array
-                itemsTrkImp = new Array();
-                drawItemsTables_old ( itemsTrkImp, "peak" ); 
-                drawItemsTables_old ( itemsTrkImp, "wayp" ); 
-                drawItemsTables_old ( itemsTrkImp, "loca" ); 
-                drawItemsTables_old ( itemsTrkImp, "part" ); 
+                // Load first set of tracks to be displayed in the List panel
+                // ----------------------------------------------------------
+                var page = 1;
+                fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";      // where string for list view (fetch_pages_new.php)
+                $("#tabDispLists_trks").load("services/fetch_pages_new.php",
+                    {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
-                $( "#uiTrack_peakSrch" ).val("");
-                $( "#uiTrack_waypSrch" ).val("");
-                $( "#uiTrack_locaSrch" ).val("");
-                $( "#uiTrack_partSrch" ).val("");
+                // empty items array and redraw empty items array
+                // itemsTrkImp = new Array();
+                // drawItemsTables_old ( itemsTrkImp, "peak" ); 
+                // drawItemsTables_old ( itemsTrkImp, "wayp" ); 
+                // drawItemsTables_old ( itemsTrkImp, "loca" ); 
+                // drawItemsTables_old ( itemsTrkImp, "part" ); 
+
+                // $( "#uiTrack_peakSrch" ).val("");
+                // $( "#uiTrack_waypSrch" ).val("");
+                // $( "#uiTrack_locaSrch" ).val("");
+                // $( "#uiTrack_partSrch" ).val("");
 
                 // Open Panel Display
                 var $activeButtonA = $('#navBtns_btn_diplay_a');                // Store the current link <a> element
@@ -1666,7 +1673,7 @@ $(document).on('click', '#uiTrack_fld_cancel', function (e) {
     //$('#uiUplFileGps').addClass('active');                 // Make File upload div visible
     
     // Purge TRACK_PART_ARRAY and TRACK_WAYP_ARRAY (array and UI)
-    TRACK_WAYP_ARRAY = {};
+    TRACK_WAYP_ARRAY = new Array();
     var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
     document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
 
@@ -1676,7 +1683,7 @@ $(document).on('click', '#uiTrack_fld_cancel', function (e) {
     var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
     document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
 
-    TRACK_PART_ARRAY = {};
+    TRACK_PART_ARRAY = new Array();
     var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
     document.getElementById("uiTrack_partList").innerHTML = itemsTable;
 
@@ -1689,7 +1696,7 @@ $(document).on('click', '#uiTrack_fld_cancel', function (e) {
 });
 
 // Deletes items (waypoints, participants, etc.) in the track UI
-$(document).on('click', '.itemDel.uiTrack', function (e) {
+$(document).on('click', '.itemDel', function (e) {
     console.info("clicked on del")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeButtonA = $(this)                                                // Store the current link <a> element
@@ -1701,7 +1708,7 @@ $(document).on('click', '.itemDel.uiTrack', function (e) {
     // peaks
     for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
         if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+            TRACK_WAYP_ARRAY[i]["disp_f"] = 0;
         }    
     }
     var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
@@ -1710,7 +1717,7 @@ $(document).on('click', '.itemDel.uiTrack', function (e) {
     // wayp
     for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
         if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+            TRACK_WAYP_ARRAY[i]["disp_f"] = 0;
         }    
     }
     var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
@@ -1719,7 +1726,7 @@ $(document).on('click', '.itemDel.uiTrack', function (e) {
     // loca
     for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
         if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_WAYP_ARRAY[i]["disp_f"] = false;
+            TRACK_WAYP_ARRAY[i]["disp_f"] = 0;
         }    
     }
     var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
@@ -1728,7 +1735,7 @@ $(document).on('click', '.itemDel.uiTrack', function (e) {
     // part
     for (var i = 0; i < TRACK_PART_ARRAY.length; i++) {
         if ( TRACK_PART_ARRAY[i]["itemId"] == itemId && TRACK_PART_ARRAY[i]["itemType"] == itemType ) {
-            TRACK_PART_ARRAY[i]["disp_f"] = false;
+            TRACK_PART_ARRAY[i]["disp_f"] = 0;
         }    
     }
     var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
@@ -1740,18 +1747,24 @@ $(document).on('click', '.cbReached', function (e) {
     console.info("checkbox ticked")
     e.preventDefault();                                                         // Prevent link behaviour
     var $activeCb = $(this)                                                     // Store the current link <a> element
-    var itemChecked = $activeCb.is(":checked");                                 // Store state of checkbox
+    //var itemChecked = $activeCb.is(":checked");                                 // Store state of checkbox
+    if ( $activeCb.is(":checked") == true ) {
+        itemChecked = 1;
+    } else {
+        itemChecked = 0;
+    }
     cbId = $activeCb.attr("id");                                                // Read id of checked checkbox
     var itemType = cbId.substring(3,7);                                         // Extract item type
     var itemId = cbId.substring(7);                                             // Extract item id
 
     // Loop through items array and set reached flag to false --> these records will not be saved/shown
-    for (var i = 0; i < itemsTrkImp.length; i++) {
-        if ( itemsTrkImp[i]["itemId"] == itemId && itemsTrkImp[i]["itemType"] == itemType ) {
-            itemsTrkImp[i]["reached_f"] = itemChecked;
+    for (var i = 0; i < TRACK_WAYP_ARRAY.length; i++) {
+        if ( TRACK_WAYP_ARRAY[i]["itemId"] == itemId && TRACK_WAYP_ARRAY[i]["itemType"] == itemType ) {
+            TRACK_WAYP_ARRAY[i]["reached_f"] = itemChecked;
         }    
     }
-    drawItemsTables_old ( itemsTrkImp, "peak" ); 
+    itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" );                           // WAS OLD
+    document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
 });
 
 // =============================================
@@ -1947,10 +1960,10 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "peak";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default
+            itemsList.reached_f = 1;                              // Set reached flag to true as default
 
-            itemsTrkImp.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( itemsTrkImp, "peak", "uiTrack" )
+            TRACK_WAYP_ARRAY.push(itemsList);                              // Push record to array
+            var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
             document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
             // not working: $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
 
@@ -1972,11 +1985,11 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "wayp";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default
+            itemsList.reached_f = 1;                              // Set reached flag to true as default
 
-            itemsTrkImp.push(itemsList);
+            TRACK_WAYP_ARRAY.push(itemsList);
 
-            drawItemsTables_old ( itemsTrkImp, "wayp" ); 
+            drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" );            // WAS OLD
         }
     });
     $( "#uiTrack_locaSrch" ).autocomplete({
@@ -1995,11 +2008,11 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "loca";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
+            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
 
-            itemsTrkImp.push(itemsList);
+            TRACK_WAYP_ARRAY.push(itemsList);
 
-            drawItemsTables_old ( itemsTrkImp, "loca" ); 
+            drawItemsTables ( TRACK_PART_ARRAY, "loca", "uiTrack" );        //WAS OLD
         }
     });
     $( "#uiTrack_partSrch" ).autocomplete({
@@ -2018,10 +2031,10 @@ function initJqueryItems () {
             itemsList.itemType = "part";                             // Type of item (must be 4 char)
             itemsList.itemId = id;                                   // id of item selected
             itemsList.itemName = value;                              // Name of item selected
-            //itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
+            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
 
-            itemsTrkImp.push(itemsList);                              // Add selected item to array
-            drawItemsTables_old ( itemsTrkImp, "part" ); 
+            TRACK_WAYP_ARRAY.push(itemsList);                              // Add selected item to array
+            drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" );       // WAS OLD
         }
     });
     
@@ -2068,7 +2081,7 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "peak";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default
+            itemsList.reached_f = 1;                              // Set reached flag to true as default
 
             TRACK_WAYP_ARRAY.push(itemsList);                              // Push record to array
             var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
@@ -2092,7 +2105,7 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "wayp";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default
+            itemsList.reached_f = 1;                              // Set reached flag to true as default
 
             TRACK_WAYP_ARRAY.push(itemsList);
             var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" )
@@ -2115,7 +2128,7 @@ function initJqueryItems () {
             itemsList.itemName = value;                              // Name of item selected
             itemsList.itemType = "loca";                             // Type of item (must be 4 char)
             itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = true;                              // Set reached flag to true as default --> not stored
+            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
 
             TRACK_WAYP_ARRAY.push(itemsList);
             var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "loca", "uiTrack" )
@@ -2576,8 +2589,8 @@ function drawItemsTables ( itemsArray, itemType, elDelClass ) {
     //                - disp_f: {1|0|true|false}
     //                - itemId: num (id of item)
     //                - itemName: string (name of item at display)
-    //                - reached_f: [true|false]
-    //    itemType: string {peak,wayp,loca,part}
+    //                - reached_f: [1=true|0=false]
+    //    itemType: Item which table needs to be changed - string {peak,wayp,loca,part}
     //    elDelClass: string 
 
     // Assign var
@@ -2613,7 +2626,7 @@ function drawItemsTables ( itemsArray, itemType, elDelClass ) {
                 }
             }
             itemsTable += '<td><ul class="tblItems">';
-            itemsTable += '<li class="button_Li"><a class="itemDel uiTrackEditBtn ' + elDelClass + '"' 
+            itemsTable += '<li class="button_Li"><a class="itemDel ' + elDelClass + '"' 
                             + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
                             + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
                             itemsTable += '</tr>';
@@ -2661,7 +2674,7 @@ function drawItemsTables_old ( itemsArray, itemType ) {
                 }
             }
             itemsTable += '<td><ul class="' + itemClass + '">';
-            itemsTable += '<li class="button_Li"><a class="itemDel uiTrackEditBtn"' 
+            itemsTable += '<li class="button_Li"><a class="itemDel "' 
                             + ' href="#' + itemDelClass + '_' + itemsArray[i]["itemId"] + '">'
                             + '<img id="' + itemDelImg + '" src="css/images/delete.png"></a></li></ul></td>';
                             itemsTable += '</tr>';

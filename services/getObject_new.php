@@ -18,8 +18,6 @@
 // Created: 25.6.2019 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
 
-$debugLevel = 3;
-
 // Set variables and parameters
 include("config.inc.php");                                        // include config file
 date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
@@ -73,14 +71,14 @@ if ( $objectType == "trk" ) {
                 $itemType = "wayp";
             } 
 
-            if ($debugLevel >= 3) fputs($logFile, "Line 79: waypNameLong: " . $trackWaypRecord["waypNameLong"] . "\r\n");
+            if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": trwpReached_f: " . $trackWaypRecord["trwpReached_f"] . "\r\n");
 
             $trkWpLine = array (
                 "disp_f" => 1,
                 "itemId" => $trackWaypRecord["trwpWaypId"],
                 "itemName" => $trackWaypRecord["waypNameLong"],                                             // add inner join
                 "itemType" => $itemType,
-                "reached_f" => $trackWaypRecord["trwpReached_f"]
+                "reached_f" => intval($trackWaypRecord["trwpReached_f"])
             );
             array_push ($trackWaypArray, $trkWpLine);
         }
