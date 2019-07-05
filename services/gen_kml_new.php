@@ -22,8 +22,6 @@
 
 // -----------------------------------
 // Set variables and parameters    
-$debugLevel = 3;
-
 date_default_timezone_set('Europe/Zurich');
 include("config.inc.php");                                                  // Include config file
 
