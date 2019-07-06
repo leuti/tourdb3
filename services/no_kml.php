@@ -28,7 +28,8 @@ $returnObject['status'] = 'OK';                                             // a
 $returnObject['message'] = 'This php returns always an empty OK message';   // add empty error message to trackObj
 $returnObject['recordcount'] = 0;
 $returnObject['objectName'] = $objectName;
-echo json_encode('OK');                                            // echo JSON object to client
+
+echo json_encode($returnObject);  
 
 if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
 
