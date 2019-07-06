@@ -35,7 +35,7 @@ $receivedData = json_decode($content, true);
 
 // read variables from JSON object
 $request = $receivedData["request"];
-$loginName = $receivedData["loginname"];
+$loginName = $receivedData["login"];
 
 if ($debugLevel > 2) fputs($logFile, "Line 42: Request (JSON): $request\r\n");    
 

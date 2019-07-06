@@ -34,20 +34,20 @@ if ($debugLevel >= 1){
     
 // variables passed on by client (as JSON object)
 $receivedData = json_decode ( file_get_contents('php://input'), true );
-$sessionid = $receivedData["sessionid"];                                    
+$sessionId = $receivedData["sessionId"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
 $login = $receivedData["login"];
 
 if ($debugLevel >= 3){
     fputs($logFile, "<$objectName> Line 72: Received parameters:\r\n");
-    fputs($logFile, "<$objectName> sessionid:       $sessionid\r\n");
+    fputs($logFile, "<$objectName> sessionId:       $sessionId\r\n");
     fputs($logFile, "<$objectName> sqlWhere:        $sqlWhere\r\n");
     fputs($logFile, "<$objectName> objectName:      $objectName\r\n");
 };
 
 // create upload dir / file name
-$kml_dir = '../tmp/kml_disp/' . $sessionid . '/';                           // Session id used to create unique directory
+$kml_dir = '../tmp/kml_disp/' . $sessionId . '/';                           // Session id used to create unique directory
 if (!is_dir ( $kml_dir )) {                                                 // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
@@ -153,8 +153,8 @@ fputs($waypOutFile, "$kmlOutput");                                       // Writ
 fclose($waypOutFile);
 
 // Create return object
-$returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['message'] = 'kml file generated with ' . $recordCount . ' ' . $objectName;                            // add empty error message to trackobj
+$returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
+$returnObject['message'] = 'kml file generated with ' . $recordCount . ' ' . $objectName;                            // add empty error message to trackObj
 $returnObject['recordcount'] = $recordCount;
 $returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client

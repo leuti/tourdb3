@@ -216,7 +216,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "tracks";
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -252,7 +252,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "segments";
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -292,7 +292,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_100";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -331,7 +331,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_1000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -370,7 +370,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_2000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -409,7 +409,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_3000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -446,7 +446,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_4000";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -484,7 +484,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "peaks_cant";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -522,7 +522,7 @@ $(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
     var objName = "huts";
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
-        sessionid: SESSION_OBJ.sessionId,
+        sessionId: SESSION_OBJ.sessionId,
         login: SESSION_OBJ.login,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
@@ -1260,10 +1260,10 @@ $(document).on('click', '#buttonUploadFile', function (e) {
     if ( fileName ) {
         phpLocation = "services/importGps.php";                                 // Variable to store location of php file
         var formData = new FormData();                                          // create new formData object
-        formData.append('sessionid', SESSION_OBJ.sessionId);                                // append parameter session ID
+        formData.append('sessionId', SESSION_OBJ.sessionId);                                // append parameter session ID
         formData.append('request', 'temp')                                      // temp request to create track temporarily
-        formData.append('filename', fileName);                                  // append parameter filename
-        formData.append('loginname', SESSION_OBJ.login);                               // append parameter file type
+        formData.append('fileName', fileName);                                  // append parameter fileName
+        formData.append('login', SESSION_OBJ.login);                               // append parameter file type
         xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
         xhr.send(formData);                                                     // send formData object to service using xhr
     } else {
@@ -1291,10 +1291,10 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
     } 
     var fileName = $('#inputFileJSON').val();
     phpLocation = "services/importGps.php";          // Variable to store location of php file
-    jsonObject["sessionid"] = SESSION_OBJ.sessionId;                             // append parameter session ID
+    jsonObject["sessionId"] = SESSION_OBJ.sessionId;                             // append parameter session ID
     jsonObject["request"] = 'json';                              // temp request to create track temporarily
-    jsonObject["filename"] = fileName;                              // send track object
-    jsonObject["loginname"] = SESSION_OBJ.login;
+    jsonObject["fileName"] = fileName;                              // send track object
+    jsonObject["login"] = SESSION_OBJ.login;
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
@@ -1331,7 +1331,7 @@ $(document).on('click', '#mainButtons_exportBtnTracks01JSON', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_JSON';                                    // temp request to create track temporarily
-    jsonObject["loginname"] = SESSION_OBJ.login;
+    jsonObject["login"] = SESSION_OBJ.login;
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
@@ -1355,7 +1355,7 @@ $(document).on('click', '#mainButtons_exportBtnTracks01CSV', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_CSV';                                     // temp request to create track temporarily
-    jsonObject["loginname"] = SESSION_OBJ.login;
+    jsonObject["login"] = SESSION_OBJ.login;
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);

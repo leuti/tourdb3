@@ -24,8 +24,8 @@ $objectName = $receivedData["objectName"];
 if ( $debugLevel >= 1 ) fputs($logFile, "objectName: $objectName\r\n"); 
 
 // Create return object
-$returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['message'] = 'This php returns always an empty OK message';   // add empty error message to trackobj
+$returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
+$returnObject['message'] = 'This php returns always an empty OK message';   // add empty error message to trackObj
 $returnObject['recordcount'] = 0;
 $returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client

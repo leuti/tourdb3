@@ -11,8 +11,8 @@
 // The table tbl_trackpoints is not used anymore
 
 // Parameters:
-// sessionid: id of user session; used to ensure multi-user capabilities
-// filename: name of file to be uploaded (one at a time); file is expected at import/gpx or import/kml
+// sessionId: id of user session; used to ensure multi-user capabilities
+// fileName: name of file to be uploaded (one at a time); file is expected at import/gpx or import/kml
 // filetype: type of file to be imported (gpx or kml)
 
 // Return object
@@ -78,19 +78,19 @@ if ($request == "temp") {
     // ---------------------------------------------------------------------------------
   
     // Read posted parameters
-    $sessionid = $_REQUEST["sessionid"];                                // ID of current user session - required to make site multiuser capable
-    $filename = basename($_FILES['filename']['name']);                  // file name of gps file to be processed
-    $loginname = $_REQUEST["loginname"];                                // Login name
-    $fileinfo = pathinfo($filename);                                    // evaluate file extension 
+    $sessionId = $_REQUEST["sessionId"];                                // ID of current user session - required to make site multiuser capable
+    $fileName = basename($_FILES['fileName']['name']);                  // file name of gps file to be processed
+    $login = $_REQUEST["login"];                                // Login name
+    $fileinfo = pathinfo($fileName);                                    // evaluate file extension 
     $filetype = $fileinfo['extension'];
-    if ($debugLevel >= 3) fputs($logFile, "Line 94: Parameters: sessionid:$sessionid | filename:$filename | filetype:$filetype | loginname:$loginname\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line 94: Parameters: sessionId:$sessionId | fileName:$fileName | filetype:$filetype | login:$login\r\n");    
 
     // if file type = gpx or kml --> create directory and copy file 
     if ( $filetype == "gpx" ) {
         
         // create upload dir / file name
-        $uploaddir = '../tmp/gps_uploads/' . $sessionid . '/';          // Session id used to create unique directory
-        $uploadfile = $uploaddir . $filename;           
+        $uploaddir = '../tmp/gps_uploads/' . $sessionId . '/';          // Session id used to create unique directory
+        $uploadfile = $uploaddir . $fileName;           
         if (!is_dir ( $uploaddir )) {                                   // Create directory with name = session id
             mkdir($uploaddir, 0777);
         }
@@ -98,10 +98,10 @@ if ($request == "temp") {
         if ( $debugLevel >= 3 ) fputs($logFile, "Line 106 - uploadfile: $uploadfile\r\n");
 
         // move file to upload dir
-        if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
-            if ( $debugLevel >= 3) fputs($logFile, "Line 110 - file " . $_FILES['filename']['name'] . " successfully uploaded to: $uploaddir\r\n");    
+        if (move_uploaded_file($_FILES['fileName']['tmp_name'], $uploadfile)) {         // move uploaded file to target dir
+            if ( $debugLevel >= 3) fputs($logFile, "Line 110 - file " . $_FILES['fileName']['name'] . " successfully uploaded to: $uploaddir\r\n");    
         } else {
-            fputs($logFile, "Line 112 - error uploading file " . $_FILES['filename']['name'] . " to: $uploaddir\r\n"); 
+            fputs($logFile, "Line 112 - error uploading file " . $_FILES['fileName']['name'] . " to: $uploaddir\r\n"); 
         }  
 
         // read gpx file structure & content
@@ -319,7 +319,7 @@ if ($request == "temp") {
 
         // write var to track obj
         $trackObj = array (
-            "trkSourceFileName"=>$filename,
+            "trkSourceFileName"=>$fileName,
             "trkTrackName"=>"$trackName",
             "trkRoute"=>"$trackName",
             "trkDateBegin"=>$DateBegin,
@@ -385,25 +385,25 @@ if ($request == "temp") {
     // ----------------------------------------------------
 
     // read received INPUT object
-    $trackobj = array();                                                // array storing track data in array
-    $sessionid = $receivedData["sessionid"];                            // ID of current user session - required to make site multiuser capable
-    $loginname = $receivedData["loginname"];
-    $trackobj = $receivedData["trackobj"];                              // Array of track data 
+    $trackObj = array();                                                // array storing track data in array
+    $sessionId = $receivedData["sessionId"];                            // ID of current user session - required to make site multiuser capable
+    $login = $receivedData["login"];
+    $trackObj = $receivedData["trackObj"];                              // Array of track data 
     
-    if ( $debugLevel >= 3) fputs($logFile, "Line 401: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line 401: sessionId: $sessionId - request: $request - login: $login\r\n");  
     
     // Create SQL statement to insert track 
     $sql = " INSERT INTO `tourdb2_prod`.`tbl_tracks` (";
 
     // Loop through received track object and add to SQL statement
-    foreach ($trackobj as $dbField => $content) {                       // Generate update statement
+    foreach ($trackObj as $dbField => $content) {                       // Generate update statement
         $sql .= "`$dbField`,";
     }
     $sql = substr($sql,0,strlen($sql)-1);                               // remove last ,
     $sql .= ") VALUES (";
     
     // Loop through received track object and add to SQL statement
-    foreach ($trackobj as $dbField => $content) {                       // Generate update statement
+    foreach ($trackObj as $dbField => $content) {                       // Generate update statement
         $sql .= "'$content',";
     }
     $sql = substr($sql,0,strlen($sql)-1);                               // remove last ,
@@ -524,14 +524,14 @@ if ($request == "temp") {
     // ---------------------------------------------------------------------------------
 
     // read received INPUT object
-    $trackobj = array();                                                // array storing track data in array
-    $sessionid = $receivedData["sessionid"];                            // ID of current user session - required to make site multiuser capable
-    $loginname = $receivedData["loginname"];
-    $trackobj = $receivedData["trackobj"];                              // Array of track data 
+    $trackObj = array();                                                // array storing track data in array
+    $sessionId = $receivedData["sessionId"];                            // ID of current user session - required to make site multiuser capable
+    $login = $receivedData["login"];
+    $trackObj = $receivedData["trackObj"];                              // Array of track data 
     $trkEdit_waypItems = $receivedData["trkEdit_waypItems"];            // Array of waypoiunts selected
     $trkEdit_partItems = $receivedData["trkEdit_partItems"];            // Array of participants selected
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line 542: sessionid: $sessionid - request: $request - loginname: $loginname\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line 542: sessionId: $sessionId - request: $request - login: $login\r\n");  
 
     // Part 1: Update tracks
     // --------------------------------------------------
@@ -540,7 +540,7 @@ if ($request == "temp") {
     $sql = " UPDATE `tourdb2_prod`.`tbl_tracks` SET ";
 
     // Loop through received track object and add to SQL statement
-    foreach ($trackobj as $dbField => $content) {                       // Generate update statement
+    foreach ($trackObj as $dbField => $content) {                       // Generate update statement
         if ( $dbField == 'trkId' ) {
             $trkId = $content;
         } else {

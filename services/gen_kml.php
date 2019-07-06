@@ -194,8 +194,8 @@ if ( $objectName == "tracks" ) {
     if ( $countTracks > 0 ) {
     
         // Create return object
-        $returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+        $returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
         $returnObject['coordTop'] = $coordTop;
         $returnObject['coordBottom'] = $coordBottom;
         $returnObject['coordLeft'] = $coordLeft;
@@ -203,8 +203,8 @@ if ( $objectName == "tracks" ) {
         $returnObject['recordcount'] = $countTracks;
         $returnObject['objectName'] = $objectName;
     } else {
-        $returnObject['status'] = 'NOK';                                             // add status field (OK) to trackobj
-        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+        $returnObject['status'] = 'NOK';                                             // add status field (OK) to trackObj
+        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
     }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
@@ -378,8 +378,8 @@ if ( $objectName == "segments" ) {
 $returnMessage = "$countSegments Segments found";
 
 // Create return object
-$returnObject['status'] = 'OK';                                             // add status field (OK) to trackobj
-$returnObject['message'] = $returnMessage;                                  // add empty error message to trackobj
+$returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
+$returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
 $returnObject['coordTop'] = $coordTop;
 $returnObject['coordBottom'] = $coordBottom;
 $returnObject['coordLeft'] = $coordLeft;
