@@ -11,3 +11,5 @@ tmp/gps_uploads/
 tmp/kml_disp/
 tmp/reimport/
 work/
+services/config.inc.php
+.gitignore

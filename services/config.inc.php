@@ -1,11 +1,11 @@
 <?php
 
-    $debugLevel = 3;                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
+    $debugLevel = 0;    // set debug level for all services                                                            // 0 = off, 1 = min, 3 = a lot, 5 = all 
 
-    //$db_username 		= 'leuti'; //database username
-    //$db_password 		= 'yTBgve0xgIAgaGyF8nXj'; //database password
-    $db_username 		= 'root'; //database username
-    $db_password 		= 'root'; //database password
+    $db_username 		= 'leuti'; //database username
+    $db_password 		= 'yTBgve0xgIAgaGyF8nXj'; //database password
+    //$db_username 		= 'root'; //database username
+    //$db_password 		= 'root'; //database password
     $db_name 			= 'tourdb2_prod'; //database name
     //$db_name 			= 'tourdb2_dev'; //database name
     $db_host 			= ''; //hostname or IP
