@@ -24,8 +24,8 @@ TRACK_WAYP_ARRAY = new Array();
 TRACK_PART_ARRAY = new Array();
 
 // temporaray global vars
-var TOURDBURL = "http://localhost";                                 // URL of tourdb (only required because I develop on tourdbnew.php)
-// var TOURDBURL = document.URL;                                  // activate this when deploying to PROD
+//var TOURDBURL = "http://localhost";                                 // URL of tourdb (only required because I develop on tourdbnew.php)
+var TOURDBURL = document.URL;                                  // activate this when deploying to PROD
 
 // unconfirmed global vars
 
