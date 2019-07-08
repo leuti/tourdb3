@@ -37,7 +37,7 @@ $receivedData = json_decode($content, true);
 $request = $receivedData["request"];
 $loginName = $receivedData["login"];
 
-if ($debugLevel > 2) fputs($logFile, "Line 42: Request (JSON): $request\r\n");    
+if ($debugLevel > 2) fputs($logFile, 'Line ' . __LINE__ . ': Request (JSON): $request\r\n');    
 
 // create upload dir / file name
 $outDir = '../export/' . $loginName . '/';                                      // Session id used to create unique directory
@@ -53,7 +53,7 @@ $sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishE
 $sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName ";
 $sql .= "FROM tbl_tracks ";
 
-if ($debugLevel > 2) fputs($logFile, "Line 63: SQL: $sql\r\n");    
+if ($debugLevel > 2) fputs($logFile, 'Line ' . __LINE__ . ': SQL: $sql\r\n');    
 
 // Evaluate request type
 switch ( $request ) {
@@ -69,14 +69,14 @@ switch ( $request ) {
             while($row = $result->fetch_object()) {
                 array_push($trackArray, $row);                                  // add each row from $result to array
             }
-            if ($debugLevel >= 3) fputs($logFile, "Line 80: JSONoutFile: $out\r\n");
+            if ($debugLevel >= 3) fputs($logFile, 'Line ' . __LINE__ . ': JSONoutFile: $out\r\n');
             fputs($JSONoutFile, json_encode($trackArray));                      // Encode content of trackArray into JSON and write to output file
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"OK",
                 "message"=>"JSON file stored in $out"
             );
         } else {
-            fputs($logFile, "Line 87 - SQL failed\r\n");  
+            fputs($logFile, 'Line ' . __LINE__ . ': SQL failed\r\n');  
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"NOK",
                 "message"=>"Failed to write JSON file to $out"
@@ -93,7 +93,7 @@ switch ( $request ) {
         $header = '';                                                           // Initialise variables
         $data = '';
 
-        if ($debugLevel >= 3) fputs($logFile, "Line 104: csvOutFile: $out\r\n");  
+        if ($debugLevel >= 3) fputs($logFile, 'Line ' . __LINE__ . ': csvOutFile: $out\r\n');  
 
         // run query and evaluate number of result columns
         $result = mysqli_query ( $conn, $sql ) or die ( "Sql error : " . $conn->error );    // run query and store results in $results

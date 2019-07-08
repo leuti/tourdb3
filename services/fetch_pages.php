@@ -21,13 +21,13 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/fetch_pages.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
-    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 11: fetch_pages.php opened \r\n"); 
+    fputs($logFile, date("Ymd-H:i:s", time()) . ' Line ' . __LINE__ . 'fetch_pages.php opened \r\n'); 
 };
 
 // continue only if $_POST is set and it is a Ajax request
 if ($debugLevel >= 3){
-    fputs($logFile, "Line 16: _SERVER:  ". $_SERVER['HTTP_X_REQUESTED_WITH'] . "\r\n");
-    fputs($logFile, "Line 17: _POST[page]:  " . $_POST["page"] . "\r\n");
+    fputs($logFile, 'Line ' . __LINE__ . ': _SERVER:  '. $_SERVER['HTTP_X_REQUESTED_WITH'] . "\r\n");
+    fputs($logFile, 'Line ' . __LINE__ . ': _POST[page]:  ' . $_POST["page"] . "\r\n");
 };
 if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
        
@@ -46,21 +46,21 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
 		$sqlFilterString = ''; // If there's no sql search string delivered, set it to ''
     };
     if ($debugLevel >= 3){
-        fputs($logFile, 'Line 37: $page: ' . $page_number . "\r\n");
-        fputs($logFile, 'Line 38: $sqlSearchString: ' . $sqlFilterString . "\r\n");
+        fputs($logFile, 'Line ' . __LINE__ . ': $page: ' . $page_number . "\r\n");
+        fputs($logFile, 'Line ' . __LINE__ . ': $sqlSearchString: ' . $sqlFilterString . "\r\n");
     };
 
     // Get total number of records from database for pagination
     $sql = "SELECT COUNT(*) FROM tbl_tracks WHERE " . $sqlFilterString; // select to count number of records for current filter
     
-    if ($debugLevel >= 1) fputs($logFile, 'Line 64: sql: ' . $sql . "\r\n");
+    if ($debugLevel >= 1) fputs($logFile, 'Line ' . __LINE__ . ': ' . $sql . "\r\n");
     
     $results = $conn->query($sql);  // Open sql connection 
     $get_total_rows = $results->fetch_row(); // Get sql result
   	$total_pages = ceil($get_total_rows[0]/$item_per_page); // Calc total pages
 	$page_position = (($page_number-1) * $item_per_page); // Get starting page position to fetch the records
     if ($debugLevel >= 3){
-        fputs($logFile, 'Line 49: $total_pages: ' . $total_pages . ' | current $page_position: ' . 
+        fputs($logFile, 'Line ' . __LINE__ . ': $total_pages: ' . $total_pages . ' | current $page_position: ' . 
             $page_position . "\r\n");
     };   	
 	
@@ -71,7 +71,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     $sql .= $sqlFilterString;  
     $sql .= " ORDER BY trkDateBegin DESC, trkId DESC LIMIT $page_position, $item_per_page";
 
-    if ($debugLevel >= 1) fputs($logFile, 'Line 64: sql: ' . $sql . "\r\n");
+    if ($debugLevel >= 1) fputs($logFile, 'Line ' . __LINE__ . ': sql: '  $sql . '\r\n');
 
     $records = mysqli_query($conn, $sql);
 
@@ -85,7 +85,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     echo '<th>Del</th>';                          // 5
     echo '</tr>';
 
-    // Write for each waypoint one line
+    // Write for each waypoint one Line 
     while($singleRecord = mysqli_fetch_assoc($records)) {
 
         echo '<tr>';
@@ -122,7 +122,7 @@ if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
     $pag = paginate_function($item_per_page, $page_number, $get_total_rows[0], $total_pages);
     echo $pag;
     if ($debugLevel >= 5){
-            fputs($logFile, "Line 124: pagination: " . $pag . "\r\n");
+            fputs($logFile, 'Line ' . __LINE__ . ': pagination:' . $pag . '\r\n');
         };
     echo '</div>';
     

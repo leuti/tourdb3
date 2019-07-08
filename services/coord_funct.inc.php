@@ -28,8 +28,6 @@ $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000
 
 function WGStoCHy($lat, $long) {
 
-    //fputs($GLOBALS['logFile'], "Line 534 - lat: $lat | long: $long \r\n"); 
-
     // Converts decimal degrees sexagesimal seconds
     $lat = DECtoSEX($lat);
     $long = DECtoSEX($long);
@@ -57,8 +55,6 @@ function WGStoCHy($lat, $long) {
   // Convert WGS lat/long (° dec) to CH x
   function WGStoCHx($lat, $long) {
 
-    // fputs($GLOBALS['logFile'], "Line 557 - lat: $lat | long: $long \r\n"); 
-
     // Converts decimal degrees sexagesimal seconds
     $lat = DECtoSEX($lat);
     $long = DECtoSEX($long);
@@ -85,9 +81,7 @@ function WGStoCHy($lat, $long) {
 
 // Convert DEC angle to SEX DMS
 function DECtoSEX($angle) {
-    
-    // fputs($GLOBALS['logFile'], "Line 580 - angle: $angle \r\n"); 
-    
+   
     // Extract DMS
     $deg = intval( $angle );
     $min = intval( ($angle-$deg)*60 );

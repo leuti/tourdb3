@@ -1057,8 +1057,10 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     parent.innerHTML = '<div id="tabDispLists_trks"></div>';
 
     fetch_pages_filterString = sqlWhereCurrent;
+    if ( !fetch_pages_filterString ) {
+        fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";   
+    }
     $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
-
     $('#dispListTrkMenuLarge').removeClass('visible');
     $('#dispListTrkMenuLarge').addClass('hidden');
     $('#dispListTrkMenuMini').removeClass('hidden');
@@ -1104,6 +1106,9 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
 
         // Track object successfully stored in DB
         if ( respObj.status == 'OK') {
+            
+            // clear all error states
+            clearAllErrorStates ();     
             
             trackObj = respObj.trackObj;
             $('#uiTrack_fld_trkId').val(trackObj.trkId); 
@@ -1202,6 +1207,9 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         if (xhr.status === 200) {                                              // when all OK
             respObj = JSON.parse(xhr.responseText);                     // transfer JSON into response object array
             if ( respObj.status == 'OK') {
+
+                // clear all error states
+                clearAllErrorStates ();     
 
                 // assign returned track values to UI fields
                 trackObj = respObj.trackObj;
@@ -1373,8 +1381,6 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     var trackObj = {};
     var jsonObject = {};
 
-    //$('#uiTrack_fld_trkId').removeClass( "ui-state-error" );                   // remove error state if previously set
-    //valid = valid && checkExistance ( $('#uiTrack_fld_trkId'), "Track ID" );   // check validity of field
     trackObj.trkId = $('#uiTrack_fld_trkId').val();                            // assign field value to track object
 
     $('#uiTrack_fld_trkTrackName').removeClass( "ui-state-error" );            // same as above
@@ -1440,8 +1446,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     $('#uiTrack_fld_trkMeterDown').removeClass( "ui-state-error" );                   // remove error state if previously set
     trackObj.trkMeterDown = $('#uiTrack_fld_trkMeterDown').val();
     valid = valid && checkIfNum ( $('#uiTrack_fld_trkMeterDown'), "Enter valid negative number (-mmmm.nnn)");
-    valid = valid && ( checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^-[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" ) 
-    || checkRegexp ( $('#uiTrack_fld_trkMeterUp'), /^[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (mmmm.nnn)" ) );
+    valid = valid && ( checkRegexp ( $('#uiTrack_fld_trkMeterDown'), /^.[0-9]{0,4}\.?[0-9]{0,3}$/, "Enter valid negative number (-mmmm.nnn)" ) );
     
     $('#uiTrack_fld_trkCountry').removeClass( "ui-state-error" );                   // remove error state if previously set
     country = $('#uiTrack_fld_trkCountry').val();
@@ -2689,9 +2694,6 @@ function updateValComments( text ) {
     valComments
         .text( text )
         .addClass( "ui-state-highlight" );
-    //setTimeout(function() {
-    //    valComments.removeClass( "ui-state-highlight", 1500 );
-    //}, 500 );
 }
 
 // Import validation: Checks existance of file content in ADD dialog
@@ -2757,4 +2759,23 @@ function DisplayObj ( objectName, sqlWherePrev, sqlWhereCurrent, genKml, jsonObj
     this.genKml = genKml; 
     this.jsonObject = jsonObject;
     this.ajaxCall = ajaxCall;
+}
+
+function clearAllErrorStates () {
+    //  remove all potential error meesags
+    $('#uiTrack_fld_trkTrackName').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkRoute').removeClass( "ui-state-error" );    
+    $('#uiTrack_fld_trkDateBegin').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkOrg').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkEvent').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkRemarks').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkDistance').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkTimeOverall').removeClass( "ui-state-error" );       
+    $('#uiTrack_fld_trkTimeToPeak').removeClass( "ui-state-error" );       
+    $('#uiTrack_fld_trkTimeToFinish').removeClass( "ui-state-error" );       
+    $('#uiTrack_fld_trkMeterUp').removeClass( "ui-state-error" );       
+    $('#uiTrack_fld_trkMeterDown').removeClass( "ui-state-error" );       
+    $('#uiTrack_fld_trkCountry').removeClass( "ui-state-error" );  
+    $('#validateComments').removeClass( "ui-state-highlight" );
 }

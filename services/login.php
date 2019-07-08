@@ -36,7 +36,7 @@ $receivedData = json_decode ( file_get_contents('php://input'), true );
 $login = $receivedData["login"];
 $password = $receivedData["password"];
 
-if ( $debugLevel >= 3 ) fputs($logFile, "Line 32: User <$login> has logged in.\r\n");    
+if ( $debugLevel >= 3 ) fputs($logFile, 'Line ' . __LINE__ . ': User <$login> has logged in.\r\n');    
 
 // Start or restart session 
 session_start();
@@ -65,8 +65,8 @@ if ( isset($login) ) {
 echo json_encode($returnObject);                                    // encode return object to JSON
 if ( $debugLevel >= 1 ) 
 {
-    fputs($logFile, "Line 57: Login script completed --> sessionId: " . $returnObject['sessionId'] . " | login: " 
-    . $login . " | loginStatus: " . $returnObject['loginStatus'] . "\r\n");
+    fputs($logFile, 'Line ' . __line__ . ': Login script completed --> sessionId: ' . $returnObject['sessionId'] . ' | login: '' 
+    . $login . ' | loginStatus: '' . $returnObject['loginStatus'] . '\r\n');
     fclose($logFile);                                               // close log file
 }
 ?>

@@ -29,7 +29,7 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_wayp.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 59: gen_wayp.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . '-Line ' . __LINE__ . ': 59: gen_wayp.php opened \r\n'); 
 };
     
 // variables passed on by client (as JSON object)
@@ -40,10 +40,10 @@ $objectName = $receivedData["objectName"];
 $login = $receivedData["login"];
 
 if ($debugLevel >= 3){
-    fputs($logFile, "<$objectName> Line 72: Received parameters:\r\n");
-    fputs($logFile, "<$objectName> sessionId:       $sessionId\r\n");
-    fputs($logFile, "<$objectName> sqlWhere:        $sqlWhere\r\n");
-    fputs($logFile, "<$objectName> objectName:      $objectName\r\n");
+    fputs($logFile, '<$objectName> Line ' . __LINE__ . ': 72: Received parameters:\r\n');
+    fputs($logFile, '<$objectName> sessionId:       $sessionId\r\n');
+    fputs($logFile, '<$objectName> sqlWhere:        $sqlWhere\r\n');
+    fputs($logFile, '<$objectName> objectName:      $objectName\r\n');
 };
 
 // create upload dir / file name
@@ -70,7 +70,7 @@ $sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS8
 //$sql .= "LIMIT 70 ";
 
 if ($debugLevel >= 3){
-    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line 42: sql for waypoints: " . $sql ."\r\n");
+    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line ' . __LINE__ . ': 42: sql for waypoints: " . $sql ."\r\n");
 };
 
 $records = mysqli_query($conn, $sql);
@@ -159,7 +159,7 @@ $returnObject['recordcount'] = $recordCount;
 $returnObject['objectName'] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $debugLevel >= 1 ) fputs($logFile, "Line 153: $recordCount $objectName items inserted into KML filer\n");    
+if ( $debugLevel >= 1 ) fputs($logFile, "Line ' . __LINE__ . ': 153: $recordCount $objectName items inserted into KML filer\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections

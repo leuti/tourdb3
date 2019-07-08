@@ -20,12 +20,12 @@ date_default_timezone_set('Europe/Zurich');
 if ($debugLevel >= 1){
     $fp = @fopen("../log/autoComplete.log","a");
     fputs($fp, "=================================================================\r\n");
-    fputs($fp, date("Ymd-H:i:s", time()) . "-Line 8: autoComplete.php opened \r\n"); 
+    fputs($fp, date("Ymd-H:i:s", time()) . "- 8: autoComplete.php opened \r\n"); 
 };
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line 14: field: ' . $_GET["field"] . "\r\n");
-    fputs($fp, 'Line 15: term: ' . $_GET["term"] . "\r\n");
+    fputs($fp, 'Line ' . __LINE__ . ': field: ' . $_GET["field"] . "\r\n");
+    fputs($fp, 'Line ' . __LINE__ . ': term: ' . $_GET["term"] . "\r\n");
 };
 
 $searchObject = $_GET["field"];
@@ -50,7 +50,7 @@ if ( $searchObject == "peak") {
 }
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line 53: sql: ' . $sql . "\r\n");
+    fputs($fp, 'Line ' . __LINE__ . ': sql: ' . $sql . "\r\n");
 };
 
 $results = $conn->prepare($sql);
@@ -69,7 +69,7 @@ while($results->fetch()) {
 $jsonstring = json_encode($json);
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line 70: jsonstring: ' . $jsonstring . "\r\n");
+    fputs($fp, 'Line ' . __LINE__ . ': jsonstring: ' . $jsonstring . "\r\n");
 };
 
 echo $jsonstring;
