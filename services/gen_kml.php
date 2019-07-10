@@ -54,7 +54,7 @@ $styleArray = array(
 
 // Open log file
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml_new.log";                // Assign file location
+    $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
     //$logFileLoc = dirname(__FILE__) . "/../log/" . basename(__FILE__)";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
@@ -347,7 +347,7 @@ if ( $objectName == "segments" ) {
             }
         }
         $firstRecord = false;
-        if ( $debugLevel >= 3 ) {
+        if ( $debugLevel >= 4 ) {
             fputs($logFile, "=============================================\r\n");
             fputs($logFile, "Line " . __LINE__ . ": segId: " . $singleRecord["segId"] . $singleRecord["segName"] . "\r\n");
             fputs($logFile, "Line " . __LINE__ . ": segcoordTop: " . $singleRecord["segCoordTop"] ."\r\n");
@@ -444,4 +444,3 @@ function createStyles ($styleArray,$kml) {
     return $kml;
 }
 ?>
-

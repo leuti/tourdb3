@@ -19,7 +19,6 @@
 
 // Set variables and parameters
 include("config.inc.php");                                              // include config file
-include("coord_funct.inc.php");                                         // include coord calc functions
 date_default_timezone_set("Europe/Zurich");                             // must be set when using time functions
 
 // Open file to write log
