@@ -197,19 +197,8 @@
 
 								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_NewLoadButton" value="Load" />
+									<input type="submit" class="button uiMapApplyBtn" id="dispFilTrk_NewLoadButton" value="Load" />
 								</div>
-								<!-- Button to add selection to existing objects -->
-								<!--
-									<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilTrk_addObjButton" value="Add Tracks" />
-								</div>
-								-->
-								<!-- Button to reset filter -->
-								<!--
-								<div class="dispObjCriteria">
-									<input type="submit" class="button filterResetButton" id="dispFilTrk_ResetButton" value="Reset Filter" />
-								</div>-->
 								
 							</fieldset>
 						</div>
@@ -360,17 +349,8 @@
 								
 								<!-- Button to newly display selection -->
 								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilSeg_NewLoadButton" value="New Load" />
+									<input type="submit" class="button uiMapApplyBtn" id="dispFilSeg_NewLoadButton" value="New Load" />
 								</div>
-								<!-- Button to add selection to existing objects -->
-								<div class="dispObjCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispFilSeg_addObjButton" value="Add Segments" />
-								</div>
-								<!-- Button to reset filter -->
-								<!--
-								<div class="dispObjCriteria">
-									<input type="submit" class="button filterResetButton" id="dispFilSeg_ResetButton" value="Reset Filter" />
-								</div>-->
 
 							</fieldset>
 						</div>
@@ -422,7 +402,7 @@
 
 							<!-- Button to newly display selection -->
 							<div class="dispObjCriteria">
-								<input type="submit" class="button applyFilterButton" id="dispFilWayp_NewLoadButton" value="Load" />
+								<input type="submit" class="button uiMapApplyBtn" id="dispFilWayp_NewLoadButton" value="Load" />
 							</div>
 							
 						</div>
@@ -435,9 +415,6 @@
 			<div id="displayMap" class="visible">
 				<div id="displayMap-ResMap">	<!-- Here the map of the mapments is displayed -->
 				</div> <!-- End mapResultMap -->
-				<!--
-					<div id="displayMap-ResMap2">
-				</div> --><!-- End mapResultMap -->
 			
 			</div> <!-- End displayMap -->
 
@@ -549,18 +526,7 @@
 								<div class="dispListTrkCriteria">
 									<input type="submit" class="button" id="dispListTrk_NewLoadButton" value="Load" />
 								</div>
-								<!-- Button to add selection to existing objects -->
-								<!--
-									<div class="dispListTrkCriteria">
-									<input type="submit" class="button applyFilterButton" id="dispListTrk_addObjButton" value="Add Tracks" />
-								</div>
-								-->
-								<!-- Button to reset filter -->
-								<!--
-								<div class="dispListTrkCriteria">
-									<input type="submit" class="button filterResetButton" id="dispListTrk_ResetButton" value="Reset Filter" />
-								</div>-->
-								
+
 							</fieldset>
 						</div>
 					</div>
@@ -768,8 +734,13 @@
 					<!-- Grade -->
 					<div>
 						<label for="uiTrack_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
-						<input type="text" name="uiTrack_fld_trkGrade" id="uiTrack_fld_trkGrade" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
+						<input id="uiTrack_fld_trkGrade" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
+
+					<!--<div>
+						<label for="uiTrack_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
+						<input type="text" name="uiTrack_fld_trkGrade" id="uiTrack_fld_trkGrade" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
+					</div>-->
 
 					<!-- MeterUp -->
 					<div>

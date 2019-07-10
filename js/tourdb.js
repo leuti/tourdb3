@@ -191,7 +191,7 @@ $(document).on('click', '#dispObjMenuMiniOpen', function(e) {
 })
 
 // Triggers KML generation for filtered tracks and selected waypoints and segments
-$(document).on('click', '#dispFilTrk_NewLoadButton', function (e) {
+$(document).on('click', '.uiMapApplyBtn', function (e) {
     e.preventDefault();
     $clickedButton = this.id;                                       // store id of button clicked
 
@@ -1949,6 +1949,17 @@ function initJqueryItems () {
     //$( "#uiTrack_fld_trkSaison" ).selectmenu();
     $( "#uiTrack_fld_trkType" ).selectmenu();
     $( "#uiTrack_fld_trkSubType" ).selectmenu();
+    $( "#uiTrack_fld_trkGrade" ).autocomplete({
+        source: "services/autoComplete.php?field=grades",
+        minLength: 1,
+        select: function( event, ui ) {                              // see above
+            $( "" ).val( ui.item.id );
+            $( "#uiTrack_fld_trkGrade" ).val( ui.item.id );
+        },
+        change: function( event, ui ) {
+            console.log("Grade Autoselect field changed");
+        }
+    });
     $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
