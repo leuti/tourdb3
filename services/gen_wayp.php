@@ -9,8 +9,8 @@
 // 
 // OUTPUT
 // The script returns a JSON object with following content:
-// ['message'] - only filled with an error message in case of an error
-// ['status']     - 'OK' if no error has occured, 'ERR' in case of an error
+// ["message"] - only filled with an error message in case of an error
+// ["status"]     - "OK" if no error has occured, "ERR" in case of an error
 // kml file 
 
 // Created: 15.03.2018 - Daniel Leutwyler
@@ -19,7 +19,7 @@
 // Tasks
 // * 
 
-date_default_timezone_set('Europe/Zurich');
+date_default_timezone_set("Europe/Zurich");
 include("config.inc.php");                                                  // Include config file
 
 $imgLoc = "./css/images/";
@@ -29,25 +29,25 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_wayp.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . '-Line ' . __LINE__ . ': 59: gen_wayp.php opened \r\n'); 
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": gen_wayp.php opened \r\n"); 
 };
     
 // variables passed on by client (as JSON object)
-$receivedData = json_decode ( file_get_contents('php://input'), true );
+$receivedData = json_decode ( file_get_contents("php://input"), true );
 $sessionId = $receivedData["sessionId"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
 $login = $receivedData["login"];
 
 if ($debugLevel >= 3){
-    fputs($logFile, '<$objectName> Line ' . __LINE__ . ': 72: Received parameters:\r\n');
-    fputs($logFile, '<$objectName> sessionId:       $sessionId\r\n');
-    fputs($logFile, '<$objectName> sqlWhere:        $sqlWhere\r\n');
-    fputs($logFile, '<$objectName> objectName:      $objectName\r\n');
+    fputs($logFile, "<$objectName> Line " . __LINE__ . ": Received parameters:\r\n");
+    fputs($logFile, "<$objectName> sessionId:       $sessionId\r\n");
+    fputs($logFile, "<$objectName> sqlWhere:        $sqlWhere\r\n");
+    fputs($logFile, "<$objectName> objectName:      $objectName\r\n");
 };
 
 // create upload dir / file name
-$kml_dir = '../tmp/kml_disp/' . $sessionId . '/';                           // Session id used to create unique directory
+$kml_dir = "../tmp/kml_disp/" . $sessionId . "/";                           // Session id used to create unique directory
 if (!is_dir ( $kml_dir )) {                                                 // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
@@ -70,21 +70,21 @@ $sql .= "GROUP BY waypID, waypNameLong, waypTypeFID, waypAltitude, waypCoordWGS8
 //$sql .= "LIMIT 70 ";
 
 if ($debugLevel >= 3){
-    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line ' . __LINE__ . ': 42: sql for waypoints: " . $sql ."\r\n");
+    fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": sql for waypoints: " . $sql ."\r\n");
 };
 
 $records = mysqli_query($conn, $sql);
 
-$waypKmlFileURL = $kml_dir . $objectName . '.kml';
+$waypKmlFileURL = $kml_dir . $objectName . ".kml";
 $waypOutFile = fopen($waypKmlFileURL, "w");     
 
 //Write document header
-/*$kml[] = '<?xml version="1.0" encoding="UTF-8"?>';*/
+/*$kml[] = "<?xml version="1.0" encoding="UTF-8"?>";*/
 $kml[] = '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '; 
 $kml[] = 'xsi:schemaLocation="http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd">';
-$kml[] = '<Document>';
-$kml[] = '<name>Waypoints</name>';
-//$kml[] = '<open>1</open>';
+$kml[] = "<Document>";
+$kml[] = "<name>Waypoints</name>";
+//$kml[] = "<open>1</open>";
 
 while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoint with coordinates
 
@@ -120,30 +120,30 @@ while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoi
     }
 
     $kml[] = '<Placemark id="marker_' . $singleRecord["waypID"] .'">';
-    $kml[] = '   <name>' . $singleRecord["waypNameLong"] . '</name>';
-    $kml[] = '   <description>' . $singleRecord["waypID"] . ': '. $singleRecord["waypNameLong"] . ' (' . $singleRecord["waypAltitude"] . 'm)</description>';
-    $kml[] = '   <Style>';
-    $kml[] = '      <IconStyle>';
-    $kml[] = '          <Icon>';
-    $kml[] = '              <href>' . $imgLoc . $imgFile . '</href>';
-    //$kml[] = '              <href>https://api3.geo.admin.ch/color/255,0,0/marker-24@2x.png</href>';
-    $kml[] = '              <gx:w>48</gx:w>';
-    $kml[] = '              <gx:h>48</gx:h>';   
-    $kml[] = '          </Icon>';
+    $kml[] = "   <name>" . $singleRecord["waypNameLong"] . "</name>";
+    $kml[] = "   <description>" . $singleRecord["waypID"] . ": ". $singleRecord["waypNameLong"] . " (" . $singleRecord["waypAltitude"] . "m)</description>";
+    $kml[] = "   <Style>";
+    $kml[] = "      <IconStyle>";
+    $kml[] = "          <Icon>";
+    $kml[] = "              <href>" . $imgLoc . $imgFile . "</href>";
+    //$kml[] = "              <href>https://api3.geo.admin.ch/color/255,0,0/marker-24@2x.png</href>";
+    $kml[] = "              <gx:w>48</gx:w>";
+    $kml[] = "              <gx:h>48</gx:h>";   
+    $kml[] = "          </Icon>";
     $kml[] = '          <hotSpot x="24" y="24" xunits="pixels" yunits="pixels"/>';
-    $kml[] = '      </IconStyle>';
-    $kml[] = '      <LabelStyle>';
-    $kml[] = '          <color>ff0000ff</color>';
-    $kml[] = '     	</LabelStyle>';
-    $kml[] = '   </Style>';
-    $kml[] = '   <Point>';
-    $kml[] = '      <coordinates>' . $singleRecord["waypCoordWGS84E"] . ',' . $singleRecord["waypCoordWGS84N"] . ',' . $singleRecord["waypAltitude"] . '</coordinates>';
-    $kml[] = '   </Point>';
-    $kml[] = '</Placemark>';
+    $kml[] = "      </IconStyle>";
+    $kml[] = "      <LabelStyle>";
+    $kml[] = "          <color>ff0000ff</color>";
+    $kml[] = "     	</LabelStyle>";
+    $kml[] = "   </Style>";
+    $kml[] = "   <Point>";
+    $kml[] = "      <coordinates>" . $singleRecord["waypCoordWGS84E"] . "," . $singleRecord["waypCoordWGS84N"] . "," . $singleRecord["waypAltitude"] . "</coordinates>";
+    $kml[] = "   </Point>";
+    $kml[] = "</Placemark>";
 };
 
-$kml[] = '</Document>';
-$kml[] = '</kml>';
+$kml[] = "</Document>";
+$kml[] = "</kml>";
 
 // Merge kml array into one variable
 $kmlOutput = join("\r\n", $kml);
@@ -153,13 +153,13 @@ fputs($waypOutFile, "$kmlOutput");                                       // Writ
 fclose($waypOutFile);
 
 // Create return object
-$returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
-$returnObject['message'] = 'kml file generated with ' . $recordCount . ' ' . $objectName;                            // add empty error message to trackObj
-$returnObject['recordcount'] = $recordCount;
-$returnObject['objectName'] = $objectName;
+$returnObject["status"] = "OK";                                             // add status field (OK) to trackObj
+$returnObject["message"] = "kml file generated with " . $recordCount . " " . $objectName;                            // add empty error message to trackObj
+$returnObject["recordcount"] = $recordCount;
+$returnObject["objectName"] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $debugLevel >= 1 ) fputs($logFile, "Line ' . __LINE__ . ': 153: $recordCount $objectName items inserted into KML filer\n");    
+if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $recordCount $objectName items inserted into KML filer\r\n");    
 if ( $debugLevel >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections

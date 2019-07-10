@@ -9,7 +9,7 @@
 
 // Set variables and parameters
 include("./config.inc.php");                                                    // include config file
-date_default_timezone_set('Europe/Zurich');                                     // must be set when using time functions
+date_default_timezone_set("Europe/Zurich");                                     // must be set when using time functions
 
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/exportData.log";                   // Assign file location
@@ -18,13 +18,13 @@ if ( $debugLevel >=1 ) fputs($logFile, "\r\n====================================
 if ( $debugLevel >=1 ) fputs($logFile, "exportData.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Evaluate request type
-if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){                        // Make sure that it is a POST request
-    throw new Exception('Request method must be POST!');
+if(strcasecmp($_SERVER["REQUEST_METHOD"], "POST") != 0){                        // Make sure that it is a POST request
+    throw new Exception("Request method must be POST!");
 }
 
-$contentType = isset($_SERVER["CONTENT_TYPE"]) ? substr($_SERVER["CONTENT_TYPE"],0,16) : '';     // Ensure content type is application/json
-if(strcasecmp($contentType, 'application/json') != 0){
-    throw new Exception('Content type must be: application/json');
+$contentType = isset($_SERVER["CONTENT_TYPE"]) ? substr($_SERVER["CONTENT_TYPE"],0,16) : "";     // Ensure content type is application/json
+if(strcasecmp($contentType, "application/json") != 0){
+    throw new Exception("Content type must be: application/json");
 }
 
 //Receive the RAW post data.
@@ -37,10 +37,10 @@ $receivedData = json_decode($content, true);
 $request = $receivedData["request"];
 $loginName = $receivedData["login"];
 
-if ($debugLevel > 2) fputs($logFile, 'Line ' . __LINE__ . ': Request (JSON): $request\r\n');    
+if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": Request (JSON): $request\r\n");    
 
 // create upload dir / file name
-$outDir = '../export/' . $loginName . '/';                                      // Session id used to create unique directory
+$outDir = "../export/" . $loginName . "/";                                      // Session id used to create unique directory
 if (!is_dir ( $outDir )) {                                                      // Create directory with name = session id
     mkdir($outDir, 0777);
 }
@@ -53,7 +53,7 @@ $sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishE
 $sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName ";
 $sql .= "FROM tbl_tracks ";
 
-if ($debugLevel > 2) fputs($logFile, 'Line ' . __LINE__ . ': SQL: $sql\r\n');    
+if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": SQL: $sql\r\n");    
 
 // Evaluate request type
 switch ( $request ) {
@@ -69,14 +69,14 @@ switch ( $request ) {
             while($row = $result->fetch_object()) {
                 array_push($trackArray, $row);                                  // add each row from $result to array
             }
-            if ($debugLevel >= 3) fputs($logFile, 'Line ' . __LINE__ . ': JSONoutFile: $out\r\n');
+            if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": JSONoutFile: $out\r\n");
             fputs($JSONoutFile, json_encode($trackArray));                      // Encode content of trackArray into JSON and write to output file
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"OK",
                 "message"=>"JSON file stored in $out"
             );
         } else {
-            fputs($logFile, 'Line ' . __LINE__ . ': SQL failed\r\n');  
+            fputs($logFile, "Line " . __LINE__ . ": SQL failed\r\n");  
             $returnObject = array (                                             // Fill return object with message
                 "status"=>"NOK",
                 "message"=>"Failed to write JSON file to $out"
@@ -90,10 +90,10 @@ switch ( $request ) {
 
         $out = $outDir . "track.csv";                                           // Assign file location
         $csvOutFile = @fopen($out,"w");                                         // Open file
-        $header = '';                                                           // Initialise variables
-        $data = '';
+        $header = "";                                                           // Initialise variables
+        $data = "";
 
-        if ($debugLevel >= 3) fputs($logFile, 'Line ' . __LINE__ . ': csvOutFile: $out\r\n');  
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": csvOutFile: $out\r\n");  
 
         // run query and evaluate number of result columns
         $result = mysqli_query ( $conn, $sql ) or die ( "Sql error : " . $conn->error );    // run query and store results in $results
@@ -107,7 +107,7 @@ switch ( $request ) {
         
         // write field content
         while( $row = mysqli_fetch_row( $result ) ) {                           // loop through each row
-            $line = '';
+            $line = "";
             foreach( $row as $value ) {                                         // lopp through each field
                 if ( ( !isset( $value ) ) || ( $value == "" ) ) {               // if field is not empty
                     $value = "\t";                                              // write content of empty field and a field separator

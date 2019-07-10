@@ -23,7 +23,7 @@
 // -----------------------------------
 // Set variables and parameters
 include("./config.inc.php");                                        // include config file
-date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
+date_default_timezone_set("Europe/Zurich");                         // must be set when using time functions
 
 // Open file for import log
 $importGpxLog = dirname(__FILE__) . "/../log/login.log";            // Assign file location
@@ -32,11 +32,11 @@ if ( $debugLevel >= 1 ) fputs($logFile, "\r\n===================================
 if ( $debugLevel >= 1 ) fputs($logFile, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // variables passed on by client (as formData object)
-$receivedData = json_decode ( file_get_contents('php://input'), true );
+$receivedData = json_decode ( file_get_contents("php://input"), true );
 $login = $receivedData["login"];
 $password = $receivedData["password"];
 
-if ( $debugLevel >= 3 ) fputs($logFile, 'Line ' . __LINE__ . ': User <$login> has logged in.\r\n');    
+if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": User <$login> has logged in.\r\n");    
 
 // Start or restart session 
 session_start();
@@ -47,26 +47,26 @@ if ( isset($login) ) {
         $login == "admin" && $password == "20Rh5530rpHqiEpfc6Is" )
     {
         // If login is successful return login & session details
-        $returnObject['login'] = $login;                            // set session var
-        $returnObject['sessionId'] = session_id();                  // add session id to return object
-        $returnObject['loginStatus'] = "OK";                        // set login status to OK
-        $returnObject['message'] = "Login successful";
-        $returnObject['loginTime'] = date("Ymd-H:i:s", time());
+        $returnObject["login"] = $login;                            // set session var
+        $returnObject["sessionId"] = session_id();                  // add session id to return object
+        $returnObject["loginStatus"] = "OK";                        // set login status to OK
+        $returnObject["message"] = "Login successful";
+        $returnObject["loginTime"] = date("Ymd-H:i:s", time());
     } else {
         // If login failed return empty session and error
-        $returnObject['login'] = $login;
-        $returnObject['sessionId'] = session_id();                      // set session id to EMPTY 
-        $returnObject['loginStatus'] = "ERR";                           // Return error    
-        $returnObject['message'] = "Login failed";                      // Return error    
-        $returnObject['loginTime'] = date("Ymd-H:i:s", time());
+        $returnObject["login"] = $login;
+        $returnObject["sessionId"] = session_id();                      // set session id to EMPTY 
+        $returnObject["loginStatus"] = "ERR";                           // Return error    
+        $returnObject["message"] = "Login failed";                      // Return error    
+        $returnObject["loginTime"] = date("Ymd-H:i:s", time());
     }
 }
 
 echo json_encode($returnObject);                                    // encode return object to JSON
 if ( $debugLevel >= 1 ) 
 {
-    fputs($logFile, 'Line ' . __line__ . ': Login script completed --> sessionId: ' . $returnObject['sessionId'] . ' | login: '' 
-    . $login . ' | loginStatus: '' . $returnObject['loginStatus'] . '\r\n');
+    fputs($logFile, "Line " . __line__ . ": Login script completed --> sessionId: " . $returnObject["sessionId"] . 
+    " | login: " . $login . " | loginStatus: " . $returnObject["loginStatus"] . "\r\n");
     fclose($logFile);                                               // close log file
 }
 ?>

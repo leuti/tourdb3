@@ -20,7 +20,7 @@
 // Set variables and parameters
 include("config.inc.php");                                              // include config file
 include("coord_funct.inc.php");                                         // include coord calc functions
-date_default_timezone_set('Europe/Zurich');                             // must be set when using time functions
+date_default_timezone_set("Europe/Zurich");                             // must be set when using time functions
 
 // Open file to write log
 $logFileName = dirname(__FILE__) . "/../log/putObject.log";             // Assign file location
@@ -31,7 +31,7 @@ if ( $debugLevel >= 1 ) {
 }
 
 //Receive the RAW post data.
-$receivedData = json_decode ( file_get_contents('php://input'), true );
+$receivedData = json_decode ( file_get_contents("php://input"), true );
 
 // read received INPUT object
 $login = $receivedData["login"];
@@ -66,7 +66,7 @@ if ( $requestType == "ins") {
 
     // Loop through received track object and add to SQL statement
     foreach ($receivedObj as $dbField => $content) {                    // Generate update statement
-        if ( $dbField != 'trkId' ) {
+        if ( $dbField != "trkId" ) {
             $sql .= "`$dbField`, ";
         } 
     }    
@@ -75,7 +75,7 @@ if ( $requestType == "ins") {
     $sql .= ") VALUES (";
 
     foreach ($receivedObj as $dbField => $content) {                    // Generate update statement
-        if ( $dbField != 'trkId' ) {
+        if ( $dbField != "trkId" ) {
             $sql .= "'$content', ";
         }
     }    
@@ -95,8 +95,8 @@ if ( $requestType == "ins") {
         $message = "Error inserting Track: $conn->error";
 
         $outObject = array (
-            'status'=>'NOK',                                            // add err status to return object
-            'message'=> $message  
+            "status"=>"NOK",                                            // add err status to return object
+            "message"=> $message  
         );
         echo json_encode($outObject); 
         return;
@@ -144,8 +144,8 @@ if ( $requestType == "ins") {
             fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
-                'status'=>'NOK',                                        // add err status to return object
-                'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+                "status"=>"NOK",                                        // add err status to return object
+                "message"=>"Error inserting tbl_track_wayp for peaks: " . $conn->error,  
             );                                                          // add error message to return object
             echo json_encode($outObject); 
             return;
@@ -190,8 +190,8 @@ if ( $requestType == "ins") {
             fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
-                'status'=>'NOK',                                        // add err status to return object
-                'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+                "status"=>"NOK",                                        // add err status to return object
+                "message"=>"Error inserting tbl_track_wayp for peaks: " . $conn->error,  
             );                                                          // add error message to return object
             echo json_encode($outObject); 
             return;
@@ -200,9 +200,9 @@ if ( $requestType == "ins") {
 
     // write output array
     $outObject = array (
-        'status'=>'OK',                                                 // add err status to return object
-        'message'=>"New track successfully  inserted: ID = $trkId",     // add error message to return object
-        'trkId'=>$trkId 
+        "status"=>"OK",                                                 // add err status to return object
+        "message"=>"New track successfully  inserted: ID = $trkId",     // add error message to return object
+        "trkId"=>$trkId 
     );
 
     // Echo output array to client
@@ -228,7 +228,7 @@ else if ( $requestType == "upd") {
 
     // Loop through received track object and add to SQL statement
     foreach ($receivedObj as $dbField => $content) {                    // Generate update statement
-        if ( $dbField == 'trkId' ) {
+        if ( $dbField == "trkId" ) {
             $trkId = $content;
         } else {
             $sql .= "`$dbField` = '$content',";
@@ -249,8 +249,8 @@ else if ( $requestType == "upd") {
         $message = "Error inserting Track: $conn->error";
 
         $outObject = array (
-            'status'=>'NOK',                                            // add err status to return object
-            'message'=> $message  
+            "status"=>"NOK",                                            // add err status to return object
+            "message"=> $message  
         );
         echo json_encode($outObject); 
         return;
@@ -273,8 +273,8 @@ else if ( $requestType == "upd") {
         fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
         // write output array
         $outObject = array (
-            'status'=>'NOK',                                            // add err status to return object
-            'message'=>'Error deleting tbl_track_wayp for peaks: ' . $conn->error,  
+            "status"=>"NOK",                                            // add err status to return object
+            "message"=>"Error deleting tbl_track_wayp for peaks: " . $conn->error,  
         );                                                              // add error message to return object
         echo json_encode($outObject); 
         return;
@@ -323,8 +323,8 @@ else if ( $requestType == "upd") {
             fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
-                'status'=>'NOK',                                        // add err status to return object
-                'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+                "status"=>"NOK",                                        // add err status to return object
+                "message"=>"Error inserting tbl_track_wayp for peaks: " . $conn->error,  
             );                                                          // add error message to return object
             echo json_encode($outObject); 
             return;
@@ -348,8 +348,8 @@ else if ( $requestType == "upd") {
         fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
         // write output array
         $outObject = array (
-            'status'=>'NOK',                                            // add err status to return object
-            'message'=>'Error deleting tbl_track_part: ' . $conn->error,  
+            "status"=>"NOK",                                            // add err status to return object
+            "message"=>"Error deleting tbl_track_part: " . $conn->error,  
         );                                                              // add error message to return object
         echo json_encode($outObject); 
         return;
@@ -396,8 +396,8 @@ else if ( $requestType == "upd") {
             fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
-                'status'=>'NOK',                                        // add err status to return object
-                'message'=>'Error inserting tbl_track_wayp for peaks: ' . $conn->error,  
+                "status"=>"NOK",                                        // add err status to return object
+                "message"=>"Error inserting tbl_track_wayp for peaks: " . $conn->error,  
             );                                                          // add error message to return object
             echo json_encode($outObject); 
             return;
@@ -406,9 +406,9 @@ else if ( $requestType == "upd") {
 
     // write output array
     $outObject = array (
-        'status'=>'OK',                                                 // add err status to return object
-        'message'=>"Track successfully updated: ID = $trkId",           // add error message to return object
-        'trkId'=>$trkId 
+        "status"=>"OK",                                                 // add err status to return object
+        "message"=>"Track successfully updated: ID = $trkId",           // add error message to return object
+        "trkId"=>$trkId 
     );
 
     // Echo output array to client

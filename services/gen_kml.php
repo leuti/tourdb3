@@ -10,8 +10,8 @@
 //
 // OUTPUT
 // The script returns a JSON object with following content:
-// ['message'] - only filled with an error message in case of an error
-// ['status']     - 'OK' if no error has occured, 'ERR' in case of an error
+// ["message"] - only filled with an error message in case of an error
+// ["status"]     - "OK" if no error has occured, "ERR" in case of an error
 
 // Created: 30.12.2017 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 
 // -----------------------------------
 // Set variables and parameters    
-date_default_timezone_set('Europe/Zurich');
+date_default_timezone_set("Europe/Zurich");
 include("config.inc.php");                                                  // Include config file
 
 // Set debug level
@@ -62,7 +62,7 @@ if ($debugLevel >= 1){
 };
 
 // variables passed on by client (as JSON object)
-$receivedData = json_decode ( file_get_contents('php://input'), true );
+$receivedData = json_decode ( file_get_contents("php://input"), true );
 $sessionId = $receivedData["sessionId"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
@@ -75,7 +75,7 @@ if ($debugLevel >= 3){
 };
 
 // create upload dir / file name
-$kml_dir = '../tmp/kml_disp/' . $sessionId . '/';                           // Session id used to create unique directory
+$kml_dir = "../tmp/kml_disp/" . $sessionId . "/";                           // Session id used to create unique directory
 if (!is_dir ( $kml_dir )) {                                                 // Create directory with name = session id
     mkdir($kml_dir, 0777);
 }
@@ -86,7 +86,7 @@ if (!is_dir ( $kml_dir )) {                                                 // C
 if ( $objectName == "tracks" ) {
 
     // open file to store track kml file
-    $trackKmlFileURL = $kml_dir . 'tracks.kml';
+    $trackKmlFileURL = $kml_dir . "tracks.kml";
     $trackOutFile = fopen($trackKmlFileURL, "w");                           // Open kml output file
 
     // Write headern and style section of KML
@@ -102,17 +102,17 @@ if ( $objectName == "tracks" ) {
     }
 
     // Write main section - intro
-    $kml[] = '    <Folder>';
-    $kml[] = '      <name>tourdb exported tracks</name>';
-    $kml[] = '        <visibility>0</visibility>';
-    $kml[] = '        <open>1</open>';
+    $kml[] = "    <Folder>";
+    $kml[] = "      <name>tourdb exported tracks</name>";
+    $kml[] = "        <visibility>0</visibility>";
+    $kml[] = "        <open>1</open>";
 
     // Select tracks meeting given WHERE clause
     $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates, ";
     $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhere;
-    $sql .= " AND trkCoordinates <> '' ";
+    $sql .= ' AND trkCoordinates <> "" ';
 
     $records = mysqli_query($conn, $sql);
 
@@ -136,7 +136,7 @@ if ( $objectName == "tracks" ) {
         $kml[] = '          <description>' . $singleRecord["trkId"] . ' - ' . $singleRecord["trkRoute"] . '</description>';
 
         // set default stylmap and then loop through style maps
-        $styleMapDefault = '          <styleUrl>#stylemap_Others</styleUrl>';   // Set styleUrl to Others in case nothing in found
+        $styleMapDefault = "          <styleUrl>#stylemap_Others</styleUrl>";   // Set styleUrl to Others in case nothing in found
         $i=0;
         for ($i; $i<sizeof($styleArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
             if ($styleArray[$i][0] == $singleRecord["trkSubType"])
@@ -147,17 +147,17 @@ if ( $objectName == "tracks" ) {
         }
         $kml[] = $styleMapDefault;
         
-        $kml[] = '          <ExtendedData>';
+        $kml[] = "          <ExtendedData>";
         $kml[] = '            <Data name="type">';
-        $kml[] = '              <value>linepolygon</value>';
-        $kml[] = '            </Data>';
-        $kml[] = '          </ExtendedData>';
-        $kml[] = '          <LineString>';
-        $kml[] = '            <coordinates>';
+        $kml[] = "              <value>linepolygon</value>";
+        $kml[] = "            </Data>";
+        $kml[] = "          </ExtendedData>";
+        $kml[] = "          <LineString>";
+        $kml[] = "            <coordinates>";
         $kml[] = '               ' . $singleRecord["trkCoordinates"];
-        $kml[] = '            </coordinates>';
-        $kml[] = '          </LineString>';
-        $kml[] = '        </Placemark>';   
+        $kml[] = "            </coordinates>";
+        $kml[] = "          </LineString>";
+        $kml[] = "        </Placemark>";   
 
         // evaluate coord boundaries
         if ( !$firstRecord ) {
@@ -178,9 +178,9 @@ if ( $objectName == "tracks" ) {
     };
 
     // Write KML trailer
-    $kml[] = '    </Folder>';
-    $kml[] = '  </Document>';
-    $kml[] = '</kml>';
+    $kml[] = "    </Folder>";
+    $kml[] = "  </Document>";
+    $kml[] = "</kml>";
 
     // Merge kml array into one variable
     $kmlOutput = join("\r\n", $kml);
@@ -194,17 +194,17 @@ if ( $objectName == "tracks" ) {
     if ( $countTracks > 0 ) {
     
         // Create return object
-        $returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
-        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
-        $returnObject['coordTop'] = $coordTop;
-        $returnObject['coordBottom'] = $coordBottom;
-        $returnObject['coordLeft'] = $coordLeft;
-        $returnObject['coordRight'] = $coordRight;
-        $returnObject['recordcount'] = $countTracks;
-        $returnObject['objectName'] = $objectName;
+        $returnObject["status"] = "OK";                                             // add status field (OK) to trackObj
+        $returnObject["message"] = $returnMessage;                                  // add empty error message to trackObj
+        $returnObject["coordTop"] = $coordTop;
+        $returnObject["coordBottom"] = $coordBottom;
+        $returnObject["coordLeft"] = $coordLeft;
+        $returnObject["coordRight"] = $coordRight;
+        $returnObject["recordcount"] = $countTracks;
+        $returnObject["objectName"] = $objectName;
     } else {
-        $returnObject['status'] = 'NOK';                                             // add status field (OK) to trackObj
-        $returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
+        $returnObject["status"] = "NOK";                                             // add status field (OK) to trackObj
+        $returnObject["message"] = $returnMessage;                                  // add empty error message to trackObj
     }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
@@ -224,7 +224,7 @@ if ( $objectName == "tracks" ) {
 if ( $objectName == "segments" ) {
     
     // open file to store segment kml file
-    $segKmlFileURL = $kml_dir . 'segments.kml';
+    $segKmlFileURL = $kml_dir . "segments.kml";
     $segOutFile = fopen($segKmlFileURL, "w");                               // Open kml output file
     
     // re-initialise kml variable
@@ -240,43 +240,43 @@ if ( $objectName == "segments" ) {
     $kml[] = '    <StyleMap id="stylemap_Others">';
     
     // StyleMap
-    $kml[] = '      <Pair>';
-    $kml[] = '        <key>normal</key>';
-    $kml[] = '        <styleUrl>#style_Others_norm</styleUrl>';
-    $kml[] = '      </Pair>';
-    $kml[] = '      <Pair>';
-    $kml[] = '        <key>highlight</key>';
-    $kml[] = '        <styleUrl>#style_Others_hl</styleUrl>';
-    $kml[] = '      </Pair>';
-    $kml[] = '    </StyleMap>';
+    $kml[] = "      <Pair>";
+    $kml[] = "        <key>normal</key>";
+    $kml[] = "        <styleUrl>#style_Others_norm</styleUrl>";
+    $kml[] = "      </Pair>";
+    $kml[] = "      <Pair>";
+    $kml[] = "        <key>highlight</key>";
+    $kml[] = "        <styleUrl>#style_Others_hl</styleUrl>";
+    $kml[] = "      </Pair>";
+    $kml[] = "    </StyleMap>";
 
     // Style
     $kml[] = '    <Style id="style_Others_norm">';
-    $kml[] = '      <LineStyle>';
-    $kml[] = '        <color>#FFCC66FF</color>';
-    $kml[] = '        <width>3</width>';
-    $kml[] = '      </LineStyle>';
-    $kml[] = '      <PolyStyle>';
-    $kml[] = '        <color>#FFCC66FF</color>';
-    $kml[] = '        <width>3</width>';
-    $kml[] = '      </PolyStyle>';
-    $kml[] = '    </Style>';
+    $kml[] = "      <LineStyle>";
+    $kml[] = "        <color>#FFCC66FF</color>";
+    $kml[] = "        <width>3</width>";
+    $kml[] = "      </LineStyle>";
+    $kml[] = "      <PolyStyle>";
+    $kml[] = "        <color>#FFCC66FF</color>";
+    $kml[] = "        <width>3</width>";
+    $kml[] = "      </PolyStyle>";
+    $kml[] = "    </Style>";
     $kml[] = '    <Style id="style_Others_hl">';
-    $kml[] = '      <LineStyle>';
-    $kml[] = '        <color>#FFCC66FF</color>';
-    $kml[] = '        <width>5</width>';
-    $kml[] = '      </LineStyle>';
-    $kml[] = '      <PolyStyle>';
-    $kml[] = '        <color>#FFCC66FF</color>';
-    $kml[] = '        <width>5</width>';
-    $kml[] = '      </PolyStyle>';
-    $kml[] = '    </Style>';
+    $kml[] = "      <LineStyle>";
+    $kml[] = "        <color>#FFCC66FF</color>";
+    $kml[] = "        <width>5</width>";
+    $kml[] = "      </LineStyle>";
+    $kml[] = "      <PolyStyle>";
+    $kml[] = "        <color>#FFCC66FF</color>";
+    $kml[] = "        <width>5</width>";
+    $kml[] = "      </PolyStyle>";
+    $kml[] = "    </Style>";
 
     // Write main section - intro
-    $kml[] = '    <Folder>';
-    $kml[] = '      <name>tourdb exported segments</name>';
-    $kml[] = '        <visibility>0</visibility>';
-    $kml[] = '        <open>1</open>';
+    $kml[] = "    <Folder>";
+    $kml[] = "      <name>tourdb exported segments</name>";
+    $kml[] = "        <visibility>0</visibility>";
+    $kml[] = "        <open>1</open>";
 
     // Select tracks meeting given WHERE clause
     $sql = "SELECT tbl_segments.segId";
@@ -292,7 +292,7 @@ if ( $objectName == "segments" ) {
     $sql .= ", tbl_segments.segCoordRight ";
     $sql .= "FROM tbl_segments ";
     $sql .= $sqlWhere;
-    $sql .= " AND segCoordinates <> '' ";
+    $sql .= ' AND segCoordinates <> "" ';
 
     // execute sql query and store results in variable $records
     $records = mysqli_query($conn, $sql);
@@ -315,21 +315,21 @@ if ( $objectName == "segments" ) {
 
         $countSegments++;                                                     // Counter for the number of tracks produced
         $kml[] = '        <Placemark id="linepolygon_' . sprintf("%'05d", $singleRecord["segId"]) . '">';
-        $kml[] = '          <name>' . $singleRecord["segName"] . '</name>';
-        $kml[] = '          <visibility>1</visibility>';
-        $kml[] = '          <description>' . $singleRecord["segSourceFID"] . '-' . $singleRecord["segSourceRef"] . ' ' .
-                $singleRecord["segName"] . ' (' . $singleRecord["segGradeFID"] . ')</description>';
-        $kml[] = '          <styleUrl>#stylemap_Others</styleUrl>';         // Set styleUrl to Others in case nothing in found
-        $kml[] = '          <ExtendedData>';
+        $kml[] = "          <name>" . $singleRecord["segName"] . "</name>";
+        $kml[] = "          <visibility>1</visibility>";
+        $kml[] = "          <description>" . $singleRecord["segSourceFID"] . "-" . $singleRecord["segSourceRef"] . " " .
+                $singleRecord["segName"] . " (" . $singleRecord["segGradeFID"] . ")</description>";
+        $kml[] = "          <styleUrl>#stylemap_Others</styleUrl>";         // Set styleUrl to Others in case nothing in found
+        $kml[] = "          <ExtendedData>";
         $kml[] = '            <Data name="type">';
-        $kml[] = '              <value>linepolygon</value>';
-        $kml[] = '            </Data>';
-        $kml[] = '          </ExtendedData>';
-        $kml[] = '          <LineString>';
-        $kml[] = '            <coordinates>' . $singleRecord["segCoordinates"];
-        $kml[] = '            </coordinates>';
-        $kml[] = '          </LineString>';
-        $kml[] = '        </Placemark>';   
+        $kml[] = "              <value>linepolygon</value>";
+        $kml[] = "            </Data>";
+        $kml[] = "          </ExtendedData>";
+        $kml[] = "          <LineString>";
+        $kml[] = "            <coordinates>" . $singleRecord["segCoordinates"];
+        $kml[] = "            </coordinates>";
+        $kml[] = "          </LineString>";
+        $kml[] = "        </Placemark>";   
     
         // evaluate if current record needs to extend coord boundaries
         if ( !$firstRecord ) {
@@ -362,9 +362,9 @@ if ( $objectName == "segments" ) {
     };
 
     // Write KML trailer
-    $kml[] = '    </Folder>';
-    $kml[] = '  </Document>';
-    $kml[] = '</kml>';
+    $kml[] = "    </Folder>";
+    $kml[] = "  </Document>";
+    $kml[] = "</kml>";
 
     // Merge kml array into one variable
     $kmlOutput = join("\r\n", $kml);
@@ -378,14 +378,14 @@ if ( $objectName == "segments" ) {
 $returnMessage = "$countSegments Segments found";
 
 // Create return object
-$returnObject['status'] = 'OK';                                             // add status field (OK) to trackObj
-$returnObject['message'] = $returnMessage;                                  // add empty error message to trackObj
-$returnObject['coordTop'] = $coordTop;
-$returnObject['coordBottom'] = $coordBottom;
-$returnObject['coordLeft'] = $coordLeft;
-$returnObject['coordRight'] = $coordRight;
-$returnObject['recordcount'] = $countSegments;
-$returnObject['objectName'] = $objectName;
+$returnObject["status"] = "OK";                                             // add status field (OK) to trackObj
+$returnObject["message"] = $returnMessage;                                  // add empty error message to trackObj
+$returnObject["coordTop"] = $coordTop;
+$returnObject["coordBottom"] = $coordBottom;
+$returnObject["coordLeft"] = $coordLeft;
+$returnObject["coordRight"] = $coordRight;
+$returnObject["recordcount"] = $countSegments;
+$returnObject["objectName"] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
 if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
@@ -409,37 +409,37 @@ function createStyles ($styleArray,$kml) {
     $kml[] = '    <StyleMap id="' . $styleMapId . '">';
 
     // StyleMap
-    $kml[] = '      <Pair>';
-    $kml[] = '        <key>normal</key>';
-    $kml[] = '        <styleUrl>#' . $styleUrlNorm . '</styleUrl>';
-    $kml[] = '      </Pair>';
-    $kml[] = '      <Pair>';
-    $kml[] = '        <key>highlight</key>';
-    $kml[] = '        <styleUrl>#' . $styleUrlHl . '</styleUrl>';
-    $kml[] = '      </Pair>';
-    $kml[] = '    </StyleMap>';
+    $kml[] = "      <Pair>";
+    $kml[] = "        <key>normal</key>";
+    $kml[] = "        <styleUrl>#" . $styleUrlNorm . "</styleUrl>";
+    $kml[] = "      </Pair>";
+    $kml[] = "      <Pair>";
+    $kml[] = "        <key>highlight</key>";
+    $kml[] = "        <styleUrl>#" . $styleUrlHl . "</styleUrl>";
+    $kml[] = "      </Pair>";
+    $kml[] = "    </StyleMap>";
 
     // Style
     $kml[] = '    <Style id="' . $styleUrlNorm . '">';
-    $kml[] = '      <LineStyle>';
-    $kml[] = '        <color>' . $styleArray[1] . '</color>';
-    $kml[] = '        <width>' . $styleArray[2] . '</width>';
-    $kml[] = '      </LineStyle>';
-    $kml[] = '      <PolyStyle>';
-    $kml[] = '        <color>' . $styleArray[1] . '</color>';
-    $kml[] = '        <width>' . $styleArray[2]. '</width>';
-    $kml[] = '      </PolyStyle>';
-    $kml[] = '    </Style>';
+    $kml[] = "      <LineStyle>";
+    $kml[] = "        <color>" . $styleArray[1] . "</color>";
+    $kml[] = "        <width>" . $styleArray[2] . "</width>";
+    $kml[] = "      </LineStyle>";
+    $kml[] = "      <PolyStyle>";
+    $kml[] = "        <color>" . $styleArray[1] . "</color>";
+    $kml[] = "        <width>" . $styleArray[2]. "</width>";
+    $kml[] = "      </PolyStyle>";
+    $kml[] = "    </Style>";
     $kml[] = '    <Style id="' . $styleUrlHl . '">';
-    $kml[] = '      <LineStyle>';
-    $kml[] = '        <color>' . $styleArray[3] . '</color>';
-    $kml[] = '        <width>' . $styleArray[4] . '</width>';
-    $kml[] = '      </LineStyle>';
-    $kml[] = '      <PolyStyle>';
-    $kml[] = '        <color>' . $styleArray[3] . '</color>';
-    $kml[] = '        <width>' . $styleArray[4] . '</width>';
-    $kml[] = '      </PolyStyle>';
-    $kml[] = '    </Style>';
+    $kml[] = "      <LineStyle>";
+    $kml[] = "        <color>" . $styleArray[3] . "</color>";
+    $kml[] = "        <width>" . $styleArray[4] . "</width>";
+    $kml[] = "      </LineStyle>";
+    $kml[] = "      <PolyStyle>";
+    $kml[] = "        <color>" . $styleArray[3] . "</color>";
+    $kml[] = "        <width>" . $styleArray[4] . "</width>";
+    $kml[] = "      </PolyStyle>";
+    $kml[] = "    </Style>";
 
     return $kml;
 }

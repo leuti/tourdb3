@@ -20,7 +20,7 @@
 
 // Set variables and parameters
 include("config.inc.php");                                        // include config file
-date_default_timezone_set('Europe/Zurich');                         // must be set when using time functions
+date_default_timezone_set("Europe/Zurich");                         // must be set when using time functions
 
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/getObject_new.log";        // Assign file location
@@ -31,7 +31,7 @@ if ( $debugLevel >= 1 ) {
 }
 
 // variables passed on by client (as JSON object)
-$receivedData = json_decode ( file_get_contents('php://input'), true );
+$receivedData = json_decode ( file_get_contents("php://input"), true );
 $objectType = $receivedData["objectType"];        
 $requestType = $receivedData["requestType"];                            
 $objectID = $receivedData["objectId"];                          // where statement to select tracks to be displayed
@@ -91,7 +91,7 @@ if ( $objectType == "trk" ) {
         $sql .= "INNER JOIN tbl_part part ON trpa.trpaPartId = part.prtID ";
         $sql .= "WHERE trpaTrkId = " . $objectID;
 
-        if ($debugLevel >= 3) fputs($logFile, "Line 93: sql: " . $sql . "\r\n");
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__. "sql: " . $sql . "\r\n");
 
         $records = mysqli_query($conn, $sql);
         
@@ -99,7 +99,7 @@ if ( $objectType == "trk" ) {
         // select single line result
         while ( $trackPartRecord = mysqli_fetch_assoc($records) ) {
             
-            if ($debugLevel >= 3) fputs($logFile, "Line 101: trkId: " . $trackPartRecord["trpaTrkId"] 
+            if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": trkId:" . $trackPartRecord["trpaTrkId"] 
                 . "FirstName: " . $trackPartRecord["prtFirstName"] . "\r\n");
 
             $trpaLine = array (

@@ -13,9 +13,9 @@
 // * blabla
 // 
 
-header('content-type: application/json; charset=utf-8');
+header("content-type: application/json; charset=utf-8");
 include("config.inc.php");                                              //include config file
-date_default_timezone_set('Europe/Zurich');
+date_default_timezone_set("Europe/Zurich");
 
 if ($debugLevel >= 1){
     $fp = @fopen("../log/autoComplete.log","a");
@@ -24,8 +24,8 @@ if ($debugLevel >= 1){
 };
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line ' . __LINE__ . ': field: ' . $_GET["field"] . "\r\n");
-    fputs($fp, 'Line ' . __LINE__ . ': term: ' . $_GET["term"] . "\r\n");
+    fputs($fp, "Line " . __LINE__ . ": field: " . $_GET["field"] . "\r\n");
+    fputs($fp, "Line " . __LINE__ . ": term: " . $_GET["term"] . "\r\n");
 };
 
 $searchObject = $_GET["field"];
@@ -50,7 +50,7 @@ if ( $searchObject == "peak") {
 }
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line ' . __LINE__ . ': sql: ' . $sql . "\r\n");
+    fputs($fp, "Line " . __LINE__ . ": sql: " . $sql . "\r\n");
 };
 
 $results = $conn->prepare($sql);
@@ -60,8 +60,8 @@ $results->bind_result($ID, $Short);                                     // Bind 
 $json = array();
 while($results->fetch()) {
     $res = array(
-        'id' => $ID,
-        'value' => $Short,
+        "id" => $ID,
+        "value" => $Short,
     );
     array_push($json, $res);
 }
@@ -69,7 +69,7 @@ while($results->fetch()) {
 $jsonstring = json_encode($json);
 
 if ($debugLevel >= 3){
-    fputs($fp, 'Line ' . __LINE__ . ': jsonstring: ' . $jsonstring . "\r\n");
+    fputs($fp, "Line " . __LINE__ . ": jsonstring: " . $jsonstring . "\r\n");
 };
 
 echo $jsonstring;
