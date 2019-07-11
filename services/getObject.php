@@ -45,7 +45,11 @@ if ( $objectType == "trk" ) {
     if ( $requestType == "get" ) {
 
         // Select tracks 
-        $sql = "SELECT * FROM tbl_tracks ";
+        $sql = "SELECT `trkId`, `trkTrackName`, `trkRoute`, `trkDateFinish`, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin, ";
+        $sql .= "`trkType`, `trkSubType`, `trkOrg`, `trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToPeak`, ";
+        $sql .= "`trkTimeToFinish`, `trkStartEle`, `trkPeakEle`, `trkPeakTime`, `trkLowEle`, `trkLowTime`, ";
+        $sql .= "`trkFinishEle`, `trkFinishTime`, `trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`, `trkLoginName`, ";
+        $sql .= "`trkCoordinates`, `trkCoordTop`, `trkCoordBottom`, `trkCoordLeft`, `trkCoordRight` FROM tbl_tracks ";
         $sql .= "WHERE trkId = " . $objectID;
         $records = mysqli_query($conn, $sql);                       // run query against DB and store results in $records
         $objectRecord = mysqli_fetch_assoc($records);               // create array containing $results

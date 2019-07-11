@@ -108,7 +108,7 @@ if ( $objectName == "tracks" ) {
     $kml[] = "        <open>1</open>";
 
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, trkDateBegin, trkSubType, trkCoordinates, ";
+    $sql = "SELECT trkId, trkTrackName, trkRoute, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin, trkSubType, trkCoordinates, ";
     $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhere;
@@ -208,7 +208,7 @@ if ( $objectName == "tracks" ) {
     }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
-    if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks tracks processed\r\n");
     if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
     // Close all files and connections

@@ -318,7 +318,6 @@ if ($request == "temp") {
 
         // write var to track obj
         $trackObj = array (
-            "trkSourceFileName"=>$fileName,
             "trkTrackName"=>"$trackName",
             "trkRoute"=>"$trackName",
             "trkDateBegin"=>$DateBegin,
@@ -339,7 +338,6 @@ if ($request == "temp") {
             "trkDistance"=>round($overallDistance/1000, 2),
             "trkCoordinates"=>$coordString,
             "trkCountry"=>"CH",
-            "trkSaison"=>"2017/18 Wi",
             "trkType"=>"Ski",
             "trkSubType"=>"Skitour",
             "trkCoordTop"=>round($trkCoordTop, 0),

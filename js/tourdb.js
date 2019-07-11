@@ -1022,11 +1022,12 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     }           
 
     // Field participants
-    var whereString = "";
+    /*var whereString = "";
     if ( ($('#dispListTrk_participants').val()) != "" ) {
         whereString = "trkParticipants like '%" + $('#dispListTrk_participants').val() + "%'";
         whereStatement.push( whereString );
     };
+    */
 
     // Field country
     var whereString = "";
@@ -1121,8 +1122,8 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
             $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
             $('#uiTrack_fld_trkSubType').selectmenu("refresh");
             $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
-            $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);
-            $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);
+            //$('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);      // field removed from DB
+            //$('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);      // field removed from DB
             $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
             $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
             $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
@@ -1222,8 +1223,8 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiTrack_fld_trkType').val(trackObj.trkType);
                 $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
                 $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
-                $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);
-                $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);
+                // $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);     // field removed from DB
+                // $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);     // field removed from DB
                 $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
                 $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
                 $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
@@ -2281,11 +2282,13 @@ function createTrkKmlWhere () {
     }           
 
     // Field participants
+    /*
     var whereString = "";
     if ( ($('#dispFilTrk_participants').val()) != "" ) {
         whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
         whereStatement.push( whereString );
     };
+    */
 
     // Field country
     var whereString = "";

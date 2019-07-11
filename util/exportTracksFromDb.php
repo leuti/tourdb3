@@ -23,7 +23,6 @@ fputs($logFile, "exportTracksFromDb.php started: " . date("Ymd-H:i:s", time()) .
 
 $sql = "SELECT 
             trkId,
-            trkLogbookId,
             trkSourceFileName,
             trkPeakRef,
             trkTrackName,

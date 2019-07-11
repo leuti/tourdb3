@@ -47,8 +47,8 @@ if (!is_dir ( $outDir )) {                                                      
    
 // Create SQL SELECT statement
 $sql .= "SELECT trkId, trkTrackName, trkRoute, ";
-$sql .= "trkDateBegin, trkDateFinish, trkGPSStartTime, trkSaison, trkType, trkSubType, trkOrg, trkOvernightLoc, ";
-$sql .= "trkParticipants, trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, ";
+$sql .= "trkDateBegin, trkDateFinish, trkGPSStartTime, trkType, trkSubType, trkOrg, trkOvernightLoc, ";
+$sql .= "trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, ";
 $sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, trkGrade, ";
 $sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName ";
 $sql .= "FROM tbl_tracks ";

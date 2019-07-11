@@ -46,8 +46,8 @@ if(isset($_POST) && isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SER
 		$sqlFilterString = ""; // If there's no sql search string delivered, set it to ""
     };
     if ($debugLevel >= 3){
-        fputs($logFile, "Line " . __LINE__ . ": $page: " . $page_number . "\r\n");
-        fputs($logFile, "Line " . __LINE__ . ": $sqlSearchString: " . $sqlFilterString . "\r\n");
+        fputs($logFile, "Line " . __LINE__ . ": page: $page_number\r\n");
+        fputs($logFile, "Line " . __LINE__ . ": sqlSearchString: $sqlFilterString\r\n");
     };
 
     // Get total number of records from database for pagination
@@ -65,7 +65,7 @@ if(isset($_POST) && isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SER
     };   	
 	
     // Select statement to read data from vw_waypoints
-    $sql = "SELECT trkId, trkTrackName, trkDateBegin  
+    $sql = "SELECT trkId, trkTrackName, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin  
             FROM tbl_tracks 
             WHERE ";
     $sql .= $sqlFilterString;  
