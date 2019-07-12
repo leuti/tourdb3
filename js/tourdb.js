@@ -105,61 +105,54 @@ $(document).ready(function() {
             data: jsn
         })
         .done(function ( jsonIn ) {
-            if ( jsonIn.login = jsonOut.login ){                    // Login send = login return (security check)
-                if ( jsonIn.loginStatus == "OK"){                   // Login successful
-                    
-                    // set session object vars
-                    // -----------------------
-                    SESSION_OBJ.login = jsonIn.login;
-                    SESSION_OBJ.loginTime = jsonIn.loginTime;
-                    SESSION_OBJ.loginStatus = jsonIn.loginStatus;
-                    SESSION_OBJ.sessionId = jsonIn.sessionId;
-                    SESSION_OBJ.activePanel = "map";
-                    SESSION_OBJ.currentFunction = "";
+            if ( jsonIn.loginStatus == "OK"){                   // Login successful
+                
+                // set session object vars
+                // -----------------------
+                SESSION_OBJ.login = jsonIn.login;
+                SESSION_OBJ.loginTime = jsonIn.loginTime;
+                SESSION_OBJ.loginStatus = jsonIn.loginStatus;
+                SESSION_OBJ.sessionId = jsonIn.sessionId;
+                SESSION_OBJ.activePanel = "map";
+                SESSION_OBJ.currentFunction = "";
 
-                    // Manage displayed items
-                    // ----------------------
+                // Manage displayed items
+                // ----------------------
 
-                    // Open Panel Display
-                    var $activeButtonA = $('#mainButtons_mapBtn_a')            // Store the current link <a> element
-                    buttonId = $activeButtonA.attr('href'); 
-                    
-                    // Run following block if selected topic is currently not active
-                    $topicButton.removeClass('active');                         // Make current panel inactive
-                    $activeButton.removeClass('active');                        // Make current tab inactive
-                    $topicButton = $(buttonId).addClass('active');              // Make new panel active
-                    $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-                    $('.loginReq').removeClass('loginReq');                     // Free deactivated menues
-                    $('#uiLogin_loginBtn').addClass('loginReq');
+                // Open Panel Display
+                var $activeButtonA = $('#mainButtons_mapBtn_a')            // Store the current link <a> element
+                buttonId = $activeButtonA.attr('href'); 
+                
+                // Run following block if selected topic is currently not active
+                $topicButton.removeClass('active');                         // Make current panel inactive
+                $activeButton.removeClass('active');                        // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
+                $('.loginReq').removeClass('loginReq');                     // Free deactivated menues
+                $('#uiLogin_loginBtn').addClass('loginReq');
 
-                    // Display status message
-                    // ----------------------
-                    $('#statusMessage').text('Login successful');
-                    $("#statusMessage").show().delay(5000).fadeOut(); 
-                    
-                    // Draw empty map (why empty???)
-                    // --------------
-                    if ( typeof(ga) != 'undefined' ) {
-                        tourdbMap = drawMapEmpty('displayMap-ResMap');          // Draw empty map (without additional layers) 
-                    }
-
-                    // Load first set of tracks to be displayed in the List panel
-                    // ----------------------------------------------------------
-                    var page = 1;
-                    fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";      // where string for list view (fetch_pages.php)
-                    $("#tabDispLists_trks").load("services/fetch_pages.php",
-                        {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
-
-                } else {                                            // Login failed
-                    // Display status message
-                    // ----------------------
-                    $('#statusMessage').text('Login failed');
-                    $('#statusMessage').show().delay(5000).fadeOut();
+                // Display status message
+                // ----------------------
+                $('#statusMessage').text('Login successful');
+                $("#statusMessage").show().delay(5000).fadeOut(); 
+                
+                // Draw empty map (why empty???)
+                // --------------
+                if ( typeof(ga) != 'undefined' ) {
+                    tourdbMap = drawMapEmpty('displayMap-ResMap');          // Draw empty map (without additional layers) 
                 }
 
-            } else {
-                // the login return by the php is not equal the login sent!!
-                $('#statusMessage').text('Returned login not equal to entered login!');
+                // Load first set of tracks to be displayed in the List panel
+                // ----------------------------------------------------------
+                var page = 1;
+                fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";      // where string for list view (fetch_pages.php)
+                $("#tabDispLists_trks").load("services/fetch_pages.php",
+                    {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
+
+            } else {                                            // Login failed
+                // Display status message
+                // ----------------------
+                $('#statusMessage').text(jsonIn.message);
                 $('#statusMessage').show().delay(5000).fadeOut();
             }
         });                                                                                 
