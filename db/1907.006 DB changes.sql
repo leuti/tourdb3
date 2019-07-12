@@ -1,0 +1,1 @@
+ALTER TABLE `tourdb2_prod`.`tbl_users` DROP INDEX `usrLogin`, ADD UNIQUE `usrLogin` (`usrLogin`) USING BTREE;
