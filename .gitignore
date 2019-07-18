@@ -1,15 +1,11 @@
+# Ignore generated export files
 export/
-import/
-jqw/
-kml/
-log/*.log
-out (move to log)/
-snipet/
-test/
-tmpout/
-tmp/gps_uploads/
-tmp/kml_disp/
-tmp/reimport/
-work/
-services/config.inc.php
-.gitignore
+
+# Ignore log files
+**/log/*.log
+
+# Ignore temp files
+**/tmp
+
+# Ignore the config file due to different pw between local host and hosttech
+**/services/config.inc.php

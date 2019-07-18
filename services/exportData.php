@@ -35,7 +35,7 @@ $receivedData = json_decode($content, true);
 
 // read variables from JSON object
 $request = $receivedData["request"];
-$loginName = $receivedData["login"];
+$loginName = $receivedData["usrId"];
 
 if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": Request (JSON): $request\r\n");    
 
@@ -50,7 +50,7 @@ $sql .= "SELECT trkId, trkTrackName, trkRoute, ";
 $sql .= "trkDateBegin, trkDateFinish, trkGPSStartTime, trkType, trkSubType, trkOrg, trkOvernightLoc, ";
 $sql .= "trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, ";
 $sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, trkGrade, ";
-$sql .= "trkMeterUp, trkMeterDown, trkCountry, trkLoginName ";
+$sql .= "trkMeterUp, trkMeterDown, trkCountry, trkUsrId";
 $sql .= "FROM tbl_tracks ";
 
 if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": SQL: $sql\r\n");    

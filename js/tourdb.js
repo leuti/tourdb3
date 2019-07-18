@@ -14,6 +14,7 @@
 // Confirmed global vars 
 var SESSION_OBJ = {                                                 // this object stores all relevant session infos
     login: "",
+    usrId: "",
     loginTime: "",
     loginStatus: "",
     sessionId: "",
@@ -110,6 +111,7 @@ $(document).ready(function() {
                 // set session object vars
                 // -----------------------
                 SESSION_OBJ.login = jsonIn.login;
+                SESSION_OBJ.usrId = jsonIn.usrId;
                 SESSION_OBJ.loginTime = jsonIn.loginTime;
                 SESSION_OBJ.loginStatus = jsonIn.loginStatus;
                 SESSION_OBJ.sessionId = jsonIn.sessionId;
@@ -145,8 +147,8 @@ $(document).ready(function() {
                 // Load first set of tracks to be displayed in the List panel
                 // ----------------------------------------------------------
                 var page = 1;
-                fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";      // where string for list view (fetch_pages.php)
-                $("#tabDispLists_trks").load("services/fetch_pages.php",
+                fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
+                $("#tabDispLists_trks").load("services/fetch_lists.php",
                     {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
             } else {                                            // Login failed
@@ -210,7 +212,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -246,7 +248,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_kml.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -286,7 +288,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -325,7 +327,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -364,7 +366,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -403,7 +405,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -440,7 +442,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -478,7 +480,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -516,7 +518,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     var phpUrl = "services/gen_wayp.php";
     var jsonObject = {
         sessionId: SESSION_OBJ.sessionId,
-        login: SESSION_OBJ.login,
+        usrId: SESSION_OBJ.usrId,
         objectName: objName,
         sqlWhere: sqlWhereCurrent
     }
@@ -1037,7 +1039,7 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
             sqlWhereCurrent += whereStatement[i];
             sqlWhereCurrent += " AND ";
         }
-        sqlWhereCurrent = sqlWhereCurrent + " trkLoginName ='" + SESSION_OBJ.login + "'";
+        sqlWhereCurrent = sqlWhereCurrent + " trkUsrId='" + SESSION_OBJ.usrId + "'";
     } 
 
     // ***********************************************************************
@@ -1052,9 +1054,9 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
 
     fetch_pages_filterString = sqlWhereCurrent;
     if ( !fetch_pages_filterString ) {
-        fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";   
+        fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";   
     }
-    $("#tabDispLists_trks").load("services/fetch_pages.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
+    $("#tabDispLists_trks").load("services/fetch_lists.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
     $('#dispListTrkMenuLarge').removeClass('visible');
     $('#dispListTrkMenuLarge').addClass('hidden');
     $('#dispListTrkMenuMini').removeClass('hidden');
@@ -1067,7 +1069,7 @@ $(document).on('click', '.pagination a', function (e){  // "#tabDispLists_trks"
     e.preventDefault();
     $(".loading-div").show(); //show loading element
     var page = $(this).attr("data-page"); //get page number from link
-    $("#tabDispLists_trks").load("services/fetch_pages.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
+    $("#tabDispLists_trks").load("services/fetch_lists.php",{"object":"trk","sqlFilterString":fetch_pages_filterString,"page":page}, function(){ //get content from PHP page
         $(".loading-div").hide(); //once done, hide loading element
     });
 });
@@ -1265,7 +1267,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
         formData.append('sessionId', SESSION_OBJ.sessionId);                                // append parameter session ID
         formData.append('request', 'temp')                                      // temp request to create track temporarily
         formData.append('fileName', fileName);                                  // append parameter fileName
-        formData.append('login', SESSION_OBJ.login);                               // append parameter file type
+        formData.append('usrId', SESSION_OBJ.usrId);                               // append parameter file type
         xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
         xhr.send(formData);                                                     // send formData object to service using xhr
     } else {
@@ -1296,7 +1298,7 @@ $(document).on('click', '#buttonUploadFileJSON', function (e) {
     jsonObject["sessionId"] = SESSION_OBJ.sessionId;                             // append parameter session ID
     jsonObject["request"] = 'json';                              // temp request to create track temporarily
     jsonObject["fileName"] = fileName;                              // send track object
-    jsonObject["login"] = SESSION_OBJ.login;
+    jsonObject["usrId"] = SESSION_OBJ.usrId;
     xhr.open ('POST', phpLocation, true);                           // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
@@ -1333,7 +1335,7 @@ $(document).on('click', '#mainButtons_exportBtnTracks01JSON', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_JSON';                                    // temp request to create track temporarily
-    jsonObject["login"] = SESSION_OBJ.login;
+    jsonObject["usrId"] = SESSION_OBJ.usrId;
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
@@ -1357,7 +1359,7 @@ $(document).on('click', '#mainButtons_exportBtnTracks01CSV', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_CSV';                                     // temp request to create track temporarily
-    jsonObject["login"] = SESSION_OBJ.login;
+    jsonObject["usrId"] = SESSION_OBJ.usrId;
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
@@ -1448,7 +1450,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     valid = valid && checkRegexp ( $('#uiTrack_fld_trkCountry'), /^[A-Za-z]{2}$/, "Enter valid country code" );   
     
     // not displayed fields
-    trackObj.trkLoginName = SESSION_OBJ.login;    
+    trackObj.trkUsrId= SESSION_OBJ.usrId;    
     trackObj.trkCoordinates = $('#uiTrack_fld_trkCoordinates').val();  
     trackObj.trkStartEle = $('#uiTrack_fld_trkStartEle').val();                        
     trackObj.trkPeakEle = $('#uiTrack_fld_trkPeakEle').val();                          
@@ -1464,7 +1466,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     
     if ( valid ) {                                                      // all validation checks were successful
         phpLocation = "services/putObject.php";                                 // Variable to store location of php file
-        jsonObject.login = SESSION_OBJ.login;
+        jsonObject.usrId = SESSION_OBJ.usrId;
         jsonObject.objectType = 'trk';
         jsonObject.putObj = trackObj;                                         // send track object
         jsonObject.requestType = SESSION_OBJ.currentFunction;
@@ -1622,8 +1624,8 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 // Load first set of tracks to be displayed in the List panel
                 // ----------------------------------------------------------
                 var page = 1;
-                fetch_pages_filterString = " trkLoginName = '" + SESSION_OBJ.login + "'";      // where string for list view (fetch_pages.php)
-                $("#tabDispLists_trks").load("services/fetch_pages.php",
+                fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
+                $("#tabDispLists_trks").load("services/fetch_lists.php",
                     {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
                 // empty items array and redraw empty items array
@@ -2298,7 +2300,7 @@ function createTrkKmlWhere () {
             sqlWhereCurrent += whereStatement[i];
             sqlWhereCurrent += " AND ";
         }
-        sqlWhere = sqlWhereCurrent + " trkLoginName ='" + SESSION_OBJ.login + "'";
+        sqlWhere = sqlWhereCurrent + " trkUsrId='" + SESSION_OBJ.usrId + "'";
     } else {
         sqlWhere = "";
     }

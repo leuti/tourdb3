@@ -12,7 +12,7 @@
 // Output Params:
 // --------------
 // status: OK or ERR
-// message: Message about login result
+// message: Message about usrId result
 // returnObj: Object to be returned (currently only track with trackPartArray and trackWaypArray) 
 //
 // Created: 25.6.2019 - Daniel Leutwyler
@@ -23,7 +23,7 @@ include("config.inc.php");                                        // include con
 date_default_timezone_set("Europe/Zurich");                         // must be set when using time functions
 
 // Open file to write log
-$importGpxLog = dirname(__FILE__) . "/../log/getObject_new.log";        // Assign file location
+$importGpxLog = dirname(__FILE__) . "/../log/getObject.log";        // Assign file location
 if ( $debugLevel >= 1 ) {
     $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
     fputs($logFile, "\r\n============================================================\r\n");    

@@ -80,10 +80,10 @@ if ($request == "temp") {
     // Read posted parameters
     $sessionId = $_REQUEST["sessionId"];                                // ID of current user session - required to make site multiuser capable
     $fileName = basename($_FILES["fileName"]["name"]);                  // file name of gps file to be processed
-    $login = $_REQUEST["login"];                                // Login name
+    $usrId = $_REQUEST["usrId"];                                // usrId
     $fileinfo = pathinfo($fileName);                                    // evaluate file extension 
     $filetype = $fileinfo["extension"];
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Parameters: sessionId:$sessionId | fileName:$fileName | filetype:$filetype | login:$login\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Parameters: sessionId:$sessionId | fileName:$fileName | filetype:$filetype | usrId:$usrId\r\n");    
 
     // if file type = gpx or kml --> create directory and copy file 
     if ( $filetype == "gpx" ) {
@@ -384,10 +384,10 @@ if ($request == "temp") {
     // read received INPUT object
     $trackObj = array();                                                // array storing track data in array
     $sessionId = $receivedData["sessionId"];                            // ID of current user session - required to make site multiuser capable
-    $login = $receivedData["login"];
+    $usrId = $receivedData["usrId"];
     $trackObj = $receivedData["trackObj"];                              // Array of track data 
     
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - login: $login\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
     
     // Create SQL statement to insert track 
     $sql = " INSERT INTO `tourdb2_prod`.`tbl_tracks` (";
@@ -523,12 +523,12 @@ if ($request == "temp") {
     // read received INPUT object
     $trackObj = array();                                                // array storing track data in array
     $sessionId = $receivedData["sessionId"];                            // ID of current user session - required to make site multiuser capable
-    $login = $receivedData["login"];
+    $usrId = $receivedData["usrId"];
     $trackObj = $receivedData["trackObj"];                              // Array of track data 
     $trkEdit_waypItems = $receivedData["trkEdit_waypItems"];            // Array of waypoiunts selected
     $trkEdit_partItems = $receivedData["trkEdit_partItems"];            // Array of participants selected
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - login: $login\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
 
     // Part 1: Update tracks
     // --------------------------------------------------

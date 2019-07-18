@@ -55,7 +55,7 @@ session_start();
 if ( isset($login) && $login != "" ) {
 
     // retrieve password and decrypt
-    $sql = "SELECT AES_DECRYPT(`usrPasswd`, 'vjLzGfqxnOFEWCpIbeXdFjnPWTKcjo9a') AS `usrPasswd` ";
+    $sql = "SELECT `usrId`, AES_DECRYPT(`usrPasswd`, 'vjLzGfqxnOFEWCpIbeXdFjnPWTKcjo9a') AS `usrPasswd` ";
     $sql .= "FROM `tbl_users` WHERE `usrLogin` = '$login' ";
   
     if ($debugLevel >= 3){
@@ -67,6 +67,7 @@ if ( isset($login) && $login != "" ) {
         if ( $num > 0 ) {                                                   // 1 result is expected 
             while ( $resultLine = mysqli_fetch_assoc( $result ) ) {         // loop through result set line by line
                 $passwordDb = $resultLine["usrPasswd"];
+                $usrId = $resultLine["usrId"];
 
                 // Loop through result (only one expected)
                 if ($debugLevel >= 3) fputs($logFileName, "Line " . __LINE__ . ": num: $num | password $password | passwordDb: $passwordDb\r\n");
@@ -76,6 +77,7 @@ if ( isset($login) && $login != "" ) {
                     if ($debugLevel >= 3) fputs($logFileName, "Line " . __LINE__ . ": Case 2: login und pw are correct\r\n");
                     $returnObject["loginStatus"] = "OK";                        // set login status to OK
                     $returnObject["message"] = "Login successful";
+                    $returnObject["usrId"] = $usrId;
                 } else {
                     // Case 4: user record found, but password provided <> db password
                     if ($debugLevel >= 3) fputs($logFileName, "Line " . __LINE__ . ": Case 4: user record found, but password provided <> db password\r\n"); 

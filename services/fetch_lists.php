@@ -21,7 +21,7 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/fetch_pages.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
-    fputs($logFile, date("Ymd-H:i:s", time()) . " Line " . __LINE__ . "fetch_pages.php opened \r\n"); 
+    fputs($logFile, date("Ymd-H:i:s", time()) . " Line " . __LINE__ . "fetch_lists.php opened \r\n"); 
 };
 
 // continue only if $_POST is set and it is a Ajax request

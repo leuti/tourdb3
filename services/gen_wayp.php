@@ -37,7 +37,7 @@ $receivedData = json_decode ( file_get_contents("php://input"), true );
 $sessionId = $receivedData["sessionId"];                                    
 $sqlWhere = $receivedData["sqlWhere"];                          // where statement to select tracks to be displayed
 $objectName = $receivedData["objectName"];
-$login = $receivedData["login"];
+$usrId = $receivedData["usrId"];
 
 if ($debugLevel >= 3){
     fputs($logFile, "<$objectName> Line " . __LINE__ . ": Received parameters:\r\n");
@@ -60,7 +60,7 @@ $sql .= "WHEN 'Schneeschuhwanderung' THEN 1 WHEN 'Skihochtour' THEN 1 WHEN 'Skit
 $sql .= "FROM tbl_tracks ";
 $sql .= "JOIN tbl_track_wayp on tbl_tracks.trkId = tbl_track_wayp.trwpTrkId ";
 $sql .= "WHERE tbl_track_wayp.trwpReached_f = 1 ";
-$sql .= "AND trkLoginName = '$login' "; 
+$sql .= "AND trkUsrId= '$usrId' "; 
 $sql .= "GROUP BY tbl_track_wayp.trwpWaypID, tbl_tracks.trkId";
 $sql .= ") AS s1 ";
 $sql .= "RIGHT JOIN tbl_waypoints ON s1.trwpWaypID = tbl_waypoints.waypID ";

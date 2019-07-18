@@ -4,7 +4,7 @@
 // Refer to the service getObject.php for the data retrieval
 // 
 // Parameters:
-// login: user      login name
+// usrId: user      usrId
 // objectType:      type of object to be worked (put) - currently track
 // putObj:          Object to be put
 // requestType:     type of request (ins, upd, del)
@@ -33,7 +33,7 @@ if ( $debugLevel >= 1 ) {
 $receivedData = json_decode ( file_get_contents("php://input"), true );
 
 // read received INPUT object
-$login = $receivedData["login"];
+$usrId = $receivedData["usrId"];
 $objectType = $receivedData["objectType"];
 $receivedObj = $receivedData["putObj"];
 $requestType = $receivedData["requestType"];                            // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
@@ -42,18 +42,17 @@ $trackWaypArray = $receivedData["trackWaypArray"];                      // Array
 $trackPartArray = $receivedData["trackPartArray"];                      // Array of participants selected
 
 if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Input Params:\r\n");
-if ($debugLevel >= 3) fputs($logFile, "   login: $login\r\n");
+if ($debugLevel >= 3) fputs($logFile, "   usrId: $usrId\r\n");
 if ($debugLevel >= 3) fputs($logFile, "   objectType: $objectType\r\n");
 if ($debugLevel >= 3) fputs($logFile, "   logrequestTypein: $requestType\r\n");
 if ($debugLevel >= 3) fputs($logFile, "   sessionId: $sessionId\r\n");
-if ($debugLevel >= 3) fputs($logFile, "   login: $login\r\n");
 
 if ( $requestType == "ins") {
 // -----------------------------------------------------------------------
     // request type is "insert" meaning that the record has to be inserted
     // -------------------------------------------------------------------
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - requestType: $requestType - login: $login\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - requestType: $requestType - usrId: $usrId\r\n");  
 
     // Part 1: insert tracks record into database
     // ----------------------------------------
@@ -215,7 +214,7 @@ else if ( $requestType == "upd") {
     // request type is "update" meaning that the user has modified a record
     // ---------------------------------------------------------------------------------
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - requestType: $requestType - login: $login\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - requestType: $requestType - usrId: $usrId\r\n");  
 
     // Part 1: Update tracks record in database
     // ----------------------------------------
