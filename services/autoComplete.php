@@ -14,7 +14,7 @@
 // 
 
 header("content-type: application/json; charset=utf-8");
-include("config.inc.php");                                              //include config file
+include("config.php");                                              //include config file
 date_default_timezone_set("Europe/Zurich");
 
 if ($debugLevel >= 1){

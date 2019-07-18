@@ -20,7 +20,7 @@
 // * 
 
 date_default_timezone_set("Europe/Zurich");
-include("config.inc.php");                                                  // Include config file
+include("config.php");                                                  // Include config file
 
 $imgLoc = "./css/images/";
 $recordCount = 0;

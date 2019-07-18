@@ -18,7 +18,7 @@
 // trkId:           track ID
 
 // Set variables and parameters
-include("config.inc.php");                                              // include config file
+include("config.php");                                              // include config file
 date_default_timezone_set("Europe/Zurich");                             // must be set when using time functions
 
 // Open file to write log
