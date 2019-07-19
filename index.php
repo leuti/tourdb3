@@ -655,11 +655,13 @@
 					</div>
 
 					<!-- Date Finish -->
+					<!--
 					<div>
 						<label for="uiTrack_fld_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
 						<input type="text" name="uiTrack_fld_trkDateFinish" id="uiTrack_fld_trkDateFinish" size="20" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
+					-->
+					
 					<!-- Saison -->
 					<!--
 					<div>

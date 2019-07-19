@@ -39,7 +39,7 @@ if ( $debugLevel >= 1 ) {
 if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != "" )        // if call to this service was done with dataForm (temp)
 {
     $request = $_REQUEST["request"];                                    // evaluate type of request
-    if ( $debugLevel >= 3 ) fputs($logFile, "Line" . __LINE__ . ": Request (_REQUEST): $request\r\n");    
+    if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": Request (_REQUEST): $request\r\n");    
 } else {
     // variables passed on by client (as formData object)
 
@@ -51,7 +51,7 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != "" )        // if ca
     if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": ContentType:" . $_SERVER["CONTENT_TYPE"] . "\r\n");
     //Make sure that the content type of the POST request has been set to application/json
     $contentType = isset($_SERVER["CONTENT_TYPE"]) ? substr($_SERVER["CONTENT_TYPE"],0,16) : "";
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": ContentType: <$contentType>\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": ContentType: <$contentType>\r\n");
     if(strcasecmp($contentType, "application/json") != 0){
         throw new Exception("Content type must be: application/json");
     }
@@ -68,7 +68,7 @@ if ( isset($_REQUEST["request"]) && $_REQUEST["request"] != "" )        // if ca
     //}
 
     $request = $receivedData["request"];                                // temp = temporary creation; save = final storage; cancel = cancel operation / delete track & track points
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Request (JSON): $request\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Request (JSON): $request\r\n");    
 }
 
 if ($request == "temp") {
@@ -83,7 +83,7 @@ if ($request == "temp") {
     $usrId = $_REQUEST["usrId"];                                // usrId
     $fileinfo = pathinfo($fileName);                                    // evaluate file extension 
     $filetype = $fileinfo["extension"];
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Parameters: sessionId:$sessionId | fileName:$fileName | filetype:$filetype | usrId:$usrId\r\n");    
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Parameters: sessionId:$sessionId | fileName:$fileName | filetype:$filetype | usrId:$usrId\r\n");    
 
     // if file type = gpx or kml --> create directory and copy file 
     if ( $filetype == "gpx" ) {
@@ -95,27 +95,27 @@ if ($request == "temp") {
             mkdir($uploaddir, 0777);
         }
 
-        if ( $debugLevel >= 3 ) fputs($logFile, "Line" . __LINE__ . ": 106 - uploadfile: $uploadfile\r\n");
+        if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": 106 - uploadfile: $uploadfile\r\n");
 
         // move file to upload dir
         if (move_uploaded_file($_FILES["fileName"]["tmp_name"], $uploadfile)) {         // move uploaded file to target dir
-            if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": file " . 
+            if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": file " . 
                 $_FILES["fileName"]["name"] . " successfully uploaded to: " . $uploaddir . "\r\n");    
         } else {
-            fputs($logFile, "Line" . __LINE__ . ": error uploading file " . 
+            fputs($logFile, "Line " . __LINE__ . ": error uploading file " . 
                 $_FILES["fileName"]["name"] . " to: " . $uploaddir . "\r\n"); 
         }  
 
         // read gpx file structure & content
         $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
-        $newTrackTime = $gpx->trk->trkseg->trkpt->time;
-        $GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-        $DateBegin = strftime("%Y.%m.%d", strtotime($newTrackTime));    // convert track time 
-        $DateFinish = strftime("%Y.%m.%d", strtotime($newTrackTime));   // convert track time 
+        $newTrackTime = $gpx->trk->trkseg->trkpt->time;                 // Read time of first trackpoint
+        //$GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
+        $DateBegin = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
+        //$DateFinish = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));   // convert track time 
         $trackName = $gpx->trk->name;                                   // Track name  
         //$trackName = $trackName[0];  
  
-        if ( $debugLevel >= 3 ) fputs($logFile, "Line" . __LINE__ . ": trackName: " . $trackName . "\r\n"); 
+        if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": trackName: " . $trackName . "\r\n"); 
 
         // -------------------------------------------------
         // Calculate times, meters up/down, distances
@@ -130,17 +130,7 @@ if ($request == "temp") {
         $eleFound = false;                                              // True when an ele <> 0 or "" has be read
         $overallDistance = (float) 0;
         $distance = (float) 0;
-        /*
-        $WGS_top_lat = 45;                                              // variables to define min/max lon/lat to diplay track in center of map, focused
-        $WGS_top_lon = 0;
-        $WGS_left_lat = 0;
-        $WGS_left_lon = 10.35;
-        $WGS_right_lat = 0;
-        $WGS_right_lon = 5.50 ;
-        $WGS_bottom_lat = 47.5;
-        $WGS_bottom_lon = 0;
-        */
-
+        
         $totalTrkPts = count($gpx->trk->trkseg->trkpt);                 // total number of track points in file
 
         // loop through each trkpt XML element in the gpx file
@@ -163,11 +153,9 @@ if ($request == "temp") {
                 $WGS_bottom_lon = $lon;
             }
 
-            //$CH03_top_lat = WGStoCHy($lat, $lon);
-            //$CH03_top_lon = WGStoCHx($lat, $lon); 
+            if ($debugLevel >= 5) fputs($logFile, "Line " . __LINE__ . ": INPUT --> lat: $lat | lon: $lon \r\n"); 
 
-            if ($debugLevel >= 5) fputs($logFile, "Line" . __LINE__ . ": INPUT --> lat: $lat | lon: $lon \r\n"); 
-
+            // Evaluate most extrem lat and lon positions
             if( $lat > $WGS_top_lat ) {                                 // This is the top most point
                 $WGS_top_lat = $lat;
                 $WGS_top_lon = $lon;
@@ -184,10 +172,10 @@ if ($request == "temp") {
             }
 
             if ($debugLevel >= 4) {
-                fputs($logFile, "Line" . __LINE__ . ": WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
-                fputs($logFile, "Line" . __LINE__ . ": WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
-                fputs($logFile, "Line" . __LINE__ . ": WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
-                fputs($logFile, "Line" . __LINE__ . ": WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+                fputs($logFile, "Line " . __LINE__ . ": WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+                fputs($logFile, "Line " . __LINE__ . ": WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+                fputs($logFile, "Line " . __LINE__ . ": WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+                fputs($logFile, "Line " . __LINE__ . ": WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
                 fputs($logFile, "====================================================================\r\n"); 
             }
 
@@ -198,7 +186,7 @@ if ($request == "temp") {
                 $eleFound = true;
             }
             $ele = $ele * 1;
-            $time = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
+            $timeTrkPt = strftime("%Y-%m-%d %H:%M:%S", strtotime($trkpt->time));
 
             if ($firstInLoop == 1)  {                                   // if record is not first, a comma is written
 
@@ -207,12 +195,12 @@ if ($request == "temp") {
                 
                 if ( $firstTrackPoint == 1 ) {
                     // initialise variables
-                    $startTime = $time;
+                    $startTime = $timeTrkPt;
                     $startEle = $ele;
-                    $peakTime = $time;
+                    $peakTime = $timeTrkPt;
                     $peakEle = $ele;
                     $lowEle = $ele;
-                    $lowTime = $time;
+                    $lowTime = $timeTrkPt;
                     $meterUp = 0;
                     $meterDown = 0;
                     $distance = 0;
@@ -232,7 +220,7 @@ if ($request == "temp") {
                 // calculate different variable
                 if ( $eleGain > 0 ) {                                   // elevation gained
                     if ( $eleGainVsPeak > 0 ) {
-                        $peakTime = $time;
+                        $peakTime = $timeTrkPt;
                         $peakEle = $ele;
                         $meterUp = $meterUp + $eleGain; 
                     } else {
@@ -240,7 +228,7 @@ if ($request == "temp") {
                     }
                 } else {
                     if ( $eleGainVsPeak < 0 ) {
-                        $lowTime = $time;
+                        $lowTime = $timeTrkPt;
                         $lowEle = $ele;
                         $meterDown = $meterDown + $eleGain;
                     } else {
@@ -250,7 +238,7 @@ if ($request == "temp") {
             }
             
             if ($GLOBALS["debugLevel"]>8) {
-                fputs($GLOBALS["logFile"],"Line" . __LINE__ . ": tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
+                fputs($GLOBALS["logFile"],"Line " . __LINE__ . ": tpNr:$tptNumber|ele:$ele|peakEle:$peakEle|lowEle:$lowEle|mU:$meterUp|mD|$meterDown|dist|$distance\r\n");
             }
             
             $previousEle = $ele;
@@ -265,48 +253,74 @@ if ($request == "temp") {
         }
 
         if ($GLOBALS["debugLevel"]>=3) {
-            fputs($GLOBALS["logFile"],"Line" . __LINE__ . ": WGS_top_lat:$WGS_top_lat|WGS_top_lon:$WGS_top_lon\r\n");
+            fputs($GLOBALS["logFile"],"Line " . __LINE__ . ": WGS_top_lat:$WGS_top_lat|WGS_top_lon:$WGS_top_lon\r\n");
         }
 
         // set elevation and time for last point
         $trkFinishEle = $ele;
-        $trkFinishTime = $time;
+        $trkFinishTime = $timeTrkPt;
 
         if ( $meterDown == 0 ) {
             $meterDown = "-0";
-            fputs($GLOBALS["logFile"],"Line" . __LINE__ . ": meter down: $meterDown\r\n");
+            fputs($GLOBALS["logFile"],"Line " . __LINE__ . ": meter down: $meterDown\r\n");
         }
 
-        // calculate times 
+        // calculate time to peak
         $datetime1 = new DateTime($peakTime);                           //start time
         $datetime2 = new DateTime($startTime);                          //end time
         $interval = $datetime1->diff($datetime2);
-        $timeToPeak = $interval->format("%H:%i:%s");
+        $timeToPeak = $interval->format("%H:%I:%S");
+        if ($GLOBALS["debugLevel"]>=3) {
+            fputs($logFile, "Line " . __LINE__ . ": peakTime: $peakTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": startTime: $startTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": timeToPeak: $timeToPeak\r\n"); 
+        }
 
-        $datetime1 = new DateTime($time);                               //start time
-        $datetime2 = new DateTime($startTime);                          //end time
-        $interval = $datetime1->diff($datetime2);
-        $overallTime = $interval->format("%H:%i:%s");
-
-        $datetime1 = new DateTime($time);                               //start time
+        // calculate time to finish
+        $datetime1 = new DateTime($trkFinishTime);                               //start time
         $datetime2 = new DateTime($peakTime);                           //end time
         $interval = $datetime1->diff($datetime2);
-        $timeToFinish = $interval->format("%H:%i:%s");
-     
+        $timeToFinish = $interval -> format( "%H:%I:%S" );
+        if ($GLOBALS["debugLevel"]>=3) {
+            fputs($logFile, "Line " . __LINE__ . ": time: $trkFinishTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": peakTime: $peakTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": timeToFinish: $timeToFinish\r\n"); 
+        }
+
+        // calculate overall time
+        $datetime1 = new DateTime($trkFinishTime);                               //start time
+        $datetime2 = new DateTime($startTime);                          //end time
+        $interval = $datetime1->diff($datetime2);
+        $overallTime_int = $interval;                                            // store overall time as interval 
+        $overallTime = $interval -> format( "%H:%I:%S" );
+        if ($GLOBALS["debugLevel"]>=3) {
+            fputs($logFile, "Line " . __LINE__ . ": time: $trkFinishTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": startTime: $startTime\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": overallTime: $overallTime\r\n"); 
+        }
+
+        // calculate date / time finish
+        /*
+        $datetime1 = new DateTime($startTime);                               //start time
+        $interval = $datetime1 -> add( $overallTime_int );
+        //$DateFinish = $interval -> format( "Y-m-d H:i:s" );
+        if ($debugLevel >= 3) {
+            fputs($logFile, "Line " . __LINE__ . ": startTime: $startTime\r\n"); 
+            fputs($logFile, "Line " . __LINE__ . ": interval: " . $interval -> format( "Y-m-d H:i:s" ) . "\r\n"); 
+            //fputs($logFile, "Line " . __LINE__ . ": DateFinish: $DateFinish\r\n"); 
+        }
+        */
+
         $trkCoordTop = WGStoCHx($WGS_top_lat, $WGS_top_lon);            // variables to define min/max lon/lat to diplay track in center of map, focused
-        //$trkCoordTop = WGStoCHx($WGS_top_lat, $WGS_top_lon); 
-        //$trkCoordLeft = WGStoCHy($WGS_left_lat, $WGS_left_lon);
         $trkCoordLeft = WGStoCHy($WGS_left_lat, $WGS_left_lon);
-        //$trkCoordRight = WGStoCHy($WGS_right_lat, $WGS_right_lon);
         $trkCoordRight = WGStoCHy($WGS_right_lat, $WGS_right_lon);
         $trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
-        //$trkCoordBottom = WGStoCHx($WGS_bottom_lat, $WGS_bottom_lon);
-
+        
         if ($debugLevel >= 3) {
-            fputs($logFile, "Line" . __LINE__ . ": trkCoordTop: $trkCoordTop --> WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
-            fputs($logFile, "Line" . __LINE__ . ": trkCoordBottom: $trkCoordBottom --> WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
-            fputs($logFile, "Line" . __LINE__ . ": trkCoordLeft: $trkCoordLeft --> WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
-            fputs($logFile, "Line" . __LINE__ . ": trkCoordRight: $trkCoordRight --> WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
+            fputs($logFile, "Line " . __LINE__ . ": trkCoordTop: $trkCoordTop --> WGS_top_lat: $WGS_top_lat | WGS_top_lon: $WGS_top_lon\r\n"); 
+            fputs($logFile, "Line " . __LINE__ . ": trkCoordBottom: $trkCoordBottom --> WGS_bottom_lat: $WGS_bottom_lat | WGS_top_lon: $WGS_bottom_lon\r\n"); 
+            fputs($logFile, "Line " . __LINE__ . ": trkCoordLeft: $trkCoordLeft --> WGS_left_lat: $WGS_left_lat | WGS_top_lon: $WGS_left_lon\r\n"); 
+            fputs($logFile, "Line " . __LINE__ . ": trkCoordRight: $trkCoordRight --> WGS_right_lat: $WGS_right_lat | WGS_top_lon: $WGS_right_lon\r\n"); 
             fputs($logFile, "=============================================================================================================\r\n"); 
         }
         
@@ -321,8 +335,8 @@ if ($request == "temp") {
             "trkTrackName"=>"$trackName",
             "trkRoute"=>"$trackName",
             "trkDateBegin"=>$DateBegin,
-            "trkDateFinish"=>$DateFinish,
-            "trkGPSStartTime"=>$GpsStartTime,
+            //"trkDateFinish"=>$DateFinish,
+            //"trkGPSStartTime"=>$GpsStartTime,
             "trkStartEle"=>$startEle,
             "trkPeakEle"=>$peakEle,
             "trkPeakTime"=>$peakTime,
@@ -362,7 +376,7 @@ if ($request == "temp") {
     } else {
 
         // if filetype is not GPX
-        fputs($logFile, "Line" . __LINE__ . ": File type is $filetype - only GPX can be processed\r\n");  
+        fputs($logFile, "Line " . __LINE__ . ": File type is $filetype - only GPX can be processed\r\n");  
 
         // prepare JSON return object
         $outObject = array (
@@ -387,7 +401,7 @@ if ($request == "temp") {
     $usrId = $receivedData["usrId"];
     $trackObj = $receivedData["trackObj"];                              // Array of track data 
     
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
     
     // Create SQL statement to insert track 
     $sql = " INSERT INTO `tourdb2_prod`.`tbl_tracks` (";
@@ -406,15 +420,15 @@ if ($request == "temp") {
     $sql = substr($sql,0,strlen($sql)-1);                               // remove last ,
     $sql .= ")";
 
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                    // run sql against DB
     {
         $trkId = $conn->insert_id;
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": New track inserted successfully: ID = $trkId\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": New track inserted successfully: ID = $trkId\r\n");
     } else {
-        fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+        fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
         $message = "Error inserting Track: $conn->error";
 
         $outObject = array (
@@ -432,7 +446,7 @@ if ($request == "temp") {
     $waypRun = false;                                                   // True when at least one item to insert
     $partRun = false;                                                   // True when at least one item to insert
 
-    if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": Part II entered\r\n");
+    if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": Part II entered\r\n");
  
     if ( sizeof($trkEdit_waypItems) > 0 ) {
 
@@ -446,17 +460,17 @@ if ($request == "temp") {
                 $sql .= "(" . $trkId . "," . $trkEdit_waypItems[$i]["itemId"] . "," . $trkEdit_waypItems[$i]["reached_f"] . "),";  
             }
         }
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": wayp sql: " . $sql . "\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": wayp sql: " . $sql . "\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
         if ( $waypRun ) {
             if ( $conn->query($sql) === TRUE )                          // run sql against DB
             {
-                if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
+                if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
             } else {
-                fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
-                fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+                fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+                fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
                 // write output array
                 $outObject = array (
                     "status"=>"NOK",                                    // add err status to return object
@@ -466,7 +480,7 @@ if ($request == "temp") {
                 return;
             }
         } else {
-            if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": Nothing to insert into tbl_tracks_wayp\r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": Nothing to insert into tbl_tracks_wayp\r\n");
         }
 
         // Insert items into tbl_track_part
@@ -481,17 +495,17 @@ if ($request == "temp") {
                 $partRun = true;
             }
         }
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": part sql: $sql\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": part sql: $sql\r\n");
         
         // run SQL and handle error
         $sql = substr( $sql, 0, strlen($sql) - 1 );                     // trim last unnecessary ,
         if ( $partRun ) {
             if ( $conn->query($sql) === TRUE )                          // run sql against DB
             {
-                if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": New record in tbl_track_part inserted successfully\r\n");
+                if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": New record in tbl_track_part inserted successfully\r\n");
             } else {
-                fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
-                fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+                fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+                fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
                 // write output array
                 $outObject = array (
                     "status"=>"NOK",                                    // add err status to return object
@@ -501,7 +515,7 @@ if ($request == "temp") {
                 return;
             }
         } else {
-            if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": Nothing to insert into tbl_tracks_wayp\r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": Nothing to insert into tbl_tracks_wayp\r\n");
         }
     }
 
@@ -528,7 +542,7 @@ if ($request == "temp") {
     $trkEdit_waypItems = $receivedData["trkEdit_waypItems"];            // Array of waypoiunts selected
     $trkEdit_partItems = $receivedData["trkEdit_partItems"];            // Array of participants selected
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sessionId: $sessionId - request: $request - usrId: $usrId\r\n");  
 
     // Part 1: Update tracks
     // --------------------------------------------------
@@ -548,14 +562,14 @@ if ($request == "temp") {
     $sql = substr($sql,0,strlen($sql)-1);                               // remove last ,
     $sql .= " WHERE trkId = $trkId";
 
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": 558 Update Track - sql: $sql\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": 558 Update Track - sql: $sql\r\n");
 
     // run SQL and handle error
     if ($conn->query($sql) === TRUE)                                    // run sql against DB
     {
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": New track inserted successfully: ID = $trkId\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": New track inserted successfully: ID = $trkId\r\n");
     } else {
-        fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+        fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
         $message = "Error inserting Track: $conn->error";
 
         $outObject = array (
@@ -580,7 +594,7 @@ if ($request == "temp") {
         }
     }
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": countItems(wayp): $countItems\r\n");
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": countItems(wayp): $countItems\r\n");
 
     // only enter into code section when at least one item 
     if ( $countItems > 0 ) {    
@@ -591,10 +605,10 @@ if ($request == "temp") {
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                              // run sql against DB
         {
-            if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": Records in tbl_track_wayp for waypoints successfully deleted \r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": Records in tbl_track_wayp for waypoints successfully deleted \r\n");
         } else {
-            fputs($logFile, "Line" . __LINE__ . ": error deleting trkPt: $conn->error\r\n");
-            fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": error deleting trkPt: $conn->error\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
                 "status"=>"NOK",                                        // add err status to return object
@@ -604,7 +618,7 @@ if ($request == "temp") {
             return;
         }
 
-        if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": selete tbl_track_wayp - sql: $sql\r\n");
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": selete tbl_track_wayp - sql: $sql\r\n");
     }
     // Part 3: Insert records to tbl_track_wayp for wayp
     // --------------------------------------------------
@@ -629,15 +643,15 @@ if ($request == "temp") {
         }
         $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
         
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Insert tbl_track_wyp - sql: ". $sql . "\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Insert tbl_track_wyp - sql: ". $sql . "\r\n");
         
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                              // run sql against DB
         {
-            if ( $debugLevel >= 6) fputs($logFile, "Line" . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
+            if ( $debugLevel >= 6) fputs($logFile, "Line " . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
         } else {
-            fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
-            fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
                 "status"=>"NOK",                                        // add err status to return object
@@ -655,16 +669,16 @@ if ($request == "temp") {
     for ( $i=0; $i < sizeof($trkEdit_partItems); $i++ ) {               // loop through records in array
         if ( $trkEdit_partItems[$i]["itemType"] == "part" ) {           // disp_f = true when user has not deleted peak on UI
             $countItems += 1;  
-            fputs($logFile, "Line" . __LINE__ . ": itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
         }
     }
 
-    if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": countItems(part): $countItems\r\n");
+    if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": countItems(part): $countItems\r\n");
 
     // only enter into code section when at least one item 
     if ( $countItems > 0 ) {  
         
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": countItems grösser null \r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": countItems grösser null \r\n");
     
         // Part 4: Delete trb_track_part before insert
         // --------------------------------------------------
@@ -674,10 +688,10 @@ if ($request == "temp") {
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                              // run sql against DB
         {
-            if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Records in tbl_track_part successfully deleted \r\n");
+            if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Records in tbl_track_part successfully deleted \r\n");
         } else {
-            fputs($logFile, "Line" . __LINE__ . ": Error deleting tbl_track_part: $conn->error\r\n");
-            fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": Error deleting tbl_track_part: $conn->error\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
                 "status"=>"NOK",                                        // add err status to return object
@@ -688,7 +702,7 @@ if ($request == "temp") {
         }
     }
 
-    if ($debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Delete tbl_track_part - sql: $sql\r\n");
+    if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Delete tbl_track_part - sql: $sql\r\n");
 
     // Part 5: Insert records to tbl_track_part
     // ----------------------------------------
@@ -697,7 +711,7 @@ if ($request == "temp") {
     for ( $i=0; $i < sizeof($trkEdit_partItems); $i++ ) {               // loop through records in array
         if ( $trkEdit_partItems[$i]["itemType"] == "part" && ( $trkEdit_partItems[$i]["disp_f"] == "true" || $trkEdit_partItems[$i]["disp_f"] == 1 ) ) {                 // disp_f = true when user has not deleted peak on UI
             $countItems += 1;  
-            fputs($logFile, "Line" . __LINE__ . ": itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": itemName: " . $trkEdit_partItems[$i]["itemName"] . "\r\n");
         }
     }
 
@@ -713,15 +727,15 @@ if ($request == "temp") {
         }
         $sql = substr( $sql, 0, strlen($sql)-1 );                       // trim last unnecessary ,
         
-        if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": Insert tbl_track_wyp - sql: " . $sql . "\r\n");
+        if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": Insert tbl_track_wyp - sql: " . $sql . "\r\n");
         
         // run SQL and handle error
         if ( $conn->query($sql) === TRUE )                              // run sql against DB
         {
-            if ( $debugLevel >= 3) fputs($logFile, "Line" . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
+            if ( $debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": New record in tbl_track_wayp for peaks successfully inserted \r\n");
         } else {
-            fputs($logFile, "Line" . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
-            fputs($logFile, "Line" . __LINE__ . ": sql: $sql\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": Error inserting trkPt: $conn->error\r\n");
+            fputs($logFile, "Line " . __LINE__ . ": sql: $sql\r\n");
             // write output array
             $outObject = array (
                 "status"=>"NOK",                                        // add err status to return object

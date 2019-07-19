@@ -8,4 +8,7 @@ export/
 **/tmp
 
 # Ignore the config file due to different pw between local host and hosttech
-**/services/config.inc.php
+services/config.php
+
+# Ignore .gitignore
+.gitignore
