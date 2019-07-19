@@ -45,7 +45,7 @@ if ( $objectType == "trk" ) {
     if ( $requestType == "get" ) {
 
         // Select tracks 
-        $sql = "SELECT `trkId`, `trkTrackName`, `trkRoute`, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d %h:%i:%s') AS trkDateBegin, ";
+        $sql = "SELECT `trkId`, `trkTrackName`, `trkRoute`, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d %H:%i:%s') AS trkDateBegin, ";
         $sql .= "`trkType`, `trkSubType`, `trkOrg`, `trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToPeak`, ";
         $sql .= "`trkTimeToFinish`, `trkStartEle`, `trkPeakEle`, `trkPeakTime`, `trkLowEle`, `trkLowTime`, ";
         $sql .= "`trkFinishEle`, `trkFinishTime`, `trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`, `trkLoginName`, ";
