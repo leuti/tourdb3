@@ -110,7 +110,7 @@ if ($request == "temp") {
         $gpx = simplexml_load_file($uploadfile);                        // Load XML structure
         $newTrackTime = $gpx->trk->trkseg->trkpt->time;                 // Read time of first trackpoint
         //$GpsStartTime = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
-        $DateBegin = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
+        $DateBegin = strftime("%Y-%m-%d %H:%M:%S", strtotime($newTrackTime));    // convert track time 
         //$DateFinish = strftime("%Y.%m.%d %H:%M:%S", strtotime($newTrackTime));   // convert track time 
         $trackName = $gpx->trk->name;                                   // Track name  
         //$trackName = $trackName[0];  
