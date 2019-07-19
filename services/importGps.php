@@ -335,7 +335,7 @@ if ($request == "temp") {
             "trkTrackName"=>"$trackName",
             "trkRoute"=>"$trackName",
             "trkDateBegin"=>$DateBegin,
-            //"trkDateFinish"=>$DateFinish,
+            "trkDateFinish"=>$trkFinishTime,
             //"trkGPSStartTime"=>$GpsStartTime,
             "trkStartEle"=>$startEle,
             "trkPeakEle"=>$peakEle,

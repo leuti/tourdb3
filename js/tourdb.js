@@ -1111,7 +1111,7 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
             $('#uiTrack_fld_trkTrackName').val(trackObj.trkTrackName);    
             $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
             $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
-            //$('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
+            $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
             $('#uiTrack_fld_trkType').val(trackObj.trkType);
             $('#uiTrack_fld_trkType').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
             $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
@@ -1213,7 +1213,7 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiTrack_fld_trkTrackName').val(trackObj.trkTrackName);    
                 $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
                 $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
-                //$('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
+                $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
                 //$('#uiTrack_fld_trkSaison').val(trackObj.trkSaison);
                 $('#uiTrack_fld_trkType').val(trackObj.trkType);
                 $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
@@ -1393,9 +1393,9 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     valid = valid && checkExistance ( $('#uiTrack_fld_trkDateBegin'), "Date Begin" );
     trackObj.trkDateBegin = $('#uiTrack_fld_trkDateBegin').val();     
 
-    //$('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
-    //valid = valid && checkExistance ( $('#uiTrack_fld_trkDateFinish'), "Date Finish" );
-    //trackObj.trkDateFinish = $('#uiTrack_fld_trkDateFinish').val();
+    $('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkExistance ( $('#uiTrack_fld_trkDateFinish'), "Date Finish" );
+    trackObj.trkDateFinish = $('#uiTrack_fld_trkDateFinish').val();
     
     //trackObj.trkSaison = $('#uiTrack_fld_trkSaison').val();
     trackObj.trkType = $('#uiTrack_fld_trkType').val();
@@ -1933,7 +1933,6 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    /*
     $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -1943,7 +1942,6 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    */
     //$( "#uiTrack_fld_trkSaison" ).selectmenu();
     $( "#uiTrack_fld_trkType" ).selectmenu();
     $( "#uiTrack_fld_trkSubType" ).selectmenu();
@@ -2067,7 +2065,6 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    /*
     $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -2077,7 +2074,6 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    */
     //$( "#uiTrack_fld_trkSaison" ).selectmenu();
     $( "#uiTrack_fld_trkType" ).selectmenu();
     $( "#uiTrack_fld_trkSubType" ).selectmenu();
@@ -2779,7 +2775,7 @@ function clearAllErrorStates () {
     $('#uiTrack_fld_trkTrackName').removeClass( "ui-state-error" );
     $('#uiTrack_fld_trkRoute').removeClass( "ui-state-error" );    
     $('#uiTrack_fld_trkDateBegin').removeClass( "ui-state-error" );
-    //$('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );
+    $('#uiTrack_fld_trkDateFinish').removeClass( "ui-state-error" );
     $('#uiTrack_fld_trkOrg').removeClass( "ui-state-error" );
     $('#uiTrack_fld_trkEvent').removeClass( "ui-state-error" );
     $('#uiTrack_fld_trkRemarks').removeClass( "ui-state-error" );

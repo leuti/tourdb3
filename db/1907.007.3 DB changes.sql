@@ -1,0 +1,1 @@
+ALTER TABLE `tbl_tracks` ADD `trkDateFinish` DATETIME NULL COMMENT 'End time of track recording' AFTER `trkDateBegin`;
