@@ -24,7 +24,7 @@ date_default_timezone_set("Europe/Zurich");                         // must be s
 
 // Open file to write log
 $importGpxLog = dirname(__FILE__) . "/../log/getObject.log";        // Assign file location
-if ( $GLOBALS["$debugLevel"] >= 1 ) {
+if ( $debugLevel >= 1 ) {
     $logFile = @fopen($importGpxLog,"a");                               // open log file handler 
     fputs($logFile, "\r\n============================================================\r\n");    
     fputs($logFile, "getObject.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
@@ -36,7 +36,7 @@ $objectType = $receivedData["objectType"];
 $requestType = $receivedData["requestType"];                            
 $objectID = $receivedData["objectId"];                          // where statement to select tracks to be displayed
 
-if ( $GLOBALS["$debugLevel"] >= 1 ) {
+if ( $debugLevel >= 1 ) {
     fputs($logFile, "Request params: objectType: $objectType | requestType: $requestType | objectID: $objectID\r\n");    
 }
 

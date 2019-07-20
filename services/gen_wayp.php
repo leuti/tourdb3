@@ -28,8 +28,8 @@ $recordCount = 0;
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_wayp.log";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
-    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": gen_wayp.php opened \r\n"); 
+    if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
+    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": gen_wayp.php opened \r\n"); 
 };
     
 // variables passed on by client (as JSON object)
@@ -92,7 +92,7 @@ while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoi
 
     if ( is_null($saisonkey) ) {                            // saisonkey --> tausender = Anzahl Besuche Sommer / einer = Anzahl Besuche Winter
         $saisonkey = 0;                                     // set to 0 when NULL
-        if ( $GLOBALS["$debugLevel"] >= 3 )  fputs($logFile, "is_null\r\n");
+        if ( $debugLevel >= 3 )  fputs($logFile, "is_null\r\n");
     } 
     $sommer = floor(intval($saisonkey) / 1000);                    // devide saison key by 1000 and extract number before comma
     $winter = $saisonkey - $sommer * 1000;                  // 
@@ -114,7 +114,7 @@ while($singleRecord = mysqli_fetch_assoc($records)){ // loop through each waypoi
         $imgFile = $objectName . "-none.png";
     }
 
-    if ( $GLOBALS["$debugLevel"] >= 4 ) {
+    if ( $debugLevel >= 4 ) {
         fputs($logFile, "<$objectName> waypNameLong: ". $singleRecord["waypNameLong"] . "-->");
         fputs($logFile, "saisonkey: $saisonkey || sommer: $sommer || winter: $winter || icon: $imgFile\r\n");
     }
@@ -159,11 +159,11 @@ $returnObject["recordcount"] = $recordCount;
 $returnObject["objectName"] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $recordCount $objectName items inserted into KML filer\r\n");    
-if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $recordCount $objectName items inserted into KML filer\r\n");    
+if ( $debugLevel >= 1 ) fputs($logFile, "gen_wayp.php finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections
-if ( $GLOBALS["$debugLevel"] >= 1 ) fclose($logFile);                                   // close log file
+if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
 mysqli_close($conn);                                                        // close SQL connection 
 exit;
 
