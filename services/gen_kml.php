@@ -57,8 +57,8 @@ if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
     //$logFileLoc = dirname(__FILE__) . "/../log/" . basename(__FILE__)";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
-    if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": " . basename(__FILE__) . " opened \r\n"); 
+    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "=================================================================\r\n");
+    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": " . basename(__FILE__) . " opened \r\n"); 
 };
 
 // variables passed on by client (as JSON object)
@@ -208,11 +208,11 @@ if ( $objectName == "tracks" ) {
     }
     echo json_encode($returnObject);                                            // echo JSON object to client
 
-    if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks tracks processed\r\n");
-    if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks tracks processed\r\n");
+    if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
     // Close all files and connections
-    if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
+    if ( $GLOBALS["$debugLevel"] >= 1 ) fclose($logFile);                                   // close log file
     mysqli_close($conn);                                                        // close SQL connection 
 
     exit;
@@ -347,7 +347,7 @@ if ( $objectName == "segments" ) {
             }
         }
         $firstRecord = false;
-        if ( $debugLevel >= 4 ) {
+        if ( $GLOBALS["$debugLevel"] >= 4 ) {
             fputs($logFile, "=============================================\r\n");
             fputs($logFile, "Line " . __LINE__ . ": segId: " . $singleRecord["segId"] . $singleRecord["segName"] . "\r\n");
             fputs($logFile, "Line " . __LINE__ . ": segcoordTop: " . $singleRecord["segCoordTop"] ."\r\n");
@@ -388,11 +388,11 @@ $returnObject["recordcount"] = $countSegments;
 $returnObject["objectName"] = $objectName;
 echo json_encode($returnObject);                                            // echo JSON object to client
 
-if ( $debugLevel >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
-if ( $debugLevel >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "Line " . __LINE__ . ": $countTracks Segments processed\r\n");
+if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFile, "gen_kml.php $objectName finished: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // Close all files and connections
-if ( $debugLevel >= 1 ) fclose($logFile);                                   // close log file
+if ( $GLOBALS["$debugLevel"] >= 1 ) fclose($logFile);                                   // close log file
 mysqli_close($conn);                                                        // close SQL connection 
 
 exit;

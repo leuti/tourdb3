@@ -37,16 +37,16 @@ date_default_timezone_set("Europe/Zurich");                             // must 
 
 // Open file for import log
 $logFile = dirname(__FILE__) . "/../log/" . basename(__FILE__, ".php") . ".log";                   // Assign file location
-if ( $debugLevel >= 1) $logFileName = @fopen($logFile,"a");             // open log file handler 
-if ( $debugLevel >= 1 ) fputs($logFileName, "\r\n============================================================\r\n");    
-if ( $debugLevel >= 1 ) fputs($logFileName, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
+if ( $GLOBALS["$debugLevel"] >= 1) $logFileName = @fopen($logFile,"a");             // open log file handler 
+if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFileName, "\r\n============================================================\r\n");    
+if ( $GLOBALS["$debugLevel"] >= 1 ) fputs($logFileName, "login.php started: " . date("Ymd-H:i:s", time()) . "\r\n");    
 
 // variables passed on by client (as formData object)
 $receivedData = json_decode ( file_get_contents("php://input"), true );
 $login = $receivedData["login"];
 $password = $receivedData["password"];
 
-if ( $debugLevel >= 3 ) fputs($logFileName, "Line " . __LINE__ . ": User <$login> has logged in.\r\n");    
+if ( $GLOBALS["$debugLevel"] >= 3 ) fputs($logFileName, "Line " . __LINE__ . ": User <$login> has logged in.\r\n");    
 
 // Start or restart session 
 session_start();
@@ -111,7 +111,7 @@ $returnObject["sessionId"] = session_id();                  // add session id to
 $returnObject["loginTime"] = date("Ymd-H:i:s", time());
 
 echo json_encode($returnObject);                                        // encode return object to JSON
-if ( $debugLevel >= 1 ) 
+if ( $GLOBALS["$debugLevel"] >= 1 ) 
 {
     fputs($logFileName, "Line " . __line__ . ": Login script completed --> sessionId: " . $returnObject["sessionId"] . 
     " | login: " . $login . " | loginStatus: " . $returnObject["loginStatus"] . "\r\n");
