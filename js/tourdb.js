@@ -1194,7 +1194,8 @@ $(document).on('click', '.uiTrack_btns_a', function(e) {
 
 // Upload file to server and receive the extracted track data (calls importGps.php in temp mode)
 $(document).on('click', '#buttonUploadFile', function (e) {
-    e.preventDefault();                                                                                 
+    e.preventDefault();               
+    
     var xhr = new XMLHttpRequest();                                            // create new xhr object
     //itemsTrkImp = [];                                              // array to store selected peaks, waypoints, locations and participants
 
@@ -1507,157 +1508,175 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 TRACK_PART_ARRAY = new Array();
                 var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
                 document.getElementById("uiTrack_partList").innerHTML = itemsTable;
-    
-                // ------------------------------
-                // Gen KML for imported File
-                var xhr = new XMLHttpRequest();
 
-                // gen_kml.php has generated kml file and returns to js
-                // Draw map with imported track in center
-                xhr.onload = function() {
-                    if (xhr.status === 200) {  
-                        respObj = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
-                        
-                        if ( respObj["status"] == "OK") {
-
-                            // delete current map
-                            var element = document.getElementById('displayMap-ResMap');
-                            var parent = element.parentNode
-                            parent.removeChild(element);
-                            parent.innerHTML = '<div id="displayMap-ResMap"></div>';
-
-                            var coordTop = Number(respObj.coordTop);
-                            var coordBottom = Number(respObj.coordBottom);
-                            var coordLeft = Number(respObj.coordLeft);
-                            var coordRight = Number(respObj.coordRight);
-                            
-                            // Evluate coord center (if route is outside CH - show empty CH map)
-                            var coordCenterY = ( coordTop + coordBottom ) / 2;
-                            var coordCenterX = ( coordRight + coordLeft ) / 2;
-                            
-                            // Calculate required resolution
-                            resolution1 = ( coordTop - coordBottom ) / 200;
-                            resolution2 = ( coordRight - coordLeft ) / 200;
-                            if ( resolution1 > resolution2 ) {
-                                resolution = Math.min(500,resolution1);
-                            } else {
-                                resolution = Math.min(500,resolution2);
-                            }
-
-                            // Draw empty map & center to provided coordinate
-                            var tourdbMap = new ga.Map({
-                                target: 'displayMap-ResMap',
-                                view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
-                            });
-                            mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
-                            tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
-                            
-                            // Draw kml file for tracks 
-                            if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
-                                $trackFile = TOURDBURL + "tmp/kml_disp/" + SESSION_OBJ.sessionId + "/tracks.kml";
-                            
-                                // Create the KML Layer for tracks
-                                kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
-                                    source: new ol.source.Vector({                          // Set source to kml file
-                                        url: $trackFile,
-                                        format: new ol.format.KML({
-                                            projection: 'EPSG:21781'
-                                        })
-                                    })
-                                });
-                                tourdbMap.addLayer(kmlLayer);                                // add track layer to map
-                            }
-                            
-                            // Popup showing the position the user clicked
-                            var popup = new ol.Overlay({                                    // popup to display track details
-                                element: $('<div title="KML"></div>')[0]
-                            });
-                            tourdbMap.addOverlay(popup);
-            
-                            // On click we display the feature informations (code basis from map admin sample library)
-                            tourdbMap.on('singleclick', function(evt) {
-                                var pixel = evt.pixel;
-                                var coordinate = evt.coordinate;
-                                var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
-                                    return feature;
-                                });
-                                var element = $(popup.getElement());
-                                element.popover('destroy');
-                                if (feature) {
-                                popup.setPosition(coordinate);
-                                element.popover({
-                                    'placement': 'top',
-                                    'animation': false,
-                                    'html': true,
-                                    'content': feature.get('name')
-                                });
-                                element.popover('show');
-                                }
-                            });
-            
-                            // Change cursor style when cursor is hover over a feature
-                            tourdbMap.on('pointermove', function(evt) {
-                                var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                                    return feature;
-                                });
-                                tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
-                            });
-                        }
-                    }
-                };     
-
-                // Create where statement (to be changed --> trkId to be returned after save)
-                sqlWhereCurrent = "WHERE trkId=" + respObj["trkId"];
-                genTrackKml = true;
-                
-                // send required parameters to gen_kml.php
-                var jsonObject = {};
-                phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
-                jsonObject["sessionId"] = SESSION_OBJ.sessionId;                                    // send session ID
-                jsonObject["sqlWhere"] = sqlWhereCurrent;                          // send where statement for tracks
-                jsonObject["objectName"] = "tracks";                                // send where statement for segments 
-                xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
-                xhr.setRequestHeader( "Content-Type", "application/json" );
-                jsn = JSON.stringify(jsonObject);
-                xhr.send( jsn );                                                        // send formData object to service using xhr   
-      
-                // Load first set of tracks to be displayed in the List panel
-                // ----------------------------------------------------------
+                // Update list panel
                 var page = 1;
                 fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
                 $("#tabDispLists_trks").load("services/fetch_lists.php",
                     {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
-                // empty items array and redraw empty items array
-                // itemsTrkImp = new Array();
-                // drawItemsTables_old ( itemsTrkImp, "peak" ); 
-                // drawItemsTables_old ( itemsTrkImp, "wayp" ); 
-                // drawItemsTables_old ( itemsTrkImp, "loca" ); 
-                // drawItemsTables_old ( itemsTrkImp, "part" ); 
+                // User has imported track --> display map
+                // ---------------------------------------
+                if ( SESSION_OBJ.currentFunction == "ins" ) {
 
-                // $( "#uiTrack_peakSrch" ).val("");
-                // $( "#uiTrack_waypSrch" ).val("");
-                // $( "#uiTrack_locaSrch" ).val("");
-                // $( "#uiTrack_partSrch" ).val("");
+                    // Gen KML for imported File
+                    var xhr = new XMLHttpRequest();
 
-                // Open Panel Map
-                var $activeButtonA = $('#mainButtons_mapBtn_a');                // Store the current link <a> element
-                buttonId = $activeButtonA.attr('href'); 
+                    // Draw map with imported track in center
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {  
+                            respObj = JSON.parse(xhr.responseText);                      // transfer JSON into response object array
+                            
+                            if ( respObj["status"] == "OK") {
 
-                // Run following block if selected topic is currently not active
-                $topicButton.removeClass('active');                             // Make current panel inactive
-                $activeButton.removeClass('active');                            // Make current tab inactive
-                $topicButton = $(buttonId).addClass('active');                  // Make new panel active
-                $activeButton = $activeButtonA.parent().addClass('active');     // Make new tab active
+                                // delete current map
+                                var element = document.getElementById('displayMap-ResMap');
+                                var parent = element.parentNode
+                                parent.removeChild(element);
+                                parent.innerHTML = '<div id="displayMap-ResMap"></div>';
+
+                                // Close upload file div and open form to update track data
+                                $('#uiTrack').removeClass('active');
+                                
+                                // Display File upload UI
+                                $('#uiUplFileGps').addClass('active');                                                                  
+
+                                // Open Panel Map
+                                var $activeButtonA = $('#mainButtons_mapBtn_a');                // Store the current link <a> element
+                                buttonId = $activeButtonA.attr('href'); 
+                                $('#dispObjMenuLarge').addClass('hidden');
+                                $('#dispObjMenuLarge').removeClass('visible');
+                                $('#dispObjMenuMini').addClass('visible');
+                                $('#dispObjMenuMini').removeClass('hidden');
+
+                                // Run following block if selected topic is currently not active
+                                $topicButton.removeClass('active');                             // Make current panel inactive
+                                $activeButton.removeClass('active');                            // Make current tab inactive
+                                $topicButton = $(buttonId).addClass('active');                  // Make new panel active
+                                $activeButton = $activeButtonA.parent().addClass('active');     // Make new tab active
+                                
+                                // Change active tab to main tab
+                                $( "#uiTrack" ).tabs({
+                                    active: 0
+                                });
+
+                                var coordTop = Number(respObj.coordTop);
+                                var coordBottom = Number(respObj.coordBottom);
+                                var coordLeft = Number(respObj.coordLeft);
+                                var coordRight = Number(respObj.coordRight);
+                                
+                                // Evluate coord center (if route is outside CH - show empty CH map)
+                                var coordCenterY = ( coordTop + coordBottom ) / 2;
+                                var coordCenterX = ( coordRight + coordLeft ) / 2;
+                                
+                                // Calculate required resolution
+                                resolution1 = ( coordTop - coordBottom ) / 200;
+                                resolution2 = ( coordRight - coordLeft ) / 200;
+                                if ( resolution1 > resolution2 ) {
+                                    resolution = Math.min(500,resolution1);
+                                } else {
+                                    resolution = Math.min(500,resolution2);
+                                }
+
+                                // Draw empty map & center to provided coordinate
+                                var tourdbMap = new ga.Map({
+                                    target: 'displayMap-ResMap',
+                                    view: new ol.View({resolution: resolution, center: [coordCenterX, coordCenterY]})
+                                });
+                                mapSTlayer_grau = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+                                tourdbMap.addLayer(mapSTlayer_grau);                              // add map layer to map
+                                
+                                // Draw kml file for tracks 
+                                if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
+                                    $trackFile = TOURDBURL + "tmp/kml_disp/" + SESSION_OBJ.sessionId + "/tracks.kml";
+                                
+                                    // Create the KML Layer for tracks
+                                    kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
+                                        source: new ol.source.Vector({                          // Set source to kml file
+                                            url: $trackFile,
+                                            format: new ol.format.KML({
+                                                projection: 'EPSG:21781'
+                                            })
+                                        })
+                                    });
+                                    tourdbMap.addLayer(kmlLayer);                                // add track layer to map
+                                }
+                                
+                                // Popup showing the position the user clicked
+                                var popup = new ol.Overlay({                                    // popup to display track details
+                                    element: $('<div title="KML"></div>')[0]
+                                });
+                                tourdbMap.addOverlay(popup);
                 
-                // Close upload file div and open form to update track data
-                $('#uiUplFileGps').addClass('active');
-                $('#uiTrack').removeClass('active');
+                                // On click we display the feature informations (code basis from map admin sample library)
+                                tourdbMap.on('singleclick', function(evt) {
+                                    var pixel = evt.pixel;
+                                    var coordinate = evt.coordinate;
+                                    var feature = tourdbMap.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                                        return feature;
+                                    });
+                                    var element = $(popup.getElement());
+                                    element.popover('destroy');
+                                    if (feature) {
+                                    popup.setPosition(coordinate);
+                                    element.popover({
+                                        'placement': 'top',
+                                        'animation': false,
+                                        'html': true,
+                                        'content': feature.get('name')
+                                    });
+                                    element.popover('show');
+                                    }
+                                });
+                
+                                // Change cursor style when cursor is hover over a feature
+                                tourdbMap.on('pointermove', function(evt) {
+                                    var feature = tourdbMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                                        return feature;
+                                    });
+                                    tourdbMap.getTargetElement().style.cursor = feature ? 'pointer' : '';
+                                });
+                            }
+                        }
+                    };     
 
-                // Change active tab to main tab
-                $( "#uiTrack" ).tabs({
-                    active: 0
-                  });
+                    // Create where statement
+                    sqlWhereCurrent = "WHERE trkId=" + respObj["trkId"];
+                    genTrackKml = true;
+                    
+                    // send required parameters to gen_kml.php
+                    var jsonObject = {};
+                    phpLocation = "services/gen_kml.php";                                   // Variable to store location of php file
+                    jsonObject["sessionId"] = SESSION_OBJ.sessionId;                                    // send session ID
+                    jsonObject["sqlWhere"] = sqlWhereCurrent;                          // send where statement for tracks
+                    jsonObject["objectName"] = "tracks";                                // send where statement for segments 
+                    xhr.open ('POST', phpLocation, true);                                   // open  XMLHttpRequest 
+                    xhr.setRequestHeader( "Content-Type", "application/json" );
+                    jsn = JSON.stringify(jsonObject);
+                    xhr.send( jsn );                                                        // send formData object to service using xhr   
+
+                // User has updated track --> display list
+                } else {
+                    
+                    // Open Panel Map       
+                    var $activeButtonA = $('#mainButtons_listBtn_a');                // Store the current link <a> element
+                    buttonId = $activeButtonA.attr('href'); 
+
+                    // Run following block if selected topic is currently not active
+                    $topicButton.removeClass('active');                             // Make current panel inactive
+                    $activeButton.removeClass('active');                            // Make current tab inactive
+                    $topicButton = $(buttonId).addClass('active');                  // Make new panel active
+                    $activeButton = $activeButtonA.parent().addClass('active');     // Make new tab active
+                    
+                    // Close upload file div and open form to update track data
+                    $('#uiUplFileGps').addClass('active');
+                    $('#uiTrack').removeClass('active');
+
+                    // Change active tab to main tab
+                    $( "#uiTrack" ).tabs({
+                        active: 0
+                    });
+                }
             } else {
                 // Track and / related tables could not be correctly inserted
                 // Task?: Make panelImport disappear and panelLists appear
