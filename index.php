@@ -41,7 +41,7 @@
 		
 		<!-- Below the the main tabs for Home, Segments, Waypoints and Routes are located -->
 		<ul class="mainButtons">
-			<li id="uiLogin_loginBtn" class="mainButtons_li active" style="display:none;">
+			<li id="mainButtons_loginBtn" class="mainButtons_li active" style="display:none;">
 				<a id="uiLogin_loginBtn_a" class="mainButtons_a" href="#panelLogin"><h2>Login</h2></a>
 			</li>
 			<li id="mainButtons_mapBtn" class="mainButtons_li loginReq">

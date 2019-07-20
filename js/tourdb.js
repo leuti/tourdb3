@@ -131,7 +131,7 @@ $(document).ready(function() {
                 $topicButton = $(buttonId).addClass('active');              // Make new panel active
                 $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
                 $('.loginReq').removeClass('loginReq');                     // Free deactivated menues
-                $('#uiLogin_loginBtn').addClass('loginReq');
+                $('#mainButtons_loginBtn').addClass('loginReq');
 
                 // Display status message
                 // ----------------------
@@ -1554,7 +1554,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                             
                             // Draw kml file for tracks 
                             if ( genTrackKml ) {                                            // var is true when user has set filter on tracks
-                                $trackFile = TOURDBURL + "/tmp/kml_disp/" + SESSION_OBJ.sessionId + "/tracks.kml";
+                                $trackFile = TOURDBURL + "tmp/kml_disp/" + SESSION_OBJ.sessionId + "/tracks.kml";
                             
                                 // Create the KML Layer for tracks
                                 kmlLayer = new ol.layer.Vector({                       // create new vector layer for tracks
@@ -1640,8 +1640,8 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                 // $( "#uiTrack_locaSrch" ).val("");
                 // $( "#uiTrack_partSrch" ).val("");
 
-                // Open Panel Display
-                var $activeButtonA = $('#navBtns_btn_diplay_a');                // Store the current link <a> element
+                // Open Panel Map
+                var $activeButtonA = $('#mainButtons_mapBtn_a');                // Store the current link <a> element
                 buttonId = $activeButtonA.attr('href'); 
 
                 // Run following block if selected topic is currently not active
