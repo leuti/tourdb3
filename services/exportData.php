@@ -35,7 +35,8 @@ $receivedData = json_decode($content, true);
 
 // read variables from JSON object
 $request = $receivedData["request"];
-$loginName = $receivedData["usrId"];
+$loginName = $receivedData["login"];
+$usrId = $receivedData["usrId"];
 
 if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": Request (JSON): $request\r\n");    
 
@@ -46,12 +47,13 @@ if (!is_dir ( $outDir )) {                                                      
 }
    
 // Create SQL SELECT statement
-$sql .= "SELECT trkId, trkTrackName, trkRoute, ";
-$sql .= "trkDateBegin, trkGPSStartTime, trkType, trkSubType, trkOrg, trkOvernightLoc, ";
-$sql .= "trkEvent, trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, trkTimeToFinish, ";
-$sql .= "trkStartEle, trkPeakEle, trkPeakTime, trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, trkGrade, ";
-$sql .= "trkMeterUp, trkMeterDown, trkCountry, trkUsrId";
-$sql .= "FROM tbl_tracks ";
+$sql  = "SELECT "; 
+$sql .= "`trkId`, `trkTrackName`, `trkRoute`, `trkDateBegin`, `trkDateFinish`, `trkType`, `trkSubType`, ";
+$sql .= "`trkOrg`, `trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToPeak`, `trkTimeToFinish`, ";
+$sql .= "`trkStartEle`, `trkPeakEle`, `trkPeakTime`, `trkLowEle`, `trkLowTime`, `trkFinishEle`, `trkFinishTime`, ";
+$sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`, `trkLoginName`, `trkUsrId`, ";
+$sql .= "`trkCoordTop`, `trkCoordBottom`, `trkCoordLeft`, `trkCoordRight` ";
+$sql .= "FROM tbl_tracks WHERE trkUsrId = $usrId"; 
 
 if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": SQL: $sql\r\n");    
 
@@ -88,10 +90,12 @@ switch ( $request ) {
     // Export Tracks v01 as CSV    
     case "tracks01_CSV":
 
+        // Open output file and empty data
         $out = $outDir . "track.csv";                                           // Assign file location
         $csvOutFile = @fopen($out,"w");                                         // Open file
         $header = "";                                                           // Initialise variables
         $data = "";
+        $delimiter = ";";                                                       // Set delimiter value
 
         if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": csvOutFile: $out\r\n");  
 
@@ -102,7 +106,7 @@ switch ( $request ) {
         // write header line
         for ( $i = 0; $i < $fields; $i++ ) {                                    // loop through each column
             $fieldinfo = mysqli_fetch_field_direct( $result , $i );             // mysqli_fetch_field_direct returns info about table column
-            $header .= $fieldinfo->name . "\t";                                 // write the column name into the header
+            $header .= $fieldinfo->name . $delimiter;                           // write column headers
         }
         
         // write field content
@@ -110,11 +114,11 @@ switch ( $request ) {
             $line = "";
             foreach( $row as $value ) {                                         // lopp through each field
                 if ( ( !isset( $value ) ) || ( $value == "" ) ) {               // if field is not empty
-                    $value = "\t";                                              // write content of empty field and a field separator
+                    $value = $delimiter;                                        // write content of empty field and a field separator
                 }
                 else {
                     $value = str_replace( '"' , '""' , $value );                // mask character "
-                    $value = '"' . $value . '"' . "\t";                         // Put field content into "" and add field separator
+                    $value = '"' . $value . '"' . $delimiter;                   // Put field content into "" and add field separator
                 }
                 $line .= $value;                                                // add field to line
             }

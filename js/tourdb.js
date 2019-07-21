@@ -1336,6 +1336,7 @@ $(document).on('click', '#mainButtons_exportBtnTracks01JSON', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_JSON';                                    // temp request to create track temporarily
+    jsonObject["login"] = SESSION_OBJ.login;
     jsonObject["usrId"] = SESSION_OBJ.usrId;
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
@@ -1360,7 +1361,9 @@ $(document).on('click', '#mainButtons_exportBtnTracks01CSV', function (e) {
 
     phpLocation = "services/exportData.php";                                    // Variable to store location of php file
     jsonObject["request"] = 'tracks01_CSV';                                     // temp request to create track temporarily
+    jsonObject["login"] = SESSION_OBJ.login;
     jsonObject["usrId"] = SESSION_OBJ.usrId;
+    
     xhr.open ('POST', phpLocation, true);                                       // open  XMLHttpRequest 
     xhr.setRequestHeader( "Content-Type", "application/json" );
     jsn = JSON.stringify(jsonObject);
