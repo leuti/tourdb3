@@ -368,7 +368,7 @@ else if ( $requestType == "upd") {
     for ( $i=0; $i < sizeof($trackPartArray); $i++ ) {                  // loop through records in array
         if ( $trackPartArray[$i]["itemType"] == "part" && $trackPartArray[$i]["disp_f"] == 1 ) {  // disp_f = true when user has not deleted peak on UI
             $countItems += 1;  
-            fputs($logFile, "Line " . __LINE__ . ": itemName: " . $trackPartArray[$i]["itemName"] . "\r\n");
+            if ( $debugLevel >= 3 ) fputs($logFile, "Line " . __LINE__ . ": itemName: " . $trackPartArray[$i]["itemName"] . "\r\n");
         }
     }
 

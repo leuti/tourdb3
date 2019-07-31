@@ -8,7 +8,6 @@
 // C) When the user wants to update an existing track the previous participant and waypoint
 //    data is deleted before the data is written to the DB again.
 //
-// The table tbl_trackpoints is not used anymore
 
 // Parameters:
 // sessionId: id of user session; used to ensure multi-user capabilities
