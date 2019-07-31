@@ -25,20 +25,19 @@ TRACK_WAYP_ARRAY = new Array();
 TRACK_PART_ARRAY = new Array();
 
 // temporaray global vars
-//var TOURDBURL = "http://localhost";                                 // URL of tourdb (only required because I develop on tourdbnew.php)
-var TOURDBURL = document.URL;                                  // activate this when deploying to PROD
+//var TOURDBURL = "http://localhost";                               // URL of tourdb (only required because I develop on tourdbnew.php)
+var TOURDBURL = document.URL;                                       // activate this when deploying to PROD
 
 // unconfirmed global vars
 
-//var today = new Date();                                              // Create unique file name for KML
-sqlWherePrev = "";                                                   // variable to store previous sql where statement
-sqlWhereSegmentsPrev = "";                                           // the gen_kml.php is only called if statement has changed
-var fetch_pages_filterString;                                        // variable to store where clause for list view
-var trackKMLlayer;                                                   // map layer object containing all tracks
-var segKMLlayer;                                                     // map layer object containing all segments
-var mapSTlayer_grau;                                                 // map layer object containing the b/w swiss map
+//var today = new Date();                                           // Create unique file name for KML
+var mapSqlWherePrev = "";                                           // variable to store previous sql where statement
+var fetch_pages_filterString;                                       // variable to store where clause for list view
+var trackKMLlayer;                                                  // map layer object containing all tracks
+var segKMLlayer;                                                    // map layer object containing all segments
+var mapSTlayer_grau;                                                // map layer object containing the b/w swiss map
 
-//itemsTrkImp = new Array();                                            // array to store selected peaks, waypoints, locations and participants
+//itemsTrkImp = new Array();                                        // array to store selected peaks, waypoints, locations and participants
 
 // ======================================================
 // ====== Perform these actions when page is ready ======
@@ -51,33 +50,33 @@ $(document).ready(function() {
 
     // Evaluate which button/panel is active
     $('.mainButtons').each(function() {
-        var $thisTopicButton = $(this);                              // $thisTopicButton becomes ul.mainButtons
-        $activeButton = $thisTopicButton.find('li.active');          // Find and store current active li element
-        var $activeButtonA = $activeButton.find('a');                // Get link <a> from active li element 
-        $topicButton = $($activeButtonA.attr('href'));               // Get active panel      
+        var $thisTopicButton = $(this);                             // $thisTopicButton becomes ul.mainButtons
+        $activeButton = $thisTopicButton.find('li.active');         // Find and store current active li element
+        var $activeButtonA = $activeButton.find('a');               // Get link <a> from active li element 
+        $topicButton = $($activeButtonA.attr('href'));              // Get active panel      
     });
 
     // Evaluate which button/panel is active (CAN THIS FUNCTION BE DELETED???)
     $('.uiTrack_btns').each(function() {
         console.log( " Function each on uiTrack_btns activated");  
-        var $clickedUpdTrkBtn = $(this);                             // $clickedUpdTrkBtn becomes ul.uiTrack_btns
-        $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');         // Find and store current active li element
-        var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');      // Get link <a> from active li element 
-        $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));    // Get active panel      
+        var $clickedUpdTrkBtn = $(this);                            // $clickedUpdTrkBtn becomes ul.uiTrack_btns
+        $actUpdTrkBtn = $clickedUpdTrkBtn.find('li.active');        // Find and store current active li element
+        var $clickedUpdTrkButton_liA = $actUpdTrkBtn.find('a');     // Get link <a> from active li element 
+        $actUpdTrkTab = $($clickedUpdTrkButton_liA.attr('href'));   // Get active panel      
     });
 
     // Change to selected panel
     $(this).on('click', '.mainButtons_a', function(e) {                  
-        e.preventDefault();                                          // Prevent link behaviour
-        var $activeButtonA = $(this)                                 // Store the current link <a> element
-        var buttonId = this.hash;                                    // Get div class of selected topic (e.g #panelLists)
+        e.preventDefault();                                         // Prevent link behaviour
+        var $activeButtonA = $(this)                                // Store the current link <a> element
+        var buttonId = this.hash;                                   // Get div class of selected topic (e.g #panelLists)
         
         // Run following block if selected topic is currently not active
         if (buttonId && !$activeButtonA.is('.active')) {
-            $topicButton.removeClass('active');                      // Make current panel inactive
-            $activeButton.removeClass('active');                     // Make current tab inactive
+            $topicButton.removeClass('active');                     // Make current panel inactive
+            $activeButton.removeClass('active');                    // Make current tab inactive
 
-            $topicButton = $(buttonId).addClass('active');           // Make new panel active
+            $topicButton = $(buttonId).addClass('active');          // Make new panel active
             $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
         }
     }); 
@@ -93,9 +92,9 @@ $(document).ready(function() {
 
         // prepare json to post to service
         var jsonOut = {};                                           // Initialise JSON Object for server 
-        jsonOut["login"] = ($('#uiLogin_login').val());                 // read login name from mask
-        jsonOut["password"] = ($('#uiLogin_password').val());            // append password to JSON object
-        phpLocation = "services/login.php";                     // Variable to store location of php file
+        jsonOut["login"] = ($('#uiLogin_login').val());             // read login name from mask
+        jsonOut["password"] = ($('#uiLogin_password').val());       // append password to JSON object
+        phpLocation = "services/login.php";                         // Variable to store location of php file
         jsn = JSON.stringify(jsonOut);                              // Convert jsonn object to JSON formated string
         
         $.ajax({
@@ -106,7 +105,7 @@ $(document).ready(function() {
             data: jsn
         })
         .done(function ( jsonIn ) {
-            if ( jsonIn.loginStatus == "OK"){                   // Login successful
+            if ( jsonIn.loginStatus == "OK"){                       // Login successful
                 
                 // set session object vars
                 // -----------------------
@@ -122,15 +121,15 @@ $(document).ready(function() {
                 // ----------------------
 
                 // Open Panel Display
-                var $activeButtonA = $('#mainButtons_mapBtn_a')            // Store the current link <a> element
+                var $activeButtonA = $('#mainButtons_mapBtn_a')     // Store the current link <a> element
                 buttonId = $activeButtonA.attr('href'); 
                 
                 // Run following block if selected topic is currently not active
-                $topicButton.removeClass('active');                         // Make current panel inactive
-                $activeButton.removeClass('active');                        // Make current tab inactive
-                $topicButton = $(buttonId).addClass('active');              // Make new panel active
+                $topicButton.removeClass('active');                 // Make current panel inactive
+                $activeButton.removeClass('active');                // Make current tab inactive
+                $topicButton = $(buttonId).addClass('active');      // Make new panel active
                 $activeButton = $activeButtonA.parent().addClass('active'); // Make new tab active
-                $('.loginReq').removeClass('loginReq');                     // Free deactivated menues
+                $('.loginReq').removeClass('loginReq');             // Free deactivated menues
                 $('#mainButtons_loginBtn').addClass('loginReq');
 
                 // Display status message
@@ -141,7 +140,7 @@ $(document).ready(function() {
                 // Draw empty map (why empty???)
                 // --------------
                 if ( typeof(ga) != 'undefined' ) {
-                    tourdbMap = drawMapEmpty('displayMap-ResMap');          // Draw empty map (without additional layers) 
+                    tourdbMap = drawMapEmpty('displayMap-ResMap');  // Draw empty map (without additional layers) 
                 }
 
                 // Load first set of tracks to be displayed in the List panel
@@ -151,7 +150,7 @@ $(document).ready(function() {
                 $("#tabDispLists_trks").load("services/fetch_lists.php",
                     {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
-            } else {                                            // Login failed
+            } else {                                                // Login failed
                 // Display status message
                 // ----------------------
                 $('#statusMessage').text(jsonIn.message);
@@ -162,7 +161,7 @@ $(document).ready(function() {
 });
 
 // ==========================================================================
-// ========================== panelMap ===============================
+// ========================== panelMap ======================================
 // ==========================================================================
 
 // Minimize the map filter UI
@@ -236,7 +235,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_tracks = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_tracks = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Request KML file for Segments
     // -----------------------------
@@ -272,7 +271,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_segments = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_segments = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Request KML file for Waypoints
     // -----------------------------------------------------------------------------
@@ -314,7 +313,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_peaks_100 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_100 = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Peaks 1000er
     // ------------
@@ -353,7 +352,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_peaks_1000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_1000 = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Peaks 2000er
     // ------------
@@ -392,7 +391,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_peaks_2000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_2000 = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Peaks 3000er
     // ------------
@@ -430,7 +429,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_peaks_3000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_3000 = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Peaks 4000er
     // ------------
@@ -468,7 +467,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_peaks_4000 = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_4000 = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Peaks Top of Cantons
     // --------------------
@@ -507,7 +506,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
         };
     }
     
-    var dispObject_peaks_cant = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_peaks_cant = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // Huts
     // ----
@@ -544,7 +543,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
             data: jsn
         };
     }
-    var dispObject_huts = new DisplayObj( objName, sqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
+    var dispObject_huts = new DisplayObj( objName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsn, ajaxCall )
 
     // ********************************************************************************************
     // Draw map fresh
@@ -994,9 +993,8 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
 
     // Field type
     var whereString = "";
-    $('#dispListTrk_type .ui-selected').each(function() {                        // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
+    $('#dispListTrk_type .ui-selected').each(function() {                       // loop through each selected type item
+        whereString = whereString + "'" + this.innerHTML + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
@@ -1006,23 +1004,14 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
 
     // Field subtype
     var whereString = "";                                                       
-    $('#dispListTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(20) + "',";              // Substring tyye from id
+    $('#dispListTrk_subtype .ui-selected').each(function() {                    // loop through each selected type item
+        whereString = whereString + "'" + this.innerHTML + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
         whereString = "trkSubType in (" + whereString + ")";                    // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     }           
-
-    // Field participants
-    /*var whereString = "";
-    if ( ($('#dispListTrk_participants').val()) != "" ) {
-        whereString = "trkParticipants like '%" + $('#dispListTrk_participants').val() + "%'";
-        whereStatement.push( whereString );
-    };
-    */
 
     // Field country
     var whereString = "";
@@ -1514,7 +1503,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
 
                 // Update list panel
                 var page = 1;
-                fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
+                //fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
                 $("#tabDispLists_trks").load("services/fetch_lists.php",
                     {"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page    
 
@@ -2277,8 +2266,7 @@ function createTrkKmlWhere () {
     // Field type
     var whereString = "";
     $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(16) + "',";              // Substring tyye from id
+        whereString = whereString + "'" + this.innerHTML + "',";                // Read type from selected li element
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
@@ -2289,23 +2277,13 @@ function createTrkKmlWhere () {
     // Field subtype
     var whereString = "";                                                       
     $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
-        var itemId = this.id                                                    // Extract id of selected item
-        whereString = whereString + "'" + itemId.slice(19) + "',";              // Substring tyye from id
+        whereString = whereString + "'" + this.innerHTML + "',";                // Read subtype from selected li element
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
         whereString = "trkSubType in (" + whereString + ")";                    // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     }           
-
-    // Field participants
-    /*
-    var whereString = "";
-    if ( ($('#dispFilTrk_participants').val()) != "" ) {
-        whereString = "trkParticipants like '%" + $('#dispFilTrk_participants').val() + "%'";
-        whereStatement.push( whereString );
-    };
-    */
 
     // Field country
     var whereString = "";
@@ -2783,9 +2761,9 @@ function checkLength( o, n, min, max ) {
 }
 
 // ???
-function DisplayObj ( objectName, sqlWherePrev, sqlWhereCurrent, genKml, jsonObject, ajaxCall ) {
+function DisplayObj ( objectName, mapSqlWherePrev, sqlWhereCurrent, genKml, jsonObject, ajaxCall ) {
     this.objectName = objectName;
-    this.sqlWherePrev = sqlWherePrev;
+    this.mapSqlWherePrev = mapSqlWherePrev;
     this.sqlWhereCurrent = sqlWhereCurrent;
     this.genKml = genKml; 
     this.jsonObject = jsonObject;
