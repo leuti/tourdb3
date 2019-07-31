@@ -1,0 +1,21 @@
+ALTER TABLE `tbl_part` ADD `prtCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `partUsrId`;
+ALTER TABLE `tbl_part` ADD `prtUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `prtCreatedDate`;
+
+ALTER TABLE `tbl_segments` ADD `segCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `segCoordRight`;
+ALTER TABLE `tbl_segments` ADD `segUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `segCreatedDate`;
+
+ALTER TABLE `tbl_tracks` ADD `trkCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `trkCoordRight`;
+ALTER TABLE `tbl_tracks` ADD `trkUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `trkCreatedDate`;
+
+ALTER TABLE `tbl_track_part` ADD `trpaCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `trpaPartId`;
+ALTER TABLE `tbl_track_part` ADD `trpapdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `trpaCreatedDate`;
+
+ALTER TABLE `tbl_track_wayp` ADD `trwpCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `trwpReached_f`;
+ALTER TABLE `tbl_track_wayp` ADD `trwpUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `trwpCreatedDate`;
+
+ALTER TABLE `tbl_users` ADD `usrCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `usrPasswd`;
+ALTER TABLE `tbl_users` ADD `usrUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `usrCreatedDate`;
+
+ALTER TABLE `tbl_waypoints` ADD `waypCreatedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Timestamp' AFTER `waypToOfCant`;
+ALTER TABLE `tbl_waypoints` ADD `waypUpdatedDate` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `waypCreatedDate`;
+
