@@ -880,7 +880,7 @@
 	</section> <!-- End main -->
 
 	<footer id="footer">
-        <div id=footerText>&copy; tourdb - 2019 leuti - Version Built 1907.001</div>
+        <div id=footerText>&copy; tourdb - 2019 leuti - Version Built 1907.009.2</div>
 		<div id="statusMessage"></div>
     </footer>
 	
