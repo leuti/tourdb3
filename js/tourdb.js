@@ -1822,7 +1822,7 @@ function initJqueryItems () {
         }
     });
     var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-    $( "#dispFilSeg_segTypeFID" ).selectable({});
+    $( "#dispFilSeg_segTypeFid" ).selectable({});
     $( "#dispFilSeg_startLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
@@ -2309,11 +2309,10 @@ function createSegKmlWhere () {
     var sqlName;
     
     // Field segment type
-    $('#dispFilSeg_segTypeFID .ui-selected').each(function() {
-        var itemId = this.id;
-        sqlName = "segTypeFID";
-        var criteria = itemId.slice(sqlName.length+1,itemId.length);            // +1 to remove _
-        selected.push( criteria );
+    $('#dispFilSeg_segTypeFid .ui-selected').each(function() {
+        var itemId = this.value;
+        sqlName = "segTypeFid";
+        selected.push( itemId );
     });
     if ( selected.length > 0 ) {
         whereString = sqlName + " in (";

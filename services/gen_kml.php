@@ -280,7 +280,7 @@ if ( $objectName == "segments" ) {
     // Select tracks meeting given WHERE clause
     $sql = "SELECT tbl_segments.segId";
     $sql .= ", tbl_segments.segName";
-    $sql .= ", tbl_segments.segTypeFID as segType";
+    $sql .= ", tbl_segments.segTypeFid as segType";
     $sql .= ", tbl_segments.segSourceFID";
     $sql .= ", tbl_segments.segSourceRef";
     $sql .= ", tbl_segments.segGradeFID";

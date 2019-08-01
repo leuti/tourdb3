@@ -211,15 +211,15 @@
 								<!-- SEGMENT filter -->
 								<legend class="filterHeader">Segments</legend>
 
-								<!-- segTypeFID -->
+								<!-- segTypeFid -->
 								<div class="dispObjCriteria">
 									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_segTypeFID" class="selectable filterItems">
-										<li id="segTypeFID_WA" class="ui-widget-content first">Wanderung</li>
-										<li id="segTypeFID_AW" class="ui-widget-content">Alpinwanderung</li>
-										<li id="segTypeFID_HT" class="ui-widget-content">Hochtour</li>
-										<li id="segTypeFID_ST" class="ui-widget-content">Skitour</li>
-										<li id="segTypeFID_SS" class="ui-widget-content">Schneeschuhtour</li>
+									<ol id="dispFilSeg_segTypeFid" class="selectable filterItems">
+										<li id="segTypeFid_AW" class="ui-widget-content first" value="28">Alpinwanderung</li>
+										<li id="segTypeFid_HT" class="ui-widget-content" value="29">Hochtour</li>
+										<li id="segTypeFid_SS" class="ui-widget-content" value="30">Mehrseilklettern</li>
+										<li id="segTypeFid_ST" class="ui-widget-content" value="31">Skitour</li>
+										<li id="segTypeFid_WA" class="ui-widget-content" value="32">Wanderung</li>
 									</ol>
 								</div>
 
