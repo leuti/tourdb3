@@ -55,7 +55,6 @@ $styleArray = array(
 // Open log file
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/gen_kml.log";                // Assign file location
-    //$logFileLoc = dirname(__FILE__) . "/../log/" . basename(__FILE__)";                // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     if ( $debugLevel >= 1 ) fputs($logFile, "=================================================================\r\n");
     if ( $debugLevel >= 1 ) fputs($logFile, date("Ymd-H:i:s", time()) . "-Line " . __LINE__ . ": " . basename(__FILE__) . " opened \r\n"); 
@@ -108,9 +107,9 @@ if ( $objectName == "tracks" ) {
     $kml[] = "        <open>1</open>";
 
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin, trkSubtypeFid, trkCoordinates, ";
-    $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
-    $sql .= "FROM tbl_tracks ";
+    $sql = "SELECT trk.trkId, trk.trkTrackName, trk.trkRoute, DATE_FORMAT ( trk.trkDateBegin, '%Y-%m-%d') AS trkDateBegin, 
+        st.typName, trk.trkCoordinates, trk.trkCoordTop, trk.trkCoordBottom, trk.trkCoordLeft, trk.trkCoordRight 
+        FROM tbl_tracks trk INNER JOIN tbl_types st ON st.typId = trk.trkSubtypeFid ";
     $sql .= $sqlWhere;
     $sql .= ' AND trkCoordinates <> "" ';
 
@@ -139,9 +138,9 @@ if ( $objectName == "tracks" ) {
         $styleMapDefault = "          <styleUrl>#stylemap_Others</styleUrl>";   // Set styleUrl to Others in case nothing in found
         $i=0;
         for ($i; $i<sizeof($styleArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
-            if ($styleArray[$i][0] == $singleRecord["trkSubtypeFid"])
+            if ($styleArray[$i][0] == $singleRecord["typName"])
             {
-                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubtypeFid"] . '</styleUrl>';
+                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["typName"] . '</styleUrl>';
                 break;
             }
         }
