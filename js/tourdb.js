@@ -994,22 +994,22 @@ $(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
     // Field type
     var whereString = "";
     $('#dispListTrk_type .ui-selected').each(function() {                       // loop through each selected type item
-        whereString = whereString + "'" + this.innerHTML + "',";                // Read text of selected li elements
+        whereString = whereString + "'" + this.value + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkType in (" + whereString + ")";                       // complete SELECT IN statement
+        whereString = "trkTypeFid in (" + whereString + ")";                       // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     };
 
     // Field subtype
     var whereString = "";                                                       
     $('#dispListTrk_subtype .ui-selected').each(function() {                    // loop through each selected type item
-        whereString = whereString + "'" + this.innerHTML + "',";                // Read text of selected li elements
+        whereString = whereString + "'" + this.value + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkSubType in (" + whereString + ")";                    // complete SELECT IN statement
+        whereString = "trkSubtypeFid in (" + whereString + ")";                    // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     }           
 
@@ -1101,14 +1101,12 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
             $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
             $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
             $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
-            $('#uiTrack_fld_trkType').val(trackObj.trkType);
-            $('#uiTrack_fld_trkType').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
-            $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
-            $('#uiTrack_fld_trkSubType').selectmenu("refresh");
+            $('#uiTrack_fld_trkTypeFid').val(trackObj.trkTypeFid);
+            $('#uiTrack_fld_trkTypeFid').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
+            $('#uiTrack_fld_trkSubtypeFid').val(trackObj.trkSubtypeFid);
+            $('#uiTrack_fld_trkSubtypeFid').selectmenu("refresh");
             $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
-            //$('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);      // field removed from DB
-            //$('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);      // field removed from DB
-            $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
+           $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
             $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
             $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
             $('#uiTrack_fld_trkTimeOverall').val(trackObj.trkTimeOverall);
@@ -1204,12 +1202,11 @@ $(document).on('click', '#buttonUploadFile', function (e) {
                 $('#uiTrack_fld_trkRoute').val(trackObj.trkRoute);
                 $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
                 $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
-                //$('#uiTrack_fld_trkSaison').val(trackObj.trkSaison);
-                $('#uiTrack_fld_trkType').val(trackObj.trkType);
-                $('#uiTrack_fld_trkSubType').val(trackObj.trkSubType);
+                $('#uiTrack_fld_trkTypeFid').val(trackObj.trkTypeFid);
+                $('#uiTrack_fld_trkTypeFid').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
+                $('#uiTrack_fld_trkSubtypeFid').val(trackObj.trkSubtypeFid);
+                $('#uiTrack_fld_trkSubtypeFid').selectmenu("refresh");               // refresh to display the value from the DB (without this the html default is shown)
                 $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
-                // $('#uiTrack_fld_trkOvernightLoc').val(trackObj.trkOvernightLoc);     // field removed from DB
-                // $('#uiTrack_fld_trkParticipants').val(trackObj.trkParticipants);     // field removed from DB
                 $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
                 $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
                 $('#uiTrack_fld_trkDistance').val(trackObj.trkDistance);
@@ -1390,16 +1387,17 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     valid = valid && checkExistance ( $('#uiTrack_fld_trkDateFinish'), "Date Finish" );
     trackObj.trkDateFinish = $('#uiTrack_fld_trkDateFinish').val();
     
-    //trackObj.trkSaison = $('#uiTrack_fld_trkSaison').val();
-    trackObj.trkType = $('#uiTrack_fld_trkType').val();
-    trackObj.trkSubType = $('#uiTrack_fld_trkSubType').val();
+    $('#uiTrack_fld_trkTypeFid').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkType ( $('#uiTrack_fld_trkTypeFid'), "Type" );
+    trackObj.trkTypeFid = $('#uiTrack_fld_trkTypeFid').val();
+    
+    $('#uiTrack_fld_trkSubtypeFid').removeClass( "ui-state-error" );           // same as above
+    valid = valid && checkType ( $('#uiTrack_fld_trkSubtypeFid'), "SubType" );
+    trackObj.trkSubTypeFid = $('#uiTrack_fld_trkSubtypeFid').val();
 
     $('#uiTrack_fld_trkOrg').removeClass( "ui-state-error" );           // same as above
     trackObj.trkOrg = $('#uiTrack_fld_trkOrg').val();    
     valid = valid && checkRegexpNot ( $('#uiTrack_fld_trkOrg'), /[&;,"']/, "No special characters [&;,\"\'] allowed. " );
-    
-    //trackObj.trkOvernightLoc = $('#uiTrack_fld_trkOvernightLoc').val();
-    //trackObj.trkParticipants = $('#uiTrack_fld_trkParticipants').val();
     
     $('#uiTrack_fld_trkEvent').removeClass( "ui-state-error" );           // same as above
     trackObj.trkEvent = $('#uiTrack_fld_trkEvent').val();
@@ -1458,6 +1456,7 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
     trackObj.trkCoordRight = $('#uiTrack_fld_trkCoordRight').val();
     
     if ( valid ) {                                                      // all validation checks were successful
+        updateValComments( "" );
         phpLocation = "services/putObject.php";                                 // Variable to store location of php file
         jsonObject.usrId = SESSION_OBJ.usrId;
         jsonObject.objectType = 'trk';
@@ -1954,8 +1953,8 @@ function initJqueryItems () {
         buttonText: "Select date"
     });
     //$( "#uiTrack_fld_trkSaison" ).selectmenu();
-    $( "#uiTrack_fld_trkType" ).selectmenu();
-    $( "#uiTrack_fld_trkSubType" ).selectmenu();
+    $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
+    $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
     $( "#uiTrack_fld_trkGrade" ).autocomplete({
         source: "services/autoComplete.php?field=grades",
         minLength: 1,
@@ -2086,8 +2085,8 @@ function initJqueryItems () {
         buttonText: "Select date"
     });
     //$( "#uiTrack_fld_trkSaison" ).selectmenu();
-    $( "#uiTrack_fld_trkType" ).selectmenu();
-    $( "#uiTrack_fld_trkSubType" ).selectmenu();
+    $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
+    $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
     $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
@@ -2257,22 +2256,22 @@ function createTrkKmlWhere () {
     // Field type
     var whereString = "";
     $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
-        whereString = whereString + "'" + this.innerHTML + "',";                // Read type from selected li element
+        whereString = whereString + "'" + this.value + "',";                // Read type from selected li element
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkType in (" + whereString + ")";                       // complete SELECT IN statement
+        whereString = "trkTypeFid in (" + whereString + ")";                       // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     };
 
     // Field subtype
     var whereString = "";                                                       
     $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
-        whereString = whereString + "'" + this.innerHTML + "',";                // Read subtype from selected li element
+        whereString = whereString + "'" + this.value + "',";                // Read subtype from selected li element
     });
     if ( whereString.length > 0 ) {
         whereString = whereString.slice(0,whereString.length-1);                // remove last comma
-        whereString = "trkSubType in (" + whereString + ")";                    // complete SELECT IN statement
+        whereString = "trkSubtypeFid in (" + whereString + ")";                    // complete SELECT IN statement
         whereStatement.push( whereString );                                     // Add to where Statement array
     }           
 
@@ -2701,6 +2700,17 @@ function checkExistance( origin, name ) {
     if ( origin.val().length == 0 ) {
         origin.addClass( "ui-state-error" );
         updateValComments( "Field " + name + " must be entered" );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// Import validation: Check if value of type / subtype is not 0
+function checkType( origin, name ) {
+    if ( origin.val() == 0 ) {
+        origin.addClass( "ui-state-error" );
+        updateValComments( "Please select value for field " + name );
         return false;
     } else {
         return true;

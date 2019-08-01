@@ -108,7 +108,7 @@ if ( $objectName == "tracks" ) {
     $kml[] = "        <open>1</open>";
 
     // Select tracks meeting given WHERE clause
-    $sql = "SELECT trkId, trkTrackName, trkRoute, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin, trkSubType, trkCoordinates, ";
+    $sql = "SELECT trkId, trkTrackName, trkRoute, DATE_FORMAT ( trkDateBegin, '%Y-%m-%d') AS trkDateBegin, trkSubtypeFid, trkCoordinates, ";
     $sql .= "trkCoordTop, trkCoordBottom, trkCoordLeft, trkCoordRight ";
     $sql .= "FROM tbl_tracks ";
     $sql .= $sqlWhere;
@@ -139,9 +139,9 @@ if ( $objectName == "tracks" ) {
         $styleMapDefault = "          <styleUrl>#stylemap_Others</styleUrl>";   // Set styleUrl to Others in case nothing in found
         $i=0;
         for ($i; $i<sizeof($styleArray); $i++) {                            // 10 is the number of existing subtypes in array (lines)
-            if ($styleArray[$i][0] == $singleRecord["trkSubType"])
+            if ($styleArray[$i][0] == $singleRecord["trkSubtypeFid"])
             {
-                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubType"] . '</styleUrl>';
+                $styleMapDefault = '          <styleUrl>#stylemap_' . $singleRecord["trkSubtypeFid"] . '</styleUrl>';
                 break;
             }
         }

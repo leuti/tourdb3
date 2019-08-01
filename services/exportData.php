@@ -47,13 +47,14 @@ if (!is_dir ( $outDir )) {                                                      
 }
    
 // Create SQL SELECT statement
-$sql  = "SELECT "; 
-$sql .= "`trkId`, `trkTrackName`, `trkRoute`, `trkDateBegin`, `trkDateFinish`, `trkType`, `trkSubType`, ";
-$sql .= "`trkOrg`, `trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToPeak`, `trkTimeToFinish`, ";
-$sql .= "`trkStartEle`, `trkPeakEle`, `trkPeakTime`, `trkLowEle`, `trkLowTime`, `trkFinishEle`, `trkFinishTime`, ";
-$sql .= "`trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`, `trkLoginName`, `trkUsrId`, ";
-$sql .= "`trkCoordTop`, `trkCoordBottom`, `trkCoordLeft`, `trkCoordRight` ";
-$sql .= "FROM tbl_tracks WHERE trkUsrId = $usrId"; 
+$sql  = "SELECT 
+    trk.trkId, trk.trkTrackName, trk.trkRoute, trk.trkDateBegin, trk.trkDateFinish, t.typName AS trkType, 
+    st.typName AS trkSubtype, trk.trkOrg, trk.trkEvent, trk.trkRemarks, trk.trkDistance, trk.trkTimeOverall, 
+    trk.trkTimeToPeak, trk.trkTimeToFinish, trk.trkStartEle, trk.trkPeakEle, trk.trkPeakTime, trk.trkLowEle, 
+    trk.trkLowTime, trk.trkFinishEle, trk.trkFinishTime, trk.trkGrade, trk.trkMeterUp, trk.trkMeterDown, 
+    trk.trkCountry FROM tbl_tracks trk INNER JOIN tbl_types t ON t.typId = trk.trkTypeFid
+    INNER JOIN tbl_types st ON st.typId = trk.trkSubtypeFid ";
+$sql .= "WHERE trkUsrId = $usrId"; 
 
 if ($debugLevel > 2) fputs($logFile, "Line " . __LINE__ . ": SQL: $sql\r\n");    
 

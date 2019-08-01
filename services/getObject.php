@@ -44,14 +44,21 @@ if ( $objectType == "trk" ) {
 
     if ( $requestType == "get" ) {
 
-        // Select tracks 
-        $sql = "SELECT `trkId`, `trkTrackName`, `trkRoute`, DATE_FORMAT ( `trkDateBegin`, '%Y-%m-%d %H:%i:%s') AS `trkDateBegin`, ";
-        $sql .= "DATE_FORMAT ( `trkDateFinish`, '%Y-%m-%d %H:%i:%s') AS `trkDateFinish`, ";
-        $sql .= "`trkType`, `trkSubType`, `trkOrg`, `trkEvent`, `trkRemarks`, `trkDistance`, `trkTimeOverall`, `trkTimeToPeak`, ";
-        $sql .= "`trkTimeToFinish`, `trkStartEle`, `trkPeakEle`, `trkPeakTime`, `trkLowEle`, `trkLowTime`, ";
-        $sql .= "`trkFinishEle`, `trkFinishTime`, `trkGrade`, `trkMeterUp`, `trkMeterDown`, `trkCountry`, `trkLoginName`, ";
-        $sql .= "`trkCoordinates`, `trkCoordTop`, `trkCoordBottom`, `trkCoordLeft`, `trkCoordRight` FROM tbl_tracks ";
+        $sql = "SELECT trkId, trkTrackName, trkRoute, 
+            DATE_FORMAT ( trkDateBegin, '%Y-%m-%d %H:%i:%s') AS trkDateBegin, 
+            DATE_FORMAT ( trkDateFinish, '%Y-%m-%d %H:%i:%s') AS trkDateFinish, 
+            trkTypeFid, trkSubtypeFid, trkOrg, trkEvent, 
+            trkRemarks, trkDistance, trkTimeOverall, trkTimeToPeak, 
+            trkTimeToFinish, trkStartEle, trkPeakEle, trkPeakTime, 
+            trkLowEle, trkLowTime, trkFinishEle, trkFinishTime, 
+            trkGrade, trkMeterUp, trkMeterDown, trkCountry, 
+            trkLoginName, trkCoordinates, trkCoordTop, trkCoordBottom, 
+            trkCoordLeft, trkCoordRight 
+            FROM tbl_tracks "; 
         $sql .= "WHERE trkId = " . $objectID;
+        
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sql: " . $sql . "\r\n");
+
         $records = mysqli_query($conn, $sql);                       // run query against DB and store results in $records
         $objectRecord = mysqli_fetch_assoc($records);               // create array containing $results
 
@@ -61,6 +68,9 @@ if ( $objectType == "trk" ) {
         $sql .= "FROM tbl_track_wayp trwp ";
         $sql .= "INNER JOIN tbl_waypoints wp ON trwp.trwpWaypId = wp.waypID ";
         $sql .= "WHERE trwpTrkId = " . $objectID;
+
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": sql: " . $sql . "\r\n");
+
         $records = mysqli_query($conn, $sql);                       // run query against DB and store results in $records
 
         $trackWaypArray = array();
@@ -75,8 +85,6 @@ if ( $objectType == "trk" ) {
             } else {
                 $itemType = "wayp";
             } 
-
-            if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__ . ": trwpReached_f: " . $trackWaypRecord["trwpReached_f"] . "\r\n");
 
             $trkWpLine = array (
                 "disp_f" => 1,
@@ -96,7 +104,7 @@ if ( $objectType == "trk" ) {
         $sql .= "INNER JOIN tbl_part part ON trpa.trpaPartId = part.prtID ";
         $sql .= "WHERE trpaTrkId = " . $objectID;
 
-        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__. "sql: " . $sql . "\r\n");
+        if ($debugLevel >= 3) fputs($logFile, "Line " . __LINE__. " sql: " . $sql . "\r\n");
 
         $records = mysqli_query($conn, $sql);
         

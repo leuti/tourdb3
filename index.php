@@ -154,12 +154,12 @@
 								<div class="dispObjCriteria">
 									<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilTrk_type" class="selectable filterItems">
-										<li id="dispFilTrk_type_Klettern" class="ui-widget-content">Klettern</li>
-										<li id="dispFilTrk_type_Ski" class="ui-widget-content">Ski</li>
-										<li id="dispFilTrk_type_Sport" class="ui-widget-content">Sport</li>
-										<li id="dispFilTrk_type_Velo" class="ui-widget-content">Velo</li>
-										<li id="dispFilTrk_type_Wasser" class="ui-widget-content">Wasser</li>
-										<li id="dispFilTrk_type_Zufuss" class="ui-widget-content first">Zufuss</li>
+										<li id="dispFilTrk_type_Klettern" class="ui-widget-content" value="5">Klettern</li>
+										<li id="dispFilTrk_type_Ski" class="ui-widget-content" value="1">Ski</li>
+										<li id="dispFilTrk_type_Sport" class="ui-widget-content" value="6">Sport</li>
+										<li id="dispFilTrk_type_Velo" class="ui-widget-content" value="3">Velo</li>
+										<li id="dispFilTrk_type_Wasser" class="ui-widget-content" value="4">Wasser</li>
+										<li id="dispFilTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
 									</ol>
 								</div>
 
@@ -167,19 +167,19 @@
 								<div class="dispObjCriteria">
 									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
 									<ol id="dispFilTrk_subtype" class="selectable filterItems">
-										<li id="dispFilTrk_subtype_alpinklettern" class="ui-widget-content">Alpinklettern</li>
-										<li id="dispFilTrk_subtype_alpintour" class="ui-widget-content">Alpintour</li>
-										<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content">Hochtour</li>
-										<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content">Joggen</li>
-										<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content">Mehrseilklettern</li>
-										<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first">Schneeschuhwanderung</li>
-										<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content">Schwimmen</li>
-										<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content">Skihochtour</li>
-										<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content">Skitour</li>
-										<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content">Sportklettern</li>
-										<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content">Velotour</li>
-										<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first">Wanderung</li>
-										<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first">Winterwanderung</li>
+										<li id="dispFilTrk_subtype_alpinklettern" class="ui-widget-content" value="13">Alpinklettern</li>
+										<li id="dispFilTrk_subtype_alpintour" class="ui-widget-content" value="23">Alpintour</li>
+										<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content" value="24">Hochtour</li>
+										<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content" value="19">Joggen</li>
+										<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content" value="14">Mehrseilklettern</li>
+										<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first" value="25">Schneeschuhwanderung</li>
+										<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content" value="22">Schwimmen</li>
+										<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content" value="16">Skihochtour</li>
+										<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content" value="17">Skitour</li>
+										<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content" value="15">Sportklettern</li>
+										<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content" value="21">Velotour</li>
+										<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first" value="26">Wanderung</li>
+										<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first" value="27">Winterwanderung</li>
 									</ol>
 								</div>
 								
@@ -660,50 +660,41 @@
 						<input type="text" name="uiTrack_fld_trkDateFinish" id="uiTrack_fld_trkDateFinish" size="20" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
 					
-					<!-- Saison -->
-					<!--
-					<div>
-						<label for="uiTrack_fld_trkSaison" class="updTrackLabelFirst">Saison</label>
-						<select name="trkSaison" id="uiTrack_fld_trkSaison">
-							<option>2016/17 Wi</option>
-							<option>2017 So</option>
-							<option selected="selected">2017/18 Wi</option>
-							<option>2018 So</option>
-						</select>
-					</div>
-					-->
-
 					<!-- Type -->
 					<div>
-						<label for="uiTrack_fld_trkType" class="updTrackLabelFirst">Type</label>
-						<!-- <input type="text" name="uiTrack_fld_trkType" id="uiTrack_fld_trkType" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">-->
-						<select name="trkType" id="uiTrack_fld_trkType">
-							<option>Zufuss</option>
-							<option selected="selected">Ski</option>
-							<option>Velo</option>
-							<option>Wasser</option>
-							<option>Klettern</option>
-							<option>Sport</option>
+						<label for="uiTrack_fld_trkTypeFid" class="updTrackLabelFirst">Type</label>
+						<!-- <input type="text" name="uiTrack_fld_trkTypeFid" id="uiTrack_fld_trkTypeFid" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">-->
+						<select name="trkTypeFid" id="uiTrack_fld_trkTypeFid">
+							<option value="0" selected="selected">select type</option>
+							<option value="5">Klettern</option>
+							<option value="1">Ski</option>
+							<option value="6">Sport</option>
+							<option value="2">Zufuss</option>
+							<option value="3">Velo</option>
+							<option value="4">Wasser</option>
 						</select>
 					</div>
 
 					<!-- SubType -->
 					<div>
-						<label for="uiTrack_fld_trkSubType" class="updTrackLabelFirst">SubType</label>
-						<select name="trkSubType" id="uiTrack_fld_trkSubType">
-							<option>Alpinklettern</option>
-							<option>Alpintour</option>
-							<option>Hochtour</option>
-							<option>Joggen</option>
-							<option>Mehrseilklettern</option>
-							<option>Schneeschuhwanderung</option>
-							<option>Schwimmen</option>
-							<option>Skihochtour</option>
-							<option selected="selected">Skitour</option>
-							<option>Sportklettern</option>
-							<option>Velotour</option>
-							<option>Wanderung</option>
-							<option>Winterwanderung</option>
+						<label for="uiTrack_fld_trkSubtypeFid" class="updTrackLabelFirst">SubType</label>
+						<select name="trkSubtypeFid" id="uiTrack_fld_trkSubtypeFid">
+							<option value="0" selected="selected">select subtype</option>
+							<option value="7">Alpinklettern</option>
+							<option value="12">Alpinski</option>
+							<option value="17">Alpintour</option>
+							<option value="18">Hochtour</option>
+							<option value="13">Joggen</option>
+							<option value="8">Mehrseilklettern</option>
+							<option value="14">Rennrad</option>
+							<option value="19">Schneeschuhtour</option>
+							<option value="16">Schwimmen</option>
+							<option value="10">Skihochtour</option>
+							<option value="11">Skitour</option>
+							<option value="9">Sportklettern</option>
+							<option value="15">Velotour</option>
+							<option value="20">Wanderung</option>
+							<option value="21">Winterwanderung</option>
 						</select>
 					</div>
 
