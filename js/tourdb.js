@@ -37,8 +37,6 @@ var trackKMLlayer;                                                  // map layer
 var segKMLlayer;                                                    // map layer object containing all segments
 var mapSTlayer_grau;                                                // map layer object containing the b/w swiss map
 
-//itemsTrkImp = new Array();                                        // array to store selected peaks, waypoints, locations and participants
-
 // ======================================================
 // ====== Perform these actions when page is ready ======
 // ======================================================
@@ -48,7 +46,7 @@ $(document).ready(function() {
     // ===================================================================
     initJqueryItems();
 
-    // Evaluate which button/panel is active
+   // Evaluate which button/panel is active
     $('.mainButtons').each(function() {
         var $thisTopicButton = $(this);                             // $thisTopicButton becomes ul.mainButtons
         $activeButton = $thisTopicButton.find('li.active');         // Find and store current active li element
@@ -1691,7 +1689,28 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#dispFilTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
+    // Build type selectable dynamically
+    $( "#dispFilTrk_type_div" ).load("services/getTypes.php", 
+        {"purpose":"trk","type":"type","parent":""}, function() {
+
+            // selectable to be called when load is done
+            $( "#dispFilTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
+            
+            // load subtype only when load types is done
+            $( "#dispFilTrk_subtype_div" ).load("services/getTypes.php", 
+                {"purpose":"trk","type":"subtype","parent":""}, function() {
+                // selectable to be called when load is done
+                $( "#dispFilTrk_subtype" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
+            }); 
+        }); 
+
+    // Build subtype selectable dynamically
+    $( "#dispFilTrk_subtype_div" ).load("services/getTypes.php", 
+    {"purpose":"trk","type":"subtype","parent":""}, function() {
+        $( "#dispFilTrk_subtype" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
+    }); 
+
+
     $( "#dispFilTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable
     $( "#dispFilSeg_sourceName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=segSourceFID",

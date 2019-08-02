@@ -151,36 +151,11 @@
 								</div>
 
 								<!-- Type as select items (selectable) -->
-								<div class="dispObjCriteria">
-									<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilTrk_type" class="selectable filterItems">
-										<li id="dispFilTrk_type_Klettern" class="ui-widget-content" value="5">Klettern</li>
-										<li id="dispFilTrk_type_Ski" class="ui-widget-content" value="1">Ski</li>
-										<li id="dispFilTrk_type_Sport" class="ui-widget-content" value="6">Sport</li>
-										<li id="dispFilTrk_type_Velo" class="ui-widget-content" value="3">Velo</li>
-										<li id="dispFilTrk_type_Wasser" class="ui-widget-content" value="4">Wasser</li>
-										<li id="dispFilTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
-									</ol>
+								<div id="dispFilTrk_type_div" class="dispObjCriteria">
 								</div>
 
 								<!-- Subtype as select items (selectable) -->
-								<div class="dispObjCriteria">
-									<label for="dispFilTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilTrk_subtype" class="selectable filterItems">
-										<li id="dispFilTrk_subtype_alpinklettern" class="ui-widget-content" value="13">Alpinklettern</li>
-										<li id="dispFilTrk_subtype_alpintour" class="ui-widget-content" value="23">Alpintour</li>
-										<li id="dispFilTrk_subtype_Hochtour" class="ui-widget-content" value="24">Hochtour</li>
-										<li id="dispFilTrk_subtype_Joggen" class="ui-widget-content" value="19">Joggen</li>
-										<li id="dispFilTrk_subtype_Mehrseilklettern" class="ui-widget-content" value="14">Mehrseilklettern</li>
-										<li id="dispFilTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first" value="25">Schneeschuhwanderung</li>
-										<li id="dispFilTrk_subtype_Schwimmen" class="ui-widget-content" value="22">Schwimmen</li>
-										<li id="dispFilTrk_subtype_Skihochtour" class="ui-widget-content" value="16">Skihochtour</li>
-										<li id="dispFilTrk_subtype_Skitour" class="ui-widget-content" value="17">Skitour</li>
-										<li id="dispFilTrk_subtype_Sportklettern" class="ui-widget-content" value="15">Sportklettern</li>
-										<li id="dispFilTrk_subtype_Velotour" class="ui-widget-content" value="21">Velotour</li>
-										<li id="dispFilTrk_subtype_Wanderung" class="ui-widget-content first" value="26">Wanderung</li>
-										<li id="dispFilTrk_subtype_Winterwanderung" class="ui-widget-content first" value="27">Winterwanderung</li>
-									</ol>
+								<div id="dispFilTrk_subtype_div" class="dispObjCriteria">
 								</div>
 								
 								<!-- participants like (standard text field) -->
