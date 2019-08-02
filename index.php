@@ -510,12 +510,6 @@
 									</ol>
 								</div>
 								
-								<!-- participants like (standard text field) -->
-								<div class="dispListTrkCriteria">	
-									<label for="dispListTrk_participants" class="labelFirst">Participants contains</label>
-									<input type="text" name="dispListTrk_participants" id="dispListTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
-
 								<!-- Country (standard text field) -->
 								<div class="dispListTrkCriteria">	
 									<label for="dispListTrk_country" class="labelFirst">Country like</label>
