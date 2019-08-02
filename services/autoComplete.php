@@ -34,15 +34,15 @@ $term = $_GET["term"];
 if ( $searchObject == "peak" ) {
     $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
     $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID = 5 ORDER BY waypNameLong";
+    $sql .= "AND waypTypeFid = 37 ORDER BY waypNameLong";
 } else if ( $searchObject == "wayp" ) {
     $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
     $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID in (1,2,3) ORDER BY waypNameLong";
+    $sql .= "AND waypTypeFid in (33,34,35) ORDER BY waypNameLong";
 } else if ( $searchObject == "loca" ) {
     $sql = "SELECT waypID, waypNameLong FROM tbl_waypoints ";
     $sql .= "WHERE waypNameLong LIKE '%" . $_GET["term"] . "%' ";
-    $sql .= "AND waypTypeFID = 4 ORDER BY waypNameLong";
+    $sql .= "AND waypTypeFid = 36 ORDER BY waypNameLong";
 } else if ( $searchObject == "part" ) {
     $sql = "SELECT prtId, CONCAT(prtFirstName, ' ', prtLastName) AS participant FROM tbl_part ";
     $sql .= "WHERE prtLastName LIKE '%" . $_GET["term"] . "%' ";

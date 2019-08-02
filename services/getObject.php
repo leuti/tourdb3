@@ -64,7 +64,7 @@ if ( $objectType == "trk" ) {
 
         // Select records from tbl_trk_wayp
         $sql =  "SELECT trwp.trwpId, trwp.trwpTrkId, trwp.trwpWaypId, ";
-        $sql .= "wp.waypNameLong, wp.waypTypeFID, trwp.trwpReached_f ";
+        $sql .= "wp.waypNameLong, wp.waypTypeFid, trwp.trwpReached_f ";
         $sql .= "FROM tbl_track_wayp trwp ";
         $sql .= "INNER JOIN tbl_waypoints wp ON trwp.trwpWaypId = wp.waypID ";
         $sql .= "WHERE trwpTrkId = " . $objectID;
@@ -78,9 +78,9 @@ if ( $objectType == "trk" ) {
         while ( $trackWaypRecord = mysqli_fetch_assoc($records) ) {
             
             // Evaluate type of waypoint
-            if ( $trackWaypRecord["waypTypeFID"] == "5" ) {
+            if ( $trackWaypRecord["waypTypeFid"] == "37" ) {
                 $itemType = "peak";
-            } else if ( $trackWaypRecord["waypTypeFID"] == "4" ) {
+            } else if ( $trackWaypRecord["waypTypeFid"] == "36" ) {
                 $itemType = "loca";
             } else {
                 $itemType = "wayp";
