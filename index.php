@@ -31,7 +31,7 @@
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
 
 	<!-- ========================================================================== -->
-	<!-- ========================== header ======================================== -->
+	<!-- ========= header - containing logo and navigation buttons ================ -->
 	<!-- ========================================================================== -->
 
 	<header id="header">
@@ -98,291 +98,290 @@
 		<!-- ========================================================================== -->
 		<div id="panelMap" class="tourdbPanel">
 			
-			<!-- Div for Menu buttons -->
-			<div id="dispObjectSelector">
-				<!-- This div shows only filter button > onclick opens the full accordion -->
-				<div id="dispObjMenuMini" class="dispObjMini hidden">
-					<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">
-						<img id="dispObjMenuOpenImg" src="css/images/filterLightBlue.png">
-					</a> 
-				</div>
-				<div id="dispObjMenuLarge" class="dispObjOpen visible">
-					<a id="dispObjMenuLargeClose" href="#dispObjMenuLargeClose">
-						<img id="dispObjMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
-					</a> 
-					<p class="dispObjMenuText">Select objects to be displayed</p>
-								
-					<!-- this div shows the jquery accordion for the display selection -->
-					<div id="dispObjAccordion" class="dispObjOpen visible"> 
+			<!-- This div shows only filter button > onclick opens the full accordion -->
+			<div id="dispObjMenuMini" class="dispObjectSelector dispObjMini hidden">
+				<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">
+					<img id="dispObjMenuOpenImg" src="css/images/filterLightBlue.png">
+				</a> 
+			</div>
 
-						<!-- Segment Section of Accordion -->
-						<h2>Tracks</h2>
-						<div class="accordionBackground">
-							<fieldset>
-								<!-- SEGMENT filter -->
-								<legend class="filterHeader">Tracks</legend>
+			<!-- Main filter UI -->
+			<div id="dispObjMenuLarge" class="dispObjectSelector dispObjOpen visible">
+				<a id="dispObjMenuLargeClose" href="#dispObjMenuLargeClose">
+					<img id="dispObjMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
+				</a> 
+				<p class="dispObjMenuText">Select objects to be displayed</p>
+							
+				<!-- this div shows the jquery accordion for the display selection -->
+				<div id="dispObjAccordion" class="dispObjOpen visible"> 
 
-								<!-- Track ID -->
-								<div class="dispObjCriteria">	
-									<label for="dispFilTrk_trackIdFrom" class="labelFirst">Track ID From</label>
-									<input type="text" name="dispFilTrk_trackIdFrom" id="dispFilTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
-									<label for="dispFilTrk_trackIdTo" class="labelNext">Track ID To</label>
-									<input type="text" name="dispFilTrk_trackIdTo" id="dispFilTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
-								</div>
+					<!-- Segment Section of Accordion -->
+					<h2>Tracks</h2>
+					<div class="accordionBackground">
+						<fieldset>
+							<!-- SEGMENT filter -->
+							<legend class="filterHeader">Tracks</legend>
 
-								<!-- Track name contains (standard text field) -->
-								<div class="dispObjCriteria">	
-									<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
-									<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
+							<!-- Track ID -->
+							<div class="dispObjCriteria">	
+								<label for="dispFilTrk_trackIdFrom" class="labelFirst">Track ID From</label>
+								<input type="text" name="dispFilTrk_trackIdFrom" id="dispFilTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
+								<label for="dispFilTrk_trackIdTo" class="labelNext">Track ID To</label>
+								<input type="text" name="dispFilTrk_trackIdTo" id="dispFilTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
+							</div>
 
-								<!-- Route contains (standard text field) -->
-								<div class="dispObjCriteria">
-									<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
-									<input name="dispFilTrk_route" id="dispFilTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
+							<!-- Track name contains (standard text field) -->
+							<div class="dispObjCriteria">	
+								<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
+								<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
 
-								<!-- Date witin range -->
-								<div class="dispObjCriteria">
-									<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
-									<input name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
-									<label for="dispFilTrk_dateTo" class="labelNext">To Date</label>
-									<input name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
-								</div>
+							<!-- Route contains (standard text field) -->
+							<div class="dispObjCriteria">
+								<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
+								<input name="dispFilTrk_route" id="dispFilTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
 
-								<!-- Type as select items (selectable) -->
-								<div id="dispFilTrk_type_div" class="dispObjCriteria">
-								</div>
+							<!-- Date witin range -->
+							<div class="dispObjCriteria">
+								<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
+								<input name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
+								<label for="dispFilTrk_dateTo" class="labelNext">To Date</label>
+								<input name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
+							</div>
 
-								<!-- Subtype as select items (selectable) -->
-								<div id="dispFilTrk_subtype_div" class="dispObjCriteria">
-								</div>
-								
-								<!-- participants like (standard text field) -->
-								<div class="dispObjCriteria">	
-									<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
-									<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
+							<!-- Type as select items (selectable) -->
+							<div id="dispFilTrk_type_div" class="dispObjCriteria">
+							</div>
 
-								<!-- Country (standard text field) -->
-								<div class="dispObjCriteria">	
-									<label for="dispFilTrk_country" class="labelFirst">Country like</label>
-									<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
+							<!-- Subtype as select items (selectable) -->
+							<div id="dispFilTrk_subtype_div" class="dispObjCriteria">
+							</div>
+							
+							<!-- participants like (standard text field) -->
+							<div class="dispObjCriteria">	
+								<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
+								<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
 
-								<!-- Button to newly display selection -->
-								<div class="dispObjCriteria">
-									<input type="submit" class="button uiMapApplyBtn" id="dispFilTrk_NewLoadButton" value="Load" />
-								</div>
-								
-							</fieldset>
-						</div>
-						
-						<!-- Segment Section of Accordion -->
-						<h2>Segments</h2>
-						<div class="accordionBackground">
-							<fieldset>
-
-								<!-- SEGMENT filter -->
-								<legend class="filterHeader">Segments</legend>
-
-								<!-- segTypeFid -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_segTypeFid" class="selectable filterItems">
-										<li id="segTypeFid_AW" class="ui-widget-content first" value="28">Alpinwanderung</li>
-										<li id="segTypeFid_HT" class="ui-widget-content" value="29">Hochtour</li>
-										<li id="segTypeFid_SS" class="ui-widget-content" value="30">Mehrseilklettern</li>
-										<li id="segTypeFid_ST" class="ui-widget-content" value="31">Skitour</li>
-										<li id="segTypeFid_WA" class="ui-widget-content" value="32">Wanderung</li>
-									</ol>
-								</div>
-
-								<!-- segName -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segName" class="labelFirst">Segment Name contains</label>
-									<input id="dispFilSeg_segName" class="filterItems" type="text" size="50">
-								</div>
-
-								<!--startLocName -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocName" class="labelFirst">Select Start Location</label>
-									<input id="dispFilSeg_startLocName" class="filterItems" type="text" size="50">
-									<input type="hidden" id="dispFilSeg_startLocID">
-								</div>
-								
-								<!--startLocAlt
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Start Altitude</label>
-									<input type="text" id="dispFilSeg_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
-								</div>
-								<div id="dispFilSeg_startLocAlt_slider"></div>
-								-->
-
-								<!-- startLocType -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_startLocType" class="selectable filterItems">
-										<li name="startLocType" class="ui-widget-content first" value="1">Bergstation</li>
-										<li name="startLocType" class="ui-widget-content" value="5">Gipfel</li>
-										<li name="startLocType" class="ui-widget-content" value="4">Hütte</li>
-										<li name="startLocType" class="ui-widget-content" value="2">Talort</li>
-										<li name="startLocType" class="ui-widget-content" value="3">Wegpunkt</li>
-									</ol>
-								</div>
-								
-								<!--TargetLocName -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocName" class="labelFirst">Target Location</label>
-									<input id="dispFilSeg_targetLocName" class="filterItems" type="text" size="50">
-									<input type="hidden" id="dispFilSeg_targetLocID">
-								</div>
-
-								<!--targetLocAlt 
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Target Altitude</label>
-									<input type="text" id="dispFilSeg_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
-								</div>
-								<div id="dispFilSeg_targetLocAlt_slider"></div>
-								-->
-
-								<!-- targetLocType -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
-										<li name="targetLocType" class="ui-widget-content first" value="1">Bergstation</li>
-										<li name="targetLocType" class="ui-widget-content" value="5">Gipfel</li>
-										<li name="targetLocType" class="ui-widget-content" value="4">Hütte</li>
-										<li name="targetLocType" class="ui-widget-content" value="2">Talort</li>
-										<li name="targetLocType" class="ui-widget-content" value="3">Wegpunkt</li>
-									</ol>
-								</div>
-
-								<!-- region -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segRegion" class="labelFirst">Region</label>
-									<input id="dispFilSeg_segRegion" class="filterItems" type="text" size="50">
-									<input type="hidden" id="dispFilSeg_segRegionID">
-								</div>
-								
-								<!-- Gebiet -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_segArea" class="labelFirst">Area</label>
-									<input id="dispFilSeg_segArea" class="filterItems" type="text" size="50">
-									<input type="hidden" id="dispFilSeg_segAreaID">
-								</div>
-					
-								<!-- grade -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_grade" class="selectable filterItems">
-										<li id="grade_T1" class="ui-widget-content first">T1</li>
-										<li id="grade_T2" class="ui-widget-content">T2</li>
-										<li id="grade_T3" class="ui-widget-content">T3</li>
-										<li id="grade_T4" class="ui-widget-content">T4</li>
-										<li id="grade_T5" class="ui-widget-content">T5</li>
-										<li id="grade_T6" class="ui-widget-content">T6</li>
-										<li id="grade_L" class="ui-widget-content first">L</li>
-										<li id="grade_WS" class="ui-widget-content">WS</li>
-										<li id="grade_ZS" class="ui-widget-content">ZS</li>
-										<li id="grade_S" class="ui-widget-content">S</li>
-										<li id="grade_SS" class="ui-widget-content">SS</li>
-										<li id="grade_aS" class="ui-widget-content">AS</li>
-										<li id="grade_EX" class="ui-widget-content">EX</li>
-									</ol>
-								</div>
-								
-								<!-- climbGrade -->
-								<div class="dispObjCriteria">
-									<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Left-click for multi-select)</label>
-									<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
-										<li id="climbGrade_I" class="ui-widget-content first">I</li>
-										<li id="climbGrade_II" class="ui-widget-content">II</li>
-										<li id="climbGrade_III" class="ui-widget-content">III</li>
-										<li id="climbGrade_IV" class="ui-widget-content">IV</li>
-										<li id="climbGrade_V" class="ui-widget-content">V</li>
-										<li id="climbGrade_VI" class="ui-widget-content">VI</li>
-										<li id="climbGrade_>VI" class="ui-widget-content">>VI</li>
-									</ol>
-								</div>
-
-								<!--tStartTarget -->
-								<!-- WAITING FOR JQUI WIDGET
-								<div class="dispObjCriteria">
-									<br>t St-Zi  min. <input type="text" name="tStartTargetMin">
-									max. <input type="text" name="tStartTargetMax">
-								</div>
-								-->
-									
-								<!--mUStartTarget -->
-								<!-- WAITING FOR JQUI WIDGET
-								<div class="dispObjCriteria">
-									<br>Aufstieg  min. <input type="text" name="mUStartTargetMin">
-									max. <input type="text" name="mUStartTargetMax"><br>
-								</div>
-								-->
-								
-								<!-- Button to newly display selection -->
-								<div class="dispObjCriteria">
-									<input type="submit" class="button uiMapApplyBtn" id="dispFilSeg_NewLoadButton" value="New Load" />
-								</div>
-
-							</fieldset>
-						</div>
-
-						<!-- Segment Section of Accordion -->
-						<h2>Additional Items to display</h2>
-						<div class="accordionBackground">
-							<fieldset>
-
-								<!-- SEGMENT filter -->
-								<legend class="filterHeader">Peaks</legend>
-
-								<p>
-									<label for="dispObjPeaks_100" class="labelFirst">Peaks < 1000m</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_100" class="text ui-widget-content ui-corner-all">
-								</p>
-								<p>
-									<label for="dispObjPeaks_1000" class="labelFirst">Peaks (1000m - 1999m)</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_1000" class="text ui-widget-content ui-corner-all">
-								</p>
-								<p>
-									<label for="dispObjPeaks_2000" class="labelFirst">Peaks (2000m - 2999m)</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_2000" class="text ui-widget-content ui-corner-all">
-								</p>
-								<p>
-									<label for="dispObjPeaks_3000" class="labelFirst">Peaks (3000m - 3999m)</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_3000" class="text ui-widget-content ui-corner-all">
-								</p>
-								<p>
-									<label for="dispObjPeaks_4000" class="labelFirst">Peaks (4000m - 4999m)</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_4000" class="text ui-widget-content ui-corner-all">
-								</p>
-								<p>
-									<label for="dispObjPeaks_cant" class="labelFirst">Peaks (Top of Cantons)</label>
-									<input type="checkbox" class="dispObjSel" id="dispObjPeaks_cant" class="text ui-widget-content ui-corner-all">
-								</p>
-							</fieldset>				
-
-							<fieldset>
-
-								<!-- SEGMENT filter -->
-								<legend class="filterHeader">Others</legend>
-
-								<p>
-									<label for="dispObjHuts" class="dispObjSel labelFirst">Hütten</label>
-									<input type="checkbox" name="dispObjHuts" id="dispObjHuts" class="text ui-widget-content ui-corner-all">
-								</p>
-							</fieldset>
+							<!-- Country (standard text field) -->
+							<div class="dispObjCriteria">	
+								<label for="dispFilTrk_country" class="labelFirst">Country like</label>
+								<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
 
 							<!-- Button to newly display selection -->
 							<div class="dispObjCriteria">
-								<input type="submit" class="button uiMapApplyBtn" id="dispFilWayp_NewLoadButton" value="Load" />
+								<input type="submit" class="button uiMapApplyBtn" id="dispFilTrk_NewLoadButton" value="Load" />
 							</div>
 							
-						</div>
-
+						</fieldset>
 					</div>
+					
+					<!-- Segment Section of Accordion -->
+					<h2>Segments</h2>
+					<div class="accordionBackground">
+						<fieldset>
+
+							<!-- SEGMENT filter -->
+							<legend class="filterHeader">Segments</legend>
+
+							<!-- segTypeFid -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_mapType" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
+								<ol id="dispFilSeg_segTypeFid" class="selectable filterItems">
+									<li id="segTypeFid_AW" class="ui-widget-content first" value="28">Alpinwanderung</li>
+									<li id="segTypeFid_HT" class="ui-widget-content" value="29">Hochtour</li>
+									<li id="segTypeFid_SS" class="ui-widget-content" value="30">Mehrseilklettern</li>
+									<li id="segTypeFid_ST" class="ui-widget-content" value="31">Skitour</li>
+									<li id="segTypeFid_WA" class="ui-widget-content" value="32">Wanderung</li>
+								</ol>
+							</div>
+
+							<!-- segName -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_segName" class="labelFirst">Segment Name contains</label>
+								<input id="dispFilSeg_segName" class="filterItems" type="text" size="50">
+							</div>
+
+							<!--startLocName -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_startLocName" class="labelFirst">Select Start Location</label>
+								<input id="dispFilSeg_startLocName" class="filterItems" type="text" size="50">
+								<input type="hidden" id="dispFilSeg_startLocID">
+							</div>
+							
+							<!--startLocAlt
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_startLocAlt_slider_values" class="labelFirst">Start Altitude</label>
+								<input type="text" id="dispFilSeg_startLocAlt_slider_values" class="filterItems sliderValue" readonly>
+							</div>
+							<div id="dispFilSeg_startLocAlt_slider"></div>
+							-->
+
+							<!-- startLocType -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_startLocType" class="labelFirst">Start Type (CTRL+Left-click for multi-select)</label>
+								<ol id="dispFilSeg_startLocType" class="selectable filterItems">
+									<li name="startLocType" class="ui-widget-content first" value="1">Bergstation</li>
+									<li name="startLocType" class="ui-widget-content" value="5">Gipfel</li>
+									<li name="startLocType" class="ui-widget-content" value="4">Hütte</li>
+									<li name="startLocType" class="ui-widget-content" value="2">Talort</li>
+									<li name="startLocType" class="ui-widget-content" value="3">Wegpunkt</li>
+								</ol>
+							</div>
+							
+							<!--TargetLocName -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_targetLocName" class="labelFirst">Target Location</label>
+								<input id="dispFilSeg_targetLocName" class="filterItems" type="text" size="50">
+								<input type="hidden" id="dispFilSeg_targetLocID">
+							</div>
+
+							<!--targetLocAlt 
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_targetLocAlt_slider_values" class="labelFirst">Target Altitude</label>
+								<input type="text" id="dispFilSeg_targetLocAlt_slider_values" class="filterItems sliderValue" readonly>
+							</div>
+							<div id="dispFilSeg_targetLocAlt_slider"></div>
+							-->
+
+							<!-- targetLocType -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_targetLocType" class="labelFirst">Target Type (CTRL+Left-click for multi-select)</label>
+								<ol id="dispFilSeg_targetLocType" class="selectable filterItems">
+									<li name="targetLocType" class="ui-widget-content first" value="1">Bergstation</li>
+									<li name="targetLocType" class="ui-widget-content" value="5">Gipfel</li>
+									<li name="targetLocType" class="ui-widget-content" value="4">Hütte</li>
+									<li name="targetLocType" class="ui-widget-content" value="2">Talort</li>
+									<li name="targetLocType" class="ui-widget-content" value="3">Wegpunkt</li>
+								</ol>
+							</div>
+
+							<!-- region -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_segRegion" class="labelFirst">Region</label>
+								<input id="dispFilSeg_segRegion" class="filterItems" type="text" size="50">
+								<input type="hidden" id="dispFilSeg_segRegionID">
+							</div>
+							
+							<!-- Gebiet -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_segArea" class="labelFirst">Area</label>
+								<input id="dispFilSeg_segArea" class="filterItems" type="text" size="50">
+								<input type="hidden" id="dispFilSeg_segAreaID">
+							</div>
+				
+							<!-- grade -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_grade" class="labelFirst">Grade (CTRL+Left-click for multi-select)</label>
+								<ol id="dispFilSeg_grade" class="selectable filterItems">
+									<li id="grade_T1" class="ui-widget-content first">T1</li>
+									<li id="grade_T2" class="ui-widget-content">T2</li>
+									<li id="grade_T3" class="ui-widget-content">T3</li>
+									<li id="grade_T4" class="ui-widget-content">T4</li>
+									<li id="grade_T5" class="ui-widget-content">T5</li>
+									<li id="grade_T6" class="ui-widget-content">T6</li>
+									<li id="grade_L" class="ui-widget-content first">L</li>
+									<li id="grade_WS" class="ui-widget-content">WS</li>
+									<li id="grade_ZS" class="ui-widget-content">ZS</li>
+									<li id="grade_S" class="ui-widget-content">S</li>
+									<li id="grade_SS" class="ui-widget-content">SS</li>
+									<li id="grade_aS" class="ui-widget-content">AS</li>
+									<li id="grade_EX" class="ui-widget-content">EX</li>
+								</ol>
+							</div>
+							
+							<!-- climbGrade -->
+							<div class="dispObjCriteria">
+								<label for="dispFilSeg_climbGrade" class="labelFirst">Climbing Grade (CTRL+Left-click for multi-select)</label>
+								<ol id="dispFilSeg_climbGrade" class="selectable filterItems">
+									<li id="climbGrade_I" class="ui-widget-content first">I</li>
+									<li id="climbGrade_II" class="ui-widget-content">II</li>
+									<li id="climbGrade_III" class="ui-widget-content">III</li>
+									<li id="climbGrade_IV" class="ui-widget-content">IV</li>
+									<li id="climbGrade_V" class="ui-widget-content">V</li>
+									<li id="climbGrade_VI" class="ui-widget-content">VI</li>
+									<li id="climbGrade_>VI" class="ui-widget-content">>VI</li>
+								</ol>
+							</div>
+
+							<!--tStartTarget -->
+							<!-- WAITING FOR JQUI WIDGET
+							<div class="dispObjCriteria">
+								<br>t St-Zi  min. <input type="text" name="tStartTargetMin">
+								max. <input type="text" name="tStartTargetMax">
+							</div>
+							-->
+								
+							<!--mUStartTarget -->
+							<!-- WAITING FOR JQUI WIDGET
+							<div class="dispObjCriteria">
+								<br>Aufstieg  min. <input type="text" name="mUStartTargetMin">
+								max. <input type="text" name="mUStartTargetMax"><br>
+							</div>
+							-->
+							
+							<!-- Button to newly display selection -->
+							<div class="dispObjCriteria">
+								<input type="submit" class="button uiMapApplyBtn" id="dispFilSeg_NewLoadButton" value="New Load" />
+							</div>
+
+						</fieldset>
+					</div>
+
+					<!-- Segment Section of Accordion -->
+					<h2>Additional Items to display</h2>
+					<div class="accordionBackground">
+						<fieldset>
+
+							<!-- SEGMENT filter -->
+							<legend class="filterHeader">Peaks</legend>
+
+							<p>
+								<label for="dispObjPeaks_100" class="labelFirst">Peaks < 1000m</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_100" class="text ui-widget-content ui-corner-all">
+							</p>
+							<p>
+								<label for="dispObjPeaks_1000" class="labelFirst">Peaks (1000m - 1999m)</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_1000" class="text ui-widget-content ui-corner-all">
+							</p>
+							<p>
+								<label for="dispObjPeaks_2000" class="labelFirst">Peaks (2000m - 2999m)</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_2000" class="text ui-widget-content ui-corner-all">
+							</p>
+							<p>
+								<label for="dispObjPeaks_3000" class="labelFirst">Peaks (3000m - 3999m)</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_3000" class="text ui-widget-content ui-corner-all">
+							</p>
+							<p>
+								<label for="dispObjPeaks_4000" class="labelFirst">Peaks (4000m - 4999m)</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_4000" class="text ui-widget-content ui-corner-all">
+							</p>
+							<p>
+								<label for="dispObjPeaks_cant" class="labelFirst">Peaks (Top of Cantons)</label>
+								<input type="checkbox" class="dispObjSel" id="dispObjPeaks_cant" class="text ui-widget-content ui-corner-all">
+							</p>
+						</fieldset>				
+
+						<fieldset>
+
+							<!-- SEGMENT filter -->
+							<legend class="filterHeader">Others</legend>
+
+							<p>
+								<label for="dispObjHuts" class="dispObjSel labelFirst">Hütten</label>
+								<input type="checkbox" name="dispObjHuts" id="dispObjHuts" class="text ui-widget-content ui-corner-all">
+							</p>
+						</fieldset>
+
+						<!-- Button to newly display selection -->
+						<div class="dispObjCriteria">
+							<input type="submit" class="button uiMapApplyBtn" id="dispFilWayp_NewLoadButton" value="Load" />
+						</div>
+						
+					</div>
+
 				</div>
 			</div>
 
@@ -400,109 +399,108 @@
 		<!-- ========================================================================== -->		
 		<div id="panelLists" class="tourdbPanel">
 
-			<!-- This div shows the filter UI -->
-			<div id="listTracksSelector">
-				<!-- This div shows only filter button > onclick opens the full accordion -->
-				<div id="dispListTrkMenuMini" class="dispListTrkMini visible">
-					<a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">
-						<img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">
-					</a> 
-				</div>
-				<div id="dispListTrkMenuLarge" class="dispListTrkOpen hidden">
-					<a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">
-						<img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
-					</a> 
-					<p class="dispListTrkMenuText">Select tracks to be displayed</p>
-								
-					<!-- this div shows the jquery accordion for the display selection -->
-					<div id="dispListTrkAccordion" class="dispListTrkOpen visible"> 
-
-						<!-- Segment Section of Accordion -->
-						<h2>Tracks</h2>
-						<div class="accordionBackground">
-							<fieldset>
-								<!-- SEGMENT filter -->
-								<legend class="filterHeader">Tracks</legend>
-
-								<!-- Track ID -->
-								<div class="dispListTrkCriteria">	
-									<label for="dispListTrk_trackIdFrom" class="labelFirst">Track ID From</label>
-									<input type="text" name="dispListTrk_trackIdFrom" id="dispListTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
-									<label for="dispListTrk_trackIdTo" class="labelNext">Track ID To</label>
-									<input type="text" name="dispListTrk_trackIdTo" id="dispListTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
-								</div>
-
-								<!-- Track name contains (standard text field) -->
-								<div class="dispListTrkCriteria">	
-									<label for="dispListTrk_trackName" class="labelFirst">Track Names contains</label>
-									<input type="text" name="dispListTrk_trackName" id="dispListTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
-
-								<!-- Route contains (standard text field) -->
-								<div class="dispListTrkCriteria">
-									<label for="dispListTrk_route" class="labelFirst">Route contains</label>
-									<input name="dispListTrk_route" id="dispListTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
-
-								<!-- Date witin range -->
-								<div class="dispListTrkCriteria">
-									<label for="dispListTrk_dateFrom" class="labelFirst">From Date</label>
-									<input name="dispListTrk_dateFrom" id="dispListTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
-									<label for="dispListTrk_dateTo" class="labelNext">To Date</label>
-									<input name="dispListTrk_dateTo" id="dispListTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
-								</div>
-
-								<!-- Type as select items (selectable) -->
-								<div class="dispListTrkCriteria">
-									<label for="dispListTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
-									<ol id="dispListTrk_type" class="selectable filterItems">
-										<li id="dispListTrk_type_Klettern" class="ui-widget-content" value="5">Klettern</li>
-										<li id="dispListTrk_type_Ski" class="ui-widget-content" value="1">Ski</li>
-										<li id="dispListTrk_type_Sport" class="ui-widget-content" value="6">Sport</li>
-										<li id="dispListTrk_type_Velo" class="ui-widget-content" value="3">Velo</li>
-										<li id="dispListTrk_type_Wasser" class="ui-widget-content" value="4">Wasser</li>
-										<li id="dispListTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
-									</ol>
-								</div>
-
-								<!-- Subtype as select items (selectable) -->
-								<div class="dispListTrkCriteria">
-									<label for="dispListTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
-									<ol id="dispListTrk_subtype" class="selectable filterItems">
-										<li id="dispListTrk_subtype_alpinklettern" class="ui-widget-content" value="13">Alpinklettern</li>
-										<li id="dispListTrk_subtype_alpintour" class="ui-widget-content" value="23">Alpintour</li>
-										<li id="dispListTrk_subtype_Hochtour" class="ui-widget-content" value="24">Hochtour</li>
-										<li id="dispListTrk_subtype_Joggen" class="ui-widget-content" value="19">Joggen</li>
-										<li id="dispListTrk_subtype_Mehrseilklettern" class="ui-widget-content" value="14">Mehrseilklettern</li>
-										<li id="dispListTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first" value="25">Schneeschuhwanderung</li>
-										<li id="dispListTrk_subtype_Schwimmen" class="ui-widget-content" value="22">Schwimmen</li>
-										<li id="dispListTrk_subtype_Skihochtour" class="ui-widget-content" value="16">Skihochtour</li>
-										<li id="dispListTrk_subtype_Skitour" class="ui-widget-content" value="17">Skitour</li>
-										<li id="dispListTrk_subtype_Sportklettern" class="ui-widget-content" value="15">Sportklettern</li>
-										<li id="dispListTrk_subtype_Velotour" class="ui-widget-content" value="21">Velotour</li>
-										<li id="dispListTrk_subtype_Wanderung" class="ui-widget-content first" value="26">Wanderung</li>
-										<li id="dispListTrk_subtype_Winterwanderung" class="ui-widget-content first" value="27">Winterwanderung</li>
-									</ol>
-								</div>
-								
-								<!-- Country (standard text field) -->
-								<div class="dispListTrkCriteria">	
-									<label for="dispListTrk_country" class="labelFirst">Country like</label>
-									<input type="text" name="dispListTrk_country" id="dispListTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
-								</div>
-
-								<!-- Button to newly display selection -->
-								<div class="dispListTrkCriteria">
-									<input type="submit" class="button" id="dispListTrk_NewLoadButton" value="Load" />
-								</div>
-
-							</fieldset>
-						</div>
-					</div>
-				</div>
+			<!-- This div shows only filter button > onclick opens the full accordion -->
+			<div id="dispListTrkMenuMini" class="dispObjectSelector dispListTrkMini visible">
+				<a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">
+					<img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">
+				</a> 
 			</div>
 
-			<!-- Accordion to display different lists -->
+			<!-- Main filter UI -->
+			<div id="dispListTrkMenuLarge" class="dispObjectSelector dispListTrkOpen hidden">
+				<a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">
+					<img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
+				</a> 
+				<p class="dispListTrkMenuText">Select tracks to be displayed</p>
+							
+				<!-- this div shows the jquery accordion for the display selection -->
+				<div id="dispListTrkAccordion" class="dispListTrkOpen visible"> 
+
+					<!-- Segment Section of Accordion -->
+					<h2>Tracks</h2>
+					<div class="accordionBackground">
+						<fieldset>
+							<!-- SEGMENT filter -->
+							<legend class="filterHeader">Tracks</legend>
+
+							<!-- Track ID -->
+							<div class="dispListTrkCriteria">	
+								<label for="dispListTrk_trackIdFrom" class="labelFirst">Track ID From</label>
+								<input type="text" name="dispListTrk_trackIdFrom" id="dispListTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
+								<label for="dispListTrk_trackIdTo" class="labelNext">Track ID To</label>
+								<input type="text" name="dispListTrk_trackIdTo" id="dispListTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
+							</div>
+
+							<!-- Track name contains (standard text field) -->
+							<div class="dispListTrkCriteria">	
+								<label for="dispListTrk_trackName" class="labelFirst">Track Names contains</label>
+								<input type="text" name="dispListTrk_trackName" id="dispListTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
+
+							<!-- Route contains (standard text field) -->
+							<div class="dispListTrkCriteria">
+								<label for="dispListTrk_route" class="labelFirst">Route contains</label>
+								<input name="dispListTrk_route" id="dispListTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
+
+							<!-- Date witin range -->
+							<div class="dispListTrkCriteria">
+								<label for="dispListTrk_dateFrom" class="labelFirst">From Date</label>
+								<input name="dispListTrk_dateFrom" id="dispListTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
+								<label for="dispListTrk_dateTo" class="labelNext">To Date</label>
+								<input name="dispListTrk_dateTo" id="dispListTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
+							</div>
+
+							<!-- Type as select items (selectable) -->
+							<div class="dispListTrkCriteria">
+								<label for="dispListTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
+								<ol id="dispListTrk_type" class="selectable filterItems">
+									<li id="dispListTrk_type_Klettern" class="ui-widget-content" value="5">Klettern</li>
+									<li id="dispListTrk_type_Ski" class="ui-widget-content" value="1">Ski</li>
+									<li id="dispListTrk_type_Sport" class="ui-widget-content" value="6">Sport</li>
+									<li id="dispListTrk_type_Velo" class="ui-widget-content" value="3">Velo</li>
+									<li id="dispListTrk_type_Wasser" class="ui-widget-content" value="4">Wasser</li>
+									<li id="dispListTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
+								</ol>
+							</div>
+
+							<!-- Subtype as select items (selectable) -->
+							<div class="dispListTrkCriteria">
+								<label for="dispListTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
+								<ol id="dispListTrk_subtype" class="selectable filterItems">
+									<li id="dispListTrk_subtype_alpinklettern" class="ui-widget-content" value="13">Alpinklettern</li>
+									<li id="dispListTrk_subtype_alpintour" class="ui-widget-content" value="23">Alpintour</li>
+									<li id="dispListTrk_subtype_Hochtour" class="ui-widget-content" value="24">Hochtour</li>
+									<li id="dispListTrk_subtype_Joggen" class="ui-widget-content" value="19">Joggen</li>
+									<li id="dispListTrk_subtype_Mehrseilklettern" class="ui-widget-content" value="14">Mehrseilklettern</li>
+									<li id="dispListTrk_subtype_Schneeschuhwanderung" class="ui-widget-content first" value="25">Schneeschuhwanderung</li>
+									<li id="dispListTrk_subtype_Schwimmen" class="ui-widget-content" value="22">Schwimmen</li>
+									<li id="dispListTrk_subtype_Skihochtour" class="ui-widget-content" value="16">Skihochtour</li>
+									<li id="dispListTrk_subtype_Skitour" class="ui-widget-content" value="17">Skitour</li>
+									<li id="dispListTrk_subtype_Sportklettern" class="ui-widget-content" value="15">Sportklettern</li>
+									<li id="dispListTrk_subtype_Velotour" class="ui-widget-content" value="21">Velotour</li>
+									<li id="dispListTrk_subtype_Wanderung" class="ui-widget-content first" value="26">Wanderung</li>
+									<li id="dispListTrk_subtype_Winterwanderung" class="ui-widget-content first" value="27">Winterwanderung</li>
+								</ol>
+							</div>
+							
+							<!-- Country (standard text field) -->
+							<div class="dispListTrkCriteria">	
+								<label for="dispListTrk_country" class="labelFirst">Country like</label>
+								<input type="text" name="dispListTrk_country" id="dispListTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
+							</div>
+
+							<!-- Button to newly display selection -->
+							<div class="dispListTrkCriteria">
+								<input type="submit" class="button" id="dispListTrk_NewLoadButton" value="Load" />
+							</div>
+
+						</fieldset>
+					</div>
+				</div>
+			</div>			
+
+			<!-- Accordion to display different lists (content is generated by fetch_lists.php ) -->
 			<div id="tabDispLists" class="tabDispLists">
 				<ul>
 					<li><a href="#tabDispLists_trks">Tracks</a></li>

@@ -169,7 +169,7 @@ tr.tblpeak>td, tr.tblwayp>td {
     margin-top: 18px;
 }
 
-#dispObjectSelector, #dispListTrkectSelector {
+.dispObjectSelector, #dispListTrkectSelector {
     width: 432px;
     position: absolute;
     top: 122px;
