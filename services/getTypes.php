@@ -2,15 +2,20 @@
 
 // ---------------------------------------------------------------------------------------------
 // This php script is called to generate all UI elements dependent on types and subtypes
-// 
 //
 // Parameters:
-// blabla
+// purpose: trk, wayp, seg --> which kind of type is requested
+// type: type or subtype is requested
+// parent: ID of partent ID if subtype is delivered
 //
+// Function:
+// Retrieved appropriate types from tbl_types and generates code for <ol> elements for
+// type / subtype selectable
+// 
 // Created: 2.8.2019 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
-// Action:§
-// * blabla
+// Action:
+// 
 // 
 
 // Set timezone (otherwise warnings are written to log)
@@ -56,18 +61,6 @@ if ( $purpose == "trk") {
     if ($debugLevel >= 1) fputs($logFile, "Line " . __LINE__ . ": sql for $purpose/$type: " . $sql . "\r\n");
 
     $records = mysqli_query($conn, $sql);
-
-    /* ----------------------
-    <ol id="dispFilTrk_type" class="selectable filterItems">
-        <li id="dispFilTrk_type_Klettern" class="ui-widget-content" value="5">Klettern</li>
-        <li id="dispFilTrk_type_Ski" class="ui-widget-content" value="1">Ski</li>
-        <li id="dispFilTrk_type_Sport" class="ui-widget-content" value="6">Sport</li>
-        <li id="dispFilTrk_type_Velo" class="ui-widget-content" value="3">Velo</li>
-        <li id="dispFilTrk_type_Wasser" class="ui-widget-content" value="4">Wasser</li>
-        <li id="dispFilTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
-    </ol>
-    -- ----------------------
-    */
 
     if ( $type == "type" ) {
         echo '<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>';

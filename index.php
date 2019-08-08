@@ -122,59 +122,57 @@
 							<!-- SEGMENT filter -->
 							<legend class="filterHeader">Tracks</legend>
 
-							<!-- Track ID -->
-							<div class="dispObjCriteria">	
-								<label for="dispFilTrk_trackIdFrom" class="labelFirst">Track ID From</label>
-								<input type="text" name="dispFilTrk_trackIdFrom" id="dispFilTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
-								<label for="dispFilTrk_trackIdTo" class="labelNext">Track ID To</label>
-								<input type="text" name="dispFilTrk_trackIdTo" id="dispFilTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
+							<!-- 1 Track ID From -->
+							<div>
+							<label for="dispFilTrk_trackIdFrom" class="labelFirst">Track ID From</label>
+							<input type="text" name="dispFilTrk_trackIdFrom" id="dispFilTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
+
+							<!-- 2 Track ID To -->
+							<label for="dispFilTrk_trackIdTo" class="labelNext">Track ID To</label>
+							<input type="text" name="dispFilTrk_trackIdTo" id="dispFilTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
 							</div>
 
-							<!-- Track name contains (standard text field) -->
-							<div class="dispObjCriteria">	
-								<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
-								<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							<!-- 3 Track name contains (standard text field) -->
+							<div>
+							<label for="dispFilTrk_trackName" class="labelFirst">Track Names contains</label>
+							<input type="text" name="dispFilTrk_trackName" id="dispFilTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
 
-							<!-- Route contains (standard text field) -->
-							<div class="dispObjCriteria">
-								<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
-								<input name="dispFilTrk_route" id="dispFilTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							<!-- 4 Route contains (standard text field) -->
+							<div>
+							<label for="dispFilTrk_route" class="labelFirst">Route contains</label>
+							<input type="text" name="dispFilTrk_route" id="dispFilTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
 
-							<!-- Date witin range -->
-							<div class="dispObjCriteria">
-								<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
-								<input name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
-								<label for="dispFilTrk_dateTo" class="labelNext">To Date</label>
-								<input name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
+							<!-- 5 Date From -->
+							<div>
+							<label for="dispFilTrk_dateFrom" class="labelFirst">From Date</label>
+							<input type="text" name="dispFilTrk_dateFrom" id="dispFilTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
+
+							<!-- 6 Date To -->
+							<label for="dispFilTrk_dateTo" class="labelNext">To Date</label>
+							<input type="text" name="dispFilTrk_dateTo" id="dispFilTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
 							</div>
 
-							<!-- Type as select items (selectable) -->
+							<!-- 7 Type as select items (selectable) -->
 							<div id="dispFilTrk_type_div" class="dispObjCriteria">
 							</div>
 
-							<!-- Subtype as select items (selectable) -->
+							<!-- 8 Subtype as select items (selectable) -->
 							<div id="dispFilTrk_subtype_div" class="dispObjCriteria">
 							</div>
 							
-							<!-- participants like (standard text field) -->
-							<div class="dispObjCriteria">	
-								<label for="dispFilTrk_participants" class="labelFirst">Participants contains</label>
-								<input type="text" name="dispFilTrk_participants" id="dispFilTrk_participants" size="32" class="dispInput text ui-widget-content ui-corner-all">
+							<!-- 9 Country (standard text field) -->
+							<div>
+							<label for="dispFilTrk_country" class="labelFirst">Country like</label>
+							<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
 
-							<!-- Country (standard text field) -->
-							<div class="dispObjCriteria">	
-								<label for="dispFilTrk_country" class="labelFirst">Country like</label>
-								<input type="text" name="dispFilTrk_country" id="dispFilTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
-							</div>
+							<!-- 10 Button to newly display selection -->
+							<div>
+							<input type="submit" name="dispFilTrk_NewLoadButton" id="dispFilTrk_NewLoadButton" class="button uiMapApplyBtn" value="Load" />
+							</div>	
 
-							<!-- Button to newly display selection -->
-							<div class="dispObjCriteria">
-								<input type="submit" class="button uiMapApplyBtn" id="dispFilTrk_NewLoadButton" value="Load" />
-							</div>
-							
 						</fieldset>
 					</div>
 					
