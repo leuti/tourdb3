@@ -25,20 +25,6 @@ if ($debugLevel >= 1){
     fputs($logFile, date("Ymd-H:i:s", time()) .  "getFilterUI.php opened \r\n"); 
 };
 
-// Are these variable required?
-$item="";
-$tab_heading="";
-$fieldset_heading="";
-$rank="";
-$div_id="";
-$ele_type="";
-$ele_name="";
-$ele_id="";
-$label="";
-$label_class="";
-$ele_size="";
-$ele_class="";
-
 // remove after development =============================================================================================================
 $debugLevel = 3;
 
@@ -60,6 +46,8 @@ $outArray[] = '  <p class="dispObjMenuText">Select objects to be displayed</p>';
 $outArray[] = '  <div id="dispObjAccordion" class="dispObjOpen visible">';
 
 foreach ( $UISettings as $key => $record ) {
+
+    // Print key variables into log
     if ( $debugLevel >= 3 ) $outArray[] = "##--------------------------------------------------------------------------------------------------------";
     if ( $debugLevel >= 3 ) $outArray[] = "##key: " . $key . " | item:   " . $UISettings[$key]["ele_id"];
     if ( $debugLevel >= 3 ) $outArray[] = "##tab_heading:                " . $tab_heading;
@@ -70,28 +58,28 @@ foreach ( $UISettings as $key => $record ) {
     if ( $debugLevel >= 3 ) $outArray[] = "##fieldset_h_opened:          " . ( $UISettings[$key]["fieldset_h_opened"] == true ? "true" : "false" ); 
     if ( $debugLevel >= 3 ) $outArray[] = "##"; 
 
-    // Close fieldset tag
+    // Close fieldset tag when fieldset heading differs from previous record and fieldset tag was previously opened
     if ( $fieldset_heading <> $UISettings[$key]["fieldset_heading"] && $fieldset_h_opened == true ) {
         $outArray[] = '      </fieldset>';    
         $fieldset_h_opened = false;
     }
     
-    // Close main tab tags
+    // Close main tab tags when tab heading differs from previous record and tag for main div was previously opened
     if ( $tab_heading <> $UISettings[$key]["tab_heading"] && $tab_h_opened == true ) {
         $outArray[] = '    </div>';    
         $tab_h_opened = false;
     }
 
-    // Open main tab tags
-    if ( $tab_heading <> $UISettings[$key]["tab_heading"] && $tab_h_opened == false && $UISettings[$key]["type"] != "dummy" ) {
+    // Open main tab tags when tab tab heading differs from previous record, tab was previously not opened and current record is not a dummy
+    if ( $tab_heading <> $UISettings[$key]["tab_heading"] && $tab_h_opened == false && $UISettings[$key]["ele_type"] != "dummy" ) {
         $outArray[] = '    <h2>' . $UISettings[$key]["tab_heading"] . '</h2>';
         $outArray[] = '    <div class="accordionBackground">';
         $tab_h_opened = true;
         $tab_heading = $UISettings[$key]["tab_heading"];
     }
 
-    // Open fieldset tags
-    if ( $fieldset_heading <> $UISettings[$key]["fieldset_heading"] && $fieldset_h_opened == false  && $UISettings[$key]["type"] != "dummy" ) {
+    // Open fieldset tags when fieldset heading differs from previous record, tab was previously not opened and current record is not a dummy
+    if ( $fieldset_heading <> $UISettings[$key]["fieldset_heading"] && $fieldset_h_opened == false  && $UISettings[$key]["ele_type"] != "dummy" ) {
         $outArray[] = '      <fieldset>';
         $outArray[] = '        <legend class="filterHeader">' . $UISettings[$key]["fieldset_heading"] .'</legend>';
         $fieldset_h_opened = true;
@@ -104,28 +92,27 @@ foreach ( $UISettings as $key => $record ) {
     // ---------------------------------------------
 
     // Text elements
-    if ( $UISettings[$key]["type"] == "text" ) {
-        $div_id = $UISettings[$key]["div_id"];
-        $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["label"] . '</label>';
-        $outArray[] = '          <input type="' . $UISettings[$key]["type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
+    if ( $UISettings[$key]["ele_type"] == "text" ) {
+        $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["ele_label"] . '</label>';
+        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     
     // Hidden elements
-    } else if ( $UISettings[$key]["type"] == "hidden" ) {
+    } else if ( $UISettings[$key]["ele_type"] == "hidden" ) {
         $outArray[] = '          <input type="hidden" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '">';
 
     // Selectable elements
-    } else if ( $UISettings[$key]["type"] == "selectable" ) {
-        $outArray[] = '        <div id="' . $UISettings[$key]["div_id"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
+    } else if ( $UISettings[$key]["ele_type"] == "selectable" ) {
+        $outArray[] = '        <div id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
         $outArray[] = '        </div>';
     
     // Buttons 
-    } else if ( $UISettings[$key]["type"] == "submit" ) {
+    } else if ( $UISettings[$key]["ele_type"] == "submit" ) {
         $outArray[] = '          <input type="submit" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '" value="' . $UISettings[$key]["label"] . '" />';
     
     // Checkboxes
-    } else if ( $UISettings[$key]["type"] == "checkbox" ) {
+    } else if ( $UISettings[$key]["ele_type"] == "checkbox" ) {
         $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["label"] . '</label>';
-        $outArray[] = '          <input type="' . $UISettings[$key]["type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
+        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     }
     
     if ( $UISettings[$key]["tag_close"] <> "" ) $outArray[] = '        ' . $UISettings[$key]["tag_close"];
