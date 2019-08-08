@@ -3,12 +3,15 @@ export/
 
 # Ignore log files
 **/log/*.log
+**/log/*.out
 
 # Ignore temp files
 **/tmp
 
 # Ignore the config file due to different pw between local host and hosttech
+**/services/config.php
 services/config.php
+**config.php
 
 # Ignore .gitignore
 .gitignore
