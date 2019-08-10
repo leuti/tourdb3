@@ -29,19 +29,21 @@ if ($debugLevel >= 1){
     fputs($logFile, date("Ymd-H:i:s", time()) . " getTypes.php opened \r\n"); 
 };
 
+$ele = $_POST["ele"];                                               // element id
 $purpose = $_POST["purpose"];                                       // trk, wayp, seg
 $type = $_POST["type"];                                             // type or subtype
 $parent = $_POST["parent"];                                         // it of parent
 
 // continue only if $_POST is set and it is a Ajax request
 if ($debugLevel >= 3){
+    fputs($logFile, "Line " . __LINE__ . ": ele     :  ". $ele . "\r\n");
     fputs($logFile, "Line " . __LINE__ . ": purpose :  ". $purpose . "\r\n");
     fputs($logFile, "Line " . __LINE__ . ": type    :  ". $type . "\r\n");
     fputs($logFile, "Line " . __LINE__ . ": parent  :  ". $parent . "\r\n");
 };
 
 // requested subject is tracks
-if ( $purpose == "trk") {
+if ( $purpose == "trk" || $purpose == "seg" ) {
 
     // Type is requested
     if ( $type == "type" ) {
@@ -62,24 +64,19 @@ if ( $purpose == "trk") {
 
     $records = mysqli_query($conn, $sql);
 
-    if ( $type == "type" ) {
-        echo '<label for="dispFilTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>';
-        echo '<ol id="dispFilTrk_type" class="selectable filterItems">';    
-    } else if ( $type == "subtype" ) {
-        echo '<label for="dispFilTrk_subtype" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>';
-        echo '<ol id="dispFilTrk_subtype" class="selectable filterItems">';    
-    }
+    echo '<label for="' . $ele . '" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>';
+    echo '<ol id="' . $ele . '_ol" class="selectable filterItems">';    
     
     // Write for each waypoint one Line 
     while($singleRecord = mysqli_fetch_assoc($records)) {
-
-        echo '<li id="dispFilTrk_' . $type . '_' . $singleRecord["typCode"] . ' class="ui-widget-content" value="' . 
+        echo '<li id="' . $ele . '_' . $singleRecord["typCode"] . '" class="ui-widget-content ui-selectee" value="' . 
             $singleRecord["typId"] . '">' . $singleRecord["typName"] . '</li>';
         $first = "";
     }
 
     // Write remaining HTML code
     echo '</ol>';
-}
+} 
+
 if ($debugLevel >= 1) fclose($logFile);
 ?>

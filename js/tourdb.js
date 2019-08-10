@@ -1692,29 +1692,19 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
+
     // Build type selectable dynamically
-    $( "#dispFilTrk_type_div" ).load("services/getTypes.php", 
-        {"purpose":"trk","type":"type","parent":""}, function() {
-
-            // selectable to be called when load is done
-            $( "#dispFilTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
-            
-            // load subtype only when load types is done
-            $( "#dispFilTrk_subtype_div" ).load("services/getTypes.php", 
-                {"purpose":"trk","type":"subtype","parent":""}, function() {
-                // selectable to be called when load is done
-                $( "#dispFilTrk_subtype" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
-            }); 
-        }); 
-
-    // Build subtype selectable dynamically
-    $( "#dispFilTrk_subtype_div" ).load("services/getTypes.php", 
-    {"purpose":"trk","type":"subtype","parent":""}, function() {
-        $( "#dispFilTrk_subtype" ).selectable({});                          // Initialse field 'type' as JQUERY selectable    
+    $( "#dispFilTrk_type" ).load("services/getTypes.php", 
+        {"ele":"dispFilTrk_type","purpose":"trk","type":"type","parent":""}, function() {
+            $( "#dispFilTrk_type_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     }); 
+    
+    // Build subtype selectable dynamically
+    $( "#dispFilTrk_subtype" ).load("services/getTypes.php", 
+        {"ele":"dispFilTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
+            $( "#dispFilTrk_subtype_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    });
 
-
-    $( "#dispFilTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable
     $( "#dispFilSeg_sourceName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=segSourceFID",
         minLength: 2,
@@ -1727,8 +1717,14 @@ function initJqueryItems () {
             }
         }
     });
-    var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
-    $( "#dispFilSeg_segTypeFid" ).selectable({});
+
+    //var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+
+    $( "#dispFilSeg_segTypeFid" ).load("services/getTypes.php", 
+        {"ele":"dispFilSeg_segTypeFid","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#dispFilSeg_segTypeFid_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    });
+
     $( "#dispFilSeg_startLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
@@ -1741,19 +1737,13 @@ function initJqueryItems () {
             }
         }
     });
-    var mapUF_startLocID = $( "#dispFilSeg_startLocID" ); 
-    $( "#dispFilSeg_startLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
+
+    // Build type selectable dynamically
+    $( "#dispFilSeg_startLocType" ).load("services/getTypes.php", 
+        {"ele":"dispFilSeg_startLocType","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#dispFilSeg_startLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
-    $( "#dispFilSeg_startLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    $( "#dispFilSeg_startLocType" ).selectable({});
+
     $( "#dispFilSeg_targetLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
@@ -1766,18 +1756,13 @@ function initJqueryItems () {
             }
         }
     });
-    $( "#dispFilSeg_targetLocAlt_slider" ).slider({
-        range: true,
-        min: 0,
-        max: 5000,
-        values: [ 400, 5000 ],
-        slide: function( event, ui ) {
-            $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + ui.values[ 0 ] + "m - max. " + ui.values[ 1 ] + "m" );
-        }
+
+    // Build type selectable dynamically
+    $( "#dispFilSeg_targetLocType" ).load("services/getTypes.php", 
+        {"ele":"dispFilSeg_targetLocType","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#dispFilSeg_targetLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded 
     });
-    $( "#dispFilSeg_targetLocAlt_slider_values" ).val( "min. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 ) +
-    "m - max. " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 ) +"m" );
-    $( "#dispFilSeg_targetLocType" ).selectable({});
+
     $( "#dispFilSeg_segRegion" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=regionID",
         minLength: 1,
@@ -2161,7 +2146,7 @@ function createTrkKmlWhere () {
 
     // Field type
     var whereString = "";
-    $('#dispFilTrk_type .ui-selected').each(function() {                        // loop through each selected type item
+    $('#dispFilTrk_type_ol .ui-selected').each(function() {                        // loop through each selected type item
         whereString = whereString + "'" + this.value + "',";                // Read type from selected li element
     });
     if ( whereString.length > 0 ) {

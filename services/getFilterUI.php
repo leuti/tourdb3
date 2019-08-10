@@ -20,6 +20,8 @@
 date_default_timezone_set("Europe/Zurich");
 include("tourdb_config.php");                                              // Include config file
 
+$debugLevel = 0;
+
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/getFilterUI.log";    // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
