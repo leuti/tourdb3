@@ -1,50 +1,60 @@
 <?php
 
 // ---------------------------------------------------------------------------------------------
-// This php script is called to generate all UI elements dependent on types and subtypes
+// This php script is called to generate HTML code for the Filter UI masks (currently only mapp panel)
+// Only the static part of the code is generated. Dynamic elements like types / subtypes are generated
+// by other services called later (e.g. getTypes.php)
 //
 // Parameters:
-// 
+// none
 //
-// Function:
+// Return Object:
+// HTML code (echo to calling object and to file in case debugLevel >= 3)
 // 
 // Created: 3.8.2019 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
 // Action:
 // 
-// 
 
 // Set timezone (otherwise warnings are written to log)
 date_default_timezone_set("Europe/Zurich");
-include("config.php");                                                  // Include config file
+include("config.php");                                              // Include config file
 
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "/../log/getFilterUI.log";                // Assign file location
+    $logFileLoc = dirname(__FILE__) . "/../log/getFilterUI.log";    // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
     fputs($logFile, date("Ymd-H:i:s", time()) .  "getFilterUI.php opened \r\n"); 
 };
 
-// remove after development =============================================================================================================
-$debugLevel = 3;
-
-// Read JSON file
+// Read JSON file containing all UI settings
 $json = file_get_contents('./UISettings.json');
 
 //Decode JSON
 $UISettings = json_decode($json,true);
 
 // Variables
-$tab_h_opened = false;
-$fieldset_h_opened = false;
+$tab_h_opened = false;                                              // indicates if top tab div is opened or not
+$fieldset_h_opened = false;                                         // indicates if fieldset tab div is opened or not
 
 // Write Initial statements
+
+// This is the div containing the icon to open large menu mask
+$outArray[] = '<div id="dispObjMenuMini" class="dispObjectSelector dispObjMini hidden">';
+$outArray[] = '<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">';
+$outArray[] = '<img id="dispObjMenuOpenImg" src="css/images/filterLightBlue.png">';
+$outArray[] = '</a>';
+$outArray[] = '</div>';
+
+// This is the start of the filter UI 
+$outArray[] = '<div id="dispObjMenuLarge" class="dispObjectSelector dispObjOpen visible">';
 $outArray[] = '  <a id="dispObjMenuLargeClose" href="#dispObjMenuLargeClose">';
 $outArray[] = '    <img id="dispObjMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
 $outArray[] = '  </a>';
 $outArray[] = '  <p class="dispObjMenuText">Select objects to be displayed</p>';
 $outArray[] = '  <div id="dispObjAccordion" class="dispObjOpen visible">';
 
+// Loop through UIsettings line by line
 foreach ( $UISettings as $key => $record ) {
 
     // Print key variables into log
@@ -86,52 +96,58 @@ foreach ( $UISettings as $key => $record ) {
         $fieldset_heading = $UISettings[$key]["fieldset_heading"];
     }
 
+    // Echo opening tag for current UI element
     if ( $UISettings[$key]["tag_open"] <> "" ) $outArray[] = '        ' . $UISettings[$key]["tag_open"];
 
-    // Output for different lines in UISettings.json
-    // ---------------------------------------------
-
-    // Text elements
+    // Generate output if element type is "Text"
     if ( $UISettings[$key]["ele_type"] == "text" ) {
         $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["ele_label"] . '</label>';
         $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     
-    // Hidden elements
+    // Generate output if element type is "Hidden"
     } else if ( $UISettings[$key]["ele_type"] == "hidden" ) {
         $outArray[] = '          <input type="hidden" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '">';
 
-    // Selectable elements
+    // Generate output if element type is "Selectable"
     } else if ( $UISettings[$key]["ele_type"] == "selectable" ) {
         $outArray[] = '        <div id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
         $outArray[] = '        </div>';
     
-    // Buttons 
+    // Generate output if element type is "Buttons" (submit) 
     } else if ( $UISettings[$key]["ele_type"] == "submit" ) {
-        $outArray[] = '          <input type="submit" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '" value="' . $UISettings[$key]["label"] . '" />';
+        $outArray[] = '          <input type="submit" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '" value="' . $UISettings[$key]["ele_label"] . '" />';
     
-    // Checkboxes
+    // Generate output if element type is "Checkboxe"
     } else if ( $UISettings[$key]["ele_type"] == "checkbox" ) {
-        $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["label"] . '</label>';
+        $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["ele_label"] . '</label>';
         $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     }
     
+    // Echo closing tag for current UI element
     if ( $UISettings[$key]["tag_close"] <> "" ) $outArray[] = '        ' . $UISettings[$key]["tag_close"];
-
 }
 
+// Write trailing lines
 $outArray[] = '  </div>';
+$outArray[] = '</div>';
 
-$htmlOut = join("\r\n", $outArray);
+// Echo Div for map display
+$outArray[] = '<div id="displayMap" class="visible">';
+$outArray[] = '  <div id="displayMap-ResMap">';
+$outArray[] = '  </div>';
+$outArray[] = '</div>';
 
-// remove after development
-$tempOut = dirname(__FILE__) . "/../log/getFilterUI.out";                // Assign file location
-$tempOutFile = fopen($tempOut,"w");     
-fputs( $tempOutFile, $htmlOut );
-// remove after development
+$htmlOut = join("\r\n", $outArray);                                 // covert array to text string  
 
-fclose( $tempOutFile );
+echo $htmlOut;                                                      // echo HTML to calling object
 
-                          
+// Write HTML to file "log/getFilterUI.out"
+if ( $debugLevel >= 3 ) {
+    $tempOut = dirname(__FILE__) . "/../log/getFilterUI.out";       // Assign file location
+    $tempOutFile = fopen($tempOut,"w");     
+    fputs( $tempOutFile, $htmlOut );
+    fclose( $tempOutFile );
+}
 
-if ($debugLevel >= 1) fclose($logFile);
+if ($debugLevel >= 1) fclose($logFile);                             // Close debug file
 ?>

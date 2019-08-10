@@ -42,11 +42,14 @@ var mapSTlayer_grau;                                                // map layer
 // ======================================================
 $(document).ready(function() {
 
-    // Initialse all jquery functional fields for the mask display objects
-    // ===================================================================
-    initJqueryItems();
+    // Generate dynamic HTML code
+    // ========================== 
+    $( "#panelMap" ).load("services/getFilterUI.php", 
+        {}, function() {
+            initJqueryItems();                                      // Initialse all jquery functional fields for the mask display objects
+        }); 
 
-   // Evaluate which button/panel is active
+    // Evaluate which button/panel is active
     $('.mainButtons').each(function() {
         var $thisTopicButton = $(this);                             // $thisTopicButton becomes ul.mainButtons
         $activeButton = $thisTopicButton.find('li.active');         // Find and store current active li element
