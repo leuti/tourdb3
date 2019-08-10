@@ -48,12 +48,15 @@ if ( $purpose == "trk" || $purpose == "seg" ) {
     // Type is requested
     if ( $type == "type" ) {
         $where = "WHERE typParentId is null AND typPurpose = '". $purpose . "'"; 
+        $typeLabel = "Type";
     
     // Subtype is requested
     } else if ( $parent == "" ) {
         $where = "WHERE typPurpose = '". $purpose . "' AND typParentId is not null"; 
+        $typeLabel = "Subtypes";
     } else {
         $where = "WHERE typParentId = " . $parent . " AND typPurpose = '". $purpose . "'"; 
+        $typeLabel = "Subtypes";
     }
 
     $sql = "SELECT typId, typCode, typName, typParentId, typType, typPurpose FROM tbl_types ";
@@ -64,7 +67,7 @@ if ( $purpose == "trk" || $purpose == "seg" ) {
 
     $records = mysqli_query($conn, $sql);
 
-    echo '<label for="' . $ele . '" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>';
+    echo '<label for="' . $ele . '" class="labelFirst">' . $typeLabel . ' (CTRL+Left-click for multi-select)</label>';
     echo '<ol id="' . $ele . '_ol" class="selectable filterItems">';    
     
     // Write for each waypoint one Line 
