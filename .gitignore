@@ -9,9 +9,9 @@ export/
 **/tmp
 
 # Ignore the config file due to different pw between local host and hosttech
-**/services/config.php
-services/config.php
-**config.php
+**/services/tourdb_config.php
+services/tourdb_config.php
+**tourdb_config.php
 
 # Ignore .gitignore
 .gitignore

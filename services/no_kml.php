@@ -9,7 +9,7 @@
 // Tasks
 // * 
 
-include("config.php");                                                  // Include config file
+include("tourdb_config.php");                                                  // Include config file
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/no_kml.log";                // Assign file location

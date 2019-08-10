@@ -32,7 +32,7 @@
 
 // -----------------------------------
 // Set variables and parameters
-include("./config.php");                                            // include config file
+include("./tourdb_config.php");                                            // include config file
 date_default_timezone_set("Europe/Zurich");                             // must be set when using time functions
 
 // Open file for import log

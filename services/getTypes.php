@@ -20,7 +20,7 @@
 
 // Set timezone (otherwise warnings are written to log)
 date_default_timezone_set("Europe/Zurich");
-include("config.php");                                                  // Include config file
+include("tourdb_config.php");                                                  // Include config file
 
 if ($debugLevel >= 1){
     $logFileLoc = dirname(__FILE__) . "/../log/getTypes.log";                // Assign file location

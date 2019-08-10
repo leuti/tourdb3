@@ -23,7 +23,7 @@
 // -----------------------------------
 // Set variables and parameters    
 date_default_timezone_set("Europe/Zurich");
-include("config.php");                                                  // Include config file
+include("tourdb_config.php");                                                  // Include config file
 
 // Set debug level
 $countTracks = 0;                                                           // Internal counter for tracks processed
