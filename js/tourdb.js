@@ -1775,7 +1775,7 @@ function initJqueryItems () {
             }
         }
     });
-    var mapUF_segRegionID = $( "#dispFilSeg_segRegionID" ); 
+    
     $( "#dispFilSeg_segArea" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=areaID",
         minLength: 1,
@@ -1788,10 +1788,18 @@ function initJqueryItems () {
             }
         }
     });
-    var mapUF_segAreaID = $( "#dispFilSeg_segAreaID" ); 
-    $( "#dispFilSeg_grade" ).selectable({});
-    $( "#dispFilSeg_climbGrade" ).selectable({});
-    $( "#dispFilSeg_ehaft" ).selectable({});   
+    
+    // Build type selectable dynamically
+    $( "#dispFilSeg_grade" ).load("services/getGrades.php", 
+        {"ele":"dispFilSeg_grade","grdType":"grade"}, function() {
+            $( "#dispFilSeg_grade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    });
+
+    // Build type selectable dynamically
+    $( "#dispFilSeg_climbGrade" ).load("services/getGrades.php", 
+        {"ele":"dispFilSeg_climbGrade","grdType":"climbGrade"}, function() {
+            $( "#dispFilSeg_climbGrade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    });
 
     // Initialse all jquery functional fields for the list display for tracks
     // ======================================================================
