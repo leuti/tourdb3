@@ -294,7 +294,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
     
-    itemChecked = document.getElementById("dispObjPeaks_100").checked;
+    itemChecked = document.getElementById("mapFilWayp_100").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -333,7 +333,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjPeaks_1000").checked;
+    itemChecked = document.getElementById("mapFilWayp_1000").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -372,7 +372,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjPeaks_2000").checked;
+    itemChecked = document.getElementById("mapFilWayp_2000").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -410,7 +410,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
         sqlWhere: sqlWhereCurrent
     }
     jsn = JSON.stringify ( jsonObject )
-    itemChecked = document.getElementById("dispObjPeaks_3000").checked;
+    itemChecked = document.getElementById("mapFilWayp_3000").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -448,7 +448,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjPeaks_4000").checked;
+    itemChecked = document.getElementById("mapFilWayp_4000").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -486,7 +486,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjPeaks_cant").checked;
+    itemChecked = document.getElementById("mapFilWayp_cant").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -524,7 +524,7 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
     }
     jsn = JSON.stringify ( jsonObject )
 
-    itemChecked = document.getElementById("dispObjHuts").checked;
+    itemChecked = document.getElementById("mapFilWayp_huts").checked;
     if ( itemChecked ) {
         var genKml = true;
         var ajaxCall = {
@@ -1674,7 +1674,7 @@ function initJqueryItems () {
         autoHeight: false,
         collapsible: true
     });
-    $( "#dispFilTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
+    $( "#mapFilTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -1683,7 +1683,7 @@ function initJqueryItems () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#dispFilTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
+    $( "#mapFilTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
@@ -1694,111 +1694,111 @@ function initJqueryItems () {
     });
 
     // Build type selectable dynamically
-    $( "#dispFilTrk_type" ).load("services/getTypes.php", 
-        {"ele":"dispFilTrk_type","purpose":"trk","type":"type","parent":""}, function() {
-            $( "#dispFilTrk_type_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilTrk_type" ).load("services/getTypes.php", 
+        {"ele":"mapFilTrk_type","purpose":"trk","type":"type","parent":""}, function() {
+            $( "#mapFilTrk_type_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     }); 
     
     // Build subtype selectable dynamically
-    $( "#dispFilTrk_subtype" ).load("services/getTypes.php", 
-        {"ele":"dispFilTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
-            $( "#dispFilTrk_subtype_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilTrk_subtype" ).load("services/getTypes.php", 
+        {"ele":"mapFilTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
+            $( "#mapFilTrk_subtype_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
 
-    $( "#dispFilSeg_sourceName" ).autocomplete({
+    $( "#mapFilSeg_sourceName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=segSourceFID",
         minLength: 2,
         select: function( event, ui ) {
-            $( "#dispFilSeg_sourceFID" ).val( ui.item.id );
+            $( "#mapFilSeg_sourceFID" ).val( ui.item.id );
         },
         change: function( event, ui ) {
-            if ( $( "#dispFilSeg_sourceName" ).val() == '' ) {
-                    $( "#dispFilSeg_sourceFID" ).val( '' );
+            if ( $( "#mapFilSeg_sourceName" ).val() == '' ) {
+                    $( "#mapFilSeg_sourceFID" ).val( '' );
             }
         }
     });
 
-    //var mapUF_sourceFID = $( "#dispFilSeg_sourceFID" );
+    //var mapUF_sourceFID = $( "#mapFilSeg_sourceFID" );
 
-    $( "#dispFilSeg_segTypeFid" ).load("services/getTypes.php", 
-        {"ele":"dispFilSeg_segTypeFid","purpose":"seg","type":"type","parent":""}, function() {
-            $( "#dispFilSeg_segTypeFid_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilSeg_segTypeFid" ).load("services/getTypes.php", 
+        {"ele":"mapFilSeg_segTypeFid","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#mapFilSeg_segTypeFid_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
 
-    $( "#dispFilSeg_startLocName" ).autocomplete({
+    $( "#mapFilSeg_startLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
         select: function( event, ui ) {
-            $( "#dispFilSeg_startLocID" ).val( ui.item.id );
+            $( "#mapFilSeg_startLocID" ).val( ui.item.id );
         },
         change: function( event, ui ) {
-            if ( $( "#dispFilSeg_startLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_startLocID" ).val( '' );
+            if ( $( "#mapFilSeg_startLocName" ).val() == '' ) {
+                    $( "#mapFilSeg_startLocID" ).val( '' );
             }
         }
     });
 
     // Build type selectable dynamically
-    $( "#dispFilSeg_startLocType" ).load("services/getTypes.php", 
-        {"ele":"dispFilSeg_startLocType","purpose":"seg","type":"type","parent":""}, function() {
-            $( "#dispFilSeg_startLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilSeg_startLocType" ).load("services/getTypes.php", 
+        {"ele":"mapFilSeg_startLocType","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#mapFilSeg_startLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
 
-    $( "#dispFilSeg_targetLocName" ).autocomplete({
+    $( "#mapFilSeg_targetLocName" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=getWaypLong",
         minLength: 1,
         select: function( event, ui ) {
-            $( "#dispFilSeg_targetLocID" ).val( ui.item.id );
+            $( "#mapFilSeg_targetLocID" ).val( ui.item.id );
         },
         change: function( event, ui ) {
-            if ( $( "#dispFilSeg_targetLocName" ).val() == '' ) {
-                    $( "#dispFilSeg_targetLocID" ).val( '' );
+            if ( $( "#mapFilSeg_targetLocName" ).val() == '' ) {
+                    $( "#mapFilSeg_targetLocID" ).val( '' );
             }
         }
     });
 
     // Build type selectable dynamically
-    $( "#dispFilSeg_targetLocType" ).load("services/getTypes.php", 
-        {"ele":"dispFilSeg_targetLocType","purpose":"seg","type":"type","parent":""}, function() {
-            $( "#dispFilSeg_targetLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded 
+    $( "#mapFilSeg_targetLocType" ).load("services/getTypes.php", 
+        {"ele":"mapFilSeg_targetLocType","purpose":"seg","type":"type","parent":""}, function() {
+            $( "#mapFilSeg_targetLocType_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded 
     });
 
-    $( "#dispFilSeg_segRegion" ).autocomplete({
+    $( "#mapFilSeg_segRegion" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=regionID",
         minLength: 1,
         select: function( event, ui ) {
-            $( "#dispFilSeg_segRegionID" ).val( ui.item.id );
+            $( "#mapFilSeg_segRegionID" ).val( ui.item.id );
         },
         change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segRegion" ).val() == '' ) {
-                    $( "#dispFilSeg_segRegionID" ).val( '' );
+            if ( $( "#mapFilSeg_segRegion" ).val() == '' ) {
+                    $( "#mapFilSeg_segRegionID" ).val( '' );
             }
         }
     });
     
-    $( "#dispFilSeg_segArea" ).autocomplete({
+    $( "#mapFilSeg_segArea" ).autocomplete({
         source: "services/get_auto_complete_values.php?field=areaID",
         minLength: 1,
         select: function( event, ui ) {
-            $( "#dispFilSeg_segAreaID" ).val( ui.item.id );
+            $( "#mapFilSeg_segAreaID" ).val( ui.item.id );
         },
         change: function( event, ui ) {
-            if ( $( "#dispFilSeg_segArea" ).val() == '' ) {
-                    $( "#dispFilSeg_segAreaID" ).val( '' );
+            if ( $( "#mapFilSeg_segArea" ).val() == '' ) {
+                    $( "#mapFilSeg_segAreaID" ).val( '' );
             }
         }
     });
     
     // Build type selectable dynamically
-    $( "#dispFilSeg_grade" ).load("services/getGrades.php", 
-        {"ele":"dispFilSeg_grade","grdType":"grade"}, function() {
-            $( "#dispFilSeg_grade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilSeg_grade" ).load("services/getGrades.php", 
+        {"ele":"mapFilSeg_grade","grdType":"grade"}, function() {
+            $( "#mapFilSeg_grade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
 
     // Build type selectable dynamically
-    $( "#dispFilSeg_climbGrade" ).load("services/getGrades.php", 
-        {"ele":"dispFilSeg_climbGrade","grdType":"climbGrade"}, function() {
-            $( "#dispFilSeg_climbGrade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#mapFilSeg_climbGrade" ).load("services/getGrades.php", 
+        {"ele":"mapFilSeg_climbGrade","grdType":"climbGrade"}, function() {
+            $( "#mapFilSeg_climbGrade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
 
     // Initialse all jquery functional fields for the list display for tracks
@@ -2093,14 +2093,14 @@ function createTrkKmlWhere () {
     // Field trackID from / to
     var trackIdFrom = "";                                           // Initialse var for track id from 
     var trackIdTo = "";                                             // Initialse var for track id to
-    if ( ($('#dispFilTrk_trackIdFrom').val()) != "" ) {                           
-        trackIdFrom = $('#dispFilTrk_trackIdFrom').val();
+    if ( ($('#mapFilTrk_trackIdFrom').val()) != "" ) {                           
+        trackIdFrom = $('#mapFilTrk_trackIdFrom').val();
     } else {
         trackIdFrom = "";
     };
 
-    if ( ($('#dispFilTrk_trackIdTo').val()) != "" ) {                           
-        trackIdTo = $('#dispFilTrk_trackIdTo').val();
+    if ( ($('#mapFilTrk_trackIdTo').val()) != "" ) {                           
+        trackIdTo = $('#mapFilTrk_trackIdTo').val();
     } else {
         trackIdTo = "";
     };
@@ -2119,15 +2119,15 @@ function createTrkKmlWhere () {
 
     // Field track name
     var whereString = "";
-    if ( ($('#dispFilTrk_trackName').val()) != "" ) {                           
-        whereString = "trkTrackName like '%" + $('#dispFilTrk_trackName').val() + "%'";
+    if ( ($('#mapFilTrk_trackName').val()) != "" ) {                           
+        whereString = "trkTrackName like '%" + $('#mapFilTrk_trackName').val() + "%'";
         whereStatement.push( whereString );
     };
 
     // Field route
     var whereString = "";
-    if ( ($('#dispFilTrk_route').val()) != "" ) {
-        whereString = "trkRoute like '%" + $('#dispFilTrk_route').val() + "%'";
+    if ( ($('#mapFilTrk_route').val()) != "" ) {
+        whereString = "trkRoute like '%" + $('#mapFilTrk_route').val() + "%'";
         whereStatement.push( whereString );
     };
 
@@ -2138,12 +2138,12 @@ function createTrkKmlWhere () {
     month = today.getMonth()+1;                                               // Extract month (January = 0)
     toDate = today.getFullYear() + '-' + month + '-' + today.getDate();       // Set to date to today (format yyyy-mm-dd)
     
-    if ( ($('#dispFilTrk_dateFrom').val()) != "" ) {                          // Overwrite fromDate with value entered by user
-        fromDate = ($('#dispFilTrk_dateFrom').val());
+    if ( ($('#mapFilTrk_dateFrom').val()) != "" ) {                          // Overwrite fromDate with value entered by user
+        fromDate = ($('#mapFilTrk_dateFrom').val());
     } 
 
-    if ( ($('#dispFilTrk_dateTo').val()) != "" ) {                            // Overwrite toDate with value entered by user
-        toDate = ($('#dispFilTrk_dateTo').val());                             // Add to where Statement array
+    if ( ($('#mapFilTrk_dateTo').val()) != "" ) {                            // Overwrite toDate with value entered by user
+        toDate = ($('#mapFilTrk_dateTo').val());                             // Add to where Statement array
     } 
 
     whereString = "trkDateBegin >= '" + fromDate + "' AND " 
@@ -2154,7 +2154,7 @@ function createTrkKmlWhere () {
 
     // Field type
     var whereString = "";
-    $('#dispFilTrk_type_ol .ui-selected').each(function() {                        // loop through each selected type item
+    $('#mapFilTrk_type_ol .ui-selected').each(function() {                        // loop through each selected type item
         whereString = whereString + "'" + this.value + "',";                // Read type from selected li element
     });
     if ( whereString.length > 0 ) {
@@ -2165,7 +2165,7 @@ function createTrkKmlWhere () {
 
     // Field subtype
     var whereString = "";                                                       
-    $('#dispFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
+    $('#mapFilTrk_subtype .ui-selected').each(function() {                     // loop through each selected type item
         whereString = whereString + "'" + this.value + "',";                // Read subtype from selected li element
     });
     if ( whereString.length > 0 ) {
@@ -2176,8 +2176,8 @@ function createTrkKmlWhere () {
 
     // Field country
     var whereString = "";
-    if ( ($('#dispFilTrk_country').val()) != "" ) {
-        whereString = "trkCountry like '%" + $('#dispFilTrk_country').val() + "%'";
+    if ( ($('#mapFilTrk_country').val()) != "" ) {
+        whereString = "trkCountry like '%" + $('#mapFilTrk_country').val() + "%'";
         whereStatement.push( whereString );
     };
     
@@ -2208,7 +2208,7 @@ function createSegKmlWhere () {
     var sqlName;
     
     // Field segment type
-    $('#dispFilSeg_segTypeFid .ui-selected').each(function() {
+    $('#mapFilSeg_segTypeFid .ui-selected').each(function() {
         var itemId = this.value;
         sqlName = $(this).attr('name');
         selected.push( itemId );
@@ -2225,30 +2225,30 @@ function createSegKmlWhere () {
 
     // Field segment name
     var whereString = "";
-    if ( ($('#dispFilSeg_segName').val()) != "" ) {
-        whereString = "segName like '%" + ($('#dispFilSeg_segName').val()) + "%'";      
+    if ( ($('#mapFilSeg_segName').val()) != "" ) {
+        whereString = "segName like '%" + ($('#mapFilSeg_segName').val()) + "%'";      
         whereStatement.push( whereString );
     };
 
     // Field Start Location (ID selected)
     var whereString = "";
-    if ( ($('#dispFilSeg_startLocID').val()) != "" ) {
-        whereString = "startLocType = " + ($('#dispFilSeg_startLocID').val()); 
+    if ( ($('#mapFilSeg_startLocID').val()) != "" ) {
+        whereString = "startLocType = " + ($('#mapFilSeg_startLocID').val()); 
         whereStatement.push( whereString );
     };
 
     // Field Altitude of start location 
     /*
     var whereString = "";
-    whereString = " startLocAlt >= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 0 );
-    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_startLocAlt_slider" ).slider( "values", 1 );
+    whereString = " startLocAlt >= " + $( "#mapFilSeg_startLocAlt_slider" ).slider( "values", 0 );
+    whereString += " AND startLocAlt <= " + $( "#mapFilSeg_startLocAlt_slider" ).slider( "values", 1 );
     whereStatement.push( whereString );     
     */
 
     // Field type of start location
     var selected = [];
     var whereString = "";    
-    $('#dispFilSeg_startLocType .ui-selected').each(function() {
+    $('#mapFilSeg_startLocType .ui-selected').each(function() {
         var itemId = this.value;
         sqlName = $(this).attr('name');
         selected.push( itemId );
@@ -2265,23 +2265,23 @@ function createSegKmlWhere () {
     
     // Field target location (ID selected)
     var whereString = "";
-    if ( ($('#dispFilSeg_targetLocID').val()) != "" ) {
-        whereString = "targetLocType = " + ($('#dispFilSeg_startLocID').val()); 
+    if ( ($('#mapFilSeg_targetLocID').val()) != "" ) {
+        whereString = "targetLocType = " + ($('#mapFilSeg_startLocID').val()); 
         whereStatement.push( whereString );
     };
 
     // Field target location altitude
     /*
     var whereString = "";
-    whereString = " targetLocAlt >= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
-    whereString += " AND startLocAlt <= " + $( "#dispFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
+    whereString = " targetLocAlt >= " + $( "#mapFilSeg_targetLocAlt_slider" ).slider( "values", 0 );
+    whereString += " AND startLocAlt <= " + $( "#mapFilSeg_targetLocAlt_slider" ).slider( "values", 1 );
     whereStatement.push( whereString );            
     */
 
     // Field target location type
     var selected = [];
     var whereString = "";
-    $('#dispFilSeg_targetLocType .ui-selected').each(function() {
+    $('#mapFilSeg_targetLocType .ui-selected').each(function() {
         var itemId = this.value;
         sqlName = $(this).attr('name');
         selected.push( itemId );
@@ -2298,15 +2298,15 @@ function createSegKmlWhere () {
 
     // Field region
     var whereString = "";
-    if ( ($('#dispFilSeg_segRegionID').val()) != "" ) {
-        whereString = "regionId = " + ($('#dispFilSeg_segRegionID').val()); 
+    if ( ($('#mapFilSeg_segRegionID').val()) != "" ) {
+        whereString = "regionId = " + ($('#mapFilSeg_segRegionID').val()); 
         whereStatement.push( whereString );
     };
 
     // Field area
     var whereString = "";
-    if ( ($('#dispFilSeg_segAreaID').val()) != "" ) {
-        whereString = "areaId = " + ($('#dispFilSeg_segAreaID').val()); 
+    if ( ($('#mapFilSeg_segAreaID').val()) != "" ) {
+        whereString = "areaId = " + ($('#mapFilSeg_segAreaID').val()); 
         whereStatement.push( whereString );
     };
     
@@ -2314,7 +2314,7 @@ function createSegKmlWhere () {
     var selected = [];
     var sqlName;
     var whereString = "";    
-    $('#dispFilSeg_grade .ui-selected').each(function() {
+    $('#mapFilSeg_grade .ui-selected').each(function() {
         var itemId = this.id;
         sqlName = "grade";
         var criteria = itemId.slice(sqlName.length+1,itemId.length);            // +1 to remove _
@@ -2334,7 +2334,7 @@ function createSegKmlWhere () {
     var selected = [];
     var sqlName;
     var whereString = "";    
-    $('#dispFilSeg_climbGrade .ui-selected').each(function() {
+    $('#mapFilSeg_climbGrade .ui-selected').each(function() {
         var itemId = this.id;
         sqlName = "climbGrade";
         var criteria = itemId.slice(sqlName.length+1,itemId.length);            // +1 to remove _
@@ -2352,7 +2352,7 @@ function createSegKmlWhere () {
 
     // Field Ernsthaftigkeit
     var whereString = "";
-    $('#dispFilSeg_ehaft .ui-selected').each(function() {
+    $('#mapFilSeg_ehaft .ui-selected').each(function() {
         var itemId = this.id;
         var sqlName = "ehaft";
         var lenCriteria = itemId.length;
