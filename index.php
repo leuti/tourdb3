@@ -9,6 +9,7 @@
 
 <!DOCTYPE HTML>
 <html>
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Cache-control" content="no-cache">
@@ -18,21 +19,13 @@
 	<link type="text/css" rel="stylesheet" href="css/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="css/tourdb.css">	
 </head>
+
 <body>
-	<!-- load jquery sources -->
-	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
 	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script> <!-- JQuery UI from local server --> <!-- local -->
-	
-	<!-- load swissmap sources -->
 	<script src="http://api3.geo.admin.ch/loader.js?lang=en" type="text/javascript"></script>
-	
 	<script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- local -->
 	<script type="text/javascript" src="js/tourdb.js"></script> <!-- tourdb code -->
-
-	<!-- ========================================================================== -->
-	<!-- ========= header - containing logo and navigation buttons ================ -->
-	<!-- ========================================================================== -->
 
 	<header id="header">
 		<div id="logo">
@@ -59,19 +52,12 @@
 		</ul>
 	</header> 
 
-    <!-- In the div #main all page content is diplayed -->
 	<section id="main"> 
-		
-		<!-- ========================================================================== -->
-		<!-- ======================== panelLogin ========================================== -->
-		<!-- ========================================================================== -->
+
 		<div id="panelLogin" class="tourdbPanel active">
 			<div id=uiLogin class="formCenter">
 				<fieldset>
-        		
-					<!-- Import Tracks -->
 					<legend class="filterHeader">Enter you login credentials</legend>
-
 					<div>
 						<label for="uiLogin_login" class="labelFirst">User Login</label>
 						<input id="uiLogin_login" class="loginFields" type="text" size="50">
@@ -80,83 +66,57 @@
 						<label for="uiLogin_password" class="labelFirst">Password</label>
 						<input id="uiLogin_password" class="loginFields" type="password" size="50">
 					</div>
-
 					<div class="uiLogin_loginBtn">
 						<input type="submit" class="button" id="uiLogin_loginBtn" value="Login" />
 					</div>
-					
 					<div id="uiLogin_status" class="statusMessage">	
 					</div>
 				</fieldset>
-				
 			</div>
-			
-		</div> <!-- End div panelLogin -->
+		</div>
 
-		<!-- ========================================================================== -->
-		<!-- ========================== panelMap ================================== -->
-		<!-- ========================================================================== -->
 		<div id="panelMap" class="tourdbPanel">
-		</div> <!-- End div panelLists -->
+		</div>
 
-		<!-- ========================================================================== -->
-		<!-- ======================== panelLists =================================== -->
-		<!-- ========================================================================== -->		
 		<div id="panelLists" class="tourdbPanel">
-
-			<!-- This div shows only filter button > onclick opens the full accordion -->
 			<div id="dispListTrkMenuMini" class="dispObjectSelector dispListTrkMini visible">
 				<a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">
 					<img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">
 				</a> 
 			</div>
 
-			<!-- Main filter UI -->
 			<div id="dispListTrkMenuLarge" class="dispObjectSelector dispListTrkOpen hidden">
 				<a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">
 					<img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">
 				</a> 
 				<p class="dispListTrkMenuText">Select tracks to be displayed</p>
 							
-				<!-- this div shows the jquery accordion for the display selection -->
 				<div id="dispListTrkAccordion" class="dispListTrkOpen visible"> 
 
-					<!-- Segment Section of Accordion -->
 					<h2>Tracks</h2>
 					<div class="accordionBackground">
 						<fieldset>
-							<!-- SEGMENT filter -->
 							<legend class="filterHeader">Tracks</legend>
-
-							<!-- Track ID -->
 							<div class="dispListTrkCriteria">	
 								<label for="dispListTrk_trackIdFrom" class="labelFirst">Track ID From</label>
 								<input type="text" name="dispListTrk_trackIdFrom" id="dispListTrk_trackIdFrom" size="10" class="text ui-widget-content ui-corner-all">
 								<label for="dispListTrk_trackIdTo" class="labelNext">Track ID To</label>
 								<input type="text" name="dispListTrk_trackIdTo" id="dispListTrk_trackIdTo" size="10" class="text ui-widget-content ui-corner-all">
 							</div>
-
-							<!-- Track name contains (standard text field) -->
 							<div class="dispListTrkCriteria">	
 								<label for="dispListTrk_trackName" class="labelFirst">Track Names contains</label>
 								<input type="text" name="dispListTrk_trackName" id="dispListTrk_trackName" size="32" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
-
-							<!-- Route contains (standard text field) -->
 							<div class="dispListTrkCriteria">
 								<label for="dispListTrk_route" class="labelFirst">Route contains</label>
 								<input name="dispListTrk_route" id="dispListTrk_route" size="32" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
-
-							<!-- Date witin range -->
 							<div class="dispListTrkCriteria">
 								<label for="dispListTrk_dateFrom" class="labelFirst">From Date</label>
 								<input name="dispListTrk_dateFrom" id="dispListTrk_dateFrom" size="10" class="text ui-widget-content ui-corner-all">
 								<label for="dispListTrk_dateTo" class="labelNext">To Date</label>
 								<input name="dispListTrk_dateTo" id="dispListTrk_dateTo" size="10" class="text ui-widget-content ui-corner-all">
 							</div>
-
-							<!-- Type as select items (selectable) -->
 							<div class="dispListTrkCriteria">
 								<label for="dispListTrk_type" class="labelFirst">Type (CTRL+Left-click for multi-select)</label>
 								<ol id="dispListTrk_type" class="selectable filterItems">
@@ -168,8 +128,6 @@
 									<li id="dispListTrk_type_Zufuss" class="ui-widget-content first" value="2">Zufuss</li>
 								</ol>
 							</div>
-
-							<!-- Subtype as select items (selectable) -->
 							<div class="dispListTrkCriteria">
 								<label for="dispListTrk_subtype" class="labelFirst">Subtype (CTRL+Left-click for multi-select)</label>
 								<ol id="dispListTrk_subtype" class="selectable filterItems">
@@ -188,24 +146,18 @@
 									<li id="dispListTrk_subtype_Winterwanderung" class="ui-widget-content first" value="27">Winterwanderung</li>
 								</ol>
 							</div>
-							
-							<!-- Country (standard text field) -->
 							<div class="dispListTrkCriteria">	
 								<label for="dispListTrk_country" class="labelFirst">Country like</label>
 								<input type="text" name="dispListTrk_country" id="dispListTrk_country" size="20" class="dispInput text ui-widget-content ui-corner-all">
 							</div>
-
-							<!-- Button to newly display selection -->
 							<div class="dispListTrkCriteria">
 								<input type="submit" class="button" id="dispListTrk_NewLoadButton" value="Load" />
 							</div>
-
 						</fieldset>
 					</div>
 				</div>
 			</div>			
 
-			<!-- Accordion to display different lists (content is generated by fetch_lists.php ) -->
 			<div id="tabDispLists" class="tabDispLists">
 				<ul>
 					<li><a href="#tabDispLists_trks">Tracks</a></li>
@@ -217,13 +169,9 @@
 				<div id="tabDispLists_part"></div>
 			</div>
 			
-		</div> <!-- End div panelLists -->
+		</div>
 
-		<!-- ========================================================================== -->
-		<!-- ====================== panelImport ======================================= -->
-		<!-- ========================================================================== -->		
 		<div id="panelImport" class="tourdbPanel">
-			
 			<div id="uiUplFileGps" class="uiDiv active">
 				<fieldset>
 					<legend class="filterHeader">Select GPX file to upload</legend>
@@ -238,57 +186,22 @@
 					</div>
 				</fieldset>
 			</div>
-
-		</div> <!-- End div panelImport -->
-
-		<!-- ========================================================================== -->
-		<!-- ===================== panelExport ======================================== -->
-		<!-- ========================================================================== -->
+		</div>
 
 		<div id="panelExport" class="tourdbPanel">
 			<div id="uiExport" class="uiDiv active">
 				<fieldset>
 					<legend class="filterHeader">Export all Objects</legend>
-					<!--
-					<p>Select a single file to upload to the tourdb</p>
-					<form id="formInputFile" enctype="multipart/form-data">
-						<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-						<input id="inputFile" class="buttonSelectFile" name="userfile" type="file" />
-					</form>
-					-->
-
 					<div class="buttonUpload">
 						<input type="submit" class="button" id="mainButtons_exportBtnTracks01JSON" value="Export Tracks as JSON" />
 					</div>
 					<div class="buttonUpload">
 						<input type="submit" class="button" id="mainButtons_exportBtnTracks01CSV" value="Export Tracks as CSV" />
 					</div>
-
 				</fieldset>
 			</div>		
+		</div>
 
-		</div> <!-- End div panelExport -->
-
-		<!-- ========================================================================== -->
-		<!-- ======================== panelMaintain =================================== -->
-		<!-- ========================================================================== -->		
-		<div id="panelMaintain" class="tourdbPanel">
-			<p>Ich bin das panel panelMaintain</p>
-		</div> <!-- End div panelMaintain -->
-
-		<!-- ========================================================================== -->
-		<!-- ======================== panelAdmin ========================================== -->
-		<!-- ========================================================================== -->
-		
-		<div id="panelAdmin" class="tourdbPanel">
-			<p>Ich bin das panel panelAdmin</p>		
-		</div> <!-- End div panelAdmin -->
-
-		<!-- ========================================================================== -->
-		<!-- ======================== UI Import/Edit Track ============================ -->
-		<!-- ========================================================================== -->
-		
-		<!-- Form to display different lists -->
 		<div id="uiTrack" class="uiTrack formCenter uiDiv">
 			<ul>
 				<li><a href="#uiTrack_tabMain">Main</a></li>
@@ -298,44 +211,28 @@
 			<p id="validateComments">Please fill / update fields.</p>
 			<div id="uiTrack_tabMain">
 				<fieldset>
-				
-					<!-- Import Tracks -->
 					<legend class="filterHeader">Import Track</legend>
-
-					<!-- Track ID -->
 					<div>
-						<!--<label for="uiTrack_fld_trkId" class="updTrackLabelFirst">Track ID</label>-->
 						<input type="hidden" name="uiTrack_fld_trkId" id="uiTrack_fld_trkId" size="20" class="uiTrackValidate text ui-widget-content ui-corner-all" readonly>
 					</div>
-
-					<!-- Track Name -->
 					<div>
 						<label for="uiTrack_fld_trkTrackName" class="updTrackLabelFirst">Track Name</label>
 						<input type="text" name="uiTrack_fld_trkTrackName" id="uiTrack_fld_trkTrackName" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-						
-					<!-- Route -->
 					<div>
 						<label for="uiTrack_fld_trkRoute" class="updTrackLabelFirst">Route</label>
 						<input type="text" name="uiTrack_fld_trkRoute" id="uiTrack_fld_trkRoute" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Date Begin -->
 					<div>
 						<label for="uiTrack_fld_trkDateBegin" class="updTrackLabelFirst">Date Begin</label>
 						<input type="text" name="uiTrack_fld_trkDateBegin" id="uiTrack_fld_trkDateBegin" size="20" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Date Finish -->
 					<div>
 						<label for="uiTrack_fld_trkDateFinish" class="updTrackLabelFirst">Date Finish</label>
 						<input type="text" name="uiTrack_fld_trkDateFinish" id="uiTrack_fld_trkDateFinish" size="20" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-					
-					<!-- Type -->
 					<div>
 						<label for="uiTrack_fld_trkTypeFid" class="updTrackLabelFirst">Type</label>
-						<!-- <input type="text" name="uiTrack_fld_trkTypeFid" id="uiTrack_fld_trkTypeFid" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">-->
 						<select name="trkTypeFid" id="uiTrack_fld_trkTypeFid">
 							<option value="0" selected="selected">select type</option>
 							<option value="5">Klettern</option>
@@ -346,8 +243,6 @@
 							<option value="4">Wasser</option>
 						</select>
 					</div>
-
-					<!-- SubType -->
 					<div>
 						<label for="uiTrack_fld_trkSubtypeFid" class="updTrackLabelFirst">SubType</label>
 						<select name="trkSubtypeFid" id="uiTrack_fld_trkSubtypeFid">
@@ -369,61 +264,38 @@
 							<option value="27">Winterwanderung</option>
 						</select>
 					</div>
-
-					<!-- Distance -->
 					<div>
 						<label for="uiTrack_fld_trkDistance" class="updTrackLabelFirst">Distance</label>
 						<input type="text" name="uiTrack_fld_trkDistance" id="uiTrack_fld_trkDistance" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Time Overall -->
 					<div>
 						<label for="uiTrack_fld_trkTimeOverall" class="updTrackLabelFirst">Overall Time</label>
 						<input type="text" name="uiTrack_fld_trkTimeOverall" id="uiTrack_fld_trkTimeOverall" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- TimeToPeak -->
 					<div>
 						<label for="uiTrack_fld_trkTimeToPeak" class="updTrackLabelFirst">Time to Peak</label>
 						<input type="text" name="uiTrack_fld_trkTimeToPeak" id="uiTrack_fld_trkTimeToPeak" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- TimeToFinish -->
 					<div>
 						<label for="uiTrack_fld_trkTimeToFinish" class="updTrackLabelFirst">Time To Finish</label>
 						<input type="text" name="uiTrack_fld_trkTimeToFinish" id="uiTrack_fld_trkTimeToFinish" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Grade -->
 					<div>
 						<label for="uiTrack_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
 						<input id="uiTrack_fld_trkGrade" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!--<div>
-						<label for="uiTrack_fld_trkGrade" class="updTrackLabelFirst">Grade</label>
-						<input type="text" name="uiTrack_fld_trkGrade" id="uiTrack_fld_trkGrade" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
-					</div>-->
-
-					<!-- MeterUp -->
 					<div>
 						<label for="uiTrack_fld_trkMeterUp" class="updTrackLabelFirst">Meter Up</label>
 						<input type="text" name="uiTrack_fld_trkMeterUp" id="uiTrack_fld_trkMeterUp" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- MeterDown -->
 					<div>
 						<label for="uiTrack_fld_trkMeterDown" class="updTrackLabelFirst">Meter Down</label>
 						<input type="text" name="uiTrack_fld_trkMeterDown" id="uiTrack_fld_trkMeterDown" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Country -->
 					<div>
 						<label for="uiTrack_fld_trkCountry" class="updTrackLabelFirst">Country</label>
 						<input type="text" name="uiTrack_fld_trkCountry" id="uiTrack_fld_trkCountry" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Hidden Fields -->
 					<div>
 						<input type="hidden" name="uiTrack_fld_trkCoordinates" id="uiTrack_fld_trkCoordinates" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all" readonly>
 						<input type="hidden" name="uiTrack_fld_trkStartEle" id="uiTrack_fld_trkStartEle" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all" readonly>
@@ -457,7 +329,6 @@
 					</table>
 					</div>
 				</fieldset>
-
 				<fieldset>
 					<legend class="filterHeader">Add Waypoints</legend>
 					<div class="ui-widget" style="float:left;">
@@ -473,10 +344,8 @@
 					</table>
 					</div>
 				</fieldset>
-
 				<fieldset>
 					<legend class="filterHeader">Add Overnight Location</legend>		
-					<!-- Overnight Location -->
 					<div class="ui-widget" style="float:left;">
 						<label for="uiTrack_locaSrch" class="updTrackLabelWayp">Overnight Loc.</label>
 						<input id="uiTrack_locaSrch" size="25">
@@ -490,13 +359,10 @@
 					</table>
 					</div>				
 				</fieldset>
-
 			</div>
 			<div id="uiTrack_tabOth">
 				<fieldset>
 					<legend class="filterHeader">Participants</legend>	
-
-					<!-- Participants -->
 					<div class="ui-widget" style="float:left;">
 						<label for="uiTrack_partSrch" class="updTrackLabelWayp">Participants</label>
 						<input id="uiTrack_partSrch" size="25">
@@ -510,23 +376,16 @@
 					</div>	
 				</table>	
 				</fieldset>
-
 				<fieldset>
 					<legend class="filterHeader">Other Information</legend>
-					
-					<!-- Org -->
 					<div>
 						<label for="uiTrack_fld_trkOrg" class="updTrackLabelWayp">Organisation</label>
 						<input type="text" name="uiTrack_fld_trkOrg" id="uiTrack_fld_trkOrg" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Event -->
 					<div>
 						<label for="uiTrack_fld_trkEvent" class="updTrackLabelWayp">Event</label>
 						<input type="text" name="uiTrack_fld_trkEvent" id="uiTrack_fld_trkEvent" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
 					</div>
-
-					<!-- Remarks -->
 					<div>
 						<label for="uiTrack_fld_trkRemarks" class="updTrackLabelWayp">Remarks</label>
 						<input type="text" name="uiTrack_fld_trkRemarks" id="uiTrack_fld_trkRemarks" size="50" class="uiTrackValidate text ui-widget-content ui-corner-all">
@@ -540,7 +399,7 @@
 			</div>
 		</div>
 
-	</section> <!-- End main -->
+	</section>
 
 	<footer id="footer">
         <div id=footerText>&copy; tourdb - 2019 leuti - Version Built 1907.009.2</div>
