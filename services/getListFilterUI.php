@@ -14,7 +14,7 @@
 // Created: 3.8.2019 - Daniel Leutwyler
 // ---------------------------------------------------------------------------------------------
 // Action:
-// 
+// - rename dispList... 
 
 // Set timezone (otherwise warnings are written to log)
 date_default_timezone_set("Europe/Zurich");
@@ -23,14 +23,14 @@ include("tourdb_config.php");                                              // In
 $debugLevel = 0;
 
 if ($debugLevel >= 1){
-    $logFileLoc = dirname(__FILE__) . "/../log/getFilterUI.log";    // Assign file location
+    $logFileLoc = dirname(__FILE__) . "/../log/getListFilterUI.log";    // Assign file location
     $logFile = @fopen($logFileLoc,"a");     
     fputs($logFile, "=================================================================\r\n");
-    fputs($logFile, date("Ymd-H:i:s", time()) .  "getFilterUI.php opened \r\n"); 
+    fputs($logFile, date("Ymd-H:i:s", time()) .  "getListFilterUI.php opened \r\n"); 
 };
 
 // Read JSON file containing all UI settings
-$json = file_get_contents('./UISettings.json');
+$json = file_get_contents('./UISettingsListFil.json');
 
 //Decode JSON
 $UISettings = json_decode($json,true);
@@ -42,19 +42,19 @@ $fieldset_h_opened = false;                                         // indicates
 // Write Initial statements
 
 // This is the div containing the icon to open large menu mask
-$outArray[] = '<div id="mapMenuMini" class="dispObjectSelector dispObjMini hidden">';
-$outArray[] = '<a id="mapMenuMiniOpen" href="#mapMenuMiniOpen">';
-$outArray[] = '<img id="mapMenuOpenImg" src="css/images/filterLightBlue.png">';
-$outArray[] = '</a>';
+$outArray[] = '<div id="dispListTrkMenuMini" class="dispObjectSelector dispListTrkMini visible">';
+$outArray[] = '  <a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">';
+$outArray[] = '    <img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">';
+$outArray[] = '  </a>'; 
 $outArray[] = '</div>';
 
 // This is the start of the filter UI 
-$outArray[] = '<div id="mapFilMenuLarge" class="dispObjectSelector dispObjOpen visible">';
-$outArray[] = '  <a id="mapMenuLargeClose" href="#mapMenuLargeClose">';
-$outArray[] = '    <img id="mapMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
+$outArray[] = '<div id="dispListTrkMenuLarge" class="dispObjectSelector dispListTrkOpen hidden">';
+$outArray[] = '  <a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">';
+$outArray[] = '    <img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
 $outArray[] = '  </a>';
-$outArray[] = '  <p class="dispObjMenuText">Select objects to be displayed</p>';
-$outArray[] = '  <div id="mapFilAccordion" class="dispObjOpen visible">';
+$outArray[] = '  <p class="dispListTrkMenuText">Select tracks to be displayed</p>';
+$outArray[] = '  <div id="dispListTrkAccordion" class="dispListTrkOpen visible">';
 
 // Loop through UIsettings line by line
 foreach ( $UISettings as $key => $record ) {
@@ -134,18 +134,24 @@ $outArray[] = '  </div>';
 $outArray[] = '</div>';
 
 // Echo Div for map display
-$outArray[] = '<div id="displayMap" class="visible">';
-$outArray[] = '  <div id="displayMap-ResMap">';
-$outArray[] = '  </div>';
+$outArray[] = '<div id="tabDispLists" class="tabDispLists">';
+$outArray[] = '  <ul>';
+$outArray[] = '    <li><a href="#tabDispLists_trks">Tracks</a></li>';
+$outArray[] = '    <li><a href="#tabDispLists_segs">Segments</a></li>';
+$outArray[] = '    <li><a href="#tabDispLists_part">Participants</a></li>';
+$outArray[] = '  </ul>';
+$outArray[] = '  <div id="tabDispLists_trks"></div>';
+$outArray[] = '  <div id="tabDispLists_segs"></div>';
+$outArray[] = '  <div id="tabDispLists_part"></div>';
 $outArray[] = '</div>';
 
 $htmlOut = join("\r\n", $outArray);                                 // covert array to text string  
 
 echo $htmlOut;                                                      // echo HTML to calling object
 
-// Write HTML to file "log/getFilterUI.out"
+// Write HTML to file "log/getMapFilterUI.out"
 if ( $debugLevel >= 3 ) {
-    $tempOut = dirname(__FILE__) . "/../log/getFilterUI.out";       // Assign file location
+    $tempOut = dirname(__FILE__) . "/../log/getMapFilterUI.out";       // Assign file location
     $tempOutFile = fopen($tempOut,"w");     
     fputs( $tempOutFile, $htmlOut );
     fclose( $tempOutFile );

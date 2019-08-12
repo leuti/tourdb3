@@ -44,10 +44,17 @@ $(document).ready(function() {
 
     // Generate dynamic HTML code
     // ========================== 
-    $( "#panelMap" ).load("services/getFilterUI.php", 
+    $( "#panelMap" ).load("services/getMapFilterUI.php", 
         {}, function() {
-            initJQItemsMap();                                      // Initialse all jquery functional fields for the mask display objects
+            initJQItemsMap();                                      // Initialse all jquery functional fields for the map filter objects
         }); 
+
+    $( "#panelLists" ).load("services/getListFilterUI.php", 
+        {}, function() {
+            initJQItemsList();
+        }); 
+
+    initJQItemsOthers();                                           // Initialise all other static html fields
 
     // Evaluate which button/panel is active
     $('.mainButtons').each(function() {
@@ -137,15 +144,13 @@ $(document).ready(function() {
                 // ----------------------
                 $('#statusMessage').text('Login successful');
                 $("#statusMessage").show().delay(5000).fadeOut(); 
-                
+                            
                 // Draw empty map (why empty???)
-                // --------------
                 if ( typeof(ga) != 'undefined' ) {
                     tourdbMap = drawMapEmpty('displayMap-ResMap');  // Draw empty map (without additional layers) 
                 }
 
                 // Load first set of tracks to be displayed in the List panel
-                // ----------------------------------------------------------
                 var page = 1;
                 fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";      // where string for list view (fetch_lists.php)
                 $("#tabDispLists_trks").load("services/fetch_lists.php",
@@ -1667,7 +1672,7 @@ $(document).on('click', '.cbReached', function (e) {
 // ============ F U N C T I O N S ==============
 // =============================================
 
-// Initialise all JQuery items 
+// Initialise all JQuery items for map fields
 function initJQItemsMap () {
     $( "#mapFilAccordion" ).accordion({
         heightStyle: "content",                                      // hight of section dependent on content of section
@@ -1696,13 +1701,13 @@ function initJQItemsMap () {
     // Build type selectable dynamically
     $( "#mapFilTrk_type" ).load("services/getTypes.php", 
         {"ele":"mapFilTrk_type","purpose":"trk","type":"type","parent":""}, function() {
-            $( "#mapFilTrk_type_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+            $( "#mapFilTrk_type_ol" ).selectable({});               // Initialse field as JQUERY selectable once HTML is loaded
     }); 
     
     // Build subtype selectable dynamically
     $( "#mapFilTrk_subtype" ).load("services/getTypes.php", 
         {"ele":"mapFilTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
-            $( "#mapFilTrk_subtype_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
+            $( "#mapFilTrk_subtype_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
     });
 
     $( "#mapFilSeg_sourceName" ).autocomplete({
@@ -1717,8 +1722,6 @@ function initJQItemsMap () {
             }
         }
     });
-
-    //var mapUF_sourceFID = $( "#mapFilSeg_sourceFID" );
 
     $( "#mapFilSeg_segTypeFid" ).load("services/getTypes.php", 
         {"ele":"mapFilSeg_segTypeFid","purpose":"seg","type":"type","parent":""}, function() {
@@ -1800,14 +1803,17 @@ function initJQItemsMap () {
         {"ele":"mapFilSeg_climbGrade","grdType":"climbGrade"}, function() {
             $( "#mapFilSeg_climbGrade_ol" ).selectable({});     // Initialse field as JQUERY selectable once HTML is loaded
     });
+}
 
-    // Initialse all jquery functional fields for the list display for tracks
-    // ======================================================================
+// Initialise all JQuery items for list fields
+function initJQItemsList () {
+    
     $( "#dispListTrkAccordion" ).accordion({
         heightStyle: "content",                                      // hight of section dependent on content of section
         autoHeight: false,
         collapsible: true
     });
+
     $( "#dispListTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -1817,6 +1823,7 @@ function initJQItemsMap () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
+
     $( "#dispListTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
@@ -1826,13 +1833,34 @@ function initJQItemsMap () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    $( "#dispListTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
-    $( "#dispListTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable   
 
-    // Initialse all jquery functional fields for the import track mask
-    // ================================================================
+    //$( "#dispListTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
+    // Build subtype selectable dynamically
+    $( "#dispListTrk_type" ).load("services/getTypes.php", 
+        {"ele":"dispListTrk_type","purpose":"trk","type":"type","parent":""}, function() {
+            $( "#dispListTrk_type_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
+    });
+
+    //$( "#dispListTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable   
+    // Build subtype selectable dynamically
+    $( "#dispListTrk_subtype" ).load("services/getTypes.php", 
+    {"ele":"dispListTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
+        $( "#dispListTrk_subtype_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
+    });
+
+    // =====================================
+    // ====== Display List 
+    $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
+    
+}
+
+// Initialise all JQuery items for all static html fields
+function initJQItemsOthers () {
+
     $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
+
     valComments = $( "#validateComments" );
+    
     $( "#uiTrack_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -1842,6 +1870,7 @@ function initJQItemsMap () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
+    
     $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -1851,9 +1880,11 @@ function initJQItemsMap () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    //$( "#uiTrack_fld_trkSaison" ).selectmenu();
+    
     $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
+    
     $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
+    
     $( "#uiTrack_fld_trkGrade" ).autocomplete({
         source: "services/autoComplete.php?field=grades",
         minLength: 1,
@@ -1865,6 +1896,7 @@ function initJQItemsMap () {
             console.log("Grade Autoselect field changed");
         }
     });
+    
     $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
@@ -1890,6 +1922,7 @@ function initJQItemsMap () {
 
         }
     });
+    
     $( "#uiTrack_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
@@ -1913,6 +1946,7 @@ function initJQItemsMap () {
             drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" );            // WAS OLD
         }
     });
+    
     $( "#uiTrack_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
@@ -1936,6 +1970,7 @@ function initJQItemsMap () {
             drawItemsTables ( TRACK_PART_ARRAY, "loca", "uiTrack" );        //WAS OLD
         }
     });
+    
     $( "#uiTrack_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
@@ -1959,12 +1994,11 @@ function initJQItemsMap () {
         }
     });
     
-    // =====================================
-    // ====== Display List 
-    $( "#tabDispLists" ).tabs();                                         // Tabs in UI Track mask
     // form to edit tracks
     $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
+    
     valComments = $( "#validateComments" );
+    
     $( "#uiTrack_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
@@ -1983,9 +2017,11 @@ function initJQItemsMap () {
         buttonImageOnly: true,
         buttonText: "Select date"
     });
-    //$( "#uiTrack_fld_trkSaison" ).selectmenu();
+    
     $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
+    
     $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
+    
     $( "#uiTrack_peakSrch" ).autocomplete({
         source: "services/autoComplete.php?field=peak",
         minLength: 2,
@@ -2010,6 +2046,7 @@ function initJQItemsMap () {
             // not working:  $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
         }
     });
+    
     $( "#uiTrack_waypSrch" ).autocomplete({
         source: "services/autoComplete.php?field=wayp",
         minLength: 2,
@@ -2033,6 +2070,7 @@ function initJQItemsMap () {
             document.getElementById("uiTrack_waypList").innerHTML = itemsTable;
         }
     });
+    
     $( "#uiTrack_locaSrch" ).autocomplete({
         source: "services/autoComplete.php?field=loca",
         minLength: 2,
@@ -2056,6 +2094,7 @@ function initJQItemsMap () {
             document.getElementById("uiTrack_locaList").innerHTML = itemsTable;
         }
     });
+    
     $( "#uiTrack_partSrch" ).autocomplete({
         source: "services/autoComplete.php?field=part",
         minLength: 2,
