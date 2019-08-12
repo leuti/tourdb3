@@ -42,19 +42,19 @@ $fieldset_h_opened = false;                                         // indicates
 // Write Initial statements
 
 // This is the div containing the icon to open large menu mask
-$outArray[] = '<div id="dispObjMenuMini" class="dispObjectSelector dispObjMini hidden">';
-$outArray[] = '<a id="dispObjMenuMiniOpen" href="#dispObjMenuMiniOpen">';
-$outArray[] = '<img id="dispObjMenuOpenImg" src="css/images/filterLightBlue.png">';
+$outArray[] = '<div id="mapMenuMini" class="dispObjectSelector dispObjMini hidden">';
+$outArray[] = '<a id="mapMenuMiniOpen" href="#mapMenuMiniOpen">';
+$outArray[] = '<img id="mapMenuOpenImg" src="css/images/filterLightBlue.png">';
 $outArray[] = '</a>';
 $outArray[] = '</div>';
 
 // This is the start of the filter UI 
-$outArray[] = '<div id="dispObjMenuLarge" class="dispObjectSelector dispObjOpen visible">';
-$outArray[] = '  <a id="dispObjMenuLargeClose" href="#dispObjMenuLargeClose">';
-$outArray[] = '    <img id="dispObjMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
+$outArray[] = '<div id="mapFilMenuLarge" class="dispObjectSelector dispObjOpen visible">';
+$outArray[] = '  <a id="mapMenuLargeClose" href="#mapMenuLargeClose">';
+$outArray[] = '    <img id="mapMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
 $outArray[] = '  </a>';
 $outArray[] = '  <p class="dispObjMenuText">Select objects to be displayed</p>';
-$outArray[] = '  <div id="dispObjAccordion" class="dispObjOpen visible">';
+$outArray[] = '  <div id="mapFilAccordion" class="dispObjOpen visible">';
 
 // Loop through UIsettings line by line
 foreach ( $UISettings as $key => $record ) {

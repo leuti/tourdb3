@@ -178,7 +178,7 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - both large and small */
-#dispObjMenuLarge, #dispObjMenuMini, #dispListTrkMenuLarge, #dispListTrkMenuMini {
+#mapFilMenuLarge, #mapMenuMini, #dispListTrkMenuLarge, #dispListTrkMenuMini {
     position: relative;
     background-color: #0b17c7;
     height: 30px;
@@ -187,12 +187,12 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - small */
-#dispObjMenuMini, #dispListTrkMenuMini {
+#mapMenuMini, #dispListTrkMenuMini {
     width: 30px;
 }
 
 /* display search main bar on top - icon in large menu */
-#dispObjMenuCloseImg, #dispListTrkMenuCloseImg {
+#mapMenuCloseImg, #dispListTrkMenuCloseImg {
     height: 20px;
     width: 20px;
     padding: 5px;
@@ -200,7 +200,7 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - icon in small menu */
-#dispObjMenuOpenImg, #dispListTrkMenuOpenImg {
+#mapMenuOpenImg, #dispListTrkMenuOpenImg {
     height: 20px;
     width: 20px;
     padding: 5px;

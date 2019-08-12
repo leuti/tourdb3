@@ -46,7 +46,7 @@ $(document).ready(function() {
     // ========================== 
     $( "#panelMap" ).load("services/getFilterUI.php", 
         {}, function() {
-            initJqueryItems();                                      // Initialse all jquery functional fields for the mask display objects
+            initJQItemsMap();                                      // Initialse all jquery functional fields for the mask display objects
         }); 
 
     // Evaluate which button/panel is active
@@ -166,7 +166,7 @@ $(document).ready(function() {
 // ==========================================================================
 
 // Minimize the map filter UI
-$(document).on('click', '#dispObjMenuLargeClose', function(e) {
+$(document).on('click', '#mapMenuLargeClose', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
     $activeButton.parent().removeClass('visible');
@@ -176,7 +176,7 @@ $(document).on('click', '#dispObjMenuLargeClose', function(e) {
 })
 
 // Open the map filter UI
-$(document).on('click', '#dispObjMenuMiniOpen', function(e) {
+$(document).on('click', '#mapMenuMiniOpen', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
     $activeButton.parent().removeClass('visible');
@@ -1420,10 +1420,10 @@ $(document).on('click', '#uiTrack_fld_save', function ( e ) {
                                 // Open Panel Map
                                 var $activeButtonA = $('#mainButtons_mapBtn_a');                // Store the current link <a> element
                                 buttonId = $activeButtonA.attr('href'); 
-                                $('#dispObjMenuLarge').addClass('hidden');
-                                $('#dispObjMenuLarge').removeClass('visible');
-                                $('#dispObjMenuMini').addClass('visible');
-                                $('#dispObjMenuMini').removeClass('hidden');
+                                $('#mapFilMenuLarge').addClass('hidden');
+                                $('#mapFilMenuLarge').removeClass('visible');
+                                $('#mapMenuMini').addClass('visible');
+                                $('#mapMenuMini').removeClass('hidden');
 
                                 // Run following block if selected topic is currently not active
                                 $topicButton.removeClass('active');                             // Make current panel inactive
@@ -1668,8 +1668,8 @@ $(document).on('click', '.cbReached', function (e) {
 // =============================================
 
 // Initialise all JQuery items 
-function initJqueryItems () {
-    $( "#dispObjAccordion" ).accordion({
+function initJQItemsMap () {
+    $( "#mapFilAccordion" ).accordion({
         heightStyle: "content",                                      // hight of section dependent on content of section
         autoHeight: false,
         collapsible: true
