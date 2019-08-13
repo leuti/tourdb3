@@ -15,3 +15,6 @@ services/tourdb_config.php
 
 # Ignore .gitignore
 .gitignore
+
+# Ignore vscode files
+.vscode

@@ -915,7 +915,7 @@ $(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
 })
 
 // Requests the filtered tracks and displays them as a table
-$(document).on('click', '#dispListTrk_NewLoadButton', function (e) {
+$(document).on('click', '#listFilTrk_NewLoadButton', function (e) {
     e.preventDefault();
     $clickedButton = this.id;                                       // store id of button clicked
 
@@ -1814,7 +1814,7 @@ function initJQItemsList () {
         collapsible: true
     });
 
-    $( "#dispListTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
+    $( "#listFilTrk_dateFrom" ).datepicker({                         // Initalise field to select start date as JQUERY datepicker
         dateFormat: 'yy-mm-dd', 
         changeMonth: true,
         changeYear: true,
@@ -1824,7 +1824,7 @@ function initJQItemsList () {
         buttonText: "Select date"
     });
 
-    $( "#dispListTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
+    $( "#listFilTrk_dateTo" ).datepicker({                           // Initalise field to select to date as JQUERY datepicker
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
@@ -1834,18 +1834,18 @@ function initJQItemsList () {
         buttonText: "Select date"
     });
 
-    //$( "#dispListTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
+    //$( "#listFilTrk_type" ).selectable({});                          // Initialse field 'type' as JQUERY selectable
     // Build subtype selectable dynamically
-    $( "#dispListTrk_type" ).load("services/getTypes.php", 
-        {"ele":"dispListTrk_type","purpose":"trk","type":"type","parent":""}, function() {
-            $( "#dispListTrk_type_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#listFilTrk_type" ).load("services/getTypes.php", 
+        {"ele":"listFilTrk_type","purpose":"trk","type":"type","parent":""}, function() {
+            $( "#listFilTrk_type_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
     });
 
-    //$( "#dispListTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable   
+    //$( "#listFilTrk_subtype" ).selectable({});                       // Initialse field 'subtype' as JQUERY selectable   
     // Build subtype selectable dynamically
-    $( "#dispListTrk_subtype" ).load("services/getTypes.php", 
-    {"ele":"dispListTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
-        $( "#dispListTrk_subtype_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
+    $( "#listFilTrk_subtype" ).load("services/getTypes.php", 
+    {"ele":"listFilTrk_subtype","purpose":"trk","type":"subtype","parent":""}, function() {
+        $( "#listFilTrk_subtype_ol" ).selectable({});            // Initialse field as JQUERY selectable once HTML is loaded
     });
 
     // =====================================
@@ -2433,14 +2433,14 @@ function createListWhere () {
     // Field trackID from / to
     var trackIdFrom = "";                                           // Initialse var for track id from 
     var trackIdTo = "";                                             // Initialse var for track id to
-    if ( ($('#dispListTrk_trackIdFrom').val()) != "" ) {                           
-        trackIdFrom = $('#dispListTrk_trackIdFrom').val();
+    if ( ($('#listFilTrk_trackIdFrom').val()) != "" ) {                           
+        trackIdFrom = $('#listFilTrk_trackIdFrom').val();
     } else {
         trackIdFrom = "";
     };
 
-    if ( ($('#dispListTrk_trackIdTo').val()) != "" ) {                           
-        trackIdTo = $('#dispListTrk_trackIdTo').val();
+    if ( ($('#listFilTrk_trackIdTo').val()) != "" ) {                           
+        trackIdTo = $('#listFilTrk_trackIdTo').val();
     } else {
         trackIdTo = "";
     };
@@ -2459,15 +2459,15 @@ function createListWhere () {
 
     // Field track name
     var whereString = "";
-    if ( ($('#dispListTrk_trackName').val()) != "" ) {                           
-        whereString = "trkTrackName like '%" + $('#dispListTrk_trackName').val() + "%'";
+    if ( ($('#listFilTrk_trackName').val()) != "" ) {                           
+        whereString = "trkTrackName like '%" + $('#listFilTrk_trackName').val() + "%'";
         whereStatement.push( whereString );
     };
 
     // Field route
     var whereString = "";
-    if ( ($('#dispListTrk_route').val()) != "" ) {
-        whereString = "trkRoute like '%" + $('#dispListTrk_route').val() + "%'";
+    if ( ($('#listFilTrk_route').val()) != "" ) {
+        whereString = "trkRoute like '%" + $('#listFilTrk_route').val() + "%'";
         whereStatement.push( whereString );
     };
 
@@ -2478,14 +2478,14 @@ function createListWhere () {
     month = today.getMonth()+1;                                                 // Extract month (January = 0)
     toDateArt = today.getFullYear() + '-' + month + '-' + today.getDate();      // Set to date to today (format yyyy-mm-dd)
     
-    if ( ($('#dispListTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
-        fromDate = ($('#dispListTrk_dateFrom').val());
+    if ( ($('#listFilTrk_dateFrom').val()) != "" ) {                            // Overwrite fromDate with value entered by user
+        fromDate = ($('#listFilTrk_dateFrom').val());
     } else {
         fromDate = "";
     }
 
-    if ( ($('#dispListTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
-        toDate = ($('#dispListTrk_dateTo').val())                                // Add to where Statement array
+    if ( ($('#listFilTrk_dateTo').val()) != "" ) {                              // Overwrite toDate with value entered by user
+        toDate = ($('#listFilTrk_dateTo').val())                                // Add to where Statement array
     } else {
         toDate = "";
     }
@@ -2503,7 +2503,7 @@ function createListWhere () {
 
     // Field type
     var whereString = "";
-    $('#dispListTrk_type .ui-selected').each(function() {                       // loop through each selected type item
+    $('#listFilTrk_type .ui-selected').each(function() {                       // loop through each selected type item
         whereString = whereString + "'" + this.value + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
@@ -2514,7 +2514,7 @@ function createListWhere () {
 
     // Field subtype
     var whereString = "";                                                       
-    $('#dispListTrk_subtype .ui-selected').each(function() {                    // loop through each selected type item
+    $('#listFilTrk_subtype .ui-selected').each(function() {                    // loop through each selected type item
         whereString = whereString + "'" + this.value + "',";                // Read text of selected li elements
     });
     if ( whereString.length > 0 ) {
@@ -2525,8 +2525,8 @@ function createListWhere () {
 
     // Field country
     var whereString = "";
-    if ( ($('#dispListTrk_country').val()) != "" ) {
-        whereString = "trkCountry like '%" + $('#dispListTrk_country').val() + "%'";
+    if ( ($('#listFilTrk_country').val()) != "" ) {
+        whereString = "trkCountry like '%" + $('#listFilTrk_country').val() + "%'";
         whereStatement.push( whereString );
     };
     
