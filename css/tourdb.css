@@ -160,16 +160,16 @@ tr.tblpeak>td, tr.tblwayp>td {
 
 /********** FILTER STYLES *********/
 
-.dispObjOpen.hidden, .dispObjMini.hidden, .dispListTrkOpen.hidden, .dispListTrkMini.hidden {
+.dispObjOpen.hidden, .dispObjMini.hidden, .listTrkOpen.hidden, .listTrkMini.hidden {
     display: none;
 }
 
-.dispObjOpen.visible, .dispObjMini.visible, .dispListTrkOpen.visible, .dispListTrkMini.visible {
+.dispObjOpen.visible, .dispObjMini.visible, .listTrkOpen.visible, .listTrkMini.visible {
     display: block;
     margin-top: 18px;
 }
 
-.dispObjectSelector, #dispListTrkectSelector {
+.dispObjectSelector, #listTrkectSelector {
     width: 432px;
     position: absolute;
     top: 122px;
@@ -178,7 +178,7 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - both large and small */
-#mapFilMenuLarge, #mapMenuMini, #dispListTrkMenuLarge, #dispListTrkMenuMini {
+#mapFilMenuLarge, #mapMenuMini, #listTrkMenuLarge, #listTrkMenuMini {
     position: relative;
     background-color: #0b17c7;
     height: 30px;
@@ -187,12 +187,12 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - small */
-#mapMenuMini, #dispListTrkMenuMini {
+#mapMenuMini, #listTrkMenuMini {
     width: 30px;
 }
 
 /* display search main bar on top - icon in large menu */
-#mapMenuCloseImg, #dispListTrkMenuCloseImg {
+#mapMenuCloseImg, #listTrkMenuCloseImg {
     height: 20px;
     width: 20px;
     padding: 5px;
@@ -200,13 +200,13 @@ tr.tblpeak>td, tr.tblwayp>td {
 }
 
 /* display search main bar on top - icon in small menu */
-#mapMenuOpenImg, #dispListTrkMenuOpenImg {
+#mapMenuOpenImg, #listTrkMenuOpenImg {
     height: 20px;
     width: 20px;
     padding: 5px;
 }
 
-.dispObjMenuText, .dispListTrkMenuText {
+.dispObjMenuText, .listTrkMenuText {
     height: 10px;
     padding: 5px;
     margin-left: 40px;

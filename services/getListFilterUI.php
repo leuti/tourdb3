@@ -42,19 +42,19 @@ $fieldset_h_opened = false;                                         // indicates
 // Write Initial statements
 
 // This is the div containing the icon to open large menu mask
-$outArray[] = '<div id="dispListTrkMenuMini" class="dispObjectSelector dispListTrkMini visible">';
-$outArray[] = '  <a id="dispListTrkMenuMiniOpen" href="#dispListTrkMenuMiniOpen">';
-$outArray[] = '    <img id="dispListTrkMenuOpenImg" src="css/images/filterLightBlue.png">';
+$outArray[] = '<div id="listTrkMenuMini" class="dispObjectSelector listTrkMini visible">';
+$outArray[] = '  <a id="listTrkMenuMiniOpen" href="#listTrkMenuMiniOpen">';
+$outArray[] = '    <img id="listTrkMenuOpenImg" src="css/images/filterLightBlue.png">';
 $outArray[] = '  </a>'; 
 $outArray[] = '</div>';
 
 // This is the start of the filter UI 
-$outArray[] = '<div id="dispListTrkMenuLarge" class="dispObjectSelector dispListTrkOpen hidden">';
-$outArray[] = '  <a id="dispListTrkMenuLargeClose" href="#dispListTrkMenuLargeClose">';
-$outArray[] = '    <img id="dispListTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
+$outArray[] = '<div id="listTrkMenuLarge" class="dispObjectSelector listTrkOpen hidden">';
+$outArray[] = '  <a id="listTrkMenuLargeClose" href="#listTrkMenuLargeClose">';
+$outArray[] = '    <img id="listTrkMenuCloseImg" src="css/images/arrowLeftLightBlue.png">';
 $outArray[] = '  </a>';
-$outArray[] = '  <p class="dispListTrkMenuText">Select tracks to be displayed</p>';
-$outArray[] = '  <div id="dispListTrkAccordion" class="dispListTrkOpen visible">';
+$outArray[] = '  <p class="listTrkMenuText">Select tracks to be displayed</p>';
+$outArray[] = '  <div id="listTrkAccordion" class="listTrkOpen visible">';
 
 // Loop through UIsettings line by line
 foreach ( $UISettings as $key => $record ) {
