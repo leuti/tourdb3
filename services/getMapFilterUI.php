@@ -104,11 +104,11 @@ foreach ( $UISettings as $key => $record ) {
     // Generate output if element type is "Text"
     if ( $UISettings[$key]["ele_type"] == "text" ) {
         $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["ele_label"] . '</label>';
-        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
+        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     
     // Generate output if element type is "Hidden"
     } else if ( $UISettings[$key]["ele_type"] == "hidden" ) {
-        $outArray[] = '          <input type="hidden" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '">';
+        $outArray[] = '          <input type="hidden" id="' . $UISettings[$key]["ele_id"] . '">';
 
     // Generate output if element type is "Selectable"
     } else if ( $UISettings[$key]["ele_type"] == "selectable" ) {
@@ -117,12 +117,12 @@ foreach ( $UISettings as $key => $record ) {
     
     // Generate output if element type is "Buttons" (submit) 
     } else if ( $UISettings[$key]["ele_type"] == "submit" ) {
-        $outArray[] = '          <input type="submit" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '" value="' . $UISettings[$key]["ele_label"] . '" />';
+        $outArray[] = '          <input type="submit" id="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["ele_class"] . '" value="' . $UISettings[$key]["ele_label"] . '" />';
     
     // Generate output if element type is "Checkboxe"
     } else if ( $UISettings[$key]["ele_type"] == "checkbox" ) {
         $outArray[] = '          <label for="' . $UISettings[$key]["ele_id"] . '" class="' . $UISettings[$key]["label_class"] . '">' . $UISettings[$key]["ele_label"] . '</label>';
-        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" name="' . $UISettings[$key]["ele_name"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
+        $outArray[] = '          <input type="' . $UISettings[$key]["ele_type"] . '" id="' . $UISettings[$key]["ele_id"] . '" size="' . $UISettings[$key]["ele_size"] . '" class="' . $UISettings[$key]["ele_class"] . '">';
     }
     
     // Echo closing tag for current UI element
