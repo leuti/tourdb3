@@ -54,7 +54,10 @@ $(document).ready(function() {
             initJQItemsList();
         }); 
 
-    initJQItemsOthers();                                           // Initialise all other static html fields
+    $( "#uiTrack" ).load("services/getUITracks.php",
+        {}, function() {
+            initJQItemsTracksUI();
+        });
 
     // Evaluate which button/panel is active
     $('.mainButtons').each(function() {
@@ -1855,7 +1858,7 @@ function initJQItemsList () {
 }
 
 // Initialise all JQuery items for all static html fields
-function initJQItemsOthers () {
+function initJQItemsTracksUI () {
 
     $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
 
@@ -1918,132 +1921,6 @@ function initJQItemsOthers () {
             TRACK_WAYP_ARRAY.push(itemsList);                              // Push record to array
             var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
             document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
-            // not working: $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
-
-        }
-    });
-    
-    $( "#uiTrack_waypSrch" ).autocomplete({
-        source: "services/autoComplete.php?field=wayp",
-        minLength: 2,
-        select: function( event, ui ) {                              // see above
-            $( "" ).val( ui.item.id );
-            id = ui.item.id;
-            value = ui.item.value;
-
-            // Initialise peakList array
-            var itemsList =  new Object();
-
-            // Add new wayp to array
-            itemsList.itemId = id;                                   // id of item selected
-            itemsList.itemName = value;                              // Name of item selected
-            itemsList.itemType = "wayp";                             // Type of item (must be 4 char)
-            itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = 1;                              // Set reached flag to true as default
-
-            TRACK_WAYP_ARRAY.push(itemsList);
-
-            drawItemsTables ( TRACK_WAYP_ARRAY, "wayp", "uiTrack" );            // WAS OLD
-        }
-    });
-    
-    $( "#uiTrack_locaSrch" ).autocomplete({
-        source: "services/autoComplete.php?field=loca",
-        minLength: 2,
-        select: function( event, ui ) {                              // see above
-            $( "" ).val( ui.item.id );
-            id = ui.item.id;
-            value = ui.item.value;
-        
-            // Initialise peakList array
-            var itemsList =  new Object();
-
-            // Add new loc to array
-            itemsList.itemId = id;                                   // id of item selected
-            itemsList.itemName = value;                              // Name of item selected
-            itemsList.itemType = "loca";                             // Type of item (must be 4 char)
-            itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
-
-            TRACK_WAYP_ARRAY.push(itemsList);
-
-            drawItemsTables ( TRACK_PART_ARRAY, "loca", "uiTrack" );        //WAS OLD
-        }
-    });
-    
-    $( "#uiTrack_partSrch" ).autocomplete({
-        source: "services/autoComplete.php?field=part",
-        minLength: 2,
-        select: function( event, ui ) {                              // see above
-            $( "" ).val( ui.item.id );
-            id = ui.item.id;
-            value = ui.item.value;
-        
-            // Initialise peakList array
-            var itemsList =  new Object();
-
-            // Add new part to array
-            itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.itemType = "part";                             // Type of item (must be 4 char)
-            itemsList.itemId = id;                                   // id of item selected
-            itemsList.itemName = value;                              // Name of item selected
-            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
-
-            TRACK_WAYP_ARRAY.push(itemsList);                              // Add selected item to array
-            drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" );       // WAS OLD
-        }
-    });
-    
-    // form to edit tracks
-    $( "#uiTrack" ).tabs();                                         // Tabs in UI Track mask
-    
-    valComments = $( "#validateComments" );
-    
-    $( "#uiTrack_fld_trkDateBegin" ).datepicker({                   // Initalise field to select start date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd', 
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-    $( "#uiTrack_fld_trkDateFinish" ).datepicker({                  // Initalise field to select start date as JQUERY datepicker
-        dateFormat: 'yy-mm-dd', 
-        changeMonth: true,
-        changeYear: true,
-        showOn: "button",
-        buttonImage: "css/images/calendar.gif",
-        buttonImageOnly: true,
-        buttonText: "Select date"
-    });
-    
-    $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
-    
-    $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
-    
-    $( "#uiTrack_peakSrch" ).autocomplete({
-        source: "services/autoComplete.php?field=peak",
-        minLength: 2,
-        select: function( event, ui ) {                              // function fires on select of element   
-            $( "" ).val( ui.item.id );                               // Set search field = found content
-            id = ui.item.id;                                         // id = id of found item
-            value = ui.item.value;                                   // value = name of found item
-
-            // Initialise peakList array
-            var itemsList =  new Object();                                  
-
-            // Add new peak to array
-            itemsList.itemId = id;                                   // id of item selected
-            itemsList.itemName = value;                              // Name of item selected
-            itemsList.itemType = "peak";                             // Type of item (must be 4 char)
-            itemsList.disp_f = 1;                                 // Set display to true (if false --> item is not shown)
-            itemsList.reached_f = 1;                              // Set reached flag to true as default
-
-            TRACK_WAYP_ARRAY.push(itemsList);                              // Push record to array
-            var itemsTable = drawItemsTables ( TRACK_WAYP_ARRAY, "peak", "uiTrack" )
-            document.getElementById("uiTrack_peakList").innerHTML = itemsTable;
-            // not working:  $('#uiTrack_peakSrch').val("");                        // clear autocomplete source field
         }
     });
     
@@ -2111,7 +1988,8 @@ function initJQItemsOthers () {
             itemsList.itemType = "part";                             // Type of item (must be 4 char)
             itemsList.itemId = id;                                   // id of item selected
             itemsList.itemName = value;                              // Name of item selected
-            
+            itemsList.reached_f = 1;                              // Set reached flag to true as default --> not stored
+
             TRACK_PART_ARRAY.push(itemsList);                              // Push record to array
             var itemsTable = drawItemsTables ( TRACK_PART_ARRAY, "part", "uiTrack" )
             document.getElementById("uiTrack_partList").innerHTML = itemsTable;
