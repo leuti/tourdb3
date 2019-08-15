@@ -38,6 +38,8 @@ $UISettings = json_decode($json,true);
 // Variables
 $tab_h_opened = false;                                              // indicates if top tab div is opened or not
 $fieldset_h_opened = false;                                         // indicates if fieldset tab div is opened or not
+$fieldset_heading = "";
+$tab_heading = "";
 
 // Write Initial statements
 

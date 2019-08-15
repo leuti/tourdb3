@@ -32,5 +32,5 @@
 {"tab_heading":"Additional Items to display","fieldset_heading":"Peaks","ele_type":"checkbox","ele_id":"mapFilWayp_cant","ele_label":"Peaks (Top of Cantons)","label_class":"labelFirst","ele_size":null,"ele_class":"dispObjSel text ui-widget-content ui-corner-all","tag_open":"<div>","tag_close":"</div>"},
 {"tab_heading":"Additional Items to display","fieldset_heading":"Others","ele_type":"checkbox","ele_id":"mapFilWayp_huts","ele_label":"Huts","label_class":"labelFirst","ele_size":null,"ele_class":"dispObjSel text ui-widget-content ui-corner-all","tag_open":"<div>","tag_close":"</div>"},
 {"tab_heading":"Additional Items to display","fieldset_heading":"Others","ele_type":"submit","ele_id":"dispFilWayp_NewLoadButton","ele_label":"Load Map","label_class":"","ele_size":null,"ele_class":"button uiMapApplyBtn","tag_open":"<div>","tag_close":"</div>"},
-{"tab_heading":"","fieldset_heading":"","ele_type":"dummy","ele_id":"dummy01","ele_label":"","label_class":"","ele_size":null,"ele_class":"","tag_open":"","tag_close":""}
+{"tab_heading":"","fieldset_heading":"none","ele_type":"dummy","ele_id":"dummy01","ele_label":"","label_class":"","ele_size":null,"ele_class":"","tag_open":"","tag_close":""}
 ]

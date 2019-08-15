@@ -34,11 +34,12 @@ $json = file_get_contents('./UISettingsTracks.json');
 
 //Decode JSON
 $UISettings = json_decode($json,true);
-fputs($logFile, "UISettings: " . $UISettings[0]["tab_id"]);
 
 // Variables
 $tab_h_opened = false;                                              // indicates if top tab div is opened or not
 $fieldset_h_opened = false;                                         // indicates if fieldset tab div is opened or not
+$fieldset_heading = "";
+$tab_id = "";
 
 // Write Initial statements
 
@@ -72,7 +73,7 @@ foreach ( $UISettings as $key => $record ) {
     
     // Close main tab tags when tab heading differs from previous record and tag for main div was previously opened
     if ( $tab_id <> $UISettings[$key]["tab_id"] && $tab_h_opened == true ) {
-        $outArray[] = '    </div> <!-- close tab tags -->';    
+        $outArray[] = '    </div>';    
         $tab_h_opened = false;
     }
 
@@ -137,20 +138,10 @@ foreach ( $UISettings as $key => $record ) {
 }
 
 // Write trailing lines
-//$outArray[] = '  </div>';
-//$outArray[] = '</div>';
-
-// Echo Div for map display
-$outArray[] = '<div id="tabDispLists" class="tabDispLists">';
-$outArray[] = '  <ul>';
-$outArray[] = '    <li><a href="#tabDispLists_trks">Tracks</a></li>';
-$outArray[] = '    <li><a href="#tabDispLists_segs">Segments</a></li>';
-$outArray[] = '    <li><a href="#tabDispLists_part">Participants</a></li>';
-$outArray[] = '  </ul>';
-$outArray[] = '  <div id="tabDispLists_trks"></div>';
-$outArray[] = '  <div id="tabDispLists_segs"></div>';
-$outArray[] = '  <div id="tabDispLists_part"></div>';
-$outArray[] = '</div>';
+$outArray[] = '  <div id="updTrk_btn" class="formCenter">';
+$outArray[] = '    <input type="submit" class="button" id="uiTrack_fld_save" value="Save Track" />';
+$outArray[] = '    <input type="submit" class="button" id="uiTrack_fld_cancel" value="Cancel import" />';
+$outArray[] = '  </div>';
 
 $htmlOut = join("\r\n", $outArray);                                 // covert array to text string  
 

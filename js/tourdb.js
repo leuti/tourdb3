@@ -1884,9 +1884,17 @@ function initJQItemsTracksUI () {
         buttonText: "Select date"
     });
     
-    $( "#uiTrack_fld_trkTypeFid" ).selectmenu();
-    
-    $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();
+    // Build type selectable dynamically
+    $( "#uiTrack_fld_trkType_div" ).load("services/getOptions.php", 
+        {"type_purpose":"trk","type_type":"type","type_parent":"","ele_id":"uiTrack_fld_trkTypeFid","ele_class":"updTrackLabelFirst","ele_label":"Type"}, function() { 
+            $( "#uiTrack_fld_trkTypeFid" ).selectmenu();               // Initialse field as JQUERY selectable once HTML is loaded
+    }); 
+
+    // Build type selectable dynamically
+    $( "#uiTrack_fld_trkSubtype_div" ).load("services/getOptions.php", 
+        {"type_purpose":"trk","type_type":"subtype","type_parent":"","ele_id":"uiTrack_fld_trkSubtypeFid","ele_class":"updTrackLabelFirst","ele_label":"Subtype"}, function() { 
+            $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();               // Initialse field as JQUERY selectable once HTML is loaded
+    }); 
     
     $( "#uiTrack_fld_trkGrade" ).autocomplete({
         source: "services/autoComplete.php?field=grades",
