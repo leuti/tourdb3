@@ -1032,7 +1032,8 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
             $('#uiTrack_fld_trkLowEle').val(trackObj.trkLowEle);                            
             $('#uiTrack_fld_trkLowTime').val(trackObj.trkLowTime);                          
             $('#uiTrack_fld_trkFinishEle').val(trackObj.trkFinishEle);                      
-            $('#uiTrack_fld_trkFinishTime').val(trackObj.trkFinishTime);  
+            $('#uiTrack_fld_trkFinishTime').val(trackObj.trkFinishTime); 
+            $('#uiTrack_fld_trkCoordinates').val(trackObj.trkCoordinates);   
             $('#uiTrack_fld_trkCoordTop').val(trackObj.trkCoordTop);
             $('#uiTrack_fld_trkCoordBottom').val(trackObj.trkCoordBottom);
             $('#uiTrack_fld_trkCoordLeft').val(trackObj.trkCoordLeft);
@@ -1092,7 +1093,6 @@ $(document).on('click', '#buttonUploadFile', function (e) {
     e.preventDefault();               
     
     var xhr = new XMLHttpRequest();                                            // create new xhr object
-    //itemsTrkImp = [];                                              // array to store selected peaks, waypoints, locations and participants
 
     // Execute following code when JSON object is received from importGpsTmp.php - TEMP service
     xhr.onload = function() {
