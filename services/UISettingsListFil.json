@@ -8,6 +8,6 @@
 {"tab_heading":"Tracks","fieldset_heading":"Tracks","ele_type":"selectable","ele_id":"listFilTrk_type","ele_label":"","label_class":"","ele_size":null,"ele_class":"dispObjCriteria","tag_open":"","tag_close":""},
 {"tab_heading":"Tracks","fieldset_heading":"Tracks","ele_type":"selectable","ele_id":"listFilTrk_subtype","ele_label":"","label_class":"","ele_size":null,"ele_class":"dispObjCriteria","tag_open":"","tag_close":""},
 {"tab_heading":"Tracks","fieldset_heading":"Tracks","ele_type":"text","ele_id":"listFilTrk_country","ele_label":"Country like","label_class":"labelFirst","ele_size":20,"ele_class":"text ui-widget-content ui-corner-all","tag_open":"<div>","tag_close":"</div>"},
-{"tab_heading":"Tracks","fieldset_heading":"Tracks","ele_type":"submit","ele_id":"listFilTrk_NewLoadButton","ele_label":"Load Map","label_class":"","ele_size":null,"ele_class":"button uiMapApplyBtn","tag_open":"<div>","tag_close":"</div>"},
+{"tab_heading":"Tracks","fieldset_heading":"Tracks","ele_type":"submit","ele_id":"listFilTrk_NewLoadButton","ele_label":"Load","label_class":"","ele_size":null,"ele_class":"button uiMapApplyBtn","tag_open":"<div>","tag_close":"</div>"},
 {"tab_heading":"","fieldset_heading":"","ele_type":"dummy","ele_id":"dummy01","ele_label":"","label_class":"","ele_size":null,"ele_class":"","tag_open":"","tag_close":""}
 ]

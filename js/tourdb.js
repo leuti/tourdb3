@@ -898,23 +898,23 @@ $(document).on('click', '.uiMapApplyBtn', function (e) {
 // ============================================================================
 
 // Opens the list filter UI
-$(document).on('click', '#dispListTrkMenuMiniOpen', function(e) {
+$(document).on('click', '#listTrkMenuMiniOpen', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
     $activeButton.parent().removeClass('visible');
     $activeButton.parent().addClass('hidden');
-    $('#dispListTrkMenuLarge').removeClass('hidden');
-    $('#dispListTrkMenuLarge').addClass('visible');
+    $('#listTrkMenuLarge').removeClass('hidden');
+    $('#listTrkMenuLarge').addClass('visible');
 })
 
 // Minimizes the list filter UI
-$(document).on('click', '#dispListTrkMenuLargeClose', function(e) {
+$(document).on('click', '#listTrkMenuLargeClose', function(e) {
     e.preventDefault();
     var $activeButton = $(this);
     $activeButton.parent().removeClass('visible');
     $activeButton.parent().addClass('hidden');
-    $('#dispListTrkMenuMini').removeClass('hidden');
-    $('#dispListTrkMenuMini').addClass('visible');
+    $('#listTrkMenuMini').removeClass('hidden');
+    $('#listTrkMenuMini').addClass('visible');
 })
 
 // Requests the filtered tracks and displays them as a table
@@ -939,10 +939,10 @@ $(document).on('click', '#listFilTrk_NewLoadButton', function (e) {
         fetch_pages_filterString = " trkUsrId= '" + SESSION_OBJ.usrId + "'";   
     }
     $("#tabDispLists_trks").load("services/fetch_lists.php",{"sqlFilterString":fetch_pages_filterString,"page":page}); //get content from PHP page
-    $('#dispListTrkMenuLarge').removeClass('visible');
-    $('#dispListTrkMenuLarge').addClass('hidden');
-    $('#dispListTrkMenuMini').removeClass('hidden');
-    $('#dispListTrkMenuMini').addClass('visible');
+    $('#listTrkMenuLarge').removeClass('visible');
+    $('#listTrkMenuLarge').addClass('hidden');
+    $('#listTrkMenuMini').removeClass('hidden');
+    $('#listTrkMenuMini').addClass('visible');
 
 });
 
@@ -1826,7 +1826,7 @@ function initJQItemsMap () {
 // Initialise all JQuery items for list fields
 function initJQItemsList () {
     
-    $( "#dispListTrkAccordion" ).accordion({
+    $( "#listTrkAccordion" ).accordion({
         heightStyle: "content",                                      // hight of section dependent on content of section
         autoHeight: false,
         collapsible: true
