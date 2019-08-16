@@ -58,7 +58,9 @@ if ( $type_type == "type" ) {
     $sql = 'SELECT DISTINCT typID, typName FROM tbl_types ';
     $sql .= 'WHERE typPurpose ="' . $type_purpose . '" ';
     $sql .= 'AND typType = "' . $type_type . '" ';
-    //$sql .= 'AND typParentId = "' . $type_parent . '" ';          // Parent ID should delivered dynamically when type is updated
+    if ( $type_parent <> "" ) {
+        $sql .= 'AND typParentId = "' . $type_parent . '" ';          // Restrict parent only if parent is delivered
+    }
     $sql .= 'ORDER BY typName';
 }
 

@@ -995,9 +995,24 @@ $(document).on('click', '.uiTrackEditBtn', function (e) {
             $('#uiTrack_fld_trkDateBegin').val(trackObj.trkDateBegin);
             $('#uiTrack_fld_trkDateFinish').val(trackObj.trkDateFinish);
             $('#uiTrack_fld_trkTypeFid').val(trackObj.trkTypeFid);
-            $('#uiTrack_fld_trkTypeFid').selectmenu("refresh");                  // refresh to display the value from the DB (without this the html default is shown)
-            $('#uiTrack_fld_trkSubtypeFid').val(trackObj.trkSubtypeFid);
-            $('#uiTrack_fld_trkSubtypeFid').selectmenu("refresh");
+            $('#uiTrack_fld_trkTypeFid').selectmenu("refresh");                     // refresh to display the value from the DB (without this the html default is shown)
+            
+            // subtype selectmenu
+            $( "#uiTrack_fld_trkSubtype_div" ).load("services/getOptions.php", 
+                {
+                    "type_purpose":"trk",
+                    "type_type":"subtype",
+                    "type_parent":trackObj.trkTypeFid,
+                    "ele_id":"uiTrack_fld_trkSubtypeFid",
+                    "ele_class":"updTrackLabelFirst",
+                    "ele_label":"Subtype"
+                }
+                , function() { 
+                    $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu({});               // Initialse field as JQUERY selectable once HTML is loaded
+                    $('#uiTrack_fld_trkSubtypeFid').val(trackObj.trkSubtypeFid);            // set value to value from service
+                    $('#uiTrack_fld_trkSubtypeFid').selectmenu("refresh");                  // refresh selectmenu
+                });
+            
             $('#uiTrack_fld_trkOrg').val(trackObj.trkOrg);
             $('#uiTrack_fld_trkEvent').val(trackObj.trkEvent);
             $('#uiTrack_fld_trkRemarks').val(trackObj.trkRemarks);
@@ -1886,14 +1901,23 @@ function initJQItemsTracksUI () {
     
     // Build type selectable dynamically
     $( "#uiTrack_fld_trkType_div" ).load("services/getOptions.php", 
-        {"type_purpose":"trk","type_type":"type","type_parent":"","ele_id":"uiTrack_fld_trkTypeFid","ele_class":"updTrackLabelFirst","ele_label":"Type"}, function() { 
-            $( "#uiTrack_fld_trkTypeFid" ).selectmenu();               // Initialse field as JQUERY selectable once HTML is loaded
+        {"type_purpose":"trk","type_type":"type","type_parent":"","ele_id":"uiTrack_fld_trkTypeFid","ele_class":"updTrackLabelFirst","ele_label":"Type"}
+        , function() { 
+            $( "#uiTrack_fld_trkTypeFid" ).selectmenu({ change: function( event, ui ) {
+                type_parent = $('#uiTrack_fld_trkTypeFid').val();
+                $( "#uiTrack_fld_trkSubtype_div" ).load("services/getOptions.php", 
+                    {"type_purpose":"trk","type_type":"subtype","type_parent":type_parent,"ele_id":"uiTrack_fld_trkSubtypeFid","ele_class":"updTrackLabelFirst","ele_label":"Subtype"}
+                    , function() { 
+                        $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu({});               // Initialse field as JQUERY selectable once HTML is loaded
+                })
+            } });               // Initialse field as JQUERY selectable once HTML is loaded
+
     }); 
 
     // Build type selectable dynamically
     $( "#uiTrack_fld_trkSubtype_div" ).load("services/getOptions.php", 
         {"type_purpose":"trk","type_type":"subtype","type_parent":"","ele_id":"uiTrack_fld_trkSubtypeFid","ele_class":"updTrackLabelFirst","ele_label":"Subtype"}, function() { 
-            $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu();               // Initialse field as JQUERY selectable once HTML is loaded
+            $( "#uiTrack_fld_trkSubtypeFid" ).selectmenu({});               // Initialse field as JQUERY selectable once HTML is loaded
     }); 
     
     $( "#uiTrack_fld_trkGrade" ).autocomplete({
